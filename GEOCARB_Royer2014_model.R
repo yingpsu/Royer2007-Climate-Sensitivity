@@ -20,7 +20,7 @@
 #Royer DL, Donnadieu Y, Park J, Kowalczyk J, Godd?ris Y. 2014. Error analysis of CO2 and O2 estimates from the long-term geochemical model GEOCARBSULF. American Journal of Science, 314: 1259-1283..
 
 
-resampleN <- 10000  #number of resamples for the Monte Carlo error analysis; if you wish to bypass resampling, set to 1
+resampleN <- 1  #number of resamples for the Monte Carlo error analysis; if you wish to bypass resampling, set to 1
 percentile_values <- c(0.025,0.975) #list of percentiles (of any length) used to evaluate a resampled data set; the median (0.5) is outputted by default and doesn't need to be included here
 Godderis <- TRUE  #set to "TRUE" to run time arrays of fA, fAw/fA, fD, and GEOG from Godd?ris et al, 2012; set to "FALSE" to run standard time arrays from GEOCARBSULF.
 input_distribution <- FALSE #set to "TRUE" to return the means and standard deviations of the input parameter choices that are associated with successful (non-failed) runs; only works when loop_parameters is set to "FALSE"; this section of code was not used in Royer et al (2014) (i.e., parameter set to "FALSE")
@@ -457,113 +457,4 @@ for (h in 1:z)  { #start the input parameter loop
     } #end of if statement
   } #end of loop for filling the median and percentile arrays
   
-  #merge results and export summary file to working directory
-  if (resampleN==1)  {
-    GEOCARB_output <- cbind(age, failed_runs, CO2, O2)
-  } else {
-    if (loop_parameters==TRUE)  {
-      start_column <- y*h-(y-1)
-      end_column <- y*h
-      GEOCARB_output[,start_column:end_column] <- cbind(age, failed_runs, CO2, percentiles_CO2, O2, percentiles_O2)
-      column_header[,start_column:end_column] <- c("age (Myrs ago)","failed runs (%)",paste("CO2 for",input[h,"parameter"],"(ppm)",sep=" "),percentile_values,paste("O2 for",input[h,"parameter"],"(%)",sep=" "),percentile_values)
-      cat(date(),"   finished with parameter # ",h,"of",z,"\n")
-    }
-    else {
-      GEOCARB_output <- cbind(age, failed_runs, CO2, percentiles_CO2, O2, percentiles_O2)
-    }
-  } #end of if...else statement
-  
-} #end of input parameter loop (h)
-
-if (loop_parameters==TRUE)  {
-  colnames(GEOCARB_output) <- column_header }
-write.csv(GEOCARB_output, "GEOCARB_output.csv")
-
-if (input_distribution==TRUE & loop_parameters==FALSE) {
-  resampled_input_constants <- matrix(nrow=length(input[,"parameter"]), ncol=2)
-  colnames(resampled_input_constants) <- c("resampled_mean", "resampled_two_sigma")
-  rownames(resampled_input_constants) <- input[, "parameter"]
-  resampled_input_constants <- cbind(input[, -c(7:11)], resampled_input_constants)
-  resampled_input_constants["ACT", "resampled_mean"] <- mean(ACT, na.rm=TRUE); resampled_input_constants["ACT", "resampled_two_sigma"] <- 2*sd(ACT, na.rm=TRUE)
-  resampled_input_constants["ACTcarb", "resampled_mean"] <- mean(ACTcarb, na.rm=TRUE); resampled_input_constants["ACTcarb", "resampled_two_sigma"] <- 2*sd(ACTcarb, na.rm=TRUE)
-  resampled_input_constants["VNV", "resampled_mean"] <- mean(VNV, na.rm=TRUE); resampled_input_constants["VNV", "resampled_two_sigma"] <- 2*sd(VNV, na.rm=TRUE)
-  resampled_input_constants["NV", "resampled_mean"] <- mean(NV, na.rm=TRUE); resampled_input_constants["NV", "resampled_two_sigma"] <- 2*sd(NV, na.rm=TRUE)
-  resampled_input_constants["exp_NV", "resampled_mean"] <- mean(exp_NV, na.rm=TRUE); resampled_input_constants["exp_NV", "resampled_two_sigma"] <- 2*sd(exp_NV, na.rm=TRUE)
-  resampled_input_constants["LIFE", "resampled_mean"] <- mean(LIFE, na.rm=TRUE); resampled_input_constants["LIFE", "resampled_two_sigma"] <- 2*sd(LIFE, na.rm=TRUE)
-  resampled_input_constants["GYM", "resampled_mean"] <- mean(GYM, na.rm=TRUE); resampled_input_constants["GYM", "resampled_two_sigma"] <- 2*sd(GYM, na.rm=TRUE)
-  resampled_input_constants["FERT", "resampled_mean"] <- mean(FERT, na.rm=TRUE); resampled_input_constants["FERT", "resampled_two_sigma"] <- 2*sd(FERT, na.rm=TRUE)
-  resampled_input_constants["exp_fnBb", "resampled_mean"] <- mean(exp_fnBb, na.rm=TRUE); resampled_input_constants["exp_fnBb", "resampled_two_sigma"] <- 2*sd(exp_fnBb, na.rm=TRUE)
-  log_deltaT2X <- log(deltaT2X); resampled_input_constants["deltaT2X", "resampled_mean"] <- exp(mean(log_deltaT2X, na.rm=TRUE)); resampled_input_constants["deltaT2X", "resampled_two_sigma"] <- exp(2*sd(log_deltaT2X, na.rm=TRUE))
-  resampled_input_constants["GLAC", "resampled_mean"] <- mean(GLAC, na.rm=TRUE); resampled_input_constants["GLAC", "resampled_two_sigma"] <- 2*sd(GLAC, na.rm=TRUE)
-  resampled_input_constants["J", "resampled_mean"] <- mean(J, na.rm=TRUE); resampled_input_constants["J", "resampled_two_sigma"] <- 2*sd(J, na.rm=TRUE)
-  resampled_input_constants["n", "resampled_mean"] <- mean(n, na.rm=TRUE); resampled_input_constants["n", "resampled_two_sigma"] <- 2*sd(n, na.rm=TRUE)
-  resampled_input_constants["Ws", "resampled_mean"] <- mean(Ws, na.rm=TRUE); resampled_input_constants["Ws", "resampled_two_sigma"] <- 2*sd(Ws, na.rm=TRUE)
-  resampled_input_constants["exp_fD", "resampled_mean"] <- mean(exp_fD, na.rm=TRUE); resampled_input_constants["exp_fD", "resampled_two_sigma"] <- 2*sd(exp_fD, na.rm=TRUE)
-  resampled_input_constants["Fwpa_0", "resampled_mean"] <- mean(Fwpa_0, na.rm=TRUE); resampled_input_constants["Fwpa_0", "resampled_two_sigma"] <- 2*sd(Fwpa_0, na.rm=TRUE)
-  resampled_input_constants["Fwsa_0", "resampled_mean"] <- mean(Fwsa_0, na.rm=TRUE); resampled_input_constants["Fwsa_0", "resampled_two_sigma"] <- 2*sd(Fwsa_0, na.rm=TRUE)
-  resampled_input_constants["Fwga_0", "resampled_mean"] <- mean(Fwga_0, na.rm=TRUE); resampled_input_constants["Fwga_0", "resampled_two_sigma"] <- 2*sd(Fwga_0, na.rm=TRUE)
-  resampled_input_constants["Fwca_0", "resampled_mean"] <- mean(Fwca_0, na.rm=TRUE); resampled_input_constants["Fwca_0", "resampled_two_sigma"] <- 2*sd(Fwca_0, na.rm=TRUE)
-  resampled_input_constants["Fmg_0", "resampled_mean"] <- mean(Fmg_0, na.rm=TRUE); resampled_input_constants["Fmg_0", "resampled_two_sigma"] <- 2*sd(Fmg_0, na.rm=TRUE)
-  resampled_input_constants["Fmc_0", "resampled_mean"] <- mean(Fmc_0, na.rm=TRUE); resampled_input_constants["Fmc_0", "resampled_two_sigma"] <- 2*sd(Fmc_0, na.rm=TRUE)
-  resampled_input_constants["Fmp_0", "resampled_mean"] <- mean(Fmp_0, na.rm=TRUE); resampled_input_constants["Fmp_0", "resampled_two_sigma"] <- 2*sd(Fmp_0, na.rm=TRUE)
-  resampled_input_constants["Fms_0", "resampled_mean"] <- mean(Fms_0, na.rm=TRUE); resampled_input_constants["Fms_0", "resampled_two_sigma"] <- 2*sd(Fms_0, na.rm=TRUE)
-  resampled_input_constants["Fwsi_0", "resampled_mean"] <- mean(Fwsi_0, na.rm=TRUE); resampled_input_constants["Fwsi_0", "resampled_two_sigma"] <- 2*sd(Fwsi_0, na.rm=TRUE)
-  resampled_input_constants["Xvolc_0", "resampled_mean"] <- mean(Xvolc_0, na.rm=TRUE); resampled_input_constants["Xvolc_0", "resampled_two_sigma"] <- 2*sd(Xvolc_0, na.rm=TRUE)
-  resampled_input_constants["CAPd13C_0", "resampled_mean"] <- mean(CAPd13C_0, na.rm=TRUE); resampled_input_constants["CAPd13C_0", "resampled_two_sigma"] <- 2*sd(CAPd13C_0, na.rm=TRUE)
-  resampled_input_constants["CAPd34S_0", "resampled_mean"] <- mean(CAPd34S_0, na.rm=TRUE); resampled_input_constants["CAPd34S_0", "resampled_two_sigma"] <- 2*sd(CAPd34S_0, na.rm=TRUE)
-  resampled_input_constants["oxygen_570", "resampled_mean"] <- mean(oxygen_570, na.rm=TRUE); resampled_input_constants["oxygen_570", "resampled_two_sigma"] <- 2*sd(oxygen_570, na.rm=TRUE)
-  resampled_input_constants["Gy_570", "resampled_mean"] <- mean(Gy_570, na.rm=TRUE); resampled_input_constants["Gy_570", "resampled_two_sigma"] <- 2*sd(Gy_570, na.rm=TRUE)
-  resampled_input_constants["Cy_570", "resampled_mean"] <- mean(Cy_570, na.rm=TRUE); resampled_input_constants["Cy_570", "resampled_two_sigma"] <- 2*sd(Cy_570, na.rm=TRUE)
-  resampled_input_constants["Ca_570", "resampled_mean"] <- mean(Ca_570, na.rm=TRUE); resampled_input_constants["Ca_570", "resampled_two_sigma"] <- 2*sd(Ca_570, na.rm=TRUE)
-  resampled_input_constants["Ssy_570", "resampled_mean"] <- mean(Ssy_570, na.rm=TRUE); resampled_input_constants["Ssy_570", "resampled_two_sigma"] <- 2*sd(Ssy_570, na.rm=TRUE)
-  resampled_input_constants["Spy_570", "resampled_mean"] <- mean(Spy_570, na.rm=TRUE); resampled_input_constants["Spy_570", "resampled_two_sigma"] <- 2*sd(Spy_570, na.rm=TRUE)
-  resampled_input_constants["dlsy_570", "resampled_mean"] <- mean(dlsy_570, na.rm=TRUE); resampled_input_constants["dlsy_570", "resampled_two_sigma"] <- 2*sd(dlsy_570, na.rm=TRUE)
-  resampled_input_constants["dlcy_570", "resampled_mean"] <- mean(dlcy_570, na.rm=TRUE); resampled_input_constants["dlcy_570", "resampled_two_sigma"] <- 2*sd(dlcy_570, na.rm=TRUE)
-  resampled_input_constants["dlpy_570", "resampled_mean"] <- mean(dlpy_570, na.rm=TRUE); resampled_input_constants["dlpy_570", "resampled_two_sigma"] <- 2*sd(dlpy_570, na.rm=TRUE)
-  resampled_input_constants["dlpa_570", "resampled_mean"] <- mean(dlpa_570, na.rm=TRUE); resampled_input_constants["dlpa_570", "resampled_two_sigma"] <- 2*sd(dlpa_570, na.rm=TRUE)
-  resampled_input_constants["dlgy_570", "resampled_mean"] <- mean(dlgy_570, na.rm=TRUE); resampled_input_constants["dlgy_570", "resampled_two_sigma"] <- 2*sd(dlgy_570, na.rm=TRUE)
-  resampled_input_constants["dlga_570", "resampled_mean"] <- mean(dlga_570, na.rm=TRUE); resampled_input_constants["dlga_570", "resampled_two_sigma"] <- 2*sd(dlga_570, na.rm=TRUE)
-  resampled_input_constants["Rcy_570", "resampled_mean"] <- mean(Rcy_570, na.rm=TRUE); resampled_input_constants["Rcy_570", "resampled_two_sigma"] <- 2*sd(Rcy_570, na.rm=TRUE)
-  resampled_input_constants["Rca_570", "resampled_mean"] <- mean(Rca_570, na.rm=TRUE); resampled_input_constants["Rca_570", "resampled_two_sigma"] <- 2*sd(Rca_570, na.rm=TRUE)
-  resampled_input_constants["Rv_570", "resampled_mean"] <- mean(Rv_570, na.rm=TRUE); resampled_input_constants["Rv_570", "resampled_two_sigma"] <- 2*sd(Rv_570, na.rm=TRUE)
-  resampled_input_constants["Rg_570", "resampled_mean"] <- mean(Rg_570, na.rm=TRUE); resampled_input_constants["Rg_570", "resampled_two_sigma"] <- 2*sd(Rg_570, na.rm=TRUE)
-  resampled_input_constants["Fob", "resampled_mean"] <- mean(Fob, na.rm=TRUE); resampled_input_constants["Fob", "resampled_two_sigma"] <- 2*sd(Fob, na.rm=TRUE)
-  resampled_input_constants["COC", "resampled_mean"] <- mean(COC, na.rm=TRUE); resampled_input_constants["COC", "resampled_two_sigma"] <- 2*sd(COC, na.rm=TRUE)
-  resampled_input_constants["Ga", "resampled_mean"] <- mean(Ga, na.rm=TRUE); resampled_input_constants["Ga", "resampled_two_sigma"] <- 2*sd(Ga, na.rm=TRUE)
-  resampled_input_constants["Ssa", "resampled_mean"] <- mean(Ssa, na.rm=TRUE); resampled_input_constants["Ssa", "resampled_two_sigma"] <- 2*sd(Ssa, na.rm=TRUE)
-  resampled_input_constants["Spa", "resampled_mean"] <- mean(Spa, na.rm=TRUE); resampled_input_constants["Spa", "resampled_two_sigma"] <- 2*sd(Spa, na.rm=TRUE)
-  resampled_input_constants["ST", "resampled_mean"] <- mean(ST, na.rm=TRUE); resampled_input_constants["ST", "resampled_two_sigma"] <- 2*sd(ST, na.rm=TRUE)
-  resampled_input_constants["dlst", "resampled_mean"] <- mean(dlst, na.rm=TRUE); resampled_input_constants["dlst", "resampled_two_sigma"] <- 2*sd(dlst, na.rm=TRUE)
-  resampled_input_constants["CT", "resampled_mean"] <- mean(CT, na.rm=TRUE); resampled_input_constants["CT", "resampled_two_sigma"] <- 2*sd(CT, na.rm=TRUE)
-  resampled_input_constants["dlct", "resampled_mean"] <- mean(dlct, na.rm=TRUE); resampled_input_constants["dlct", "resampled_two_sigma"] <- 2*sd(dlct, na.rm=TRUE)
-  resampled_input_constants["kwpy", "resampled_mean"] <- mean(kwpy, na.rm=TRUE); resampled_input_constants["kwpy", "resampled_two_sigma"] <- 2*sd(kwpy, na.rm=TRUE)
-  resampled_input_constants["kwsy", "resampled_mean"] <- mean(kwsy, na.rm=TRUE); resampled_input_constants["kwsy", "resampled_two_sigma"] <- 2*sd(kwsy, na.rm=TRUE)
-  resampled_input_constants["kwgy", "resampled_mean"] <- mean(kwgy, na.rm=TRUE); resampled_input_constants["kwgy", "resampled_two_sigma"] <- 2*sd(kwgy, na.rm=TRUE)
-  resampled_input_constants["kwcy", "resampled_mean"] <- mean(kwcy, na.rm=TRUE); resampled_input_constants["kwcy", "resampled_two_sigma"] <- 2*sd(kwcy, na.rm=TRUE)
-  
-  resampled_input_arrays <- time_arrays
-  for (j in 1:ageN) {
-    resampled_input_arrays[j, match("Sr", colnames(resampled_input_arrays))] <- mean(Sr[j,], na.rm=TRUE); resampled_input_arrays[j, match("Sr", colnames(resampled_input_arrays))+1] <- 2*sd(Sr[j,], na.rm=TRUE)
-    resampled_input_arrays[j, match("d13C", colnames(resampled_input_arrays))] <- mean(d13C[j,], na.rm=TRUE); resampled_input_arrays[j, match("d13C", colnames(resampled_input_arrays))+1] <- 2*sd(d13C[j,], na.rm=TRUE)
-    resampled_input_arrays[j, match("d34S", colnames(resampled_input_arrays))] <- mean(d34S[j,], na.rm=TRUE); resampled_input_arrays[j, match("d34S", colnames(resampled_input_arrays))+1] <- 2*sd(d34S[j,], na.rm=TRUE)
-    resampled_input_arrays[j, match("fR", colnames(resampled_input_arrays))] <- mean(fR[j,], na.rm=TRUE); resampled_input_arrays[j, match("fR", colnames(resampled_input_arrays))+1] <- 2*sd(fR[j,], na.rm=TRUE)
-    resampled_input_arrays[j, match("fL", colnames(resampled_input_arrays))] <- mean(fL[j,], na.rm=TRUE); resampled_input_arrays[j, match("fL", colnames(resampled_input_arrays))+1] <- 2*sd(fL[j,], na.rm=TRUE)
-    if (Godderis==TRUE) {
-      resampled_input_arrays[j, match("fA_Godderis", colnames(resampled_input_arrays))] <- mean(fA[j,], na.rm=TRUE); resampled_input_arrays[j, match("fA_Godderis", colnames(resampled_input_arrays))+1] <- 2*sd(fA[j,], na.rm=TRUE)
-      resampled_input_arrays[j, match("fAw_fA_Godderis", colnames(resampled_input_arrays))] <- mean(fAw_fA[j,], na.rm=TRUE); resampled_input_arrays[j, match("fAw_fA_Godderis", colnames(resampled_input_arrays))+1] <- 2*sd(fAw_fA[j,], na.rm=TRUE)
-      resampled_input_arrays[j, match("fD_Godderis", colnames(resampled_input_arrays))] <- mean(fD[j,], na.rm=TRUE); resampled_input_arrays[j, match("fD_Godderis", colnames(resampled_input_arrays))+1] <- 2*sd(fD[j,], na.rm=TRUE)
-      resampled_input_arrays[j, match("GEOG_Godderis", colnames(resampled_input_arrays))] <- mean(GEOG[j,], na.rm=TRUE); resampled_input_arrays[j, match("GEOG_Godderis", colnames(resampled_input_arrays))+1] <- 2*sd(GEOG[j,], na.rm=TRUE) }
-    else {
-      resampled_input_arrays[j, match("fA", colnames(resampled_input_arrays))] <- mean(fA[j,], na.rm=TRUE); resampled_input_arrays[j, match("fA", colnames(resampled_input_arrays))+1] <- 2*sd(fA[j,], na.rm=TRUE)
-      resampled_input_arrays[j, match("fAw_fA", colnames(resampled_input_arrays))] <- mean(fAw_fA[j,], na.rm=TRUE); resampled_input_arrays[j, match("fAw_fA", colnames(resampled_input_arrays))+1] <- 2*sd(fAw_fA[j,], na.rm=TRUE)
-      resampled_input_arrays[j, match("fD", colnames(resampled_input_arrays))] <- mean(fD[j,], na.rm=TRUE); resampled_input_arrays[j, match("fD", colnames(resampled_input_arrays))+1] <- 2*sd(fD[j,], na.rm=TRUE)
-      resampled_input_arrays[j, match("GEOG", colnames(resampled_input_arrays))] <- mean(GEOG[j,], na.rm=TRUE); resampled_input_arrays[j, match("GEOG", colnames(resampled_input_arrays))+1] <- 2*sd(GEOG[j,], na.rm=TRUE)
-    }
-    resampled_input_arrays[j, match("RT", colnames(resampled_input_arrays))] <- mean(RT[j,], na.rm=TRUE); resampled_input_arrays[j, match("RT", colnames(resampled_input_arrays))+1] <- 2*sd(RT[j,], na.rm=TRUE)
-    resampled_input_arrays[j, match("fSR", colnames(resampled_input_arrays))] <- mean(fSR[j,], na.rm=TRUE); resampled_input_arrays[j, match("fSR", colnames(resampled_input_arrays))+1] <- 2*sd(fSR[j,], na.rm=TRUE)
-    resampled_input_arrays[j, match("fC", colnames(resampled_input_arrays))] <- mean(fC[j,], na.rm=TRUE); resampled_input_arrays[j, match("fC", colnames(resampled_input_arrays))+1] <- 2*sd(fC[j,], na.rm=TRUE)      
-  }
-  write.csv(resampled_input_arrays, "resampled_input_arrays.csv")
-  write.csv(resampled_input_constants, "resampled_input_constants.csv")
-}
 
