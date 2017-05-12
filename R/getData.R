@@ -10,7 +10,7 @@ library(sn)
 
 # col 1 is age (million years ago), col 2 is CO2 (units?), col 3 is lower error
 # bound, col 4 is upper error bound
-dat <- read.table('../proxydata_clean.txt', fill=TRUE, header=TRUE)
+dat <- read.table('../data/proxydata_clean.txt', fill=TRUE, header=TRUE)
 
 # want to determine the three skew-normal parameters (xi, omega, alpha) that
 # give the median and 68% probability mass between upper/lower erorr bounds.

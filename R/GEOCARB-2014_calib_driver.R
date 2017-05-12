@@ -23,15 +23,8 @@ source('getData.R')
 ## Model parameters and setup
 ##===========================
 
-# Read parameter information
-input.summary <- read.csv("GEOCARB_input_summaries_calib.csv")
-
-# Which model parameters to calibrate?
-#TODO
-# read column "calib" in GEOCARB_input_summaries_calib.csv; a 0 implies to keep
-# the parameter/forcing fixed at the central estimate on the file, and a 1
-# implies to calibrate the parameter
-
+# Read parameter information, set up the calibration parameters
+source('GEOCARB-2014_parameterSetup.R')
 ##==============================================================================
 
 
@@ -40,8 +33,29 @@ input.summary <- read.csv("GEOCARB_input_summaries_calib.csv")
 ##==========================================
 
 # Get model parameter prior distributions
-#TODO
+bound_lower <- rep(NA, length(names))
+bound_upper <- rep(NA, length(names))
 
+ind_neg_inf <- which(input[,'lower_limit']=='_inf')
+bound_lower[ind_neg_inf] <- -Inf
+bound_lower[setdiff(1:length(names), ind_neg_inf)] <- as.numeric(as.character(input$lower_limit[setdiff(1:length(names), ind_neg_inf)]))
+bound_upper <- input$upper_limit
+
+bounds <- cbind(bound_lower, bound_upper)
+rownames(bounds) <- as.character(input$parameter)
+
+# only actually need the calibration parameters' bounds, so reformat the bounds
+# array to match the vector of calibration parameters
+bounds_calib <- mat.or.vec(nr=length(parnames_calib), nc=2)
+colnames(bounds_calib) <- c('lower','upper')
+rownames(bounds_calib) <- parnames_calib
+for (i in 1:length(parnames_calib)) {
+  bounds_calib[i,'lower'] <- bounds[parnames_calib[i],'bound_lower']
+  bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
+}
+
+# Other characteristics are in 'input' and 'time_arrays', which are fed into
+# the calibration MCMC call below.
 ##==============================================================================
 
 
