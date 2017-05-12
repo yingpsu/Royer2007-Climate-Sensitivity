@@ -108,6 +108,9 @@ if (length(ind_time_calib)>0) {ind_time_calib <- (length(ind_const_calib)+1):len
 if (length(ind_time_fixed)>0) {ind_time_fixed <- (length(ind_const_fixed)+1):length(par_fixed0)
 } else                        {ind_time_fixed <- NULL}
 
+# TONY TODO -- priors for the time-varying parameters
+#time_priors <- data.frame() ...
+
 ##==============================================================================
 ## End
 ##==============================================================================

@@ -33,6 +33,7 @@ source('GEOCARB-2014_parameterSetup.R')
 ##==========================================
 
 # Get model parameter prior distributions
+names <- as.character(input$parameter)
 bound_lower <- rep(NA, length(names))
 bound_upper <- rep(NA, length(names))
 

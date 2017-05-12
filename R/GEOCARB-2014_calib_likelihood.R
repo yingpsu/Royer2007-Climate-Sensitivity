@@ -36,36 +36,20 @@ log_prior <- function(
     n_time_calib <- length(ind_time_calib)/ageN
     if (n_time_calib>0) {
       for (i in 1:n_time_calib) {
-        name <- # TONY TODO -- add the log-prior for the new guy here
-        lpri_time <- lpri_time + lpri_new
+        lpri_new <- 0
+        name <- parnames_calib[ind_time_calib[ageN*i]]
+        row_num <- match(name,input$parameter)
+        col_num <- match(name,colnames(time_arrays))
+        if(input[row_num, 'distribution_type']=='gaussian') {
+          lpri_new <- dnorm(x=par[ind_time_calib[((i-1)*ageN+1):(i*ageN)]], mean=time_arrays[,col_num], sd=(0.5*time_arrays[,col_num+1]), log=TRUE)
+        } else if(input[row_num, 'distribution_type']=='lognormal') {
+          lpri_new <- dlnorm(x=par[ind_const_calib[((i-1)*ageN+1):(i*ageN)]], meanlog=log(time_arrays[,col_num]), sdlog=log(0.5*time_arrays[,col_num+1]), log=TRUE)
+        } else {
+          print('ERROR - unknown prior distribution type')
+        }
+        lpri_time <- lpri_time + sum(lpri_new)
       }
     }
-###
-if(FALSE){
-    #resampling following a normal distribution
-    if (input[row_position, "resample"]==TRUE & input[row_position, "distribution_type"]=="gaussian" & resampleN>1) {
-      for (i in 1:ageN) {
-        temp_resample <- NULL
-        temp_resample <- rnorm(n=resampleN, mean=time_arrays[i,col_num], sd=time_arrays[i,col_num+1]/2)
-        temp_resample <- replace(temp_resample,temp_resample<=input[row_position,"lower_limit"],input[row_position,"lower_limit"]+0.0001)
-        temp_resample <- replace(temp_resample,temp_resample>=input[row_position,"upper_limit"],input[row_position,"upper_limit"]-0.0001)
-        x[i,] <- matrix(temp_resample, nrow=1, ncol=resampleN)
-      } #end of time-sequence loop (i)
-    }
-
-    #resampling following a lognormal distribution
-    if (input[row_position, "resample"]==TRUE & input[row_position, "distribution_type"]=="lognormal" & resampleN>1) {
-      for (i in 1:ageN) {
-        temp_resample <- NULL
-        temp_resample <- rlnorm(n=resampleN, meanlog=log(time_arrays[i,col_num]), sdlog=log(time_arrays[i,col_num+1])/2)
-        temp_resample <- replace(temp_resample,temp_resample<=input[row_position,"lower_limit"],input[row_position,"lower_limit"]+0.0001)
-        temp_resample <- replace(temp_resample,temp_resample>=input[row_position,"upper_limit"],input[row_position,"upper_limit"]-0.0001)
-        x[i,] <- matrix(temp_resample, nrow=1, ncol=resampleN)
-      } #end of time-sequence loop (i)
-    }
-}
-###
-
 
     # Priors for the time-constant parameters
     lpri_const <- 0

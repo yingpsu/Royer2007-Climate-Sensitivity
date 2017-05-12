@@ -1,5 +1,5 @@
 parameter,type,resample,distribution_type,mean,two_sigma,lower_limit,upper_limit,calib
-Sr,time array,TRUE,gaussian,,,_inf,inf,1
+Sr,time array,TRUE,gaussian,,,_inf,inf,0
 d13C,time array,TRUE,gaussian,,,_inf,inf,0
 d34S,time array,TRUE,gaussian,,,_inf,inf,0
 fR,time array,TRUE,gaussian,,,0,inf,0
