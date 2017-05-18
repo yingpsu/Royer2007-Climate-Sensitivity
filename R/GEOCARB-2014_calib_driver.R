@@ -6,16 +6,44 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
+rm(list=ls())
 
 ##==============================================================================
 ## Data
 ##=====
 
-# Read proxy data
-source('getData.R')
+# Read proxy data. Returns "data_calib_all"
+library(sn)
+source('GEOCARB-2014_getData.R')
 
-# Which proxy sets to use?
-#TODO (once Ying puts another column to designate different outputs)
+# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
+data_to_assim <- cbind( c("paleosols" , TRUE),
+                        c("alkenones" , TRUE),
+                        c("stomata"   , TRUE),
+                        c("boron"     , TRUE),
+                        c("liverworts", TRUE) )
+
+ind_data    <- which(data_to_assim[2,]==TRUE)
+n_data_sets <- length(ind_data)
+ind_assim   <- vector("list",n_data_sets)
+for (i in 1:n_data_sets) {
+  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
+}
+
+data_calib <- data_calib_all[unlist(ind_assim),]
+
+# assumption of steady state in-between model time steps permits figuring out
+# which model time steps each data point should be compared against in advance.
+# doing this each calibration iteration would be outrageous!
+# This assumes the model time step is 10 million years, seq(570,0,by=-10). The
+# model will choke later (in calibration) if this is not consistent with what is
+# set within the actual GEOCARB physical model.
+age_tmp <- seq(570,0,by=-10)
+ttmp <- 10*ceiling(data_calib$age/10)
+ind_mod2obs <- rep(NA,nrow(data_calib))
+for (i in 1:length(ind_mod2obs)){
+  ind_mod2obs[i] <- which(age_tmp==ttmp[i])
+}
 ##==============================================================================
 
 
@@ -61,10 +89,55 @@ for (i in 1:length(parnames_calib)) {
 
 
 ##==============================================================================
+## Pad if only one calibration parameter
+## (adaptMCMC requires 2 or more)
+##======================================
+if(length(parnames_calib)==1){
+  parnames_calib <- c(parnames_calib, "padding")
+  bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
+  rownames(bounds_calib) <- parnames_calib
+  par_calib0 <- c(par_calib0, 0)
+}
+##==============================================================================
+
+
+##==============================================================================
 ## Run the calibration
 ##====================
 
+# need the physical model
+source('model_forMCMC.R')
 
+# need the likelihood function and prior distributions
+source('GEOCARB-2014_calib_likelihood.R')
+
+# set up and run the actual calibration
+# interpolate between lots of parameters and one parameter.
+# this functional form yields an acceptance rate of about 25% for as few as 10
+# parameters, 44% for a single parameter (or Metropolis-within-Gibbs sampler),
+# and 0.234 for infinite number of parameters, using accept_mcmc_few=0.44 and
+# accept_mcmc_many=0.234.
+library(adaptMCMC)
+accept_mcmc_few <- 0.44         # optimal for only one parameter
+accept_mcmc_many <- 0.234       # optimal for many parameters
+accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
+niter_mcmc <- 5e4
+gamma_mcmc <- 0.5
+stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
+
+##==============================================================================
+## Actually run the calibration
+tbeg=proc.time()
+amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+                  gamma=gamma_mcmc, list=TRUE, n.start=round(0.01*niter_mcmc),
+                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs)
+tend=proc.time()
+chain1 = amcmc_out1$samples
 ##==============================================================================
 
 

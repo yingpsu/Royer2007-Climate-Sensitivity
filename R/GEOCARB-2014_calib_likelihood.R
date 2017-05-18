@@ -67,14 +67,13 @@ log_prior <- function(
         lpri_const <- lpri_const + lpri_new
       }
     }
-
+    # Add them up, assuming independence
+    lpri <- lpri_time + lpri_const
   } else {
     # if any of the calibration parameters are outside of the prior range
     lpri <- -Inf
   }
 
-  # Add them up, assuming independence
-  lpri <- lpri_time + lpri_const
 
   return(lpri)
 }
@@ -95,11 +94,14 @@ log_like <- function(
   ind_const_calib,
   ind_time_calib,
   ind_const_fixed,
-  ind_time_fixed
+  ind_time_fixed,
+  data_calib,
+  ind_mod2obs
 ){
 
   llike <- 0
 
+#if(FALSE){
   # run the model
   model_out <- model_forMCMC(par=par,
                              par_fixed=par_fixed,
@@ -113,11 +115,14 @@ log_like <- function(
                              ind_time_fixed=ind_time_fixed)
 
   # compare against data
-
-# TONY TODO
-# TONY TODO
-# TONY TODO
-
+  # assumption of steady state in-between model time steps
+  # note that these are not necessarily sequential in time
+  model_stdy <- model_out[ind_mod2obs,'co2']
+  llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
+                       xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
+                       alpha=data_calib$alpha_co2[i], log=TRUE)) )
+  if(is.na(llike)) {llike <- -Inf}
+#}
   return(llike)
 }
 ##==============================================================================
@@ -140,8 +145,13 @@ log_post <- function(
   ind_time_fixed,
   input,
   time_arrays,
-  bounds_calib
+  bounds_calib,
+  data_calib,
+  ind_mod2obs
 ){
+
+  lpri <- 0
+  llike <- 0
 
   # calculate log-prior probability at these parameter values
   lpri <- log_prior(par=par,
@@ -163,11 +173,18 @@ log_post <- function(
   # prior ranges)
   # Fun note: it is faster to check is.finite() than ~is.infinite
   if(is.finite(lpri)) {
-
-# TONY TODO
-# TONY TODO
-# TONY TODO
-
+    llike <- log_like(par=par,
+                      par_fixed=par_fixed,
+                      parnames_calib=parnames_calib,
+                      parnames_fixed=parnames_fixed,
+                      age=age,
+                      ageN=ageN,
+                      ind_const_calib=ind_const_calib,
+                      ind_time_calib=ind_time_calib,
+                      ind_const_fixed=ind_const_fixed,
+                      ind_time_fixed=ind_time_fixed,
+                      data_calib=data_calib,
+                      ind_mod2obs=ind_mod2obs)
   }
 
   # combine

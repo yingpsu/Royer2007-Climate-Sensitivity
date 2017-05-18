@@ -109,7 +109,7 @@ if (length(ind_time_fixed)>0) {ind_time_fixed <- (length(ind_const_fixed)+1):len
 } else                        {ind_time_fixed <- NULL}
 
 # TONY TODO -- priors for the time-varying parameters
-#time_priors <- data.frame() ...
+#time_priors <- data.frame()
 
 ##==============================================================================
 ## End
