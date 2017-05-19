@@ -97,6 +97,7 @@ if(length(parnames_calib)==1){
   bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
   rownames(bounds_calib) <- parnames_calib
   par_calib0 <- c(par_calib0, 0)
+  step_mcmc <- c(step_mcmc, 1)
 }
 ##==============================================================================
 
@@ -121,7 +122,7 @@ library(adaptMCMC)
 accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
-niter_mcmc <- 5e4
+niter_mcmc <- 1e4
 gamma_mcmc <- 0.5
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
@@ -129,7 +130,7 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 ## Actually run the calibration
 tbeg=proc.time()
 amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                  gamma=gamma_mcmc, list=TRUE, n.start=round(0.01*niter_mcmc),
+                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(500,round(0.05*niter_mcmc)),
                   par_fixed=par_fixed0, parnames_calib=parnames_calib,
                   parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                   ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -138,12 +139,39 @@ amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs)
 tend=proc.time()
 chain1 = amcmc_out1$samples
+
+## Extend an MCMC chain?
+## Extend and run more MCMC samples?
+if(FALSE){
+niter_extend <- 4e4
+tbeg=proc.time()
+amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
+                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs)
+tend=proc.time()
+chain1 = amcmc_extend1$samples
+}
 ##==============================================================================
 
 
 ##==============================================================================
 ## Convergence diagnostics
 ##========================
+
+# visual inspection
+
+#TONY TODO
+#TONY TODO
+# for now only look at climate sensitivity
+ind_cs <- match('deltaT2X',parnames_calib)
+plot(chain1[,ind_cs], type='l')
+#par(mfrow=c(7,8))
+#for (p in 1:length(parnames_calib)) {plot(chain1[,p], type='l', ylab=parnames_calib[p])}
+
 
 #TODO
 # Gelman and Rubin

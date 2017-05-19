@@ -101,7 +101,7 @@ log_like <- function(
 
   llike <- 0
 
-#if(FALSE){
+if(TRUE){
   # run the model
   model_out <- model_forMCMC(par=par,
                              par_fixed=par_fixed,
@@ -122,7 +122,7 @@ log_like <- function(
                        xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
                        alpha=data_calib$alpha_co2[i], log=TRUE)) )
   if(is.na(llike)) {llike <- -Inf}
-#}
+}
   return(llike)
 }
 ##==============================================================================

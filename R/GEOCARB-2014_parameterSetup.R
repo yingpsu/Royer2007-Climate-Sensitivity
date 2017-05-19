@@ -108,7 +108,30 @@ if (length(ind_time_calib)>0) {ind_time_calib <- (length(ind_const_calib)+1):len
 if (length(ind_time_fixed)>0) {ind_time_fixed <- (length(ind_const_fixed)+1):length(par_fixed0)
 } else                        {ind_time_fixed <- NULL}
 
-# TONY TODO -- priors for the time-varying parameters
+# initial step sizes for MCMC
+# the adaptation algorithm will refine these and add correlation structure, but
+# using crappy initial estimates leads to terribly slow convergence and mixing.
+step_mcmc <- rep(NA,length(parnames_calib))
+for (p in 1:length(parnames_calib)) {
+  row_num <- match(parnames_calib[p], input$parameter)
+  if(input$type[row_num]=='time array') {
+    col_num <- match(parnames_calib[p], colnames(time_arrays))
+    if(input[row_num, 'distribution_type']=='lognormal') {
+      step_mcmc[p] <- log(0.5*time_arrays[,col_num+1])
+    } else if(input[row_num, 'distribution_type']=='gaussian') {
+      step_mcmc[p] <- 0.5*time_arrays[,col_num+1]
+    } else {print('ERROR - unknown distribution type (fitting step sizes, time-varying parameters)')}
+  } else if(input$type[row_num]=='constant') {
+    if(input[row_num, 'distribution_type']=='lognormal') {
+      step_mcmc[p] <- log(0.5*input[row_num,"two_sigma"])
+    } else if(input[row_num, 'distribution_type']=='gaussian') {
+      step_mcmc[p] <- 0.5*input[row_num,"two_sigma"]
+    } else {print('ERROR - unknown distribution type (fitting step sizes, constant parameters)')}
+  } else {print('ERROR - unknown calibration parameter type (fitting step sizes)')}
+}
+
+
+# TONY TODO -- more detail Gaussian process priors for the time-varying parameters
 #time_priors <- data.frame()
 
 ##==============================================================================
