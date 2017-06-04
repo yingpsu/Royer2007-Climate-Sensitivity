@@ -7,7 +7,10 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-niter_mcmc000 <- 1e2
+niter_mcmc000 <- 1e6   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1         # number of CPUs to use
+setwd('/home/scrim/axw322/codes/GEOCARB/R')
+appen <- 'withPaleosols'
 #rm(list=ls())
 
 ##==============================================================================
@@ -130,8 +133,9 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 
 ##==============================================================================
 ## Actually run the calibration
-tbeg=proc.time()
-amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+if(n_node000==1) {
+  tbeg=proc.time()
+  amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
                   scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(500,round(0.05*niter_mcmc)),
                   par_fixed=par_fixed0, parnames_calib=parnames_calib,
                   parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -139,8 +143,14 @@ amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_
                   ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                   input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs)
-tend=proc.time()
-chain1 = amcmc_out1$samples
+  tend=proc.time()
+  chain1 = amcmc_out1$samples
+} else if(n_node000 > 1) {
+  # TODO -- add support for MCMC.parallel
+}
+
+# save
+save.image(file='GEOCARB_MCMC_tmp.RData')
 
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
@@ -169,8 +179,8 @@ chain1 = amcmc_extend1$samples
 #TONY TODO
 #TONY TODO
 # for now only look at climate sensitivity
-ind_cs <- match('deltaT2X',parnames_calib)
-plot(chain1[,ind_cs], type='l')
+#ind_cs <- match('deltaT2X',parnames_calib)
+#plot(chain1[,ind_cs], type='l')
 #par(mfrow=c(7,8))
 #for (p in 1:length(parnames_calib)) {plot(chain1[,p], type='l', ylab=parnames_calib[p])}
 
@@ -179,6 +189,10 @@ plot(chain1[,ind_cs], type='l')
 # Gelman and Rubin
 # Heidelberger and Welch
 # visual inspection
+
+parameters.posterior <- chain1
+covjump <- amcmc_out1$cov.jump
+
 ##==============================================================================
 
 
@@ -186,6 +200,28 @@ plot(chain1[,ind_cs], type='l')
 ## Write calibrated parameters output file
 ##========================================
 
+## Get maximum length of parameter name, for width of array to write to netcdf
+## this code will write an n.parameters (rows) x n.ensemble (columns) netcdf file
+## to get back into the shape BRICK expects, just transpose it
+lmax=0
+for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
+
+## Name the file
+today=Sys.Date(); today=format(today,format="%d%b%Y")
+filename.parameters = paste('geocarb_calibratedParameters_',appen,'_',today,'.nc',sep="")
+
+library(ncdf4)
+dim.parameters <- ncdim_def('n.parameters', '', 1:ncol(parameters.posterior), unlim=FALSE)
+dim.name <- ncdim_def('name.len', '', 1:lmax, unlim=FALSE)
+dim.ensemble <- ncdim_def('n.ensemble', 'ensemble member', 1:nrow(parameters.posterior), unlim=TRUE)
+parameters.var <- ncvar_def('geocarb_parameters', '', list(dim.parameters,dim.ensemble), -999)
+parnames.var <- ncvar_def('parnames', '', list(dim.name,dim.parameters), prec='char')
+covjump.var <- ncvar_def('covjump', '', list(dim.parameters,dim.parameters), -999)
+outnc <- nc_create(filename.parameters, list(parameters.var,parnames.var, covjump.var))
+ncvar_put(outnc, parameters.var, t(parameters.posterior))
+ncvar_put(outnc, parnames.var, parnames_calib)
+ncvar_put(outnc, covjump.var, covjump)
+nc_close(outnc)
 
 ##==============================================================================
 
