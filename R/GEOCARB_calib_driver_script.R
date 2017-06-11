@@ -7,7 +7,7 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-niter_mcmc000 <- 1e6   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 setwd('/home/scrim/axw322/codes/GEOCARB/R')
 appen <- 'withPaleosols'
@@ -20,6 +20,11 @@ appen <- 'withPaleosols'
 # Read proxy data. Returns "data_calib_all"
 library(sn)
 source('GEOCARB-2014_getData.R')
+
+# remove the lowest 10 co2 content data points (all paleosols, it turns out)
+# (lowest ~40 are all from paleosols, actually)
+ind_co2_sort_all <- order(data_calib_all$co2)
+data_calib_all <- data_calib_all[-ind_co2_sort_all[1:20], ]
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -149,8 +154,16 @@ if(n_node000==1) {
   # TODO -- add support for MCMC.parallel
 }
 
+if(FALSE) {
+par(mfrow=c(3,2))
+for (p in 1:3) {
+  plot(chain1[,p], type='l', ylab=parnames_calib[p], xlab='Iteration')
+  hist(chain1[,p], xlab=parnames_calib[p], ylab='freq', main='')
+}
+}
+
 # save
-save.image(file='GEOCARB_MCMC_tmp.RData')
+save.image(file=paste('GEOCARB_MCMC_',appen,'.RData', sep=''))
 
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?

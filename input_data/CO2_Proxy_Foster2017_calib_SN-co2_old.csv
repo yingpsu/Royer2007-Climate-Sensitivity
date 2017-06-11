@@ -1,0 +1,1216 @@
+,age,age_old,age_young,co2,type,co2_low,co2_high,co2_range,distribution,proxy_type,reference,xi_co2,omega_co2,alpha_co2
+1,196.1,201.3,190.8,1204,mean,602,2408,1,skew_normal,paleosols,"Suchecki et al., 1988 (reported in Ekart et al., 1999)",2317.429325,1223.777153,-1.489473223
+2,211.9,214,209.8,1264,mean,632,2528,1,skew_normal,paleosols,"Suchecki et al., 1988 (reported in Ekart et al., 1999)",2432.915837,1284.762725,-1.489473223
+3,223.3,237,209.5,800,mean,400,1600,1,skew_normal,paleosols,"Suchecki et al., 1988 (reported in Ekart et al., 1999)",1539.82015,813.1409652,-1.489473223
+4,142.2,145,139.4,560,mean,280,1120,1,skew_normal,paleosols,"Platt, 1989 (reported in Cerling, 1991)",1077.874105,569.1986757,-1.489473223
+5,242.1,247.1,237,284,mean,142,568,1,skew_normal,paleosols,"Purvis & Wright, 1991 (reported in Ekart et al., 1999)",546.6361532,288.6650427,-1.489473223
+6,211.9,214,209.8,667,mean,333,1333,1,skew_normal,paleosols,"Cerling, 1991",1282.185758,677.1699617,-1.485668489
+7,4,5.3,2.6,80,mean,40,160,1,skew_normal,paleosols,"Cerling, 1992",153.982015,81.31409652,-1.489473223
+8,8.4,11.4,5.3,133,mean,67,267,1,skew_normal,paleosols,"Cerling, 1992",257.630013,135.9688737,-1.508553044
+9,13.7,16,11.4,133,mean,67,267,1,skew_normal,paleosols,"Cerling, 1992",257.630013,135.9688737,-1.508553044
+10,53.5,55,52,80,mean,40,160,1,skew_normal,paleosols,"Cerling, 1992",153.982015,81.31409652,-1.489473223
+11,106.8,113,100.5,600,mean,300,1200,1,skew_normal,paleosols,"Cerling, 1992",1154.865112,609.8557239,-1.489473223
+12,55.5,56,55,328,mean,164,656,1,skew_normal,paleosols,"Koch et al., 1992",631.3262614,333.3877957,-1.489473223
+13,56.5,57,56,428,mean,214,856,1,skew_normal,paleosols,"Koch et al., 1992",823.8037801,435.0304164,-1.489473223
+14,303,307,298.9,588,mean,294,1176,1,skew_normal,paleosols,"Kenny & Neet, 1993",1131.76781,597.6586094,-1.489473223
+15,344.9,346.7,343,524,mean,262,1048,1,skew_normal,paleosols,"Muchez et al., 1993",1008.582198,532.6073322,-1.489473223
+16,7.7,7.8,7.5,292,mean,146,584,1,skew_normal,paleosols,"Quade et al., 1994 (reported in Ekart et al., 1999)",562.0343547,296.7964523,-1.489473223
+17,10.6,11.2,9.9,448,mean,224,896,1,skew_normal,paleosols,"Quade et al., 1994 (reported in Ekart et al., 1999)",862.2992839,455.3589405,-1.489473223
+18,7.1,8.9,5.3,468,mean,234,936,1,skew_normal,paleosols,"Quade et al., 1994 (reported in Ekart et al., 1999)",900.7947876,475.6874647,-1.489473223
+19,55.5,56,55,100,mean,50,200,1,skew_normal,paleosols,"Sinha & Stott, 1994",192.4775187,101.6426207,-1.489473223
+20,56.5,57,56,100,mean,50,200,1,skew_normal,paleosols,"Sinha & Stott, 1994",192.4775187,101.6426207,-1.489473223
+21,69.1,72.1,66,60,mean,30,120,1,skew_normal,paleosols,"Andrews et al., 1995",115.4865112,60.98557239,-1.489473223
+22,7,9,5,148,mean,74,296,1,skew_normal,paleosols,"Quade & Cerling, 1995 (reported in Ekart et al., 1999)",284.8667277,150.4310786,-1.489473223
+23,9,11,7,204,mean,102,408,1,skew_normal,paleosols,"Quade & Cerling, 1995 (reported in Ekart et al., 1999)",392.6541382,207.3509461,-1.489473223
+24,13,15,11,296,mean,148,592,1,skew_normal,paleosols,"Quade & Cerling, 1995 (reported in Ekart et al., 1999)",569.7334554,300.8621571,-1.489473223
+25,13,15,11,176,mean,88,352,1,skew_normal,paleosols,"Quade & Cerling, 1995 (reported in Ekart et al., 1999)",338.7604329,178.8910123,-1.489473223
+26,285.6,298.9,272.3,70,mean,35,140,1,skew_normal,paleosols,"Mora et al., 1996",134.7342631,71.14983446,-1.489473223
+27,303,307,298.9,250,mean,125,500,1,skew_normal,paleosols,"Mora et al., 1996",481.1937968,254.1065516,-1.489473223
+28,327.1,330.9,323.2,290,mean,145,580,1,skew_normal,paleosols,"Mora et al., 1996",558.1848043,294.7635999,-1.489473223
+29,327.1,330.9,323.2,210,mean,105,420,1,skew_normal,paleosols,"Mora et al., 1996",404.2027893,213.4495034,-1.489473223
+30,332.6,346.7,318.5,320,mean,160,640,1,skew_normal,paleosols,"Mora et al., 1996",615.9280599,325.2563861,-1.489473223
+31,338.8,346.7,330.9,190,mean,95,380,1,skew_normal,paleosols,"Mora et al., 1996",365.7072856,193.1209792,-1.489473223
+32,365.6,372.2,358.9,395,mean,198,790,1,skew_normal,paleosols,"Mora et al., 1996",760.6427778,401.372968,-1.492689533
+33,365.6,372.2,358.9,600,mean,300,1200,1,skew_normal,paleosols,"Mora et al., 1996",1154.865112,609.8557239,-1.489473223
+34,423.3,427.4,419.2,1680,mean,840,3360,1,skew_normal,paleosols,"Mora et al., 1996",3233.622314,1707.596027,-1.489473223
+35,5,NA,NA,324,mean,162,648,1,skew_normal,paleosols,"Ekart et al., 1999",623.6271606,329.3220909,-1.489473223
+36,21,NA,NA,312,mean,156,624,1,skew_normal,paleosols,"Ekart et al., 1999",600.5298584,317.1249764,-1.489473223
+37,25.6,28.1,23,588,mean,294,1176,1,skew_normal,paleosols,"Ekart et al., 1999",1131.76781,597.6586094,-1.489473223
+38,45,NA,NA,780,mean,390,1560,1,skew_normal,paleosols,"Ekart et al., 1999",1501.324646,792.8124411,-1.489473223
+39,69.1,72.1,66,328,mean,164,656,1,skew_normal,paleosols,"Ekart et al., 1999",631.3262614,333.3877957,-1.489473223
+40,69.1,72.1,66,172,mean,86,344,1,skew_normal,paleosols,"Ekart et al., 1999",331.0613322,174.8253075,-1.489473223
+41,69.1,72.1,66,252,mean,126,504,1,skew_normal,paleosols,"Ekart et al., 1999",485.0433472,256.139404,-1.489473223
+42,77.9,83.6,72.1,1180,mean,590,2360,1,skew_normal,paleosols,"Ekart et al., 1999",2271.234721,1199.382924,-1.489473223
+43,77.9,83.6,72.1,504,mean,252,1008,1,skew_normal,paleosols,"Ekart et al., 1999",970.0866943,512.2788081,-1.489473223
+44,119.7,126.3,113,904,mean,452,1808,1,skew_normal,paleosols,"Ekart et al., 1999",1739.996769,918.8492907,-1.489473223
+45,119.7,126.3,113,1084,mean,542,2168,1,skew_normal,paleosols,"Ekart et al., 1999",2086.456303,1101.806008,-1.489473223
+46,119.7,126.3,113,1076,mean,538,2152,1,skew_normal,paleosols,"Ekart et al., 1999",2071.058101,1093.674598,-1.489473223
+47,119.7,126.3,113,592,mean,296,1184,1,skew_normal,paleosols,"Ekart et al., 1999",1139.466911,601.7243143,-1.489473223
+48,154.7,157.3,152.1,1272,mean,636,2544,1,skew_normal,paleosols,"Ekart et al., 1999",2448.314038,1292.894135,-1.489473223
+49,187.7,201.3,174.1,1824,mean,912,3648,1,skew_normal,paleosols,"Ekart et al., 1999",3510.789941,1853.961401,-1.489473223
+50,172.2,174.1,170.3,768,mean,384,1536,1,skew_normal,paleosols,"Ekart et al., 1999",1478.227344,780.6153266,-1.489473223
+51,223.3,237,209.5,660,mean,330,1320,1,skew_normal,paleosols,"Ekart et al., 1999",1270.351624,670.8412963,-1.489473223
+52,223.3,237,209.5,732,mean,366,1464,1,skew_normal,paleosols,"Ekart et al., 1999",1408.935437,744.0239832,-1.489473223
+53,223.3,237,209.5,1140,mean,570,2280,1,skew_normal,paleosols,"Ekart et al., 1999",2194.243713,1158.725875,-1.489473223
+54,242.1,247.1,237,244,mean,122,488,1,skew_normal,paleosols,"Ekart et al., 1999",469.6451457,248.0079944,-1.489473223
+55,259.4,259.8,259,400,mean,200,800,1,skew_normal,paleosols,"Ekart et al., 1999",769.9100749,406.5704826,-1.489473223
+56,303,307,298.9,608,mean,304,1216,1,skew_normal,paleosols,"Ekart et al., 1999",1170.263314,617.9871336,-1.489473223
+57,344.8,347,342.5,824,mean,412,1648,1,skew_normal,paleosols,"Ekart et al., 1999",1586.014754,837.5351942,-1.489473223
+58,388,393.3,382.7,624,mean,312,1248,1,skew_normal,paleosols,"Ekart et al., 1999",1201.059717,634.2499529,-1.489473223
+59,130.1,133.9,126.3,1150,mean,575,2300,1,skew_normal,paleosols,"Lee, 1999",2213.491465,1168.890138,-1.489473223
+60,134.3,136.5,132,653,mean,327,1307,1,skew_normal,paleosols,"Lee & Hisada, 1999  (updated by Hong and Lee, 2012)",1258.516001,664.5119094,-1.493359383
+61,365.6,372.2,358.9,1140,mean,570,2280,1,skew_normal,paleosols,"Driese et al., 2000",2194.243713,1158.725875,-1.489473223
+62,365.6,372.2,358.9,1260,mean,630,2520,1,skew_normal,paleosols,"Driese et al., 2000",2425.216736,1280.69702,-1.489473223
+63,402.6,407.6,397.5,1320,mean,660,2640,1,skew_normal,paleosols,"Driese et al., 2000",2540.703247,1341.682593,-1.489473223
+64,421.1,423,419.2,1440,mean,720,2880,1,skew_normal,paleosols,"Driese et al., 2000",2771.67627,1463.653737,-1.489473223
+65,377.5,382.7,372.2,1120,mean,560,2240,1,skew_normal,paleosols,"Cox et al., 2001",2155.74821,1138.397351,-1.489473223
+66,385.2,387.7,382.7,1560,mean,780,3120,1,skew_normal,paleosols,"Cox et al., 2001",3002.649292,1585.624882,-1.489473223
+67,54.2,54.5,53.9,814,mean,407,1627,1,skew_normal,paleosols,"Royer et al., 2001b",1565.485187,826.4696656,-1.487913466
+68,54.9,55.2,54.6,231,mean,115,462,1,skew_normal,paleosols,"Royer et al., 2001b",444.2656468,234.9094287,-1.483992045
+69,56.2,56.5,55.9,461,mean,230,922,1,skew_normal,paleosols,"Royer et al., 2001b",886.9642056,468.687585,-1.486723774
+70,56.5,56.8,56.2,487,mean,243,974,1,skew_normal,paleosols,"Royer et al., 2001b",937.0083747,495.1146732,-1.486870413
+71,56.7,57,56.4,579,mean,290,1158,1,skew_normal,paleosols,"Royer et al., 2001b",1114.801511,588.3954379,-1.49166655
+72,57.3,57.6,57,816,mean,408,1633,1,skew_normal,paleosols,"Royer et al., 2001b",1571.898067,830.304905,-1.491027226
+73,57.7,58,57.4,474,mean,237,948,1,skew_normal,paleosols,"Royer et al., 2001b",912.3434387,481.7860219,-1.489473223
+74,200.3,201.3,199.3,992,mean,496,1984,1,skew_normal,paleosols,"Tanner et al., 2001",1909.376986,1008.294797,-1.489473223
+75,223.3,237,209.5,900,mean,450,1800,1,skew_normal,paleosols,"Tanner et al., 2001",1732.297668,914.7835859,-1.489473223
+76,130.1,130.8,129.4,112,mean,56,224,1,skew_normal,paleosols,"Robinson et al., 2002",215.574821,113.8397351,-1.489473223
+77,64.8,65,64.7,400,mean,200,800,1,skew_normal,paleosols,"Nordt et al., 2002",769.9100749,406.5704826,-1.489473223
+78,65.3,65.7,65,340,mean,170,680,1,skew_normal,paleosols,"Nordt et al., 2002",654.4235636,345.5849102,-1.489473223
+79,65.9,66.3,65.5,300,mean,150,600,1,skew_normal,paleosols,"Nordt et al., 2002",577.4325562,304.927862,-1.489473223
+80,67.2,68.1,66.3,560,mean,280,1120,1,skew_normal,paleosols,"Nordt et al., 2002",1077.874105,569.1986757,-1.489473223
+81,67.2,68.1,66.3,300,mean,150,600,1,skew_normal,paleosols,"Nordt et al., 2002",577.4325562,304.927862,-1.489473223
+82,77.1,80,74.3,480,mean,240,960,1,skew_normal,paleosols,"Nordt et al., 2002",923.8920898,487.8845791,-1.489473223
+83,65.2,66.2,64.2,178,mean,89,356,1,skew_normal,paleosols,"Nordt et al., 2003",342.6099833,180.9238648,-1.489473223
+84,65.2,66.2,64.2,163,mean,81,326,1,skew_normal,paleosols,"Nordt et al., 2003",313.3807114,165.792339,-1.481712286
+85,65.4,66.4,64.4,88,mean,44,176,1,skew_normal,paleosols,"Nordt et al., 2003",169.3802165,89.44550617,-1.489473223
+86,65.6,66.6,64.6,111,mean,56,222,1,skew_normal,paleosols,"Nordt et al., 2003",214.0058336,112.7075406,-1.500955646
+87,65.8,66.8,64.8,178,mean,89,355,1,skew_normal,paleosols,"Nordt et al., 2003",341.3276239,180.0223348,-1.482324448
+88,65.9,66.9,64.9,54,mean,27,108,1,skew_normal,paleosols,"Nordt et al., 2003",103.9378601,54.88701515,-1.489473223
+89,66.1,67.1,65.1,183,mean,92,366,1,skew_normal,paleosols,"Nordt et al., 2003",352.5900794,185.8904379,-1.496425655
+90,66.2,67.2,65.2,277,mean,139,555,1,skew_normal,paleosols,"Nordt et al., 2003",534.79952,282.3351642,-1.498634323
+91,66.4,67.4,65.4,90,mean,45,180,1,skew_normal,paleosols,"Nordt et al., 2003",173.2297668,91.47835859,-1.489473223
+92,66.5,67.5,65.5,42,mean,21,85,1,skew_normal,paleosols,"Nordt et al., 2003",82.11939588,43.58971533,-1.519328488
+93,66.6,67.6,65.6,15,mean,7,30,1,skew_normal,paleosols,"Nordt et al., 2003",28.50631406,15.35760651,-1.407485216
+94,66.6,67.6,65.6,263,mean,132,527,1,skew_normal,paleosols,"Nordt et al., 2003",507.8525743,268.105152,-1.499121977
+95,66.7,67.7,65.7,453,mean,226,906,1,skew_normal,paleosols,"Nordt et al., 2003",871.5659994,460.556173,-1.486675271
+96,66.9,67.9,65.9,426,mean,213,852,1,skew_normal,paleosols,"Nordt et al., 2003",819.9542297,432.997564,-1.489473223
+97,66.9,67.9,65.9,265,mean,133,531,1,skew_normal,paleosols,"Nordt et al., 2003",511.7021386,270.1380112,-1.499049158
+98,67,68,66,219,mean,110,438,1,skew_normal,paleosols,"Nordt et al., 2003",421.8820959,222.4818347,-1.495280193
+99,67,68,66,128,mean,64,257,1,skew_normal,paleosols,"Nordt et al., 2003",247.6519401,131.0032869,-1.499347236
+100,68.5,69.5,67.5,10,mean,5,21,1,skew_normal,paleosols,"Nordt et al., 2003",20.51866349,11.06012364,-1.61052053
+101,68.7,69.7,67.7,171,mean,85,341,1,skew_normal,paleosols,"Nordt et al., 2003",327.4951012,173.0215174,-1.474631222
+102,68.8,69.8,67.8,110,mean,55,219,1,skew_normal,paleosols,"Nordt et al., 2003",210.4424758,110.9051424,-1.477884614
+103,69,70,68,158,mean,79,317,1,skew_normal,paleosols,"Nordt et al., 2003",305.3953742,161.49616,-1.497478368
+104,69.1,70.1,68.1,138,mean,69,277,1,skew_normal,paleosols,"Nordt et al., 2003",266.89976,141.1675821,-1.498634323
+105,69.3,70.3,68.3,202,mean,101,404,1,skew_normal,paleosols,"Nordt et al., 2003",388.8045878,205.3180937,-1.489473223
+106,69.4,70.4,68.4,145,mean,73,290,1,skew_normal,paleosols,"Nordt et al., 2003",279.4484474,147.266157,-1.498253938
+107,69.5,70.5,68.5,345,mean,172,689,1,skew_normal,paleosols,"Nordt et al., 2003",662.4074554,349.880388,-1.482117226
+108,69.7,70.7,68.7,204,mean,102,407,1,skew_normal,paleosols,"Nordt et al., 2003",391.3718679,206.4494594,-1.483237846
+109,69.9,70.9,68.9,309,mean,155,618,1,skew_normal,paleosols,"Nordt et al., 2003",595.1120254,313.9602724,-1.493586124
+110,70,71,69,375,mean,188,751,1,skew_normal,paleosols,"Nordt et al., 2003",723.4279462,381.9451552,-1.49624026
+111,70.1,71.1,69.1,329,mean,164,657,1,skew_normal,paleosols,"Nordt et al., 2003",631.6109824,333.6175349,-1.481759468
+112,70.2,71.2,69.2,122,mean,61,243,1,skew_normal,paleosols,"Nordt et al., 2003",233.5398906,123.1023112,-1.47902927
+113,70.3,71.3,69.3,38,mean,19,76,1,skew_normal,paleosols,"Nordt et al., 2003",73.14145711,38.62419585,-1.489473223
+114,70.5,71.5,69.5,126,mean,63,252,1,skew_normal,paleosols,"Nordt et al., 2003",242.5216736,128.069702,-1.489473223
+115,71.4,72.4,70.4,254,mean,127,508,1,skew_normal,paleosols,"Nordt et al., 2003",488.8928975,258.1722565,-1.489473223
+116,71.5,72.5,70.5,289,mean,145,578,1,skew_normal,paleosols,"Nordt et al., 2003",556.6164943,293.6317349,-1.493871243
+117,71.6,72.6,70.6,294,mean,147,589,1,skew_normal,paleosols,"Nordt et al., 2003",567.165154,299.7302964,-1.493781641
+118,280.7,282,279.3,133,mean,67,267,1,skew_normal,paleosols,"Tabor et al., 2004",257.630013,135.9688737,-1.508553044
+119,273.7,275,272.3,133,mean,67,267,1,skew_normal,paleosols,"Tabor et al., 2004",257.630013,135.9688737,-1.508553044
+120,83.3,100.5,66,740,mean,370,1480,1,skew_normal,paleosols,"Ghosh et al., 2005 (and 1995, 2001)",1424.333639,752.1553928,-1.489473223
+121,182.4,201.3,163.5,1113,mean,556,2225,1,skew_normal,paleosols,"Ghosh et al., 2005 (and 1995, 2001)",2140.635788,1130.496193,-1.487193138
+122,232.7,237,228.4,585,mean,293,1170,1,skew_normal,paleosols,"Ghosh et al., 2005 (and 1995, 2001)",1126.350164,594.4939962,-1.491644035
+123,242.1,247.1,237,605,mean,303,1210,1,skew_normal,paleosols,"Ghosh et al., 2005 (and 1995, 2001)",1164.845675,614.8225237,-1.491572214
+124,279.4,298.9,259.8,358,mean,179,715,1,skew_normal,paleosols,"Ghosh et al., 2005 (and 1995, 2001)",687.7875084,362.9792218,-1.485923917
+125,219,228.4,209.5,880,mean,440,1760,1,skew_normal,paleosols,"Prochnow et al., 2006",1693.802165,894.4550617,-1.489473223
+126,219,228.4,209.5,695,mean,348,1390,1,skew_normal,paleosols,"Prochnow et al., 2006",1338.075468,706.300895,-1.491300209
+127,232.7,237,228.4,116,mean,58,232,1,skew_normal,paleosols,"Prochnow et al., 2006",223.2739217,117.90544,-1.489473223
+128,246.1,247.1,245,580,mean,290,1160,1,skew_normal,paleosols,"Prochnow et al., 2006",1116.369609,589.5271998,-1.489473223
+129,246.1,247.1,245,300,mean,150,600,1,skew_normal,paleosols,"Prochnow et al., 2006",577.4325562,304.927862,-1.489473223
+130,92.2,93,91.3,772,mean,386,1544,1,skew_normal,paleosols,"Sandler, 2006",1485.926444,784.6810314,-1.489473223
+131,300.2,NA,NA,882,mean,282,1347,1,skew_normal,paleosols,"Monta_ez et al., 2007",475.6799176,635.0595245,0.899172751
+132,299.9,NA,NA,697,mean,185,1102,1,skew_normal,paleosols,"Monta_ez et al., 2007",360.0970231,542.2937337,0.866738005
+133,299.7,NA,NA,399,mean,88,650,1,skew_normal,paleosols,"Monta_ez et al., 2007",200.6144624,329.5451488,0.833808517
+134,298.6,NA,NA,515,mean,0,996,1,skew_normal,paleosols,"Monta_ez et al., 2007",296.3447201,540.1290525,0.529525389
+135,297.9,NA,NA,288,mean,0,878,1,skew_normal,paleosols,"Monta_ez et al., 2007",838.5734432,598.0585092,-1.519943094
+136,296.6,NA,NA,65,mean,0,304,1,skew_normal,paleosols,"Monta_ez et al., 2007",319.6892428,227.5354494,-2.295369917
+137,295.9,NA,NA,47,mean,0,210,1,skew_normal,paleosols,"Monta_ez et al., 2007",219.2633762,156.062413,-2.21297658
+138,294.3,NA,NA,50,mean,0,271,1,skew_normal,paleosols,"Monta_ez et al., 2007",290.7261886,206.9139644,-2.564681496
+139,293.1,NA,NA,208,mean,0,468,1,skew_normal,paleosols,"Monta_ez et al., 2007",376.1870713,275.4601052,-0.848374174
+140,290.5,NA,NA,600,mean,234,966,1,skew_normal,paleosols,"Monta_ez et al., 2007",605.7705581,368.0848477,-0.019651439
+141,290.5,NA,NA,461,mean,144,678,1,skew_normal,paleosols,"Monta_ez et al., 2007",216.0199279,332.8607235,1.080228271
+142,290.4,NA,NA,1700,mean,530,2497,1,skew_normal,paleosols,"Monta_ez et al., 2007",792.0725911,1228.036128,1.08698684
+143,290.4,NA,NA,419,mean,131,616,1,skew_normal,paleosols,"Monta_ez et al., 2007",196.2892378,302.3908191,1.081267398
+144,290.2,NA,NA,411,mean,96,538,1,skew_normal,paleosols,"Monta_ez et al., 2007",99.27084424,312.4612821,1.764176853
+145,289.9,NA,NA,620,mean,102,770,1,skew_normal,paleosols,"Monta_ez et al., 2007",72.90913386,496.1609946,2.207025321
+146,289.4,NA,NA,182,mean,11,353,1,skew_normal,paleosols,"Monta_ez et al., 2007",182.5788915,171.9539576,-0.004219372
+147,288.9,NA,NA,183,mean,24,342,1,skew_normal,paleosols,"Monta_ez et al., 2007",183.234947,159.8862801,-0.001841701
+148,287.4,NA,NA,397,mean,249,544,1,skew_normal,paleosols,"Monta_ez et al., 2007",369.0644576,150.8422152,0.234126353
+149,287,NA,NA,1030,mean,676,1396,1,skew_normal,paleosols,"Monta_ez et al., 2007",1150.338603,379.7142375,-0.407564391
+150,286.9,NA,NA,1449,mean,899,1999,1,skew_normal,paleosols,"Monta_ez et al., 2007",1450.454772,553.0670649,-0.003296696
+151,285.8,NA,NA,774,mean,465,1084,1,skew_normal,paleosols,"Monta_ez et al., 2007",819.4281883,314.4542732,-0.182014406
+152,285,NA,NA,792,mean,460,1124,1,skew_normal,paleosols,"Monta_ez et al., 2007",793.5037022,333.8536228,-0.005645094
+153,284.8,NA,NA,792,mean,460,1124,1,skew_normal,paleosols,"Monta_ez et al., 2007",792.8999853,333.8514499,-0.003378656
+154,284.5,NA,NA,824,mean,480,1168,1,skew_normal,paleosols,"Monta_ez et al., 2007",824.9118504,345.9183146,-0.003303786
+155,283.8,NA,NA,1012,mean,604,1419,1,skew_normal,paleosols,"Monta_ez et al., 2007",957.5407986,413.3114128,0.165862055
+156,283.4,NA,NA,1100,mean,679,1520,1,skew_normal,paleosols,"Monta_ez et al., 2007",1044.400497,426.421207,0.164114048
+157,282.4,NA,NA,899,mean,566,1233,1,skew_normal,paleosols,"Monta_ez et al., 2007",946.7186914,338.6696649,-0.177475513
+158,281.1,NA,NA,1248,mean,759,1737,1,skew_normal,paleosols,"Monta_ez et al., 2007",1249.467452,491.7273878,-0.003740261
+159,277.6,NA,NA,1237,mean,788,1685,1,skew_normal,paleosols,"Monta_ez et al., 2007",1178.983571,454.6551452,0.16058463
+160,210.7,211.9,209.5,111,mean,56,222,1,skew_normal,paleosols,"Cleveland et al., 2008",214.0058336,112.7075406,-1.500955646
+161,211.8,214,209.5,544,mean,272,1088,1,skew_normal,paleosols,"Cleveland et al., 2008",1047.077702,552.9358564,-1.489473223
+162,211.8,214,209.5,643,mean,322,1287,1,skew_normal,paleosols,"Cleveland et al., 2008",1239.268238,654.3476417,-1.49341982
+163,210.7,211.9,209.5,13,mean,6,25,1,skew_normal,paleosols,"Cleveland et al., 2008",23.33934137,12.4070226,-1.292724684
+164,210.7,211.9,209.5,45,mean,23,90,1,skew_normal,paleosols,"Cleveland et al., 2008",86.96907071,45.62262878,-1.517986507
+165,210.7,211.9,209.5,372,mean,186,743,1,skew_normal,paleosols,"Cleveland et al., 2008",714.734374,377.209195,-1.486057676
+166,211.8,214,209.5,1667,mean,833,3333,1,skew_normal,paleosols,"Cleveland et al., 2008",3206.961389,1693.596383,-1.487950893
+167,211.8,214,209.5,1702,mean,851,3404,1,skew_normal,paleosols,"Cleveland et al., 2008",3275.967369,1729.957404,-1.489473223
+168,211.8,214,209.5,1596,mean,798,3192,1,skew_normal,paleosols,"Cleveland et al., 2008",3071.941199,1622.216226,-1.489473223
+169,210.7,211.9,209.5,344,mean,172,688,1,skew_normal,paleosols,"Cleveland et al., 2008",662.1226644,349.650615,-1.489473223
+170,210.7,211.9,209.5,269,mean,134,537,1,skew_normal,paleosols,"Cleveland et al., 2008",516.1241342,272.6317996,-1.480038801
+171,210.7,211.9,209.5,377,mean,189,754,1,skew_normal,paleosols,"Cleveland et al., 2008",725.9968096,383.0772891,-1.492843299
+172,211.8,214,209.5,1443,mean,721,2885,1,skew_normal,paleosols,"Cleveland et al., 2008",2775.811701,1465.916891,-1.487714576
+173,211.8,214,209.5,1191,mean,596,2383,1,skew_normal,paleosols,"Cleveland et al., 2008",2294.04539,1211.349373,-1.491603937
+174,211.8,214,209.5,1349,mean,674,2697,1,skew_normal,paleosols,"Cleveland et al., 2008",2594.882809,1370.372816,-1.48759203
+175,211.8,214,209.5,1678,mean,839,3356,1,skew_normal,paleosols,"Cleveland et al., 2008",3229.772764,1705.563175,-1.489473223
+176,211.8,214,209.5,1295,mean,648,2591,1,skew_normal,paleosols,"Cleveland et al., 2008",2494.222042,1317.057714,-1.491432823
+177,211.8,214,209.5,1516,mean,758,3032,1,skew_normal,paleosols,"Cleveland et al., 2008",2917.959184,1540.902129,-1.489473223
+178,210.7,211.9,209.5,560,mean,280,1119,1,skew_normal,paleosols,"Cleveland et al., 2008",1076.592221,568.2973759,-1.487205364
+179,211.8,214,209.5,1367,mean,684,2735,1,skew_normal,paleosols,"Cleveland et al., 2008",2632.805876,1390.240411,-1.491329611
+180,205.4,209.5,201.3,1777,mean,888,3553,1,skew_normal,paleosols,"Cleveland et al., 2008",3418.686677,1805.403275,-1.488045129
+181,205.4,209.5,201.3,1702,mean,851,3404,1,skew_normal,paleosols,"Cleveland et al., 2008",3275.967369,1729.957404,-1.489473223
+182,205.4,209.5,201.3,1085,mean,542,2169,1,skew_normal,paleosols,"Cleveland et al., 2008",2086.742071,1102.036254,-1.487134296
+183,205.4,209.5,201.3,1191,mean,596,2383,1,skew_normal,paleosols,"Cleveland et al., 2008",2294.04539,1211.349373,-1.491603937
+184,205.4,209.5,201.3,863,mean,431,1725,1,skew_normal,paleosols,"Cleveland et al., 2008",1659.441863,876.3895795,-1.486532615
+185,205.4,209.5,201.3,661,mean,331,1322,1,skew_normal,paleosols,"Cleveland et al., 2008",1272.633102,671.7423996,-1.491394254
+186,205.4,209.5,201.3,1030,mean,515,2060,1,skew_normal,paleosols,"Cleveland et al., 2008",1982.518443,1046.918993,-1.489473223
+187,205.4,209.5,201.3,513,mean,257,1026,1,skew_normal,paleosols,"Cleveland et al., 2008",987.7663212,521.311295,-1.491949005
+188,205.4,209.5,201.3,623,mean,311,1245,1,skew_normal,paleosols,"Cleveland et al., 2008",1197.495598,632.4471833,-1.485399769
+189,205.4,209.5,201.3,1557,mean,778,3113,1,skew_normal,paleosols,"Cleveland et al., 2008",2995.236097,1581.78949,-1.487843342
+190,205.4,209.5,201.3,1202,mean,601,2404,1,skew_normal,paleosols,"Cleveland et al., 2008",2313.579775,1221.7443,-1.489473223
+191,205.4,209.5,201.3,1967,mean,983,3933,1,skew_normal,paleosols,"Cleveland et al., 2008",3784.39399,1998.524267,-1.488183075
+192,205.4,209.5,201.3,1783,mean,891,3565,1,skew_normal,paleosols,"Cleveland et al., 2008",3430.235329,1811.501832,-1.488049935
+193,205.4,209.5,201.3,880,mean,440,1759,1,skew_normal,paleosols,"Cleveland et al., 2008",1692.520361,893.5538007,-1.488030515
+194,205.4,209.5,201.3,843,mean,422,1686,1,skew_normal,paleosols,"Cleveland et al., 2008",1622.942226,856.7319886,-1.490979269
+195,205.4,209.5,201.3,1619,mean,809,3237,1,skew_normal,paleosols,"Cleveland et al., 2008",3114.572171,1644.807921,-1.487905759
+196,205.4,209.5,201.3,1214,mean,607,2427,1,skew_normal,paleosols,"Cleveland et al., 2008",2335.395312,1233.040172,-1.488427604
+197,205.4,209.5,201.3,614,mean,307,1227,1,skew_normal,paleosols,"Cleveland et al., 2008",1180.5301,623.1844004,-1.487404982
+198,205.4,209.5,201.3,1267,mean,634,2534,1,skew_normal,paleosols,"Cleveland et al., 2008",2439.046955,1287.696724,-1.490475076
+199,205.4,209.5,201.3,773,mean,387,1546,1,skew_normal,paleosols,"Cleveland et al., 2008",1488.20795,785.5821477,-1.491115738
+200,205.4,209.5,201.3,341,mean,171,682,1,skew_normal,paleosols,"Cleveland et al., 2008",656.7048686,346.485929,-1.493199601
+201,205.4,209.5,201.3,961,mean,481,1922,1,skew_normal,paleosols,"Cleveland et al., 2008",1850.065716,976.6702896,-1.490794248
+202,205.4,209.5,201.3,1171,mean,586,2342,1,skew_normal,paleosols,"Cleveland et al., 2008",2254.268529,1190.119804,-1.490557243
+203,12.8,NA,NA,273,mean,193,354,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",291.842535,83.00576215,-0.28824328
+204,13.1,NA,NA,370,mean,187,553,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",368.9970618,184.0225914,0.0068308
+205,13.8,NA,NA,190,mean,143,237,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",190.1367835,47.26212906,-0.003627293
+206,14.4,NA,NA,132,mean,86,178,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",132.1907965,46.25675142,-0.00516963
+207,14.7,NA,NA,74,mean,50,97,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",65.39413941,24.98971832,0.445006854
+208,15.1,NA,NA,182,mean,131,233,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",182.2467275,51.28481657,-0.006029689
+209,15.6,NA,NA,473,mean,425,521,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",473.4050559,48.26920363,-0.0105178
+210,16,NA,NA,333,mean,281,385,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",333.3899332,52.29124985,-0.009346227
+211,16.1,NA,NA,289,mean,231,346,1,skew_normal,paleosols,"Retallack, 2009b (updated by Breecker & Retallack, 2014)",273.8309716,59.6577249,0.32395634
+212,95.3,100.5,90,1307,mean,654,2614,1,skew_normal,paleosols,"Leier et al., 2009",2516.037965,1328.353773,-1.490444403
+213,113.4,126.3,100.5,591,mean,296,1182,1,skew_normal,paleosols,"Leier et al., 2009",1137.898817,600.5925545,-1.491621978
+214,200.4,NA,NA,1664,mean,832,3328,1,skew_normal,paleosols,"Schaller et al., 2011",3202.825911,1691.333208,-1.489473223
+215,200.5,NA,NA,2087,mean,1044,4175,1,skew_normal,paleosols,"Schaller et al., 2011",4018.644134,2122.067339,-1.490689174
+216,200.9,NA,NA,3515,mean,1758,7031,1,skew_normal,paleosols,"Schaller et al., 2011",6767.223197,3573.524009,-1.490195185
+217,200.9,NA,NA,3294,mean,1647,6588,1,skew_normal,paleosols,"Schaller et al., 2011",6340.209467,3348.107924,-1.489473223
+218,200.9,NA,NA,1299,mean,650,2599,1,skew_normal,paleosols,"Schaller et al., 2011",2501.921144,1321.12342,-1.491426789
+219,201,NA,NA,1571,mean,785,3141,1,skew_normal,paleosols,"Schaller et al., 2011",3022.182953,1596.019458,-1.487857866
+220,201.1,NA,NA,2472,mean,1236,4944,1,skew_normal,paleosols,"Schaller et al., 2011",4758.044263,2512.605583,-1.489473223
+221,201.1,NA,NA,1761,mean,881,3523,1,skew_normal,paleosols,"Schaller et al., 2011",3391.16738,1790.712375,-1.490914272
+222,201.2,NA,NA,2307,mean,1153,4613,1,skew_normal,paleosols,"Schaller et al., 2011",4438.81759,2344.109195,-1.488373215
+223,201.2,NA,NA,2009,mean,1005,4019,1,skew_normal,paleosols,"Schaller et al., 2011",3868.511661,2042.786091,-1.490736384
+224,201.2,NA,NA,2438,mean,1219,4876,1,skew_normal,paleosols,"Schaller et al., 2011",4692.601906,2478.047092,-1.489473223
+225,201.2,NA,NA,2677,mean,1338,5353,1,skew_normal,paleosols,"Schaller et al., 2011",5150.984439,2720.186906,-1.488525253
+226,201.2,NA,NA,2700,mean,1350,5400,1,skew_normal,paleosols,"Schaller et al., 2011",5196.893005,2744.350758,-1.489473223
+227,201.2,NA,NA,2713,mean,1357,5427,1,skew_normal,paleosols,"Schaller et al., 2011",5223.553456,2758.350171,-1.490408606
+228,201.2,NA,NA,2823,mean,1411,5645,1,skew_normal,paleosols,"Schaller et al., 2011",5432.001626,2868.585136,-1.48857428
+229,201.3,NA,NA,2302,mean,1151,4604,1,skew_normal,paleosols,"Schaller et al., 2011",4430.832481,2339.813127,-1.489473223
+230,201.3,NA,NA,2385,mean,1192,4769,1,skew_normal,paleosols,"Schaller et al., 2011",4588.950062,2423.390442,-1.488409191
+231,201.4,NA,NA,2389,mean,1195,4779,1,skew_normal,paleosols,"Schaller et al., 2011",4599.92627,2429.028068,-1.490535463
+232,201.5,NA,NA,2819,mean,1409,5637,1,skew_normal,paleosols,"Schaller et al., 2011",5424.302525,2864.519431,-1.488573005
+233,201.5,NA,NA,2956,mean,1478,5912,1,skew_normal,paleosols,"Schaller et al., 2011",5689.635453,3004.555867,-1.489473223
+234,201.5,NA,NA,710,mean,355,1420,1,skew_normal,paleosols,"Schaller et al., 2011",1366.590383,721.6626066,-1.489473223
+235,201.7,NA,NA,1191,mean,596,2383,1,skew_normal,paleosols,"Schaller et al., 2011",2294.04539,1211.349373,-1.491603937
+236,201.8,NA,NA,1495,mean,747,2989,1,skew_normal,paleosols,"Schaller et al., 2011",2875.900022,1518.771059,-1.487775747
+237,201.9,NA,NA,1502,mean,751,3004,1,skew_normal,paleosols,"Schaller et al., 2011",2891.012331,1526.672162,-1.489473223
+238,202.1,NA,NA,1509,mean,754,3017,1,skew_normal,paleosols,"Schaller et al., 2011",2902.846878,1533.001027,-1.487791496
+239,202.2,NA,NA,1065,mean,532,2129,1,skew_normal,paleosols,"Schaller et al., 2011",2048.246559,1081.707726,-1.487090372
+240,202.5,NA,NA,1613,mean,806,3225,1,skew_normal,paleosols,"Schaller et al., 2011",3103.023519,1638.709363,-1.487899928
+241,203,NA,NA,1487,mean,744,2975,1,skew_normal,paleosols,"Schaller et al., 2011",2863.778927,1512.21157,-1.491179803
+242,203.1,NA,NA,1298,mean,649,2596,1,skew_normal,paleosols,"Schaller et al., 2011",2498.358193,1319.321216,-1.489473223
+243,203.6,NA,NA,1021,mean,511,2043,1,skew_normal,paleosols,"Schaller et al., 2011",1966.83354,1038.556884,-1.491958704
+244,203.7,NA,NA,1855,mean,927,3709,1,skew_normal,paleosols,"Schaller et al., 2011",3568.819154,1884.684524,-1.488105179
+245,203.9,NA,NA,983,mean,492,1967,1,skew_normal,paleosols,"Schaller et al., 2011",1893.692064,999.9326795,-1.492054785
+246,211.9,NA,NA,1183,mean,592,2367,1,skew_normal,paleosols,"Schaller et al., 2012",2278.647186,1203.217962,-1.491618345
+247,211.9,NA,NA,1135,mean,568,2271,1,skew_normal,paleosols,"Schaller et al., 2012",2186.257959,1154.429495,-1.491709063
+248,211.9,NA,NA,1479,mean,739,2957,1,skew_normal,paleosols,"Schaller et al., 2012",2845.103616,1502.508238,-1.487757384
+249,211.9,NA,NA,1376,mean,688,2752,1,skew_normal,paleosols,"Schaller et al., 2012",2648.490658,1398.60246,-1.489473223
+250,205,NA,NA,1377,mean,688,2753,1,skew_normal,paleosols,"Schaller et al., 2012",2648.776522,1398.832753,-1.487630283
+251,201.3,NA,NA,3457,mean,1729,6915,1,skew_normal,paleosols,"Schaller et al., 2012",6655.586234,3514.571288,-1.490207298
+252,201.2,NA,NA,2049,mean,1025,4099,1,skew_normal,paleosols,"Schaller et al., 2012",3945.502673,2083.443141,-1.490711725
+253,200.8,NA,NA,1499,mean,750,2999,1,skew_normal,paleosols,"Schaller et al., 2012",2886.876232,1524.408685,-1.491166141
+254,200.8,NA,NA,3649,mean,1824,7297,1,skew_normal,paleosols,"Schaller et al., 2012",7021.86597,3708.153202,-1.488777769
+255,200.8,NA,NA,1987,mean,993,3973,1,skew_normal,paleosols,"Schaller et al., 2012",3822.889496,2018.852792,-1.488196061
+256,200.8,NA,NA,2353,mean,1177,4707,1,skew_normal,paleosols,"Schaller et al., 2012",4530.634361,2392.436723,-1.490551715
+257,200.8,NA,NA,2927,mean,1464,5855,1,skew_normal,paleosols,"Schaller et al., 2012",5635.455359,2975.865386,-1.490340218
+258,200.8,NA,NA,3012,mean,1506,6024,1,skew_normal,paleosols,"Schaller et al., 2012",5797.422864,3061.475734,-1.489473223
+259,200.7,NA,NA,2383,mean,1191,4765,1,skew_normal,paleosols,"Schaller et al., 2012",4585.100511,2421.35759,-1.488408298
+260,200.7,NA,NA,1818,mean,909,3636,1,skew_normal,paleosols,"Schaller et al., 2012",3499.24129,1847.862843,-1.489473223
+261,200.7,NA,NA,2013,mean,1006,4025,1,skew_normal,paleosols,"Schaller et al., 2012",3872.933654,2045.279875,-1.488212557
+262,200.7,NA,NA,1874,mean,937,3748,1,skew_normal,paleosols,"Schaller et al., 2012",3607.028701,1904.782711,-1.489473223
+263,200.7,NA,NA,2303,mean,1152,4607,1,skew_normal,paleosols,"Schaller et al., 2012",4434.395597,2341.615411,-1.49057513
+264,200.7,NA,NA,1992,mean,996,3984,1,skew_normal,paleosols,"Schaller et al., 2012",3834.152173,2024.721003,-1.489473223
+265,200.6,NA,NA,2048,mean,1024,4096,1,skew_normal,paleosols,"Schaller et al., 2012",3941.939583,2081.640871,-1.489473223
+266,200.6,NA,NA,1545,mean,772,3089,1,skew_normal,paleosols,"Schaller et al., 2012",2972.138792,1569.592374,-1.487830682
+267,200.6,NA,NA,2187,mean,1093,4373,1,skew_normal,paleosols,"Schaller et al., 2012",4207.844556,2222.138044,-1.488312858
+268,200.6,NA,NA,1469,mean,735,2939,1,skew_normal,paleosols,"Schaller et al., 2012",2829.13297,1493.915896,-1.491200714
+269,200.6,NA,NA,1697,mean,848,3393,1,skew_normal,paleosols,"Schaller et al., 2012",3264.704649,1724.089172,-1.487977806
+270,200.5,NA,NA,2997,mean,1499,5995,1,skew_normal,paleosols,"Schaller et al., 2012",5770.189626,3047.015222,-1.490319968
+271,200.5,NA,NA,2750,mean,1375,5500,1,skew_normal,paleosols,"Schaller et al., 2012",5293.131765,2795.172068,-1.489473223
+272,200.5,NA,NA,3395,mean,1697,6789,1,skew_normal,paleosols,"Schaller et al., 2012",6532.973062,3449.980941,-1.488725738
+273,200.4,NA,NA,1921,mean,961,3843,1,skew_normal,paleosols,"Schaller et al., 2012",3699.131433,1953.340579,-1.490794248
+274,200.4,NA,NA,2002,mean,1001,4004,1,skew_normal,paleosols,"Schaller et al., 2012",3853.399925,2034.885265,-1.489473223
+275,200.4,NA,NA,997,mean,499,1995,1,skew_normal,paleosols,"Schaller et al., 2012",1920.638924,1014.16265,-1.492018534
+276,200.4,NA,NA,1411,mean,706,2823,1,skew_normal,paleosols,"Schaller et al., 2012",2717.495995,1434.963169,-1.491271723
+277,200.3,NA,NA,1766,mean,883,3532,1,skew_normal,paleosols,"Schaller et al., 2012",3399.152981,1795.008681,-1.489473223
+278,200.3,NA,NA,1811,mean,905,3621,1,skew_normal,paleosols,"Schaller et al., 2012",3484.129039,1839.961768,-1.488071941
+279,200.2,NA,NA,1019,mean,509,2037,1,skew_normal,paleosols,"Schaller et al., 2012",1959.706879,1034.95211,-1.486982803
+280,200.2,NA,NA,610,mean,305,1220,1,skew_normal,paleosols,"Schaller et al., 2012",1174.112864,620.019986,-1.489473223
+281,199.8,NA,NA,523,mean,262,1047,1,skew_normal,paleosols,"Schaller et al., 2012",1008.295041,532.3764123,-1.494325333
+282,199,NA,NA,1179,mean,589,2357,1,skew_normal,paleosols,"Schaller et al., 2012",2267.670975,1197.580335,-1.487320778
+283,127.9,129.4,126.3,393,mean,234,551,1,skew_normal,paleosols,"Huang et al., 2012",363.7198197,161.9649567,0.228449554
+284,137.9,139.4,136.4,174,mean,76,272,1,skew_normal,paleosols,"Huang et al., 2012",174.4081117,98.54699926,-0.005190392
+285,143.5,145,142,232,mean,92,372,1,skew_normal,paleosols,"Huang et al., 2012",232.4015269,140.7807929,-0.003574648
+286,83,NA,NA,1522,mean,761,3044,1,skew_normal,paleosols,"Hong & Lee, 2012",2929.507835,1547.000686,-1.489473223
+287,98,NA,NA,1520,mean,760,3040,1,skew_normal,paleosols,"Hong & Lee, 2012",2925.658285,1544.967834,-1.489473223
+288,100.5,NA,NA,1368,mean,684,2736,1,skew_normal,paleosols,"Hong & Lee, 2012",2633.092456,1390.471051,-1.489473223
+289,102,NA,NA,1428,mean,714,2856,1,skew_normal,paleosols,"Hong & Lee, 2012",2748.578967,1451.456623,-1.489473223
+290,103.5,NA,NA,1060,mean,530,2120,1,skew_normal,paleosols,"Hong & Lee, 2012",2040.261698,1077.411779,-1.489473223
+291,113.5,NA,NA,449,mean,225,898,1,skew_normal,paleosols,"Hong & Lee, 2012",864.5806752,456.2600013,-1.492302289
+292,157.8,163.5,152.1,558,mean,279,1115,1,skew_normal,paleosols,"Gutierrez & Sheldon, 2012",1072.74267,566.2645231,-1.487197228
+293,5.5,6.1,4.9,222,median,112,524,1,skew_normal,paleosols,"Cotton & Sheldon, 2012  (updated by Breecker & Retallack, 2014)",528.0767579,296.2324561,-1.896548683
+294,50.5,50.5,50.4,684,mean,574,807,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",746.2917043,129.8747437,-0.638997587
+295,50.7,50.8,50.7,397,mean,246,533,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",322.2999044,159.3148777,0.622890427
+296,50.9,50.9,50.8,178,mean,109,246,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",161.0227224,70.83035117,0.304815885
+297,51.1,51.2,51.1,1285,mean,1026,1532,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",1188.467145,270.1268932,0.462908715
+298,51.2,51.3,51.2,1354,mean,1258,1450,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",1354.386395,96.5357814,-0.00501658
+299,51.4,51.4,51.3,971,mean,834,1108,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",971.4209392,137.7641444,-0.00382953
+300,51.5,51.5,51.4,1709,mean,1436,2000,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",1829.606833,304.8879279,-0.516396022
+301,51.5,51.6,51.5,1299,mean,1067,1491,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",1157.310623,245.8694547,0.790901319
+302,51.8,51.8,51.7,903,mean,738,1067,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",872.9995313,168.030712,0.225573563
+303,52,52,51.9,301,mean,219,383,1,skew_normal,paleosols,"Hyland & Sheldon, 2013",301.2891111,82.45749307,-0.004394383
+304,63.6,NA,NA,235,mean,188,281,1,skew_normal,paleosols,"Huang et al., 2013",221.7591709,48.46975928,0.348948771
+305,63.7,NA,NA,212,mean,148,276,1,skew_normal,paleosols,"Huang et al., 2013",212.2402474,64.35712055,-0.004678709
+306,64.6,NA,NA,200,mean,144,255,1,skew_normal,paleosols,"Huang et al., 2013",185.1717118,57.62483807,0.327983691
+307,64.7,NA,NA,289,mean,188,390,1,skew_normal,paleosols,"Huang et al., 2013",288.723261,101.5632503,0.003415038
+308,64.9,NA,NA,175,mean,127,223,1,skew_normal,paleosols,"Huang et al., 2013",175.1662487,48.26779037,-0.00431682
+309,65,NA,NA,357,mean,260,455,1,skew_normal,paleosols,"Huang et al., 2013",378.3333846,100.2370874,-0.269814816
+310,65.1,NA,NA,278,mean,200,355,1,skew_normal,paleosols,"Huang et al., 2013",259.6145438,79.96298299,0.292053465
+311,65.2,NA,NA,360,mean,189,532,1,skew_normal,paleosols,"Huang et al., 2013",390.8298301,175.1064463,-0.222392885
+312,65.4,NA,NA,298,mean,196,399,1,skew_normal,paleosols,"Huang et al., 2013",276.1022855,104.2891592,0.266109201
+313,66.5,NA,NA,492,mean,395,588,1,skew_normal,paleosols,"Huang et al., 2013",470.8088956,99.2239422,0.270773774
+314,68.3,NA,NA,175,mean,102,248,1,skew_normal,paleosols,"Huang et al., 2013",174.7290414,73.40732914,0.004626225
+315,52.8,52.9,52.7,400,mean,275,530,1,skew_normal,paleosols,"Hyland et al., 2013",445.280381,135.1946327,-0.43206078
+316,52.6,52.7,52.5,750,mean,630,880,1,skew_normal,paleosols,"Hyland et al., 2013",808.4240462,136.6633637,-0.562093046
+317,51.9,52,51.8,1260,mean,1075,1440,1,skew_normal,paleosols,"Hyland et al., 2013",1203.247066,191.4001334,0.380073941
+318,51.8,51.9,51.7,1210,mean,1030,1400,1,skew_normal,paleosols,"Hyland et al., 2013",1284.198933,198.5608732,-0.485601879
+319,51.1,51.2,51,725,mean,640,800,1,skew_normal,paleosols,"Hyland et al., 2013",680.1657664,89.86141327,0.668281422
+320,135.7,145,126.3,924,mean,462,1847,1,skew_normal,paleosols,"Mortazavi et al., 2013",1777.210476,938.276557,-1.488099253
+321,31.6,35.5,27.7,265,mean,132,529,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Srivastava et al., 2013",508.4250055,268.5660813,-1.479896384
+322,31.6,35.5,27.7,377,mean,188,754,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Srivastava et al., 2013",725.2830304,383.3077548,-1.486111964
+323,253.2,254.2,252.2,1325,mean,663,2650,1,skew_normal,paleosols,"Gastaldo et al., 2014",2550.68392,1346.649446,-1.490431205
+324,253.2,254.2,252.2,1100,mean,550,2200,1,skew_normal,paleosols,"Gastaldo et al., 2014",2117.252706,1118.068827,-1.489473223
+325,253.2,254.2,252.2,883,mean,442,1766,1,skew_normal,paleosols,"Gastaldo et al., 2014",1699.933241,897.3890401,-1.490911006
+326,6.4,NA,NA,213,median,118,376,1,skew_normal,paleosols,"Breecker & Retallack, 2014",353.5098475,168.5130038,-1.293856587
+327,6.7,NA,NA,283,median,154,531,1,skew_normal,paleosols,"Breecker & Retallack, 2014",508.7249965,253.2018449,-1.439287391
+328,6.8,NA,NA,372,median,227,663,1,skew_normal,paleosols,"Breecker & Retallack, 2014",641.4660476,295.6645888,-1.493840965
+329,8.8,NA,NA,274,median,173,476,1,skew_normal,paleosols,"Breecker & Retallack, 2014",460.8045878,205.3180937,-1.489473223
+330,9.1,NA,NA,197,median,90,485,1,skew_normal,paleosols,"Breecker & Retallack, 2014",487.625512,283.1097719,-1.870518868
+331,12.7,NA,NA,267,median,131,624,1,skew_normal,paleosols,"Breecker & Retallack, 2014",625.2102483,351.9031991,-1.837759765
+332,13.7,NA,NA,101,median,31,272,1,skew_normal,paleosols,"Breecker & Retallack, 2014",269.5573212,169.9109095,-1.744545663
+333,17.5,NA,NA,261,median,125,609,1,skew_normal,paleosols,"Breecker & Retallack, 2014",608.0712078,344.0003826,-1.804529998
+334,17.8,NA,NA,237,median,73,1017,1,skew_normal,paleosols,"Breecker & Retallack, 2014",1092.787295,725.7937376,-2.676490522
+335,18,NA,NA,160,median,47,694,1,skew_normal,paleosols,"Breecker & Retallack, 2014",745.5315412,497.1526644,-2.666586469
+336,18.2,NA,NA,274,median,183,400,1,skew_normal,paleosols,"Breecker & Retallack, 2014",366.6450497,132.8453293,-1.004705094
+337,23,NA,NA,203,median,97,493,1,skew_normal,paleosols,"Breecker & Retallack, 2014",496.6926196,284.5698767,-1.891936782
+338,100.8,NA,NA,763,mean,382,1526,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1468.960196,775.4178847,-1.491137279
+339,102.4,NA,NA,621,mean,310,1242,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1194.928304,631.3158113,-1.487431605
+340,103.1,NA,NA,792,mean,396,1584,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1524.421948,805.0095556,-1.489473223
+341,103.3,NA,NA,1052,mean,526,2104,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2024.863497,1069.280369,-1.489473223
+342,104.6,NA,NA,1246,mean,623,2493,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2399.551449,1267.368199,-1.49049115
+343,104.7,NA,NA,1139,mean,570,2278,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2192.67572,1157.594164,-1.490587712
+344,104.8,NA,NA,1254,mean,627,2509,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2414.949651,1275.499609,-1.490484659
+345,106.1,NA,NA,1399,mean,700,2798,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2693.117288,1421.864987,-1.490380514
+346,106.4,NA,NA,1474,mean,737,2949,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2838.400821,1499.11391,-1.490334972
+347,106.5,NA,NA,1679,mean,840,3358,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3232.054355,1706.464332,-1.490229165
+348,106.6,NA,NA,1497,mean,748,2994,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2881.031484,1521.705224,-1.488625906
+349,106.9,NA,NA,1496,mean,748,2992,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2879.46368,1520.573605,-1.489473223
+350,107.8,NA,NA,1201,mean,600,2402,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2311.298008,1220.843057,-1.488417161
+351,108.8,NA,NA,1015,mean,508,2030,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1954.003583,1031.557308,-1.490723933
+352,110.3,NA,NA,1065,mean,532,2130,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2049.52857,1082.609087,-1.488282365
+353,111.1,NA,NA,1637,mean,818,3274,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3150.500017,1664.004897,-1.488698349
+354,111.5,NA,NA,1966,mean,983,3933,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3785.38962,1999.195085,-1.490118455
+355,111.8,NA,NA,1880,mean,940,3760,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3618.577352,1910.881268,-1.489473223
+356,112.3,NA,NA,1829,mean,914,3658,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3520.056861,1859.158732,-1.48877967
+357,112.7,NA,NA,1419,mean,710,2838,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2731.612793,1442.193512,-1.490367722
+358,113.8,NA,NA,1295,mean,648,2590,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2492.940662,1316.156659,-1.490453406
+359,114.8,NA,NA,1514,mean,757,3029,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2915.391217,1539.770431,-1.490311023
+360,114.9,NA,NA,1426,mean,713,2853,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2746.010995,1450.324922,-1.490362706
+361,115.3,NA,NA,1367,mean,684,2734,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2631.52448,1389.339348,-1.490401761
+362,116.1,NA,NA,1666,mean,833,3331,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3205.393724,1692.464831,-1.488711376
+363,117.8,NA,NA,1364,mean,682,2728,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2625.393355,1386.405346,-1.489473223
+364,123.3,NA,NA,736,mean,368,1472,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1416.634538,748.089688,-1.489473223
+365,123.6,NA,NA,607,mean,304,1214,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1168.695226,616.8553764,-1.491565293
+366,123.7,NA,NA,824,mean,412,1648,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1586.014754,837.5351942,-1.489473223
+367,123.8,NA,NA,1018,mean,509,2035,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1958.139355,1033.820626,-1.488226186
+368,126.4,NA,NA,1065,mean,532,2130,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2049.52857,1082.609087,-1.488282365
+369,126.6,NA,NA,1510,mean,755,3019,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",2905.128787,1533.902339,-1.488632642
+370,127.5,NA,NA,1704,mean,852,3408,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3279.816919,1731.990256,-1.489473223
+371,129.8,NA,NA,940,mean,470,1880,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1809.288676,955.4406341,-1.489473223
+372,130.2,NA,NA,1023,mean,512,2046,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1969.401786,1039.688718,-1.490714147
+373,130.8,NA,NA,842,mean,421,1685,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",1621.942226,856.7319886,-1.490979269
+374,131.3,NA,NA,1910,mean,955,3819,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",3675.038879,1940.47283,-1.488808727
+375,132,NA,NA,2562,mean,1281,5123,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)",paleosols,"Li et al., 2014",4929.992317,2603.182725,-1.488977867
+376,201.5,NA,NA,710,mean,449,971,1,normal,paleosols,"Schaller et al., 2015",710.6920436,262.455466,-0.003304758
+377,201.8,NA,NA,1189.6,mean,730,1650,1,normal,paleosols,"Schaller et al., 2015",1244.293654,465.7411807,-0.147691237
+378,201.8,NA,NA,1494.733333,mean,911,2078,1,normal,paleosols,"Schaller et al., 2015",1441.360198,589.1542248,0.113774926
+379,201.9,NA,NA,1502,mean,917,2087,1,normal,paleosols,"Schaller et al., 2015",1503.946717,588.2634278,-0.004147569
+380,202.1,NA,NA,1508.866667,mean,925,2092,1,normal,paleosols,"Schaller et al., 2015",1446.707898,589.9983566,0.132409763
+381,202.6,NA,NA,1064.533333,mean,662,1467,1,normal,paleosols,"Schaller et al., 2015",1048.547766,405.0560054,0.049442158
+382,202.8,NA,NA,1613.266667,mean,982,2244,1,normal,paleosols,"Schaller et al., 2015",1554.464594,637.211966,0.115903139
+383,203.3,NA,NA,1486.8,mean,907,2066,1,normal,paleosols,"Schaller et al., 2015",1428.975432,585.5633058,0.124068016
+384,203.5,NA,NA,1297.866667,mean,801,1795,1,normal,paleosols,"Schaller et al., 2015",1337.618393,501.3381444,-0.099533407
+385,203.9,NA,NA,1942.533333,mean,1155,2730,1,normal,paleosols,"Schaller et al., 2015",1942.239243,791.8887779,0.000430286
+386,204.1,NA,NA,1021.333333,mean,632,1411,1,normal,paleosols,"Schaller et al., 2015",1057.78269,393.3483326,-0.11638762
+387,204.4,NA,NA,1854.466667,mean,1122,2586,1,normal,paleosols,"Schaller et al., 2015",1776.107696,740.1915062,0.13305303
+388,204.6,NA,NA,1427.133333,mean,872,1983,1,normal,paleosols,"Schaller et al., 2015",1487.300594,561.7894465,-0.134615651
+389,204.6,NA,NA,1973.333333,mean,1252,2695,1,normal,paleosols,"Schaller et al., 2015",2028.2147,727.5817061,-0.094672036
+390,204.7,NA,NA,2023.8,mean,1270,2778,1,normal,paleosols,"Schaller et al., 2015",2083.878321,760.5635062,-0.099156404
+391,205.9,NA,NA,2157.866667,mean,1351,2965,1,normal,paleosols,"Schaller et al., 2015",2212.725883,813.3410361,-0.084631367
+392,205.9,NA,NA,2103.866667,mean,1317,2891,1,normal,paleosols,"Schaller et al., 2015",2157.818188,793.2142082,-0.085344593
+393,207.2,NA,NA,1962.8,mean,1246,2680,1,normal,paleosols,"Schaller et al., 2015",2020.903855,723.3179935,-0.100841049
+394,207.3,NA,NA,2275.6,mean,1405,3146,1,normal,paleosols,"Schaller et al., 2015",2223.206284,876.9122006,0.074949883
+395,207.5,NA,NA,2723.733333,mean,1657,3790,1,normal,paleosols,"Schaller et al., 2015",2644.075067,1075.381469,0.092966141
+396,207.8,NA,NA,2505.333333,mean,1539,3472,1,normal,paleosols,"Schaller et al., 2015",2571.984339,974.1581875,-0.085851129
+397,207.9,NA,NA,2508.4,mean,1519,3497,1,normal,paleosols,"Schaller et al., 2015",2417.589282,998.6145003,0.114208621
+398,208.1,NA,NA,2953.133333,mean,1575,4331,1,normal,paleosols,"Schaller et al., 2015",2874.824354,1387.8834,0.070772486
+399,208.3,NA,NA,2953.133333,mean,1764,4142,1,normal,paleosols,"Schaller et al., 2015",2882.145217,1197.724306,0.0743482
+400,208.4,NA,NA,2831.733333,mean,1713,3950,1,normal,paleosols,"Schaller et al., 2015",2749.514801,1127.718294,0.091497013
+401,209.2,NA,NA,3191.066667,mean,1878,4504,1,normal,paleosols,"Schaller et al., 2015",3130.923061,1321.683592,0.057061981
+402,210,NA,NA,2756,mean,1664,3848,1,normal,paleosols,"Schaller et al., 2015",2760.272326,1098.094028,-0.004876282
+403,210.3,NA,NA,2295.533333,mean,1437,3154,1,normal,paleosols,"Schaller et al., 2015",2259.579825,864.0314593,0.052174673
+404,210.8,NA,NA,2605.6,mean,1579,3632,1,normal,paleosols,"Schaller et al., 2015",2547.133207,1033.8698,0.070933414
+405,211.6,NA,NA,1623.4,mean,1047,2200,1,normal,paleosols,"Schaller et al., 2015",1663.23455,581.0732914,-0.08602007
+406,211.6,NA,NA,2236.6,mean,1367,3106,1,normal,paleosols,"Schaller et al., 2015",2184.246331,875.9060293,0.074978677
+407,211.9,NA,NA,1942.266667,mean,1220,2664,1,normal,paleosols,"Schaller et al., 2015",1877.967082,728.8430546,0.11078495
+408,213.1,NA,NA,2635.6,mean,1574,3697,1,normal,paleosols,"Schaller et al., 2015",2575.814175,1069.083398,0.070143332
+409,215,NA,NA,3194.333333,mean,1873,4516,1,normal,paleosols,"Schaller et al., 2015",3276.397647,1331.386467,-0.077325553
+410,215,NA,NA,3087.8,mean,1803,4373,1,normal,paleosols,"Schaller et al., 2015",3173.422371,1294.98239,-0.082958042
+411,215.1,NA,NA,3123.2,mean,1826,4420,1,normal,paleosols,"Schaller et al., 2015",3037.046791,1307.058026,0.082700618
+412,215.2,NA,NA,3722.4,mean,2095,5350,1,normal,paleosols,"Schaller et al., 2015",3801.856658,1638.493141,-0.060813652
+413,215.3,NA,NA,3395.733333,mean,1939,4853,1,normal,paleosols,"Schaller et al., 2015",3498.235809,1468.68338,-0.087578119
+414,215.4,NA,NA,3218.066667,mean,1867,4569,1,normal,paleosols,"Schaller et al., 2015",3212.134674,1358.541536,0.005431743
+415,215.6,NA,NA,3113.6,mean,1808,4419,1,normal,paleosols,"Schaller et al., 2015",3044.988348,1314.562335,0.065459488
+416,215.6,NA,NA,3132.333333,mean,1844,4420,1,normal,paleosols,"Schaller et al., 2015",3030.551444,1299.146267,0.098342183
+417,215.7,NA,NA,3240.6,mean,1884,4597,1,normal,paleosols,"Schaller et al., 2015",3170.215787,1365.869537,0.064627072
+418,216,NA,NA,2470.2,mean,1505,3436,1,normal,paleosols,"Schaller et al., 2015",2551.330174,974.2407976,-0.104551502
+419,216.2,NA,NA,2767,mean,1582,3952,1,normal,paleosols,"Schaller et al., 2015",2771.681858,1191.613204,-0.00492433
+420,218.2,NA,NA,3183.266667,mean,1806,4561,1,normal,paleosols,"Schaller et al., 2015",3277.693256,1388.376454,-0.085339444
+421,218.8,NA,NA,2798.666667,mean,1647,3950,1,normal,paleosols,"Schaller et al., 2015",2723.783306,1160.325915,0.080968853
+422,222,NA,NA,2732.066667,mean,1636,3828,1,normal,paleosols,"Schaller et al., 2015",2678.738548,1103.394388,0.06060929
+423,222.3,NA,NA,2324.933333,mean,1413,3237,1,normal,paleosols,"Schaller et al., 2015",2372.120624,918.2924897,-0.064445238
+424,222.4,NA,NA,3022.666667,mean,1756,4290,1,normal,paleosols,"Schaller et al., 2015",3123.343276,1278.00753,-0.098884888
+425,223.2,NA,NA,2627.333333,mean,1596,3658,1,normal,paleosols,"Schaller et al., 2015",2539.534787,1040.430012,0.105951946
+426,224.3,NA,NA,3042.066667,mean,1805,4279,1,normal,paleosols,"Schaller et al., 2015",2984.263924,1245.233152,0.058209221
+427,225.8,NA,NA,2547.466667,mean,1537,3558,1,normal,paleosols,"Schaller et al., 2015",2587.543242,1016.920276,-0.049411988
+428,226.2,NA,NA,3302.4,mean,1906,4699,1,normal,paleosols,"Schaller et al., 2015",3374.158951,1406.11008,-0.064002901
+429,226.6,NA,NA,3182.6,mean,1875,4491,1,normal,paleosols,"Schaller et al., 2015",3291.923439,1319.793443,-0.103995251
+430,227.1,NA,NA,3568.133333,mean,2055,5081,1,normal,paleosols,"Schaller et al., 2015",3563.785026,1521.437334,0.003509036
+431,229.3,NA,NA,3319.733333,mean,1936,4704,1,normal,paleosols,"Schaller et al., 2015",3418.792849,1395.215972,-0.089096922
+432,229.7,NA,NA,2445.6,mean,1505,3387,1,normal,paleosols,"Schaller et al., 2015",2533.462787,950.2794381,-0.116129819
+433,231,NA,NA,2516.4,mean,1541,3492,1,normal,paleosols,"Schaller et al., 2015",2572.917584,982.557788,-0.072151432
+434,231.4,NA,NA,3230.866667,mean,1900,4562,1,normal,paleosols,"Schaller et al., 2015",3307.388176,1340.596112,-0.071597778
+435,232,NA,NA,2142.8,mean,1335,2950,1,normal,paleosols,"Schaller et al., 2015",2070.743977,815.1657603,0.111002895
+436,232.2,NA,NA,2884.2,mean,1724,4045,1,normal,paleosols,"Schaller et al., 2015",2975.871954,1170.540223,-0.098305322
+437,100,NA,NA,746,mean,373,1492,1,skew_normal,paleosols,"Ludvigson et al., 2015",1435.88229,758.2539501,-1.489473223
+438,102.5,NA,NA,886,mean,443,1772,1,skew_normal,paleosols,"Ludvigson et al., 2015",1705.350816,900.553619,-1.489473223
+439,111.5,NA,NA,996,mean,498,1992,1,skew_normal,paleosols,"Ludvigson et al., 2015",1917.076086,1012.360502,-1.489473223
+440,113.5,NA,NA,1335,mean,668,2670,1,skew_normal,paleosols,"Ludvigson et al., 2015",2569.931672,1356.813708,-1.490424026
+441,115.5,NA,NA,986,mean,493,1972,1,skew_normal,paleosols,"Ludvigson et al., 2015",1897.828335,1002.19624,-1.489473223
+442,116,NA,NA,1071,mean,536,2142,1,skew_normal,paleosols,"Ludvigson et al., 2015",2061.791,1088.477179,-1.490658506
+443,116.5,NA,NA,1190,mean,595,2380,1,skew_normal,paleosols,"Ludvigson et al., 2015",2290.482473,1209.547186,-1.489473223
+444,119.4,NA,NA,1179,mean,590,2358,1,skew_normal,paleosols,"Ludvigson et al., 2015",2269.666731,1198.251214,-1.490549885
+445,1,NA,NA,244,mean,153,403,1,skew_normal,paleosols,"Da et al., 2015",382.3946098,164.0580293,-1.317265494
+446,1.1,NA,NA,214,mean,134,353,1,skew_normal,paleosols,"Da et al., 2015",334.6318055,143.50821,-1.310064386
+447,1.2,NA,NA,335,mean,210,552,1,skew_normal,paleosols,"Da et al., 2015",523.2385168,224.0587734,-1.308952513
+448,1.2,NA,NA,217,mean,136,357,1,skew_normal,paleosols,"Da et al., 2015",338.1609063,144.6220787,-1.303297394
+449,1.2,NA,NA,193,mean,121,319,1,skew_normal,paleosols,"Da et al., 2015",302.760837,129.9862198,-1.319285267
+450,1.3,NA,NA,141,mean,88,233,1,skew_normal,paleosols,"Da et al., 2015",220.8025193,94.99354627,-1.308840562
+451,1.3,NA,NA,157,mean,98,258,1,skew_normal,paleosols,"Da et al., 2015",243.9555931,104.4414635,-1.290899553
+452,1.3,NA,NA,196,mean,123,324,1,skew_normal,paleosols,"Da et al., 2015",307.6160126,132.021618,-1.321797766
+453,1.4,NA,NA,194,mean,122,321,1,skew_normal,paleosols,"Da et al., 2015",305.0825592,130.9058486,-1.329438814
+454,1.4,NA,NA,192,mean,120,317,1,skew_normal,paleosols,"Da et al., 2015",300.4359973,129.0652271,-1.309034914
+455,1.4,NA,NA,192,mean,120,316,1,skew_normal,paleosols,"Da et al., 2015",299.1079178,128.142826,-1.298684887
+456,1.4,NA,NA,194,mean,121,320,1,skew_normal,paleosols,"Da et al., 2015",302.9647728,130.1789547,-1.301530594
+457,1.5,NA,NA,239,mean,150,394,1,skew_normal,paleosols,"Da et al., 2015",373.6834296,159.9868706,-1.313077681
+458,1.5,NA,NA,210,mean,132,347,1,skew_normal,paleosols,"Da et al., 2015",329.5688465,141.2784,-1.32398338
+459,1.5,NA,NA,303,mean,190,500,1,skew_normal,paleosols,"Da et al., 2015",474.270528,203.3156773,-1.314399118
+460,1.6,NA,NA,282,mean,177,465,1,skew_normal,paleosols,"Da et al., 2015",441.0748364,188.8727451,-1.314025925
+461,1.6,NA,NA,230,mean,144,380,1,skew_normal,paleosols,"Da et al., 2015",360.4412635,154.801023,-1.315006364
+462,1.6,NA,NA,247,mean,154,407,1,skew_normal,paleosols,"Da et al., 2015",385.1260672,165.3639479,-1.297341986
+463,1.6,NA,NA,207,mean,130,342,1,skew_normal,paleosols,"Da et al., 2015",324.7138419,139.2430768,-1.321667391
+464,1.7,NA,NA,239,mean,150,394,1,skew_normal,paleosols,"Da et al., 2015",373.6834296,159.9868706,-1.313077681
+465,1.8,NA,NA,230,mean,144,379,1,skew_normal,paleosols,"Da et al., 2015",359.1153468,153.8795609,-1.306396837
+466,1.9,NA,NA,307,mean,192,507,1,skew_normal,paleosols,"Da et al., 2015",480.6568316,206.4658268,-1.311271629
+467,1.9,NA,NA,252,mean,158,415,1,skew_normal,paleosols,"Da et al., 2015",393.3112531,168.3225864,-1.307499809
+468,2.1,NA,NA,299,mean,187,494,1,skew_normal,paleosols,"Da et al., 2015",468.4148085,201.2800415,-1.312707045
+469,2.1,NA,NA,300,mean,188,495,1,skew_normal,paleosols,"Da et al., 2015",469.4148085,201.2800415,-1.312707045
+470,2.1,NA,NA,278,mean,174,458,1,skew_normal,paleosols,"Da et al., 2015",433.8925157,185.9153495,-1.305066091
+471,2.2,NA,NA,338,mean,212,557,1,skew_normal,paleosols,"Da et al., 2015",528.0945472,226.0945446,-1.310505284
+472,2.3,NA,NA,387,mean,243,639,1,skew_normal,paleosols,"Da et al., 2015",606.5216741,259.9724397,-1.319285267
+473,2.3,NA,NA,342,mean,214,564,1,skew_normal,paleosols,"Da et al., 2015",534.4802971,229.2444531,-1.307746672
+474,2.3,NA,NA,405,mean,254,669,1,skew_normal,paleosols,"Da et al., 2015",634.8620048,272.3798926,-1.318068508
+475,2.6,NA,NA,400,mean,251,660,1,skew_normal,paleosols,"Da et al., 2015",626.151083,268.3088468,-1.315581706
+476,2.6,NA,NA,385,mean,241,636,1,skew_normal,paleosols,"Da et al., 2015",603.1976287,259.0517933,-1.314172367
+477,221.9,NA,NA,6,mean,3,12,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",11.54865112,6.098557239,-1.489473223
+478,220.1,NA,NA,215,mean,108,430,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",414.1829848,218.4161249,-1.495388479
+479,214.7,NA,NA,355,mean,178,710,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",683.6517354,360.7159028,-1.49305244
+480,213.5,NA,NA,443,mean,222,886,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",853.0320204,450.1614423,-1.492340649
+481,213.3,NA,NA,500,mean,250,1000,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",962.3875936,508.2131033,-1.489473223
+482,213.2,NA,NA,546,mean,273,1092,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1050.927252,554.9687088,-1.489473223
+483,213.1,NA,NA,501,mean,251,1002,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",964.6690132,509.1141778,-1.492008363
+484,213,NA,NA,523,mean,262,1046,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1007.014078,531.4755593,-1.491901622
+485,212.7,NA,NA,170,mean,85,340,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",327.2117818,172.7924551,-1.489473223
+486,212.6,NA,NA,738,mean,369,1476,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1420.484088,750.1225404,-1.489473223
+487,212.5,NA,NA,1463,mean,732,2926,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",2816.302904,1486.916267,-1.490340811
+488,212.4,NA,NA,522,mean,261,1044,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1004.732648,530.5744798,-1.489473223
+489,212.2,NA,NA,713,mean,357,1426,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1372.721426,724.5965689,-1.491254054
+490,212.1,NA,NA,708,mean,354,1416,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1362.740833,719.6297542,-1.489473223
+491,212,NA,NA,10,mean,5,20,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",19.24775187,10.16426207,-1.489473223
+492,211.7,NA,NA,683,mean,342,1366,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1314.978162,694.103779,-1.491332331
+493,211.5,NA,NA,643,mean,322,1286,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1237.987144,653.4467253,-1.491448073
+494,211.4,NA,NA,749,mean,375,1498,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1442.013341,761.1879163,-1.491168403
+495,211.3,NA,NA,128,mean,64,256,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",246.371224,130.1025544,-1.489473223
+496,211.2,NA,NA,182,mean,91,364,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",350.3090841,184.9895696,-1.489473223
+497,211.2,NA,NA,616,mean,308,1232,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1185.661515,626.1185432,-1.489473223
+498,211.1,NA,NA,726,mean,363,1452,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1397.386786,737.9254259,-1.489473223
+499,210.9,NA,NA,-127,mean,-64,-254,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",350.3090841,184.9895696,-1.489473223
+500,210.7,NA,NA,-194,mean,-97,-388,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1185.661515,626.1185432,-1.489473223
+501,210.4,NA,NA,219,mean,110,438,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",421.8820959,222.4818347,-1.495280193
+502,210.1,NA,NA,420,mean,210,840,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",808.4055786,426.8990067,-1.489473223
+503,209.9,NA,NA,1080,mean,540,2160,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",2078.757202,1097.740303,-1.489473223
+504,209.9,NA,NA,777,mean,389,1554,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1495.907052,789.647853,-1.491107277
+505,209.7,NA,NA,665,mean,333,1330,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1280.332204,675.8081049,-1.491382691
+506,209.6,NA,NA,529,mean,265,1058,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1018.562731,537.5741179,-1.491874053
+507,209.5,NA,NA,1220,mean,610,2440,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",2348.225728,1240.039972,-1.489473223
+508,209.3,NA,NA,1025,mean,513,2050,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1973.251336,1041.721571,-1.490711725
+509,209.2,NA,NA,1406,mean,703,2812,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",2706.233913,1429.095246,-1.489473223
+510,209,NA,NA,1063,mean,532,2126,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",2046.392798,1080.345769,-1.49066743
+511,208.6,NA,NA,1869,mean,935,3738,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",3597.761648,1899.585315,-1.490152296
+512,208.4,NA,NA,904,mean,452,1808,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1739.996769,918.8492907,-1.489473223
+513,208.2,NA,NA,1179,mean,590,2358,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",2269.666731,1198.251214,-1.490549885
+514,208,NA,NA,964,mean,482,1928,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",1855.48328,979.8348631,-1.489473223
+515,207.4,NA,NA,1978,mean,989,3956,1,skew_normal,paleosols,"Nordt et al., 2015 (expands and refines Atchley et al., 2013)",3807.20532,2010.491037,-1.489473223
+516,205.15,209,201.3,1626.42,mean,813,3253,1,skew_normal,paleosols,"Whiteside et al., 2015",3130.548028,1653.328497,-1.48927042
+517,205.15,209,201.3,1233.546667,mean,617,2467,1,skew_normal,paleosols,"Whiteside et al., 2015",2374.342171,1253.672802,-1.489843607
+518,205.15,209,201.3,1293.693333,mean,647,2587,1,skew_normal,paleosols,"Whiteside et al., 2015",2489.682697,1314.560008,-1.489394739
+519,211.9,212.6,211.2,749,mean,374,1498,1,skew_normal,paleosols,"Whiteside et al., 2015",1441.299562,761.4183821,-1.487780277
+520,211.9,212.6,211.2,786,mean,393,1573,1,skew_normal,paleosols,"Whiteside et al., 2015",1514.154806,799.812116,-1.491086501
+521,34.2,NA,NA,399,mean,127,672,1,normal,paleosols,"Kohn et al., 2015",440.7769847,277.1134847,-0.190029553
+522,0.2,NA,NA,289,mean,263,315,1,normal,alkenones,"Seki et al., 2010",289.0813673,26.14502465,-0.003900527
+523,0.3,NA,NA,246,mean,224,268,1,normal,alkenones,"Seki et al., 2010",246.086621,22.12277565,-0.004907358
+524,0.5,NA,NA,255,mean,232,278,1,normal,alkenones,"Seki et al., 2010",255.0655921,23.12827208,-0.003554431
+525,0.9,NA,NA,243,mean,221,264,1,normal,alkenones,"Seki et al., 2010",234.8573208,22.93827281,0.459619229
+526,1,NA,NA,252,mean,230,275,1,normal,alkenones,"Seki et al., 2010",260.375987,23.9642966,-0.452082187
+527,1.2,NA,NA,266,mean,243,290,1,normal,alkenones,"Seki et al., 2010",274.6058633,24.98971943,-0.445007
+528,1.3,NA,NA,271,mean,246,295,1,normal,alkenones,"Seki et al., 2010",262.1674987,26.01458353,0.438346686
+529,1.5,NA,NA,277,mean,252,302,1,normal,alkenones,"Seki et al., 2010",277.0851517,25.13946929,-0.004245222
+530,1.8,NA,NA,270,mean,246,295,1,normal,alkenones,"Seki et al., 2010",278.8325013,26.01458353,-0.438346686
+531,2.1,NA,NA,254,mean,231,277,1,normal,alkenones,"Seki et al., 2010",254.1219501,23.12850043,-0.006608483
+532,2.3,NA,NA,273,mean,249,298,1,normal,alkenones,"Seki et al., 2010",281.8325013,26.01458353,-0.438346686
+533,2.6,NA,NA,267,mean,243,291,1,normal,alkenones,"Seki et al., 2010",267.0891434,24.13391665,-0.004629402
+534,2.8,NA,NA,299,mean,272,326,1,normal,alkenones,"Seki et al., 2010",298.9295559,27.15056246,0.003251826
+535,2.8,NA,NA,303,mean,276,331,1,normal,alkenones,"Seki et al., 2010",312.4946594,29.08618104,-0.420476376
+536,2.9,NA,NA,323,mean,294,352,1,normal,alkenones,"Seki et al., 2010",323.1875393,29.16222022,-0.008060138
+537,2.9,NA,NA,333,mean,303,363,1,normal,alkenones,"Seki et al., 2010",333.1678238,30.16765668,-0.006972368
+538,3,NA,NA,372,mean,338,405,1,normal,alkenones,"Seki et al., 2010",361.249048,35.21835503,0.391830962
+539,3.1,NA,NA,353,mean,321,385,1,normal,alkenones,"Seki et al., 2010",353.1984653,32.17894753,-0.007730054
+540,3.1,NA,NA,344,mean,313,375,1,normal,alkenones,"Seki et al., 2010",344.1120475,31.17296445,-0.004504923
+541,3.2,NA,NA,335,mean,305,365,1,normal,alkenones,"Seki et al., 2010",335.1029717,30.1673658,-0.004278029
+542,3.2,NA,NA,341,mean,310,372,1,normal,alkenones,"Seki et al., 2010",341.1268849,31.17302133,-0.005101469
+543,3.6,NA,NA,362,mean,329,395,1,normal,alkenones,"Seki et al., 2010",362.1074737,33.18408315,-0.00405915
+544,3.8,NA,NA,357,mean,325,389,1,normal,alkenones,"Seki et al., 2010",357.1206908,32.17856246,-0.004700796
+545,3.9,NA,NA,338,mean,307,368,1,normal,alkenones,"Seki et al., 2010",327.8668794,32.15389824,0.405162791
+546,4,NA,NA,329,mean,300,359,1,normal,alkenones,"Seki et al., 2010",338.9227288,31.13171523,-0.410022926
+547,4.1,NA,NA,354,mean,322,385,1,normal,alkenones,"Seki et al., 2010",343.6587746,33.17572015,0.400521512
+548,4.3,NA,NA,381,mean,348,414,1,normal,alkenones,"Seki et al., 2010",381.112751,33.18410058,-0.004258466
+549,4.4,NA,NA,351,mean,320,382,1,normal,alkenones,"Seki et al., 2010",351.0831868,31.17287408,-0.003344562
+550,4.6,NA,NA,370,mean,337,402,1,normal,alkenones,"Seki et al., 2010",359.4528606,34.19719993,0.396082517
+551,4.8,NA,NA,351,mean,320,382,1,normal,alkenones,"Seki et al., 2010",351.0810548,31.17286848,-0.003258847
+552,4.9,NA,NA,383,mean,350,417,1,normal,alkenones,"Seki et al., 2010",393.750952,35.21835503,-0.391830962
+553,4.9,NA,NA,422,mean,385,459,1,normal,alkenones,"Seki et al., 2010",422.1485737,37.20649767,-0.005004808
+554,5,NA,NA,448,mean,409,488,1,normal,alkenones,"Seki et al., 2010",459.9339965,41.33928653,-0.369594209
+555,5.2,NA,NA,457,mean,417,497,1,normal,alkenones,"Seki et al., 2010",457.1914138,40.22337539,-0.005964314
+556,0.02,NA,NA,318,mean,283,402,1,skew_normal,alkenones,"Zhang et al., 2013",400.4092826,83.63106001,-1.721768505
+557,0.03,NA,NA,305,mean,273,384,1,skew_normal,alkenones,"Zhang et al., 2013",383.0857971,78.40424855,-1.758142655
+558,0.03,NA,NA,322,mean,284,411,1,skew_normal,alkenones,"Zhang et al., 2013",408.7245824,88.8533704,-1.690436288
+559,0.04,NA,NA,308,mean,268,400,1,skew_normal,alkenones,"Zhang et al., 2013",397.1796185,92.03711997,-1.667220744
+560,0.06,NA,NA,312,mean,279,393,1,skew_normal,alkenones,"Zhang et al., 2013",391.9428439,80.44108882,-1.750698514
+561,0.07,NA,NA,338,mean,304,422,1,skew_normal,alkenones,"Zhang et al., 2013",421.0438839,83.35960479,-1.759103371
+562,0.09,NA,NA,334,mean,293,429,1,skew_normal,alkenones,"Zhang et al., 2013",426.2864239,94.95878623,-1.676679232
+563,0.11,NA,NA,332,mean,290,429,1,skew_normal,alkenones,"Zhang et al., 2013",426.1400256,96.99373895,-1.672504551
+564,0.11,NA,NA,336,mean,293,435,1,skew_normal,alkenones,"Zhang et al., 2013",431.9934713,99.02860801,-1.668512765
+565,0.13,NA,NA,336,mean,305,418,1,skew_normal,alkenones,"Zhang et al., 2013",418.4232407,80.76136009,-1.847748198
+566,0.15,NA,NA,315,mean,277,403,1,skew_normal,alkenones,"Zhang et al., 2013",400.4726481,87.96733943,-1.675970217
+567,0.16,NA,NA,316,mean,286,395,1,skew_normal,alkenones,"Zhang et al., 2013",395.3259785,77.84499401,-1.841895805
+568,0.17,NA,NA,330,mean,286,429,1,skew_normal,alkenones,"Zhang et al., 2013",425.3350793,99.28715564,-1.639155895
+569,0.31,NA,NA,319,mean,275,418,1,skew_normal,alkenones,"Zhang et al., 2013",414.3350793,99.28715564,-1.639155895
+570,0.43,NA,NA,285,mean,252,362,1,skew_normal,alkenones,"Zhang et al., 2013",359.9512188,76.90574524,-1.685630223
+571,0.58,NA,NA,302,mean,261,393,1,skew_normal,alkenones,"Zhang et al., 2013",389.2615868,91.40554493,-1.621765398
+572,0.93,NA,NA,291,mean,255,374,1,skew_normal,alkenones,"Zhang et al., 2013",371.5123971,83.0108041,-1.670305318
+573,1.05,NA,NA,301,mean,261,393,1,skew_normal,alkenones,"Zhang et al., 2013",390.1796185,92.03711997,-1.667220744
+574,1.19,NA,NA,322,mean,281,416,1,skew_normal,alkenones,"Zhang et al., 2013",413.032864,94.07188197,-1.663148009
+575,1.21,NA,NA,311,mean,263,414,1,skew_normal,alkenones,"Zhang et al., 2013",408.6932904,103.8572715,-1.57881254
+576,1.22,NA,NA,317,mean,278,409,1,skew_normal,alkenones,"Zhang et al., 2013",406.829524,91.774032,-1.699634595
+577,1.23,NA,NA,322,mean,278,422,1,skew_normal,alkenones,"Zhang et al., 2013",418.591752,100.1757158,-1.651981292
+578,1.25,NA,NA,291,mean,257,372,1,skew_normal,alkenones,"Zhang et al., 2013",370.3059229,80.71126084,-1.712288119
+579,1.27,NA,NA,309,mean,257,416,1,skew_normal,alkenones,"Zhang et al., 2013",409.0114103,108.4069231,-1.525555504
+580,1.28,NA,NA,298,mean,263,382,1,skew_normal,alkenones,"Zhang et al., 2013",380.4092826,83.63106001,-1.721768505
+581,1.35,NA,NA,326,mean,276,434,1,skew_normal,alkenones,"Zhang et al., 2013",428.6602786,108.8173246,-1.587177036
+582,1.64,NA,NA,298,mean,255,392,1,skew_normal,alkenones,"Zhang et al., 2013",387.7032678,94.58223478,-1.602422596
+583,1.73,NA,NA,312,mean,271,405,1,skew_normal,alkenones,"Zhang et al., 2013",401.7775877,93.18406206,-1.649487874
+584,1.97,NA,NA,309,mean,263,408,1,skew_normal,alkenones,"Zhang et al., 2013",402.9919599,99.79044777,-1.582562646
+585,2.09,NA,NA,329,mean,275,442,1,skew_normal,alkenones,"Zhang et al., 2013",435.2573847,114.2669274,-1.546901432
+586,2.19,NA,NA,331,mean,279,441,1,skew_normal,alkenones,"Zhang et al., 2013",434.8273359,111.0961841,-1.560656276
+587,2.3,NA,NA,337,mean,285,450,1,skew_normal,alkenones,"Zhang et al., 2013",444.6264405,113.7769545,-1.594852542
+588,2.4,NA,NA,344,mean,288,461,1,skew_normal,alkenones,"Zhang et al., 2013",453.957381,118.3330759,-1.544893766
+589,2.59,NA,NA,333,mean,280,446,1,skew_normal,alkenones,"Zhang et al., 2013",439.9459429,114.0239873,-1.57063938
+590,2.6,NA,NA,305,mean,255,410,1,skew_normal,alkenones,"Zhang et al., 2013",403.8571913,106.1345296,-1.551387502
+591,2.72,NA,NA,317,mean,266,424,1,skew_normal,alkenones,"Zhang et al., 2013",417.7072671,108.1676428,-1.550201501
+592,2.94,NA,NA,307,mean,261,407,1,skew_normal,alkenones,"Zhang et al., 2013",402.2566101,100.6831613,-1.595341834
+593,3.08,NA,NA,338,mean,290,444,1,skew_normal,alkenones,"Zhang et al., 2013",439.4836246,106.5335472,-1.6153342
+594,3.13,NA,NA,318,mean,265,428,1,skew_normal,alkenones,"Zhang et al., 2013",421.1352449,111.3373473,-1.536473565
+595,3.32,NA,NA,336,mean,291,437,1,skew_normal,alkenones,"Zhang et al., 2013",433.1873501,101.3214028,-1.636002908
+596,3.36,NA,NA,321,mean,278,417,1,skew_normal,alkenones,"Zhang et al., 2013",413.224729,96.36361042,-1.629233333
+597,3.46,NA,NA,339,mean,299,434,1,skew_normal,alkenones,"Zhang et al., 2013",431.9338007,94.69433226,-1.708320041
+598,3.51,NA,NA,393,mean,340,512,1,skew_normal,alkenones,"Zhang et al., 2013",507.5210111,119.3736163,-1.636479366
+599,3.52,NA,NA,346,mean,303,445,1,skew_normal,alkenones,"Zhang et al., 2013",441.9934713,99.02860801,-1.668512765
+600,3.67,NA,NA,346,mean,309,437,1,skew_normal,alkenones,"Zhang et al., 2013",435.8591165,90.35185655,-1.753277892
+601,3.85,NA,NA,327,mean,291,414,1,skew_normal,alkenones,"Zhang et al., 2013",412.5120344,86.55052512,-1.730667298
+602,3.99,NA,NA,334,mean,295,427,1,skew_normal,alkenones,"Zhang et al., 2013",425.0787183,92.65857746,-1.713506934
+603,4.11,NA,NA,348,mean,307,445,1,skew_normal,alkenones,"Zhang et al., 2013",442.788667,96.72996913,-1.703369246
+604,4.45,NA,NA,379,mean,345,471,1,skew_normal,alkenones,"Zhang et al., 2013",471.9476289,90.38559875,-1.877466021
+605,4.78,NA,NA,361,mean,332,443,1,skew_normal,alkenones,"Zhang et al., 2013",444.6227679,80.17846824,-1.935474493
+606,7.15,NA,NA,379,mean,323,500,1,skew_normal,alkenones,"Zhang et al., 2013",494.0301075,121.911117,-1.587597408
+607,14.1,NA,NA,341,mean,311,421,1,skew_normal,alkenones,"Zhang et al., 2013",421.5611627,78.72164451,-1.858335149
+608,14.74,NA,NA,430,mean,388,539,1,skew_normal,alkenones,"Zhang et al., 2013",539.0776733,107.5789557,-1.822900738
+609,15.84,NA,NA,402,mean,375,486,1,skew_normal,alkenones,"Zhang et al., 2013",489.2296673,81.3108075,-2.063514815
+610,16.82,NA,NA,401,mean,370,490,1,skew_normal,alkenones,"Zhang et al., 2013",492.0412872,86.88120829,-1.955681117
+611,18.26,NA,NA,412,mean,384,499,1,skew_normal,alkenones,"Zhang et al., 2013",502.3247464,84.22587964,-2.061784534
+612,20.3,NA,NA,358,mean,332,435,1,skew_normal,alkenones,"Zhang et al., 2013",437.2441218,74.91947825,-1.997124007
+613,22.94,NA,NA,462,mean,430,560,1,skew_normal,alkenones,"Zhang et al., 2013",563.4833801,95.01768702,-2.042204852
+614,23.48,NA,NA,410,mean,383,497,1,skew_normal,alkenones,"Zhang et al., 2013",500.8882599,83.91216593,-2.111315143
+615,25.3,NA,NA,416,mean,386,506,1,skew_normal,alkenones,"Zhang et al., 2013",508.8479633,87.44939539,-2.014432014
+616,26.57,NA,NA,656,mean,588,825,1,skew_normal,alkenones,"Zhang et al., 2013",823.3309242,167.6004171,-1.766767525
+617,27.85,NA,NA,712,mean,626,914,1,skew_normal,alkenones,"Zhang et al., 2013",908.9956008,201.6018337,-1.694113976
+618,28.78,NA,NA,730,mean,662,910,1,skew_normal,alkenones,"Zhang et al., 2013",910.9587655,177.2670792,-1.84868512
+619,29.21,NA,NA,854,mean,792,1040,1,skew_normal,alkenones,"Zhang et al., 2013",1045.885791,180.7287505,-2.014432014
+620,29.57,NA,NA,972,mean,905,1179,1,skew_normal,alkenones,"Zhang et al., 2013",1186.695058,200.5173613,-2.054094684
+621,29.64,NA,NA,895,mean,818,1106,1,skew_normal,alkenones,"Zhang et al., 2013",1108.761091,207.012903,-1.894056076
+622,30.62,NA,NA,765,mean,709,932,1,skew_normal,alkenones,"Zhang et al., 2013",937.092366,162.3690478,-2.006417127
+623,31.27,NA,NA,725,mean,664,894,1,skew_normal,alkenones,"Zhang et al., 2013",896.6136359,165.6095314,-1.908510423
+624,32.04,NA,NA,743,mean,688,906,1,skew_normal,alkenones,"Zhang et al., 2013",910.7730975,158.5839317,-1.998072449
+625,32.58,NA,NA,756,mean,698,925,1,skew_normal,alkenones,"Zhang et al., 2013",929.3821557,164.7167792,-1.975399491
+626,32.83,NA,NA,740,mean,671,923,1,skew_normal,alkenones,"Zhang et al., 2013",924.0558758,180.1833569,-1.851208044
+627,32.91,NA,NA,723,mean,654,904,1,skew_normal,alkenones,"Zhang et al., 2013",904.5844902,178.4294633,-1.836859221
+628,32.97,NA,NA,727,mean,653,912,1,skew_normal,alkenones,"Zhang et al., 2013",910.4474354,183.347185,-1.774393724
+629,33.45,NA,NA,767,mean,698,950,1,skew_normal,alkenones,"Zhang et al., 2013",951.0558758,180.1833569,-1.851208044
+630,33.57,NA,NA,671,mean,612,832,1,skew_normal,alkenones,"Zhang et al., 2013",833.9590305,158.0295555,-1.888550696
+631,33.69,NA,NA,930,mean,792,1234,1,skew_normal,alkenones,"Zhang et al., 2013",1220.819657,305.6158191,-1.612196753
+632,34.69,NA,NA,1038,mean,953,1278,1,skew_normal,alkenones,"Zhang et al., 2013",1282.67751,234.704878,-1.933572646
+633,35.29,NA,NA,879,mean,813,1073,1,skew_normal,alkenones,"Zhang et al., 2013",1078.367839,188.9079198,-1.987081459
+634,35.56,NA,NA,919,mean,825,1155,1,skew_normal,alkenones,"Zhang et al., 2013",1153.269575,233.7808956,-1.779887209
+635,35.86,NA,NA,947,mean,881,1150,1,skew_normal,alkenones,"Zhang et al., 2013",1157.378559,196.733973,-2.048041469
+636,36.09,NA,NA,1132,mean,1032,1402,1,skew_normal,alkenones,"Zhang et al., 2013",1404.650034,265.325043,-1.874610546
+637,36.48,NA,NA,2622,mean,2417,3212,1,skew_normal,alkenones,"Zhang et al., 2013",3225.828633,575.8026704,-1.958956992
+638,36.81,NA,NA,1247,mean,1087,1617,1,skew_normal,alkenones,"Zhang et al., 2013",1606.225401,369.9221853,-1.674151778
+639,37.1,NA,NA,939,mean,877,1136,1,skew_normal,alkenones,"Zhang et al., 2013",1144.320841,190.2798373,-2.09218887
+640,37.43,NA,NA,1042,mean,938,1309,1,skew_normal,alkenones,"Zhang et al., 2013",1308.5006,263.8345591,-1.808829218
+641,38.55,NA,NA,798,mean,737,975,1,skew_normal,alkenones,"Zhang et al., 2013",979.4411264,172.5906656,-1.969826145
+642,38.25,NA,NA,898,mean,802,1137,1,skew_normal,alkenones,"Zhang et al., 2013",1134.743577,236.9750895,-1.768995728
+643,38.62,NA,NA,863,mean,754,1116,1,skew_normal,alkenones,"Zhang et al., 2013",1108.896752,252.8405514,-1.678901598
+644,12.81,NA,NA,283,mean,261,306,1,normal,alkenones,"Badger et al., 2013a",291.375987,23.9642966,-0.452082187
+645,13.6,NA,NA,271,mean,250,291,1,normal,alkenones,"Badger et al., 2013a",263.0942747,21.9116005,0.467673043
+646,13.64,NA,NA,303,mean,280,327,1,normal,alkenones,"Badger et al., 2013a",311.6058633,24.98971943,-0.445007
+647,13.65,NA,NA,306,mean,282,330,1,normal,alkenones,"Badger et al., 2013a",306.0741809,24.13386608,-0.003852367
+648,13.66,NA,NA,305,mean,282,328,1,normal,alkenones,"Badger et al., 2013a",305.0687126,23.12828113,-0.003723537
+649,13.67,NA,NA,308,mean,284,331,1,normal,alkenones,"Badger et al., 2013a",299.3941361,24.98971976,0.445007039
+650,13.67,NA,NA,289,mean,267,312,1,normal,alkenones,"Badger et al., 2013a",297.375987,23.9642966,-0.452082187
+651,13.68,NA,NA,261,mean,241,282,1,normal,alkenones,"Badger et al., 2013a",268.9057253,21.9116005,-0.467673043
+652,13.69,NA,NA,294,mean,272,317,1,normal,alkenones,"Badger et al., 2013a",302.375987,23.9642966,-0.452082187
+653,13.7,NA,NA,271,mean,249,294,1,normal,alkenones,"Badger et al., 2013a",279.375987,23.9642966,-0.452082187
+654,13.71,NA,NA,301,mean,279,324,1,normal,alkenones,"Badger et al., 2013a",309.375987,23.9642966,-0.452082187
+655,13.72,NA,NA,292,mean,271,315,1,normal,alkenones,"Badger et al., 2013a",302.8219815,24.22240942,-0.59017512
+656,13.74,NA,NA,305,mean,283,329,1,normal,alkenones,"Badger et al., 2013a",316.1137096,25.26006711,-0.580215738
+657,13.75,NA,NA,305,mean,279,331,1,normal,alkenones,"Badger et al., 2013a",305.1104454,26.14513126,-0.005294461
+658,13.76,NA,NA,292,mean,270,315,1,normal,alkenones,"Badger et al., 2013a",300.375987,23.9642966,-0.452082187
+659,13.77,NA,NA,340,mean,313,368,1,normal,alkenones,"Badger et al., 2013a",349.4946594,29.08618103,-0.420476376
+660,13.77,NA,NA,313,mean,289,336,1,normal,alkenones,"Badger et al., 2013a",304.3941367,24.98971943,0.445007
+661,13.78,NA,NA,313,mean,286,339,1,normal,alkenones,"Badger et al., 2013a",303.7232528,28.06278225,0.426114205
+662,13.79,NA,NA,294,mean,272,318,1,normal,alkenones,"Badger et al., 2013a",305.1137096,25.26006711,-0.580215738
+663,13.79,NA,NA,315,mean,288,345,1,normal,alkenones,"Badger et al., 2013a",329.8783683,31.654689,-0.624589128
+664,13.8,NA,NA,329,mean,306,354,1,normal,alkenones,"Badger et al., 2013a",340.4012418,26.29680032,-0.570876291
+665,2.81,NA,NA,282,mean,261,304,1,normal,alkenones,"Badger et al., 2013b",290.1426792,22.93827281,-0.459619229
+666,2.85,NA,NA,294,mean,269,320,1,normal,alkenones,"Badger et al., 2013b",303.0560762,27.03892654,-0.43206078
+667,2.86,NA,NA,288,mean,269,307,1,normal,alkenones,"Badger et al., 2013b",288.0871478,19.10608569,-0.005716767
+668,2.9,NA,NA,270,mean,252,288,1,normal,alkenones,"Badger et al., 2013b",270.1236393,18.10073605,-0.008561151
+669,2.92,NA,NA,278,mean,260,297,1,normal,alkenones,"Badger et al., 2013b",285.4198933,19.85608732,-0.485601879
+670,2.93,NA,NA,270,mean,252,288,1,normal,alkenones,"Badger et al., 2013b",270.0695271,18.10044755,-0.004814251
+671,2.94,NA,NA,307,mean,285,330,1,normal,alkenones,"Badger et al., 2013b",315.375987,23.9642966,-0.452082187
+672,2.98,NA,NA,258,mean,242,275,1,normal,alkenones,"Badger et al., 2013b",264.9161984,17.79722613,-0.506551709
+673,3,NA,NA,255,mean,239,272,1,normal,alkenones,"Badger et al., 2013b",261.9161984,17.79722613,-0.506551709
+674,3.02,NA,NA,265,mean,247,283,1,normal,alkenones,"Badger et al., 2013b",264.9382768,18.10041927,0.004273886
+675,3.03,NA,NA,262,mean,240,285,1,normal,alkenones,"Badger et al., 2013b",270.375987,23.9642966,-0.452082187
+676,3.07,NA,NA,284,mean,253,318,1,normal,alkenones,"Badger et al., 2013b",300.0856442,35.81445897,-0.593645212
+677,3.09,NA,NA,254,mean,237,271,1,normal,alkenones,"Badger et al., 2013b",254.0614453,17.09485146,-0.004504914
+678,3.1,NA,NA,275,mean,255,296,1,normal,alkenones,"Badger et al., 2013b",282.9057253,21.9116005,-0.467673043
+679,3.11,NA,NA,271,mean,253,290,1,normal,alkenones,"Badger et al., 2013b",278.4198933,19.85608732,-0.485601879
+680,3.13,NA,NA,272,mean,254,290,1,normal,alkenones,"Badger et al., 2013b",272.0503401,18.10038403,-0.003485683
+681,3.16,NA,NA,278,mean,258,298,1,normal,alkenones,"Badger et al., 2013b",278.0634089,20.11156002,-0.003951544
+682,3.18,NA,NA,259,mean,239,280,1,normal,alkenones,"Badger et al., 2013b",266.9057253,21.9116005,-0.467673043
+683,3.19,NA,NA,274,mean,255,294,1,normal,alkenones,"Badger et al., 2013b",281.664886,20.88422581,-0.476308316
+684,3.2,NA,NA,272,mean,254,290,1,normal,alkenones,"Badger et al., 2013b",272.0488747,18.10038003,-0.003384217
+685,3.21,NA,NA,267,mean,245,290,1,normal,alkenones,"Badger et al., 2013b",275.375987,23.9642966,-0.452082187
+686,3.22,NA,NA,265,mean,246,285,1,normal,alkenones,"Badger et al., 2013b",272.664886,20.88422581,-0.476308316
+687,3.24,NA,NA,273,mean,253,293,1,normal,alkenones,"Badger et al., 2013b",273.0859998,20.11164394,-0.005359379
+688,3.26,NA,NA,270,mean,251,290,1,normal,alkenones,"Badger et al., 2013b",277.664886,20.88422581,-0.476308316
+689,3.27,NA,NA,262,mean,244,280,1,normal,alkenones,"Badger et al., 2013b",262.0608056,18.10041613,-0.004210347
+690,3.28,NA,NA,258,mean,241,275,1,normal,alkenones,"Badger et al., 2013b",258.0535748,17.09482502,-0.003927882
+691,3.29,NA,NA,276,mean,257,295,1,normal,alkenones,"Badger et al., 2013b",276.0842559,19.10607281,-0.005527058
+692,120.3,120.4,120.2,972,mean,699,1388,1,skew_normal,alkenones,"Naafs et al., 2016",1304.479938,435.2026772,-1.137791167
+693,120.3,120.4,120.2,975,mean,799,1221,1,skew_normal,alkenones,"Naafs et al., 2016",1157.59167,259.1938348,-1.018228856
+694,120.1,120.2,120.1,896,mean,692,1194,1,skew_normal,alkenones,"Naafs et al., 2016",1126.290673,312.9108848,-1.080185542
+695,120.1,120.2,120.1,915,mean,753,1141,1,skew_normal,alkenones,"Naafs et al., 2016",1082.431063,238.1534787,-1.015498998
+696,120.1,120.2,120.1,1437,mean,934,2289,1,skew_normal,alkenones,"Naafs et al., 2016",2166.231555,882.0182037,-1.277209353
+697,120.1,120.2,120.1,1596,mean,1050,2517,1,skew_normal,alkenones,"Naafs et al., 2016",2382.440809,953.8658905,-1.271825969
+698,119.9,120.1,119.8,1255,mean,952,1716,1,skew_normal,alkenones,"Naafs et al., 2016",1623.018442,482.3482288,-1.135704047
+699,119.9,120.1,119.8,1942,mean,1409,2829,1,skew_normal,alkenones,"Naafs et al., 2016",2693.51744,919.9488116,-1.254271541
+700,119.9,120.1,119.8,2187,mean,1426,3596,1,skew_normal,alkenones,"Naafs et al., 2016",3448.527457,1444.617903,-1.391427901
+701,119.9,120.1,119.8,1845,mean,1011,3440,1,skew_normal,alkenones,"Naafs et al., 2016",3293.545247,1629.411208,-1.43265287
+702,119.6,119.8,119.3,2058,mean,1358,3326,1,skew_normal,alkenones,"Naafs et al., 2016",3181.738799,1303.204034,-1.363496513
+703,119.6,119.8,119.3,2005,mean,1381,3099,1,skew_normal,alkenones,"Naafs et al., 2016",2958.906393,1128.387532,-1.321636884
+704,119.6,119.8,119.3,2005,mean,1321,3231,1,skew_normal,alkenones,"Naafs et al., 2016",3085.969697,1261.499403,-1.349988425
+705,119.6,119.8,119.3,1746,mean,1233,2600,1,skew_normal,alkenones,"Naafs et al., 2016",2469.698953,885.6925181,-1.25470322
+706,119.6,119.8,119.3,1634,mean,1009,2731,1,skew_normal,alkenones,"Naafs et al., 2016",2591.083755,1131.342763,-1.323097943
+707,119.1,119.3,119,1379,mean,1041,1900,1,skew_normal,alkenones,"Naafs et al., 2016",1798.929492,544.4695399,-1.153230132
+708,118.9,119,118.8,1904,mean,1184,3211,1,skew_normal,alkenones,"Naafs et al., 2016",3063.476708,1342.972911,-1.36620893
+709,118.9,119,118.8,762,mean,588,1014,1,skew_normal,alkenones,"Naafs et al., 2016",955.3053184,264.7960367,-1.06826952
+710,120.1,120.2,120.1,1117,mean,779,1594,1,skew_normal,alkenones,"Naafs et al., 2016",1474.361466,502.2311626,-1.031923123
+711,120.1,120.2,120.1,1099,mean,822,1520,1,skew_normal,alkenones,"Naafs et al., 2016",1434.821144,440.5381074,-1.134287732
+712,119.9,120.1,119.8,1322,mean,856,2104,1,skew_normal,alkenones,"Naafs et al., 2016",1987.777917,810.3443986,-1.265117186
+713,119.9,120.1,119.8,1894,mean,1154,3278,1,skew_normal,alkenones,"Naafs et al., 2016",3138.784984,1417.394521,-1.404269715
+714,119.1,119.3,119,1227,mean,900,1735,1,skew_normal,alkenones,"Naafs et al., 2016",1638.745054,530.4928938,-1.163683947
+715,2.1,2.4,1.8,358,mean,250,590,1,skew_normal; reported distribution is normal,stomata,"van der Burgh et al., 1993 (updated by K™rschner et al., 1996)",578.1264263,233.9022236,-1.580182836
+716,5.1,NA,NA,358,mean,250,590,1,skew_normal; reported distribution is normal,stomata,"van der Burgh et al., 1993 (updated by K™rschner et al., 1996)",578.1264263,233.9022236,-1.580182836
+717,7.2,NA,NA,270,mean,189,446,1,skew_normal; reported distribution is normal,stomata,"van der Burgh et al., 1993 (updated by K™rschner et al., 1996)",437.6245751,177.2123278,-1.594713576
+718,8.5,NA,NA,350,mean,245,578,1,skew_normal; reported distribution is normal,stomata,"van der Burgh et al., 1993 (updated by K™rschner et al., 1996)",567.1038791,229.5874914,-1.593887424
+719,10.5,NA,NA,370,mean,259,611,1,skew_normal; reported distribution is normal,stomata,"van der Burgh et al., 1993 (updated by K™rschner et al., 1996)",599.473703,242.6812812,-1.593736653
+720,2.8,3,2.6,276,mean,193,455,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 1996",446.0618434,180.3867391,-1.585189898
+721,3.4,NA,NA,330,median,315,349,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 1996",342.5380501,20.12305538,-0.869876184
+722,4,NA,NA,363,mean,254,598,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 1996",586.2427643,236.8288727,-1.584798898
+723,4.6,NA,NA,270,mean,189,446,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 1996",437.6245751,177.2123278,-1.594713576
+724,168.8,174.1,163.5,879,mean,586,1172,1,skew_normal,stomata,"Beerling et al., 1998",879.8123653,294.6340096,-0.003455655
+725,200.3,201.3,199.3,864,mean,576,1152,1,skew_normal,stomata,"Beerling et al., 1998",866.1377749,289.6129107,-0.009251623
+726,205.4,209.5,201.3,758,mean,505,1010,1,skew_normal,stomata,"Beerling et al., 1998",718.2652329,256.9241295,0.195001644
+727,205.4,209.5,201.3,835,mean,556,1113,1,skew_normal,stomata,"Beerling et al., 1998",792.6202018,283.1695436,0.188633108
+728,44.5,47.8,41.2,768,mean,512,1024,1,skew_normal,stomata,"McElwain, 1998",768.2502609,257.4268104,-0.001218427
+729,168.8,174.1,163.5,639,mean,426,852,1,skew_normal,stomata,"McElwain, 1998",639.7655751,214.188418,-0.004479765
+730,285.6,298.9,272.3,354,mean,236,472,1,skew_normal,stomata,"McElwain, 1998",354.3384041,118.6580968,-0.003574378
+731,316.6,318,315.2,261,mean,174,348,1,skew_normal,stomata,"McElwain, 1998",261.2208199,87.48512989,-0.003163483
+732,400.5,407.6,393.3,2282,mean,1521,3042,1,skew_normal,stomata,"McElwain, 1998",2199.738758,769.0989852,0.134436937
+733,200.7,201.3,200,716,mean,477,954,1,skew_normal,stomata,"McElwain et al., 1999",677.7269796,242.7890946,0.198810108
+734,201.3,201.8,200.8,1535,mean,1023,2046,1,skew_normal,stomata,"McElwain et al., 1999",1471.721774,518.1703355,0.153626771
+735,201.6,201.8,201.3,702,mean,468,936,1,skew_normal,stomata,"McElwain et al., 1999",703.7695537,235.3107326,-0.009425345
+736,135.1,139.4,130.8,1448,mean,965,1931,1,skew_normal,stomata,"Chen et al., 2001",1449.205501,485.6932562,-0.003110763
+737,172.2,174.1,170.3,1894,mean,1263,2525,1,skew_normal,stomata,"Chen et al., 2001",1896.24409,634.5205337,-0.004432591
+738,187.7,201.3,174.1,735,mean,490,980,1,skew_normal,stomata,"Chen et al., 2001",735.9869837,246.3673619,-0.005021011
+739,44.5,47.8,41.2,965,mean,643,1286,1,skew_normal,stomata,"K™rschner et al., 2001",918.4194339,326.5624777,0.179687869
+740,15.2,16.7,13.7,339,median,318,559,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",591.4609802,194.6242369,-4.081364596
+741,15.3,16.8,13.8,341,median,319,559,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",590.713455,193.3805101,-3.969080457
+742,15.3,16.8,13.8,313,median,308,480,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",507.9058031,142.274464,-6.915077751
+743,16.5,18,15,535,median,402,704,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",647.0341863,178.9722052,-0.874939179
+744,54.2,54.3,54.1,443,median,359,623,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",613.6466748,181.5268315,-1.57704868
+745,54.3,54.4,54.2,327,median,318,416,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",428.9401897,78.95696766,-3.965003852
+746,54.7,54.8,54.6,378,median,343,579,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",601.9769982,184.3160026,-2.977307495
+747,55.6,55.7,55.5,479,median,380,639,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",612.1608827,166.4399319,-1.216013332
+748,55.9,58.9,52.9,667,median,475,748,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",479.27748,191.42433,1.705816156
+749,56.1,56.2,56,307,median,298,321,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",318.3578068,14.61806174,-1.16543404
+750,56.1,56.2,56,307,median,298,321,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",318.3578068,14.61806174,-1.16543404
+751,56.1,56.2,56,307,median,298,321,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",318.3578068,14.61806174,-1.16543404
+752,56.1,56.2,56,520,median,400,673,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",621.9199282,162.0104383,-0.880352128
+753,56.2,56.3,56.1,304,median,297,311,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",304.0197609,7.039038756,-0.003518483
+754,56.4,56.5,56.3,313,median,304,320,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",306.9346215,9.527206963,0.893570385
+755,56.5,56.6,56.4,316,median,305,325,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",309.1425495,11.65755179,0.810711108
+756,56.6,56.7,56.5,320,median,309,335,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",330.8545031,15.8308356,-0.982546017
+757,56.7,56.9,56.5,315,median,306,323,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",310.3548372,9.508692714,0.652427336
+758,56.7,56.9,56.5,318,median,307,328,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",312.7370994,11.59187786,0.600829036
+759,56.7,56.9,56.5,318,median,307,328,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",312.7370994,11.59187786,0.600829036
+760,57.2,57.4,57,469,median,379,631,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",612.1315753,166.6134966,-1.355404211
+761,58.1,58.4,57.8,447,median,367,623,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",615.2986158,176.9619782,-1.61052053
+762,59.9,60.8,59,535,median,416,680,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",624.9090641,153.6695086,-0.805453155
+763,59.9,60.8,59,574,median,433,704,1,skew_normal,stomata,"Royer et al., 2001b (updated by Beerling et al., 2009)",510.2982364,148.2584825,0.565226232
+764,270.6,272.3,268.8,343,mean,240,566,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",555.1378144,224.6279114,-1.590145421
+765,270.6,272.3,268.8,266,mean,186,439,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",430.509407,174.2862782,-1.588647769
+766,270.6,272.3,268.8,290,mean,203,479,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",469.9944027,190.3061195,-1.594464359
+767,270.6,272.3,268.8,326,mean,228,538,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",527.6188732,213.5676447,-1.589097675
+768,270.6,272.3,268.8,342,mean,239,564,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",552.8729136,223.7350692,-1.584431205
+769,313.5,319,308,348,mean,244,574,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",563.252881,227.5539089,-1.594852542
+770,313.5,319,308,351,mean,246,579,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",568.1038791,229.5874914,-1.593887424
+771,313.5,319,308,336,mean,235,554,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",543.1713647,219.6681338,-1.586244259
+772,313.5,319,308,308,mean,216,508,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",498.5132201,201.3663226,-1.595341834
+773,313.5,319,308,350,mean,245,578,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",567.1038791,229.5874914,-1.593887424
+774,313.5,319,308,366,mean,256,604,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",592.3585152,239.7552214,-1.589315758
+775,313.5,319,308,368,mean,258,607,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",595.6227095,240.6477011,-1.594647877
+776,313.5,319,308,358,mean,251,591,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",580.0695848,234.5468867,-1.597479854
+777,313.5,319,308,303,mean,212,500,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",490.3981762,198.4403367,-1.590020093
+778,313.5,319,308,367,mean,257,606,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",594.6227095,240.6477011,-1.594647877
+779,313.5,319,308,350,mean,245,578,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",567.1038791,229.5874914,-1.593887424
+780,313.5,319,308,401,mean,281,662,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",649.6603279,262.7680988,-1.595977651
+781,313.5,319,308,287,mean,201,474,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",465.1433871,188.2725281,-1.5956376
+782,313.5,319,308,311,mean,218,513,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",503.3642291,203.3999106,-1.594247261
+783,313.5,319,308,284,mean,199,469,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",460.2923408,186.2389209,-1.596837402
+784,313.5,319,308,325,mean,228,536,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",526.0320214,212.4265174,-1.596128368
+785,324,329,319,385,mean,270,635,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",623.1415251,251.7079032,-1.595341834
+786,324,329,319,392,mean,274,647,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",634.4300421,256.9160254,-1.587775493
+787,324,329,319,359,mean,251,592,1,skew_normal; reported distribution is normal,stomata,"Beerling, 2002",580.3919925,234.7954064,-1.585650143
+788,168.4,175.6,161.2,816,mean,544,1088,1,skew_normal,stomata,"Beerling & Royer, 2002",816.6829745,273.5167095,-0.003129552
+789,63.8,66,61.6,367,median,337,571,1,skew_normal,stomata,"Beerling et al., 2002 (updated by Beerling et al., 2009)",596.798248,184.9003844,-3.264301922
+790,64.1,64.3,63.9,330,median,321,401,1,skew_normal,stomata,"Beerling et al., 2002 (updated by Beerling et al., 2009)",410.5935432,63.76439953,-3.531181896
+791,65.4,66,64.8,343,median,329,541,1,skew_normal,stomata,"Beerling et al., 2002 (updated by Beerling et al., 2009)",571.9511473,172.9101593,-4.724669526
+792,65.4,66,64.8,470,median,370,642,1,skew_normal,stomata,"Beerling et al., 2002 (updated by Beerling et al., 2009)",618.4654387,177.7709834,-1.297019435
+793,66.5,67,66,539,median,400,687,1,skew_normal,stomata,"Beerling et al., 2002 (updated by Beerling et al., 2009)",599.954614,155.021723,-0.513032031
+794,54.3,54.4,54.2,515,median,393,671,1,skew_normal,stomata,"Royer, 2003 (updated by Beerling et al., 2009)",619.3412926,165.1709617,-0.884933783
+795,61.1,64.8,57.4,317,median,311,325,1,skew_normal,stomata,"Royer, 2003 (updated by Beerling et al., 2009)",322.6449038,8.454324505,-0.949295214
+796,49.9,52,47.8,659,mean,439,878,1,skew_normal,stomata,"Greenwood et al., 2003",622.7574604,223.6021395,0.20449086
+797,409.2,410.8,407.6,2836,mean,2505,4561,1,skew_normal,stomata,"Roth & Konrad, 2003",4743.870113,1593.42375,-2.819939227
+798,182.5,NA,NA,1050,mean,800,1300,1,skew_normal,stomata,"McElwain et al., 2005",1051.130422,251.3957916,-0.005635694
+799,182.6,NA,NA,1550,mean,1200,1900,1,skew_normal,stomata,"McElwain et al., 2005",1551.049273,351.952115,-0.00373652
+800,182.7,NA,NA,550,mean,400,700,1,skew_normal,stomata,"McElwain et al., 2005",550.4960226,150.836766,-0.004121517
+801,182.8,NA,NA,950,mean,700,1200,1,skew_normal,stomata,"McElwain et al., 2005",950.87941,251.3947889,-0.004384281
+802,182.9,NA,NA,950,mean,700,1200,1,skew_normal,stomata,"McElwain et al., 2005",950.698155,251.39422,-0.003480636
+803,183,NA,NA,600,mean,500,700,1,skew_normal,stomata,"McElwain et al., 2005",600.2320408,100.557568,-0.002892084
+804,104.1,107.8,100.5,710,mean,580,1420,1,skew_normal,stomata,"Haworth et al., 2005",1498.207247,653.49577,-2.895236026
+805,110.4,113,107.8,710,mean,603,1400,1,skew_normal,stomata,"Haworth et al., 2005",1484.824031,627.6009073,-3.172324178
+806,116.5,120,113,700,mean,597,1340,1,skew_normal,stomata,"Haworth et al., 2005",1417.00093,583.6009909,-3.108991656
+807,123,125,121,695,mean,590,1380,1,skew_normal,stomata,"Haworth et al., 2005",1464.75211,622.5677521,-3.19227758
+808,124.7,126.3,123,630,mean,530,1220,1,skew_normal,stomata,"Haworth et al., 2005",1288.699486,539.9724016,-3.022019546
+809,127.9,129.5,126.3,630,mean,530,1250,1,skew_normal,stomata,"Haworth et al., 2005",1324.496353,565.4491903,-3.105281617
+810,130.2,130.8,129.5,550,mean,450,1130,1,skew_normal,stomata,"Haworth et al., 2005",1196.759202,531.4744639,-2.993657202
+811,131.4,132,130.8,620,mean,590,1270,1,skew_normal,stomata,"Haworth et al., 2005",1376.333543,559.6394981,-5.750151717
+812,133,133.9,132,650,mean,500,1300,1,skew_normal,stomata,"Haworth et al., 2005",1356.542186,609.6143812,-2.534935601
+813,139.5,145,133.9,1442,mean,961,1923,1,skew_normal,stomata,"Sun et al., 2007",1440.541286,483.6828139,0.003779826
+814,139.5,145,133.9,1228,mean,819,1638,1,skew_normal,stomata,"Sun et al., 2007",1282.635413,415.3283555,-0.165588283
+815,139.5,145,133.9,1151,mean,767,1534,1,skew_normal,stomata,"Sun et al., 2007",1098.678402,389.1065707,0.169295116
+816,168,168.3,167.7,1031,mean,687,1375,1,skew_normal,stomata,"Sun et al., 2007",1030.375983,345.917676,0.002260917
+817,168,168.3,167.7,926,mean,618,1235,1,skew_normal,stomata,"Sun et al., 2007",971.3314907,313.4452082,-0.182213763
+818,172.2,174.1,170.3,896,mean,597,1195,1,skew_normal,stomata,"Sun et al., 2007",896.7214555,300.6671934,-0.003007357
+819,186.8,190.8,182.7,942,mean,628,1256,1,skew_normal,stomata,"Sun et al., 2007",941.5861893,315.7501941,0.001642549
+820,25.6,28.1,23,588,mean,412,971,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",952.9545242,385.5716412,-1.596642052
+821,22.1,23.6,20.6,333,mean,233,550,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",539.5850317,218.5272729,-1.593050435
+822,20,20.3,19.7,332,mean,233,548,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",537.9975012,217.3857963,-1.599959217
+823,19,19.5,18.5,397,mean,278,654,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",641.2808658,258.9495183,-1.586979168
+824,19,19.2,18.8,459,mean,321,757,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",742.2411735,300.2643869,-1.586835768
+825,17.6,18,17.2,374,mean,262,617,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",605.3246735,244.7148494,-1.592841107
+826,17.6,18,17.2,341,mean,239,563,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",552.550809,223.4867051,-1.596837402
+827,17.6,18,17.2,388,mean,272,641,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",629.2559872,254.6335897,-1.599502156
+828,17,17.5,16.4,393,mean,275,649,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",636.6944941,257.8086375,-1.592752399
+829,16.8,17.2,16.4,425,mean,297,701,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",687.2030724,278.1437415,-1.584967938
+830,16.5,17.5,15.5,393,mean,275,649,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",636.6944941,257.8086375,-1.592752399
+831,15.8,16,15.6,564,median,414,701,1,skew_normal,stomata,"K™rschner et al., 2008 (updated by Beerling et al., 2009)",493.5102513,157.9647137,0.589385381
+832,15.7,16.4,15,555,median,426,695,1,skew_normal,stomata,"K™rschner et al., 2008 (updated by Beerling et al., 2009)",618.4183796,147.2226501,-0.566818439
+833,15.7,16.4,15,552,median,416,693,1,skew_normal,stomata,"K™rschner et al., 2008 (updated by Beerling et al., 2009)",599.6896135,146.4540422,-0.419383442
+834,15.7,16.4,15,449,mean,314,741,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",726.6886665,294.1638898,-1.588919952
+835,13.9,14.3,13.5,287,median,262,301,1,skew_normal,stomata,"K™rschner et al., 2008 (updated by Beerling et al., 2009)",264.997925,25.73439645,1.34520532
+836,13.9,14.3,13.5,293,mean,205,483,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",473.5808937,191.4470616,-1.586641828
+837,11.6,12.2,11,332,mean,233,548,1,skew_normal; reported distribution is normal,stomata,"K™rschner et al., 2008",537.9975012,217.3857963,-1.599959217
+838,72.5,83.6,72.1,559,mean,497,819,1,skew_normal,stomata,"Quan et al., 2009",840.6044317,244.5495377,-2.486104343
+839,73.1,83.6,72.1,568,mean,508,836,1,skew_normal,stomata,"Quan et al., 2009",860.237689,250.6923587,-2.580537052
+840,73.7,83.6,72.1,572,mean,491,938,1,skew_normal,stomata,"Quan et al., 2009",971.5685949,342.0269169,-2.598025136
+841,74.7,83.6,72.1,589,mean,506,1020,1,skew_normal,stomata,"Quan et al., 2009",1065.549527,398.2363982,-2.814211433
+842,75.4,83.6,72.1,593,mean,520,979,1,skew_normal,stomata,"Quan et al., 2009",1020.425872,356.157444,-2.843126942
+843,75.9,83.6,72.1,695,mean,559,3251,1,skew_normal,stomata,"Quan et al., 2009",3664.289564,2210.057944,-5.393886197
+844,78.1,83.6,72.1,568,mean,475,984,1,skew_normal,stomata,"Quan et al., 2009",1021.68963,389.0864084,-2.582720343
+845,79.9,83.6,72.1,582,mean,497,1001,1,skew_normal,stomata,"Quan et al., 2009",1043.21602,388.747354,-2.732108578
+846,81.5,83.6,72.1,585,mean,483,1105,1,skew_normal,stomata,"Quan et al., 2009",1159.068638,481.1642882,-2.785000134
+847,121,123,119,867,mean,578,1156,1,skew_normal,stomata,"Passalia, 2009",868.3274471,290.613629,-0.005724885
+848,121,123,119,837,mean,558,1116,1,skew_normal,stomata,"Passalia, 2009",837.8650068,280.5562012,-0.003864223
+849,121,123,119,784,mean,523,1046,1,skew_normal,stomata,"Passalia, 2009",824.660196,266.0098309,-0.192700724
+850,121,123,119,573,mean,382,764,1,skew_normal,stomata,"Passalia, 2009",573.5361423,192.0651917,-0.003498592
+851,121,123,119,1060,mean,707,1413,1,skew_normal,stomata,"Passalia, 2009",1062.226095,354.9742531,-0.007859895
+852,121,123,119,1060,mean,707,1413,1,skew_normal,stomata,"Passalia, 2009",1061.068302,354.9688774,-0.003771949
+853,121,123,119,867,mean,578,1156,1,skew_normal,stomata,"Passalia, 2009",866.2914959,290.6114615,0.003055562
+854,121,123,119,593,mean,395,791,1,skew_normal,stomata,"Passalia, 2009",594.4587919,199.1087903,-0.009182829
+855,121,123,119,908,mean,605,1211,1,skew_normal,stomata,"Passalia, 2009",909.3598249,304.6916537,-0.005593551
+856,121,123,119,782,mean,521,1043,1,skew_normal,stomata,"Passalia, 2009",782.7718816,262.4556885,-0.003686015
+857,121,123,119,734,mean,489,979,1,skew_normal,stomata,"Passalia, 2009",734.8109635,246.3667206,-0.004125552
+858,121,123,119,769,mean,513,1026,1,skew_normal,stomata,"Passalia, 2009",809.1474037,260.9623217,-0.193965562
+859,101.8,103,100.5,974,mean,649,1298,1,skew_normal,stomata,"Passalia, 2009",927.1335944,329.5893674,0.179124463
+860,101.8,103,100.5,852,mean,568,1136,1,skew_normal,stomata,"Passalia, 2009",852.8387919,285.5839646,-0.003681142
+861,101.8,103,100.5,917,mean,612,1223,1,skew_normal,stomata,"Passalia, 2009",962.0407688,310.4179677,-0.182817102
+862,101.8,103,100.5,954,mean,636,1272,1,skew_normal,stomata,"Passalia, 2009",955.4115211,319.7753292,-0.005532323
+863,3.9,4.2,3.6,355,mean,249,586,1,skew_normal,stomata,"Retallack, 2009a",575.2184933,232.5132562,-1.598458102
+864,12,12.3,11.6,468,mean,328,773,1,skew_normal,stomata,"Retallack, 2009a",758.7354381,307.0088289,-1.59806468
+865,34.5,35,33.9,672,mean,448,896,1,skew_normal,stomata,"Retallack, 2009a",672.5582369,225.2490442,-0.003106112
+866,35.5,36,35,746,mean,497,995,1,skew_normal,stomata,"Retallack, 2009a",747.498916,250.3921629,-0.007502858
+867,46.4,47.8,45,908,mean,605,1210,1,skew_normal,stomata,"Retallack, 2009a",863.2509063,307.3906579,0.183428481
+868,118,123,113,893,mean,595,1190,1,skew_normal,stomata,"Retallack, 2009a",848.739184,302.3449847,0.184465832
+869,124.7,126.3,123,1008,mean,672,1344,1,skew_normal,stomata,"Retallack, 2009a",1010.060539,337.8788127,-0.007643463
+870,127.9,129.5,126.3,592,mean,395,789,1,skew_normal,stomata,"Retallack, 2009a",592.684199,198.0990626,-0.004328756
+871,142,143,141,813,mean,542,1084,1,skew_normal,stomata,"Retallack, 2009a",813.9339765,272.5118843,-0.004295496
+872,142,143,141,736,mean,491,981,1,skew_normal,stomata,"Retallack, 2009a",735.4073391,246.3660986,0.003014996
+873,143.5,145,142,972,mean,648,1296,1,skew_normal,stomata,"Retallack, 2009a",972.8689971,325.8068118,-0.003342874
+874,148,149,147,736,mean,491,981,1,skew_normal,stomata,"Retallack, 2009a",737.3766956,246.3692303,-0.007003566
+875,153.4,154.7,152.1,939,mean,626,1252,1,skew_normal,stomata,"Retallack, 2009a",940.3386148,314.7471957,-0.005330378
+876,203.2,205,201.3,908,mean,605,1210,1,skew_normal,stomata,"Retallack, 2009a",863.2509063,307.3906579,0.183428481
+877,230.5,233,228,813,mean,542,1084,1,skew_normal,stomata,"Retallack, 2009a",813.7418005,272.5112933,-0.003411649
+878,233.8,237,230.5,789,mean,526,1052,1,skew_normal,stomata,"Retallack, 2009a",790.4751549,264.4698126,-0.006990852
+879,233.8,237,230.5,825,mean,550,1100,1,skew_normal,stomata,"Retallack, 2009a",825.9644858,276.5342576,-0.004371295
+880,168.8,174.1,163.5,1422,mean,948,1896,1,skew_normal,stomata,"Yan et al., 2009",1423.872101,476.6452788,-0.004922639
+881,168.8,174.1,163.5,1373,mean,915,1830,1,skew_normal,stomata,"Yan et al., 2009",1314.217478,463.7296482,0.159512571
+882,168.8,174.1,163.5,1296,mean,864,1728,1,skew_normal,stomata,"Yan et al., 2009",1297.699831,434.4108623,-0.004904208
+883,168.8,174.1,163.5,1188,mean,792,1584,1,skew_normal,stomata,"Yan et al., 2009",1189.711062,398.2105844,-0.005385395
+884,168.8,174.1,163.5,1134,mean,756,1512,1,skew_normal,stomata,"Yan et al., 2009",1131.355992,380.1157853,0.008718045
+885,94.5,NA,NA,366,mean,256,603,1,skew_normal,stomata,"Barclay et al., 2010",591.0935161,238.8623288,-1.583962609
+886,94.4,NA,NA,381,mean,267,628,1,skew_normal,stomata,"Barclay et al., 2010",616.0265476,248.7819515,-1.591095455
+887,94.3,NA,NA,384,mean,269,634,1,skew_normal,stomata,"Barclay et al., 2010",622.1415251,251.7079032,-1.595341834
+888,94.3,NA,NA,410,mean,287,676,1,skew_normal,stomata,"Barclay et al., 2010",662.9490219,267.9763119,-1.588707522
+889,94.2,NA,NA,444,mean,311,733,1,skew_normal,stomata,"Barclay et al., 2010",719.2510157,290.9892824,-1.59476791
+890,94.1,NA,NA,457,mean,320,753,1,skew_normal,stomata,"Barclay et al., 2010",738.3903547,298.2308965,-1.587520708
+891,94.1,NA,NA,360,mean,252,595,1,skew_normal,stomata,"Barclay et al., 2010",583.920651,236.5805042,-1.596519039
+892,94.1,NA,NA,446,mean,313,737,1,skew_normal,stomata,"Barclay et al., 2010",723.7772764,292.7731464,-1.603541693
+893,94.1,NA,NA,396,mean,277,654,1,skew_normal,stomata,"Barclay et al., 2010",641.5454404,259.8421933,-1.591917217
+894,94.1,NA,NA,448,mean,314,740,1,skew_normal,stomata,"Barclay et al., 2010",726.3655813,293.9150222,-1.598375904
+895,94.1,NA,NA,508,mean,355,838,1,skew_normal,stomata,"Barclay et al., 2010",821.5332249,332.5524105,-1.585329148
+896,94,NA,NA,485,mean,340,801,1,skew_normal,stomata,"Barclay et al., 2010",786.2541958,318.0690012,-1.598496082
+897,94,NA,NA,425,mean,297,701,1,skew_normal,stomata,"Barclay et al., 2010",687.2030724,278.1437415,-1.584967938
+898,94,NA,NA,466,mean,326,769,1,skew_normal,stomata,"Barclay et al., 2010",754.2076162,305.2241609,-1.589697318
+899,94,NA,NA,370,mean,259,610,1,skew_normal,stomata,"Barclay et al., 2010",598.2093756,241.788733,-1.588449115
+900,93.9,NA,NA,431,mean,302,711,1,skew_normal,stomata,"Barclay et al., 2010",697.5831717,281.962649,-1.593368421
+901,93.9,NA,NA,436,mean,305,720,1,skew_normal,stomata,"Barclay et al., 2010",706.2850779,286.0297676,-1.591841962
+902,203.7,206,201.3,2200,mean,1650,2750,1,skew_normal,stomata,"Bonis et al., 2010",2203.692609,553.0774848,-0.008367954
+903,201.1,201.3,200.8,1320,mean,880,1760,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1321.552766,442.4548447,-0.004398457
+904,201.1,201.3,200.8,1140,mean,760,1520,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1141.506578,382.120709,-0.004941457
+905,201.1,201.3,200.8,2792,mean,1861,3722,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",2697.976992,940.350206,0.125629791
+906,201.3,201.8,200.8,2152,mean,1435,2869,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",2153.768758,720.9980127,-0.003074651
+907,201.6,201.8,201.3,1445,mean,964,1927,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1505.801301,487.9267977,-0.156787219
+908,201.6,201.8,201.3,1092,mean,728,1456,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1093.986002,366.0339578,-0.006800266
+909,201.6,201.8,201.3,1195,mean,797,1593,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1196.159736,400.2197353,-0.003631808
+910,201.6,201.8,201.3,1236,mean,824,1648,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1234.024711,414.300787,0.005975592
+911,201.6,201.8,201.3,1113,mean,742,1484,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1113.98322,373.0688797,-0.003303114
+912,201.1,201.3,200.8,1469,mean,979,1958,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1407.533276,495.9920445,0.155919053
+913,201.3,201.8,200.8,1604,mean,1069,2139,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1608.607125,538.0012428,-0.010733125
+914,201.6,201.8,201.3,1761,mean,1174,2348,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1762.64611,590.2736479,-0.003495164
+915,201.6,201.8,201.3,1600,mean,1067,2133,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1602.27683,535.9752446,-0.005324158
+916,201.6,201.8,201.3,1459,mean,973,1946,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1520.217618,492.9676036,-0.156242365
+917,201.6,201.8,201.3,881,mean,587,1174,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",837.1317784,298.3083017,0.185312788
+918,201.6,201.8,201.3,1206,mean,804,1608,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1209.359705,404.2542936,-0.010416566
+919,201.6,201.8,201.3,1122,mean,748,1497,1,skew_normal,stomata,"Steinthorsdottir et al., 2011",1173.508609,380.0289937,-0.170658057
+920,3.1,3.6,2.6,357,median,333,376,1,skew_normal; reported distribution is normal,stomata,"Stults et al., 2011",341.2268199,25.42060123,0.865411877
+921,8.5,11.6,5.3,360,mean,252,594,1,skew_normal; reported distribution is normal,stomata,"Stults et al., 2011",582.6567293,235.6881646,-1.591095455
+922,47.4,48,46.8,943,mean,853,1033,1,skew_normal,stomata,"Grein et al., 2011",943.2674272,90.50196536,-0.003703479
+923,85,86.3,83.6,660,mean,542,1896,1,skew_normal,stomata,"Wan et al., 2011",2078.364856,1093.442426,-4.081050711
+924,85,86.3,83.6,531,mean,473,733,1,skew_normal,stomata,"Wan et al., 2011",744.6131519,193.3223419,-2.218878445
+925,85,86.3,83.6,565,mean,512,795,1,skew_normal,stomata,"Wan et al., 2011",815.0459543,215.6824826,-2.537107583
+926,35.9,37.8,33.9,450,mean,259,640,1,skew_normal,stomata,"Roth-Nebelsick et al., 2012",416.9739066,194.3072104,0.214579245
+927,30.8,32,29.5,671,mean,503,839,1,skew_normal,stomata,"Erdei et al., 2012",670.1488833,168.9384072,0.006314329
+928,27,27.1,26.3,395,mean,273,516,1,skew_normal,stomata,"Grein et al., 2013 (updates Roth-Nebelsick et al., 2004, 2012)",370.3841833,124.5388022,0.25018036
+929,25,25.25,23,453,mean,287,619,1,skew_normal,stomata,"Grein et al., 2013 (updates Roth-Nebelsick et al., 2004)",453.5261943,166.9259475,-0.003950801
+930,24,25.25,23,434,mean,257,611,1,skew_normal,stomata,"Grein et al., 2013 (updates Roth-Nebelsick et al., 2004, 2012)",434.4698956,177.9870418,-0.003308833
+931,17.4,17.6,17.2,402,mean,238,566,1,skew_normal,stomata,"Grein et al., 2013 (updates Roth-Nebelsick et al., 2004)",402.5466051,164.9148782,-0.004154098
+932,33,33.9,32,383,mean,240,527,1,skew_normal,stomata,"Roth-Nebelsick et al., 2014",410.4383629,146.7968237,-0.236335092
+933,409.2,410.8,407.6,1548,median,1092,2540,1,skew_normal,stomata,"Franks et al., 2014",2493.161962,998.6972081,-1.596234125
+934,317.5,318,317,332,median,239,471,1,skew_normal,stomata,"Franks et al., 2014",441.453421,145.6692259,-1.111594756
+935,311.1,323.2,298.9,340,median,237,488,1,skew_normal,stomata,"Franks et al., 2014",452.7389341,155.6134196,-1.057272712
+936,316.5,318,315,388,median,272,567,1,skew_normal,stomata,"Franks et al., 2014",532.388857,187.0442981,-1.154692081
+937,277.2,282,272.3,498,median,364,707,1,skew_normal,stomata,"Franks et al., 2014",667.8726891,218.1714319,-1.168982718
+938,219.2,237,201.3,889,median,685,1203,1,skew_normal,stomata,"Franks et al., 2014",1141.82397,328.1887055,-1.151312025
+939,226.5,237,216,615,median,441,877,1,skew_normal,stomata,"Franks et al., 2014",822.5084754,274.3901703,-1.121671841
+940,131.6,133.9,129.3,513,median,370,736,1,skew_normal,stomata,"Franks et al., 2014",694.2305254,232.7895053,-1.168759779
+941,106.8,113,100.5,828,median,651,1070,1,skew_normal,stomata,"Franks et al., 2014",1003.61334,255.361299,-0.986391065
+942,106.8,113,100.5,662,median,523,861,1,skew_normal,stomata,"Franks et al., 2014",813.0899415,209.2970471,-1.052160958
+943,106.8,113,100.5,734,median,580,948,1,skew_normal,stomata,"Franks et al., 2014",891.9231512,225.5701383,-1.009885486
+944,48,52,44,636,median,576,708,1,skew_normal,stomata,"Franks et al., 2014",679.4006672,76.30041201,-0.778661906
+945,40.9,47.8,33.9,356,median,261,486,1,skew_normal,stomata,"Franks et al., 2014",450.4249854,137.1698843,-0.987658656
+946,24.9,33.9,16,389,median,283,549,1,skew_normal,stomata,"Franks et al., 2014",515.9619135,167.5297663,-1.124986213
+947,12.8,23,2.6,434,median,340,560,1,skew_normal,stomata,"Franks et al., 2014",523.4557909,133.1162552,-0.957217964
+948,42.9,47.9,37.8,424,median,385,467,1,skew_normal,stomata,"Maxbauer et al., 2014",444.7519026,45.3280569,-0.606443224
+949,186.8,190.8,182.7,809,mean,540,1079,1,skew_normal,stomata,"Steinthorsdottir and Vajda, 2015",850.4739208,274.0853305,-0.190743431
+950,13.8,16,11.6,334,mean,234,551,1,skew_normal,stomata,"Wang et al, 2015",540.5850317,218.5272729,-1.593050435
+951,9.5,10,9,351,mean,246,579,1,skew_normal,stomata,"Wang et al, 2015",568.1038791,229.5874914,-1.593887424
+952,2.9,3,2.8,280,mean,196,462,1,skew_normal,stomata,"Wang et al, 2015",453.1774561,183.3130169,-1.591095455
+953,2.7,2.7,2.6,279,mean,195,460,1,skew_normal,stomata,"Wang et al, 2015",450.9126013,182.4201983,-1.584090311
+954,2.6,NA,NA,285,mean,200,470,1,skew_normal,stomata,"Wang et al, 2015",461.2923408,186.2389209,-1.596837402
+955,1.9,NA,NA,280,mean,196,462,1,skew_normal,stomata,"Wang et al, 2015",453.1774561,183.3130169,-1.591095455
+956,1,NA,NA,278,mean,195,459,1,skew_normal,stomata,"Wang et al, 2015",450.5901522,182.171657,-1.59932039
+957,97.2,100.5,93.9,1028,mean,685,1370,1,skew_normal,stomata,"Mays et al, 2015",979.4366567,347.7494241,0.175885451
+958,117,123,111,796,mean,531,1060,1,skew_normal,stomata,"Du et al, 2016",755.0336978,269.0382163,0.191957383
+959,121,125.1,116.8,824,mean,549,1098,1,skew_normal,stomata,"Du et al, 2016",782.0215933,279.1322073,0.189559487
+960,121,125.1,116.8,839,mean,559,1119,1,skew_normal,stomata,"Du et al, 2016",841.5461513,281.5719513,-0.011333858
+961,112.6,115.2,110,856,mean,571,1142,1,skew_normal,stomata,"Du et al, 2016",899.0776369,290.234538,-0.187054351
+962,112.6,115.2,110,846,mean,564,1128,1,skew_normal,stomata,"Du et al, 2016",846.6180363,283.5722603,-0.002731565
+963,23.5,24,23,476,mean,352,600,1,skew_normal,stomata,"Steinthorsdottir et al., 2016a",476.596245,124.6924778,-0.005993084
+964,26.5,27,26,429,mean,317,541,1,skew_normal,stomata,"Steinthorsdottir et al., 2016a",429.3399103,112.6246892,-0.003782623
+965,33.5,33.9,33,409,mean,303,516,1,skew_normal,stomata,"Steinthorsdottir et al., 2016a",431.5928113,109.3531655,-0.261748088
+966,34.5,35,33.9,410,mean,303,517,1,skew_normal,stomata,"Steinthorsdottir et al., 2016a",410.3275077,107.5968096,-0.003814911
+967,36,36.5,35.5,365,mean,270,460,1,skew_normal,stomata,"Steinthorsdottir et al., 2016a",365.5599606,95.53107573,-0.007346525
+968,204.9,208.5,201.3,1472,mean,981,1962,1,skew_normal,stomata,"Wu et al., 2016",1410.450354,497.0001845,0.155811874
+969,171.2,174.1,168.3,990,mean,660,1320,1,skew_normal,stomata,"Wu et al., 2016",990.9518688,331.8404561,-0.003595091
+970,171.2,174.1,168.3,954,mean,636,1272,1,skew_normal,stomata,"Wu et al., 2016",955.0345064,319.7738881,-0.004054646
+971,60,62,58,322,mean,275,645,1,skew_normal,stomata,"Steinthorsdottir et al., 2016b",686.0651583,292.5581889,-3.282853649
+972,65.5,66,65,418,mean,363,836,1,skew_normal,stomata,"Steinthorsdottir et al., 2016b",891.6371786,376.2350649,-3.462821072
+973,65.9,66,65.8,429,mean,365,858,1,skew_normal,stomata,"Steinthorsdottir et al., 2016b",911.8532106,389.1995864,-3.239257768
+974,67,68,66,649,mean,555,1297,1,skew_normal,stomata,"Steinthorsdottir et al., 2016b",1379.511159,586.8108398,-3.288286048
+975,23,23,23,516,median,405,627,1,skew_normal,stomata,"Reichgelt et al., 2016",516.4034788,111.6193325,-0.004530484
+976,23,23,22.9,425,median,372,478,1,skew_normal,stomata,"Reichgelt et al., 2016",425.1305766,53.2955291,-0.003070691
+977,28.5,33.9,23,390,mean,265,715,1,skew_normal,stomata,"Sun et al., 2017",715.3724846,320.6980467,-1.825287461
+978,32.98,NA,NA,550,median,455,645,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",550.3166755,95.52996015,-0.004154681
+979,33.17,NA,NA,710,median,595,825,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",710.4196475,115.6416566,-0.00454814
+980,33.33,NA,NA,890,median,745,1035,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",890.8605634,145.8106265,-0.007397127
+981,33.47,NA,NA,930,median,770,1090,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",930.4666226,160.8923569,-0.0036349
+982,33.59,NA,NA,690,median,575,805,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",690.3010476,115.6412872,-0.003262753
+983,33.96,NA,NA,870,median,720,1020,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",870.4430484,150.836601,-0.003681346
+984,34.21,NA,NA,960,median,795,1125,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",960.8806006,165.9218817,-0.00665185
+985,34.42,NA,NA,940,median,760,1120,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",940.4706283,181.0037524,-0.003258759
+986,34.63,NA,NA,810,median,655,965,1,skew_normal,boron,"Pearson et al., 2009 (updated by Anagnostou et al., 2016)",810.5588201,155.8648172,-0.004493525
+987,0,NA,NA,266,mean,254,279,1,normal,boron,"Seki et al., 2010",271.8424046,13.66633637,-0.562093046
+988,0.46,NA,NA,293,mean,281,306,1,normal,boron,"Seki et al., 2010",298.8424046,13.66633637,-0.562093046
+989,0.9,NA,NA,278,mean,265,290,1,normal,boron,"Seki et al., 2010",272.1575954,13.66633637,0.562093046
+990,1.5,NA,NA,279,mean,266,291,1,normal,boron,"Seki et al., 2010",273.1575954,13.66633637,0.562093046
+991,2.11,NA,NA,274,mean,262,287,1,normal,boron,"Seki et al., 2010",279.8424046,13.66633637,-0.562093046
+992,2.59,NA,NA,258,mean,246,271,1,normal,boron,"Seki et al., 2010",263.8424046,13.66633637,-0.562093046
+993,2.79,NA,NA,283,mean,270,295,1,normal,boron,"Seki et al., 2010",277.1575954,13.66633637,0.562093046
+994,2.89,NA,NA,399,mean,386,411,1,normal,boron,"Seki et al., 2010",393.1575954,13.66633637,0.562093046
+995,2.99,NA,NA,402,mean,389,414,1,normal,boron,"Seki et al., 2010",396.1575954,13.66633637,0.562093046
+996,3.05,NA,NA,428,mean,415,440,1,normal,boron,"Seki et al., 2010",422.1575954,13.66633637,0.562093046
+997,3.17,NA,NA,336,mean,324,349,1,normal,boron,"Seki et al., 2010",341.8424046,13.66633637,-0.562093046
+998,3.5,NA,NA,366,mean,354,379,1,normal,boron,"Seki et al., 2010",371.8424046,13.66633637,-0.562093046
+999,1.98,NA,NA,219,mean,196,245,1,skew_normal,boron,"Bartoli et al., 2011",232.6131023,27.48124563,-0.662833192
+1000,2.03,NA,NA,262,mean,236,291,1,skew_normal,boron,"Bartoli et al., 2011",276.5679212,30.61273898,-0.633358774
+1001,2.08,NA,NA,246,mean,221,274,1,skew_normal,boron,"Bartoli et al., 2011",260.2536917,29.56988796,-0.642621593
+1002,2.16,NA,NA,221,mean,198,247,1,skew_normal,boron,"Bartoli et al., 2011",234.6131023,27.48124563,-0.662833192
+1003,2.17,NA,NA,383,mean,348,423,1,skew_normal,boron,"Bartoli et al., 2011",404.5914068,42.31370052,-0.685720433
+1004,2.2,NA,NA,386,mean,351,427,1,skew_normal,boron,"Bartoli et al., 2011",409.507424,43.42549498,-0.734383619
+1005,2.3,NA,NA,238,mean,214,265,1,skew_normal,boron,"Bartoli et al., 2011",251.9354884,28.52607814,-0.652427336
+1006,2.5,NA,NA,367,mean,334,407,1,skew_normal,boron,"Bartoli et al., 2011",391.5701833,42.39168756,-0.796374777
+1007,2.56,NA,NA,310,mean,281,344,1,skew_normal,boron,"Bartoli et al., 2011",329.5306014,36.0124325,-0.735976604
+1008,2.6,NA,NA,203,mean,181,227,1,skew_normal,boron,"Bartoli et al., 2011",214.1137096,25.26006711,-0.580215738
+1009,2.69,NA,NA,194,mean,172,217,1,skew_normal,boron,"Bartoli et al., 2011",202.375987,23.9642966,-0.452082187
+1010,2.7,NA,NA,358,mean,325,396,1,skew_normal,boron,"Bartoli et al., 2011",378.9175712,40.21671224,-0.701007461
+1011,2.71,NA,NA,314,mean,285,348,1,skew_normal,boron,"Bartoli et al., 2011",333.5306014,36.0124325,-0.735976604
+1012,2.71,NA,NA,238,mean,214,266,1,skew_normal,boron,"Bartoli et al., 2011",253.9060653,29.65191895,-0.726610537
+1013,2.71,NA,NA,334,mean,303,370,1,skew_normal,boron,"Bartoli et al., 2011",354.2309773,38.11640284,-0.717682384
+1014,2.75,NA,NA,300,mean,271,333,1,skew_normal,boron,"Bartoli et al., 2011",317.6051828,34.89821053,-0.676786116
+1015,2.77,NA,NA,404,mean,367,446,1,skew_normal,boron,"Bartoli et al., 2011",426.2533815,44.40765972,-0.671634032
+1016,2.78,NA,NA,418,mean,381,462,1,skew_normal,boron,"Bartoli et al., 2011",444.0511346,46.62181716,-0.762352405
+1017,2.78,NA,NA,316,mean,286,350,1,skew_normal,boron,"Bartoli et al., 2011",333.9336935,35.94456531,-0.668281422
+1018,2.8,NA,NA,314,mean,285,349,1,skew_normal,boron,"Bartoli et al., 2011",335.3282781,37.09215945,-0.78881074
+1019,2.92,NA,NA,241,mean,217,269,1,skew_normal,boron,"Bartoli et al., 2011",256.9060653,29.65191895,-0.726610537
+1020,3,NA,NA,354,mean,321,392,1,skew_normal,boron,"Bartoli et al., 2011",374.9175712,40.21671224,-0.701007461
+1021,3.07,NA,NA,265,mean,239,294,1,skew_normal,boron,"Bartoli et al., 2011",279.5679212,30.61273898,-0.633358774
+1022,3.08,NA,NA,411,mean,374,454,1,skew_normal,boron,"Bartoli et al., 2011",435.207785,45.52946026,-0.719141489
+1023,3.1,NA,NA,249,mean,224,277,1,skew_normal,boron,"Bartoli et al., 2011",263.2536917,29.56988796,-0.642621593
+1024,3.16,NA,NA,233,mean,209,260,1,skew_normal,boron,"Bartoli et al., 2011",246.9354884,28.52607814,-0.652427336
+1025,3.22,NA,NA,242,mean,218,270,1,skew_normal,boron,"Bartoli et al., 2011",257.9060653,29.65191895,-0.726610537
+1026,3.24,NA,NA,330,mean,300,366,1,skew_normal,boron,"Bartoli et al., 2011",351.7003336,38.150206,-0.778661906
+1027,3.26,NA,NA,252,mean,226,280,1,skew_normal,boron,"Bartoli et al., 2011",264.2408713,29.40205715,-0.545983212
+1028,3.32,NA,NA,274,mean,247,304,1,skew_normal,boron,"Bartoli et al., 2011",288.878368,31.65468897,-0.624589111
+1029,3.4,NA,NA,255,mean,230,284,1,skew_normal,boron,"Bartoli et al., 2011",271.2540263,30.70330739,-0.715514703
+1030,3.41,NA,NA,251,mean,226,279,1,skew_normal,boron,"Bartoli et al., 2011",265.2536917,29.56988796,-0.642621593
+1031,3.47,NA,NA,292,mean,264,324,1,skew_normal,boron,"Bartoli et al., 2011",309.2731254,33.85096042,-0.685720433
+1032,3.54,NA,NA,329,mean,299,365,1,skew_normal,boron,"Bartoli et al., 2011",350.7003336,38.150206,-0.778661906
+1033,3.59,NA,NA,282,mean,255,314,1,skew_normal,boron,"Bartoli et al., 2011",300.8152673,33.90440217,-0.75618007
+1034,3.72,NA,NA,310,mean,281,344,1,skew_normal,boron,"Bartoli et al., 2011",329.5306014,36.0124325,-0.735976604
+1035,3.79,NA,NA,288,mean,260,319,1,skew_normal,boron,"Bartoli et al., 2011",303.1852078,32.6957903,-0.616269055
+1036,3.87,NA,NA,408,mean,371,451,1,skew_normal,boron,"Bartoli et al., 2011",432.207785,45.52946026,-0.719141489
+1037,3.96,NA,NA,295,mean,266,327,1,skew_normal,boron,"Bartoli et al., 2011",310.4886025,33.73609066,-0.608360308
+1038,4.04,NA,NA,334,mean,303,371,1,skew_normal,boron,"Bartoli et al., 2011",356.0686577,39.20718987,-0.768989824
+1039,4.12,NA,NA,394,mean,358,435,1,skew_normal,boron,"Bartoli et al., 2011",415.9238249,43.36104212,-0.678537438
+1040,4.58,NA,NA,425,mean,387,469,1,skew_normal,boron,"Bartoli et al., 2011",449.5535838,46.58027384,-0.711956626
+1041,12.28,NA,NA,190,mean,172,208,1,skew_normal,boron,"Foster et al., 2012",190.0543092,18.10039553,-0.003760518
+1042,12.72,NA,NA,223,mean,202,244,1,skew_normal,boron,"Foster et al., 2012",223.0607374,21.11712043,-0.003604821
+1043,13.25,NA,NA,244,mean,221,267,1,skew_normal,boron,"Foster et al., 2012",244.0556392,23.12824599,-0.003015088
+1044,13.48,NA,NA,243,mean,220,266,1,skew_normal,boron,"Foster et al., 2012",243.0728031,23.1282936,-0.003945198
+1045,13.72,NA,NA,240,mean,217,263,1,skew_normal,boron,"Foster et al., 2012",240.2658369,23.12970583,-0.014405744
+1046,13.83,NA,NA,257,mean,233,282,1,skew_normal,boron,"Foster et al., 2012",265.8325013,26.01458353,-0.438346686
+1047,14.17,NA,NA,268,mean,242,295,1,skew_normal,boron,"Foster et al., 2012",277.2767472,28.06278225,-0.426114205
+1048,14.31,NA,NA,272,mean,247,299,1,skew_normal,boron,"Foster et al., 2012",283.964622,28.3677413,-0.553811176
+1049,14.8,NA,NA,374,mean,336,415,1,skew_normal,boron,"Foster et al., 2012",392.0856382,43.06889176,-0.551153578
+1050,15.04,NA,NA,332,mean,297,369,1,skew_normal,boron,"Foster et al., 2012",346.5914932,38.68342007,-0.490523598
+1051,15.56,NA,NA,298,mean,270,328,1,skew_normal,boron,"Foster et al., 2012",310.7833643,31.46861091,-0.531528796
+1052,15.87,NA,NA,392,mean,351,438,1,skew_normal,boron,"Foster et al., 2012",415.5448309,48.58747087,-0.646475717
+1053,16.38,NA,NA,225,mean,204,246,1,skew_normal,boron,"Foster et al., 2012",225.0773162,21.11717457,-0.004588789
+1054,11.8,NA,NA,247,mean,225,271,1,skew_normal,boron,"Foster et al., 2012",258.1137096,25.26006711,-0.580215738
+1055,13.6,NA,NA,232,mean,211,254,1,skew_normal,boron,"Foster et al., 2012",240.1426792,22.93827281,-0.459619229
+1056,14.94,NA,NA,346,mean,314,378,1,skew_normal,boron,"Foster et al., 2012",346.0879813,32.17845633,-0.003426789
+1057,13.7,NA,NA,250,mean,227,274,1,normal,boron,"Badger et al., 2013a",258.6058633,24.98971943,-0.445007
+1058,13.74,NA,NA,255,mean,231,279,1,normal,boron,"Badger et al., 2013a",255.0827987,24.1338941,-0.004299908
+1059,13.74,NA,NA,230,mean,208,251,1,normal,boron,"Badger et al., 2013a",221.8573208,22.93827281,0.459619229
+1060,13.77,NA,NA,301,mean,273,329,1,normal,boron,"Badger et al., 2013a",301.1033579,28.1562338,-0.004600794
+1061,13.79,NA,NA,283,mean,257,310,1,normal,boron,"Badger et al., 2013a",292.2767472,28.06278225,-0.426114205
+1062,13.8,NA,NA,311,mean,282,340,1,normal,boron,"Badger et al., 2013a",311.1084349,29.1618186,-0.004660346
+1063,15.54,NA,NA,300,mean,254,357,1,skew_normal,boron,"Greenop et al., 2014",336.3641738,60.39888632,-0.833925082
+1064,15.6,NA,NA,442,mean,371,530,1,skew_normal,boron,"Greenop et al., 2014",498.1636702,93.2470528,-0.83433698
+1065,15.61,NA,NA,469,mean,394,562,1,skew_normal,boron,"Greenop et al., 2014",528.3984521,98.54448827,-0.835094117
+1066,15.63,NA,NA,330,mean,280,391,1,skew_normal,boron,"Greenop et al., 2014",367.9067271,64.64692665,-0.80758857
+1067,15.65,NA,NA,294,mean,248,350,1,skew_normal,boron,"Greenop et al., 2014",328.668068,59.34834212,-0.803900637
+1068,15.69,NA,NA,287,mean,238,352,1,skew_normal,boron,"Greenop et al., 2014",332.5880222,68.71021286,-0.941610274
+1069,15.72,NA,NA,505,mean,401,682,1,skew_normal,boron,"Greenop et al., 2014",656.8989059,183.1441028,-1.28337235
+1070,15.76,NA,NA,291,mean,243,352,1,skew_normal,boron,"Greenop et al., 2014",331.4455381,64.59918704,-0.875136119
+1071,15.77,NA,NA,315,mean,261,384,1,skew_normal,boron,"Greenop et al., 2014",361.104973,73.05818041,-0.883805594
+1072,15.81,NA,NA,520,mean,432,638,1,skew_normal,boron,"Greenop et al., 2014",603.8107149,124.6618727,-0.95775491
+1073,15.84,NA,NA,435,mean,364,527,1,skew_normal,boron,"Greenop et al., 2014",497.6527254,97.35913978,-0.905738963
+1074,15.89,NA,NA,281,mean,237,333,1,skew_normal,boron,"Greenop et al., 2014",311.3929187,55.09090372,-0.75093162
+1075,15.95,NA,NA,291,mean,236,369,1,skew_normal,boron,"Greenop et al., 2014",349.7075909,82.09568173,-1.038861544
+1076,15.96,NA,NA,318,mean,268,379,1,skew_normal,boron,"Greenop et al., 2014",355.9067271,64.64692665,-0.80758857
+1077,15.98,NA,NA,595,mean,496,727,1,skew_normal,boron,"Greenop et al., 2014",688.140912,139.4963543,-0.949295214
+1078,15.99,NA,NA,322,mean,271,387,1,skew_normal,boron,"Greenop et al., 2014",365.2757382,68.82883566,-0.879740725
+1079,16.06,NA,NA,293,mean,247,348,1,skew_normal,boron,"Greenop et al., 2014",325.9194322,58.2824648,-0.772163249
+1080,16.12,NA,NA,406,mean,334,503,1,skew_normal,boron,"Greenop et al., 2014",475.2637025,102.4484405,-0.964727905
+1081,16.15,NA,NA,309,mean,261,366,1,skew_normal,boron,"Greenop et al., 2014",342.6500966,60.39474672,-0.75975745
+1082,16.18,NA,NA,271,mean,229,322,1,skew_normal,boron,"Greenop et al., 2014",302.4285107,54.04949517,-0.799478153
+1083,16.21,NA,NA,236,mean,197,287,1,skew_normal,boron,"Greenop et al., 2014",271.1447892,53.94914919,-0.919867421
+1084,16.24,NA,NA,477,mean,390,603,1,skew_normal,boron,"Greenop et al., 2014",573.6526592,132.3980183,-1.06826952
+1085,16.27,NA,NA,278,mean,235,328,1,skew_normal,boron,"Greenop et al., 2014",306.1845102,52.94249575,-0.720190654
+1086,16.3,NA,NA,467,mean,392,561,1,skew_normal,boron,"Greenop et al., 2014",528.0565198,99.58361574,-0.852735922
+1087,16.33,NA,NA,262,mean,223,309,1,skew_normal,boron,"Greenop et al., 2014",290.5621991,49.80903098,-0.786226619
+1088,16.37,NA,NA,502,mean,421,606,1,skew_normal,boron,"Greenop et al., 2014",571.9573895,110.0977987,-0.891413301
+1089,16.4,NA,NA,430,mean,362,516,1,skew_normal,boron,"Greenop et al., 2014",486.6226338,91.08736722,-0.867385405
+1090,16.42,NA,NA,221,mean,189,261,1,skew_normal,boron,"Greenop et al., 2014",246.874934,42.37847772,-0.848374174
+1091,16.47,NA,NA,532,mean,425,701,1,skew_normal,boron,"Greenop et al., 2014",670.5524664,176.2023029,-1.185692593
+1092,16.59,NA,NA,271,mean,230,319,1,skew_normal,boron,"Greenop et al., 2014",298.4841583,50.83853352,-0.733253759
+1093,16.65,NA,NA,242,mean,204,284,1,skew_normal,boron,"Greenop et al., 2014",262.4497682,44.28805038,-0.612265479
+1094,16.69,NA,NA,236,mean,199,282,1,skew_normal,boron,"Greenop et al., 2014",265.5033735,48.74033132,-0.839433893
+1095,16.76,NA,NA,338,mean,285,405,1,skew_normal,boron,"Greenop et al., 2014",382.0845217,70.96429252,-0.86667864
+1096,16.98,NA,NA,207,mean,172,250,1,skew_normal,boron,"Greenop et al., 2014",234.046124,45.56878104,-0.819538747
+1097,17.11,NA,NA,252,mean,215,297,1,skew_normal,boron,"Greenop et al., 2014",279.8103065,47.69069926,-0.802231405
+1098,2.34,NA,NA,317,median,281,354,1,skew_normal,boron,"Martinez-Boti et al., 2015",328.3505868,38.28002668,-0.380073941
+1099,2.35,NA,NA,318,median,279,357,1,skew_normal,boron,"Martinez-Boti et al., 2015",318.1285118,39.21755768,-0.004107005
+1100,2.35,NA,NA,306,median,271,342,1,skew_normal,boron,"Martinez-Boti et al., 2015",317.1526007,37.25975413,-0.383838128
+1101,2.36,NA,NA,450,median,395,505,1,skew_normal,boron,"Martinez-Boti et al., 2015",450.1493916,55.3067169,-0.003385401
+1102,2.37,NA,NA,415,median,366,463,1,skew_normal,boron,"Martinez-Boti et al., 2015",401.3981395,50.50532421,0.343828887
+1103,2.38,NA,NA,371,median,328,416,1,skew_normal,boron,"Martinez-Boti et al., 2015",387.5195499,46.90272532,-0.455789749
+1104,2.39,NA,NA,377,median,334,421,1,skew_normal,boron,"Martinez-Boti et al., 2015",389.6894068,45.4150569,-0.357229722
+1105,2.41,NA,NA,278,median,245,310,1,skew_normal,boron,"Martinez-Boti et al., 2015",267.4528606,34.19719993,0.396082517
+1106,2.42,NA,NA,332,median,294,371,1,skew_normal,boron,"Martinez-Boti et al., 2015",343.7412229,40.31978147,-0.372960563
+1107,2.45,NA,NA,320,median,283,358,1,skew_normal,boron,"Martinez-Boti et al., 2015",331.546773,39.30003185,-0.376451078
+1108,2.47,NA,NA,340,median,302,379,1,skew_normal,boron,"Martinez-Boti et al., 2015",351.7412229,40.31978147,-0.372960563
+1109,2.5,NA,NA,357,median,316,398,1,skew_normal,boron,"Martinez-Boti et al., 2015",357.1402878,41.22873171,-0.004264646
+1110,2.5,NA,NA,362,median,321,403,1,skew_normal,boron,"Martinez-Boti et al., 2015",362.2091442,41.22902352,-0.00635783
+1111,2.52,NA,NA,246,median,218,275,1,skew_normal,boron,"Martinez-Boti et al., 2015",255.7099459,30.10915039,-0.415120488
+1112,2.55,NA,NA,335,median,297,374,1,skew_normal,boron,"Martinez-Boti et al., 2015",346.7412229,40.31978147,-0.372960563
+1113,2.56,NA,NA,300,median,265,335,1,skew_normal,boron,"Martinez-Boti et al., 2015",300.0184843,35.19505996,-0.000658236
+1114,2.58,NA,NA,330,median,292,368,1,skew_normal,boron,"Martinez-Boti et al., 2015",330.1569555,38.21209643,-0.005148017
+1115,2.59,NA,NA,362,median,319,405,1,skew_normal,boron,"Martinez-Boti et al., 2015",362.121254,43.23980911,-0.003514588
+1116,2.62,NA,NA,279,median,246,311,1,skew_normal,boron,"Martinez-Boti et al., 2015",268.4528606,34.19719993,0.396082517
+1117,2.62,NA,NA,305,median,270,340,1,skew_normal,boron,"Martinez-Boti et al., 2015",305.1754942,35.19549253,-0.006249454
+1118,2.63,NA,NA,245,median,216,274,1,skew_normal,boron,"Martinez-Boti et al., 2015",245.1167649,29.16185085,-0.005018357
+1119,2.65,NA,NA,282,median,249,315,1,skew_normal,boron,"Martinez-Boti et al., 2015",282.1084343,33.18408619,-0.004095429
+1120,2.66,NA,NA,302,median,267,336,1,skew_normal,boron,"Martinez-Boti et al., 2015",291.0472534,36.23920149,0.387753508
+1121,2.67,NA,NA,263,median,232,294,1,skew_normal,boron,"Martinez-Boti et al., 2015",263.125994,31.17301764,-0.00506565
+1122,2.68,NA,NA,323,median,286,360,1,skew_normal,boron,"Martinez-Boti et al., 2015",323.1049886,37.20634921,-0.00353661
+1123,2.69,NA,NA,284,median,251,317,1,skew_normal,boron,"Martinez-Boti et al., 2015",284.102981,33.18406885,-0.003889465
+1124,2.7,NA,NA,276,median,244,308,1,skew_normal,boron,"Martinez-Boti et al., 2015",276.1442654,32.17865933,-0.005619005
+1125,2.7,NA,NA,234,median,205,265,1,skew_normal,boron,"Martinez-Boti et al., 2015",247.0499158,32.50092856,-0.524834298
+1126,2.7,NA,NA,319,median,282,357,1,skew_normal,boron,"Martinez-Boti et al., 2015",330.546773,39.30003185,-0.376451078
+1127,2.71,NA,NA,262,median,231,294,1,skew_normal,boron,"Martinez-Boti et al., 2015",272.3412254,33.17572015,-0.400521512
+1128,2.75,NA,NA,339,median,300,378,1,skew_normal,boron,"Martinez-Boti et al., 2015",339.1213475,39.21753484,-0.003878047
+1129,2.75,NA,NA,321,median,283,360,1,skew_normal,boron,"Martinez-Boti et al., 2015",332.7412229,40.31978147,-0.372960563
+1130,2.76,NA,NA,358,median,317,400,1,skew_normal,boron,"Martinez-Boti et al., 2015",370.3147365,43.37760341,-0.363204674
+1131,2.78,NA,NA,279,median,247,312,1,skew_normal,boron,"Martinez-Boti et al., 2015",289.5471394,34.19719993,-0.396082517
+1132,2.8,NA,NA,281,median,249,314,1,skew_normal,boron,"Martinez-Boti et al., 2015",291.5471394,34.19719993,-0.396082517
+1133,2.83,NA,NA,317,median,281,355,1,skew_normal,boron,"Martinez-Boti et al., 2015",331.8397867,39.71217463,-0.485601879
+1134,2.83,NA,NA,361,median,314,408,1,skew_normal,boron,"Martinez-Boti et al., 2015",361.1383971,47.26213377,-0.003670084
+1135,2.84,NA,NA,388,median,343,433,1,skew_normal,boron,"Martinez-Boti et al., 2015",388.1942725,45.25120205,-0.005380788
+1136,2.85,NA,NA,308,median,272,343,1,skew_normal,boron,"Martinez-Boti et al., 2015",296.8473993,37.25975413,0.383838128
+1137,2.86,NA,NA,445,median,392,498,1,skew_normal,boron,"Martinez-Boti et al., 2015",444.6294979,53.29665645,0.008712911
+1138,2.91,NA,NA,371,median,328,413,1,skew_normal,boron,"Martinez-Boti et al., 2015",358.4971887,44.39643511,0.360168485
+1139,2.92,NA,NA,377,median,334,420,1,skew_normal,boron,"Martinez-Boti et al., 2015",377.125858,43.23982227,-0.003648037
+1140,2.94,NA,NA,337,median,299,376,1,skew_normal,boron,"Martinez-Boti et al., 2015",348.7412229,40.31978147,-0.372960563
+1141,2.95,NA,NA,358,median,317,400,1,skew_normal,boron,"Martinez-Boti et al., 2015",370.3147365,43.37760341,-0.363204674
+1142,2.95,NA,NA,419,median,366,473,1,skew_normal,boron,"Martinez-Boti et al., 2015",433.4834294,55.59142037,-0.332216554
+1143,2.96,NA,NA,346,median,307,385,1,skew_normal,boron,"Martinez-Boti et al., 2015",346.1413836,39.21760191,-0.004518366
+1144,2.98,NA,NA,328,median,291,366,1,skew_normal,boron,"Martinez-Boti et al., 2015",339.546773,39.30003185,-0.376451078
+1145,3,NA,NA,369,median,327,412,1,skew_normal,boron,"Martinez-Boti et al., 2015",381.5028063,44.3964338,-0.360168336
+1146,3.01,NA,NA,357,median,316,399,1,skew_normal,boron,"Martinez-Boti et al., 2015",369.3147365,43.37760341,-0.363204674
+1147,3.03,NA,NA,381,median,338,425,1,skew_normal,boron,"Martinez-Boti et al., 2015",393.6894068,45.4150569,-0.357229722
+1148,3.04,NA,NA,419,median,369,470,1,skew_normal,boron,"Martinez-Boti et al., 2015",432.9579617,52.54022398,-0.338993397
+1149,3.05,NA,NA,418,median,371,467,1,skew_normal,boron,"Martinez-Boti et al., 2015",435.4391514,51.00443774,-0.441627651
+1150,3.06,NA,NA,361,median,319,405,1,skew_normal,boron,"Martinez-Boti et al., 2015",377.2853584,45.87654562,-0.459619229
+1151,3.06,NA,NA,413,median,365,462,1,skew_normal,boron,"Martinez-Boti et al., 2015",426.6018605,50.50532421,-0.343828887
+1152,3.07,NA,NA,380,median,336,425,1,skew_normal,boron,"Martinez-Boti et al., 2015",392.8745828,46.43348064,-0.354383487
+1153,3.09,NA,NA,334,median,296,374,1,skew_normal,boron,"Martinez-Boti et al., 2015",349.329772,41.76845161,-0.476308316
+1154,3.1,NA,NA,319,median,282,357,1,skew_normal,boron,"Martinez-Boti et al., 2015",330.546773,39.30003185,-0.376451078
+1155,3.11,NA,NA,392,median,347,438,1,skew_normal,boron,"Martinez-Boti et al., 2015",405.0583767,47.45171243,-0.351624694
+1156,3.13,NA,NA,345,median,305,386,1,skew_normal,boron,"Martinez-Boti et al., 2015",357.12515,42.35855731,-0.366344532
+1157,3.14,NA,NA,334,median,295,373,1,skew_normal,boron,"Martinez-Boti et al., 2015",334.1456241,39.21761753,-0.004653885
+1158,3.15,NA,NA,403,median,343,466,1,skew_normal,boron,"Martinez-Boti et al., 2015",426.7171758,65.73480151,-0.467673043
+1159,3.16,NA,NA,340,median,301,379,1,skew_normal,boron,"Martinez-Boti et al., 2015",340.2265206,39.21800085,-0.007239208
+1160,3.17,NA,NA,452,median,400,505,1,skew_normal,boron,"Martinez-Boti et al., 2015",466.3093917,54.57450208,-0.334415886
+1161,3.18,NA,NA,381,median,337,424,1,skew_normal,boron,"Martinez-Boti et al., 2015",368.3105932,45.4150569,0.357229722
+1162,3.19,NA,NA,283,median,251,317,1,skew_normal,boron,"Martinez-Boti et al., 2015",296.8323969,35.59445225,-0.506551709
+1163,3.2,NA,NA,331,median,294,370,1,skew_normal,boron,"Martinez-Boti et al., 2015",346.0858537,40.74051241,-0.480867456
+1164,3.21,NA,NA,326,median,289,365,1,skew_normal,boron,"Martinez-Boti et al., 2015",341.0858537,40.74051241,-0.480867456
+1165,3.22,NA,NA,376,median,333,420,1,skew_normal,boron,"Martinez-Boti et al., 2015",388.6894068,45.4150569,-0.357229722
+1166,3.24,NA,NA,423,median,366,481,1,skew_normal,boron,"Martinez-Boti et al., 2015",438.1690284,59.6577249,-0.32395634
+1167,3.24,NA,NA,354,median,314,396,1,skew_normal,boron,"Martinez-Boti et al., 2015",369.8114505,43.823201,-0.467673043
+1168,3.25,NA,NA,316,median,280,353,1,skew_normal,boron,"Martinez-Boti et al., 2015",327.3505868,38.28002668,-0.380073941
+1169,3.26,NA,NA,348,median,307,390,1,skew_normal,boron,"Martinez-Boti et al., 2015",360.3147365,43.37760341,-0.363204674
+1170,3.27,NA,NA,365,median,319,412,1,skew_normal,boron,"Martinez-Boti et al., 2015",378.2408291,48.46975928,-0.348948771
+1171,3.28,NA,NA,313,median,278,350,1,skew_normal,boron,"Martinez-Boti et al., 2015",327.5914932,38.68342007,-0.490523598
+1172,2.35,NA,NA,369,median,326,413,1,skew_normal,boron,"Martinez-Boti et al., 2015",381.6894068,45.4150569,-0.357229722
+1173,2.42,NA,NA,442,median,385,499,1,skew_normal,boron,"Martinez-Boti et al., 2015",442.1501677,57.31785785,-0.003283585
+1174,2.5,NA,NA,423,median,373,473,1,skew_normal,boron,"Martinez-Boti et al., 2015",423.2421634,50.27923318,-0.006036512
+1175,2.63,NA,NA,402,median,354,450,1,skew_normal,boron,"Martinez-Boti et al., 2015",402.1856191,48.26786115,-0.004819794
+1176,2.75,NA,NA,376,median,330,424,1,skew_normal,boron,"Martinez-Boti et al., 2015",393.2117265,49.97943887,-0.445007
+1177,2.83,NA,NA,352,median,311,395,1,skew_normal,boron,"Martinez-Boti et al., 2015",368.0493448,44.85004189,-0.463577754
+1178,3.16,NA,NA,525,median,461,592,1,skew_normal,boron,"Martinez-Boti et al., 2015",549.6625276,69.84105099,-0.457052356
+1179,3.24,NA,NA,441,median,385,499,1,skew_normal,boron,"Martinez-Boti et al., 2015",460.4198918,60.21830078,-0.415120488
+1180,0.54,NA,NA,162,mean,92,233,1,skew_normal,boron,"Stap et al., 2016",179.2952885,72.86042459,-0.301787817
+1181,0.54,NA,NA,281,mean,209,354,1,skew_normal,boron,"Stap et al., 2016",298.610306,74.89014214,-0.298875488
+1182,0.6,NA,NA,163,mean,92,234,1,skew_normal,boron,"Stap et al., 2016",163.2110762,71.39599516,-0.003705338
+1183,0.62,NA,NA,169,mean,98,240,1,skew_normal,boron,"Stap et al., 2016",168.3330756,71.39879311,0.011707518
+1184,0.76,NA,NA,175,mean,102,249,1,skew_normal,boron,"Stap et al., 2016",192.7667267,75.9048726,-0.297460356
+1185,0.82,NA,NA,152,mean,82,223,1,skew_normal,boron,"Stap et al., 2016",169.2952885,72.86042459,-0.301787817
+1186,0.86,NA,NA,168,mean,98,239,1,skew_normal,boron,"Stap et al., 2016",185.2952885,72.86042459,-0.301787817
+1187,0.94,NA,NA,183,mean,112,254,1,skew_normal,boron,"Stap et al., 2016",183.2759632,71.39621657,-0.004844398
+1188,1.82,NA,NA,250,mean,178,322,1,skew_normal,boron,"Stap et al., 2016",249.7992588,72.40153444,0.003474966
+1189,2.74,NA,NA,274,mean,192,362,1,skew_normal,boron,"Stap et al., 2016",311.8118817,92.34015951,-0.536181313
+1190,2.89,NA,NA,481,mean,400,566,1,skew_normal,boron,"Stap et al., 2016",512.8612727,88.67332882,-0.465607791
+1191,3.21,NA,NA,423,mean,346,502,1,skew_normal,boron,"Stap et al., 2016",446.6756313,81.65912782,-0.37126235
+1192,3.66,NA,NA,357,mean,281,434,1,skew_normal,boron,"Stap et al., 2016",375.2317923,78.94857353,-0.293368734
+1193,3.89,NA,NA,507,mean,426,591,1,skew_normal,boron,"Stap et al., 2016",535.4839782,87.25854311,-0.420476376
+1194,4.1,NA,NA,380,mean,305,456,1,skew_normal,boron,"Stap et al., 2016",398.0774574,77.93408647,-0.294707793
+1195,5.19,NA,NA,433,mean,347,523,1,skew_normal,boron,"Stap et al., 2016",466.0390997,93.80545065,-0.455789749
+1196,6.35,NA,NA,332,mean,257,408,1,skew_normal,boron,"Stap et al., 2016",350.0774574,77.93408647,-0.294707793
+1197,53.2,53.6,52.8,1400,median,1165,1635,1,normal,boron,"Anagnostou et al., 2016",1401.64848,236.3154029,-0.008743076
+1198,45.6,45.9,45.5,1100,median,925,1275,1,normal,boron,"Anagnostou et al., 2016",1099.474989,175.9760587,0.003739187
+1199,44.4,44.5,44,920,median,760,1080,1,normal,boron,"Anagnostou et al., 2016",920.4700457,160.8923671,-0.003661565
+1200,36.9,37.5,36.3,770,median,620,920,1,normal,boron,"Anagnostou et al., 2016",770.3445752,150.836344,-0.002863118
+1201,40.3,40.6,40,650,median,540,760,1,normal,boron,"Anagnostou et al., 2016",650.3046218,110.6134497,-0.003451558
+1202,51.9,56,47.8,1868,mean,1396,2861,1,skew_normal,liverworts,"Fletcher et al., 2008",2803.498593,1003.522092,-1.553691124
+1203,58.8,61.6,56,583,mean,401,818,1,skew_normal,liverworts,"Fletcher et al., 2008",742.2885117,248.7248736,-0.900244583
+1204,70,71,69,670,mean,459,931,1,skew_normal,liverworts,"Fletcher et al., 2008",836.0362087,276.5703396,-0.831006163
+1205,100.8,107.6,93.9,797,mean,543,1085,1,skew_normal,liverworts,"Fletcher et al., 2008",949.109407,304.4828322,-0.66926083
+1206,104.1,107.6,100.5,830,mean,584,1106,1,skew_normal,liverworts,"Fletcher et al., 2008",971.2689852,291.5248252,-0.646475717
+1207,104.1,107.6,100.5,977,mean,653,1340,1,skew_normal,liverworts,"Fletcher et al., 2008",1161.981656,383.3651862,-0.643355925
+1208,104.1,107.6,100.5,1001,mean,649,1415,1,skew_normal,liverworts,"Fletcher et al., 2008",1240.481632,438.5492494,-0.741949789
+1209,111.9,113,110.8,654,mean,448,887,1,skew_normal,liverworts,"Fletcher et al., 2008",776.1931232,246.2857829,-0.664029217
+1210,121.9,130.8,113,1051,mean,819,1292,1,skew_normal,liverworts,"Fletcher et al., 2008",1134.051572,250.5176934,-0.427407971
+1211,139.3,142,136.5,982,mean,755,1239,1,skew_normal,liverworts,"Fletcher et al., 2008",1117.155372,271.6758604,-0.66608159
+1212,161.7,166.1,157.3,698,mean,514,933,1,skew_normal,liverworts,"Fletcher et al., 2008",854.9200914,248.825353,-0.883056445
+1213,169.5,170,169,637,mean,459,899,1,skew_normal,liverworts,"Fletcher et al., 2008",840.7640669,274.9343999,-1.090642131
+1214,187.7,201.3,174.1,919,mean,685,1208,1,skew_normal,liverworts,"Fletcher et al., 2008",1102.378901,306.2470856,-0.828398038
+1215,205.6,237,174.1,388,mean,275,549,1,skew_normal,liverworts,"Fletcher et al., 2008",509.7018501,169.3939695,-1.045401433

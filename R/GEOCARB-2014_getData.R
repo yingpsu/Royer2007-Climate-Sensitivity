@@ -6,7 +6,7 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-data_calib_all <- read.csv('../input_data/CO2_Proxy_Foster2017_calib_SN-co2.csv', fill=TRUE, header=TRUE)
+data_calib_all <- read.csv('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv', fill=TRUE, header=TRUE)
 
 ##==============================================================================
 ## End

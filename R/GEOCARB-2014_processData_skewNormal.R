@@ -41,7 +41,7 @@ sse_quantiles <- function(parameters, q16, q50, q84) {
 }
 
 # preliminary testing to see how many iterations are needed to get convergence
-bound.lower <- c(-1e4, 0, -1e4)
+bound.lower <- c(-1e4, 0, -100)
 bound.upper <- c(1e4, 1e4, 100)
 
 # testing
@@ -109,7 +109,8 @@ ind_co2_high <- which(dat.co2$co2_high==0)
 irem <- intersect(intersect(ind_co2,ind_co2_high),ind_co2_low)
 dat.co2 <- dat.co2[-irem,]
 
-filename.out <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2.csv'
+today=Sys.Date(); today=format(today,format="%d%b%Y")
+filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_',today,'.csv',sep='')
 write.csv(dat.co2, file=filename.out)
 
 # TODO:
