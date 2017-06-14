@@ -7,10 +7,10 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 1e7   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 setwd('/home/scrim/axw322/codes/GEOCARB/R')
-appen <- 'withPaleosols'
+appen <- 'allData_constOnly'
 #rm(list=ls())
 
 ##==============================================================================
@@ -21,10 +21,11 @@ appen <- 'withPaleosols'
 library(sn)
 source('GEOCARB-2014_getData.R')
 
-# remove the lowest 10 co2 content data points (all paleosols, it turns out)
+# remove the lowest [some number] co2 content data points (all paleosols, it turns out)
 # (lowest ~40 are all from paleosols, actually)
 ind_co2_sort_all <- order(data_calib_all$co2)
-data_calib_all <- data_calib_all[-ind_co2_sort_all[1:10], ]
+n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
+data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
