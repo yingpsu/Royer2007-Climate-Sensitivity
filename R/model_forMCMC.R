@@ -46,13 +46,8 @@ model_forMCMC <- function(par, par_fixed, parnames_calib, parnames_fixed,
   # rows = time, col = different time series
   Matrix_12 <- matrix(c(par[ind_time_calib], par_fixed[ind_time_fixed]),
                       nrow=ageN, ncol=N_time_total)
-  if(length(ind_time_calib) > 0) {
-    colnames(Matrix_12) <- c(parnames_calib[ind_time_calib[seq(1, length(ind_time_calib)-1, by=ageN)]],
-                             parnames_time_fixed0_vec[seq(from=1, to=(length(ind_time_fixed)), by=ageN)])
-  } else {
-    colnames(Matrix_12) <- c(parnames_calib[ind_time_calib[seq(1, length(par), by=ageN)]],
-                             parnames_time_fixed0_vec[seq(from=1, to=(length(ind_time_fixed)), by=ageN)])
-  }
+  colnames(Matrix_12) <- c(unique(parnames_calib[ind_time_calib]), unique(parnames_fixed[ind_time_fixed]))
+
   geoRes <- GEOCARBSULFvolc_forMCMC(Matrix_56, Matrix_12, age, ageN)
 
   #merge results and export summary file to working directory

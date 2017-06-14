@@ -6,9 +6,9 @@
 
 library(ncdf4)
 
-filename.mcmc <- 'geocarb_calibratedParameters_noPaleosols_03Jun2017.nc'
+filename.mcmc <- 'geocarb_calibratedParameters_allData-allConst_12Jun2017.nc'
 ncdata <- nc_open(filename.mcmc)
-  parameters.nopaleosols = t(ncvar_get(ncdata, 'geocarb_parameters'))
+  parameters = t(ncvar_get(ncdata, 'geocarb_parameters'))
   parnames = ncvar_get(ncdata, 'parnames')
 nc_close(ncdata)
 
@@ -19,7 +19,12 @@ ncdata <- nc_open(filename.mcmc)
 nc_close(ncdata)
 
 
+par(mfrow=c(7,8))
+for (p in 1:length(parnames)) {plot(parameters[,p], type='l', ylab=parnames[p])}
 
+par(mfrow=c(1,1))
+hist(parameters[round(nrow(parameters)*0.5):nrow(parameters), match('deltaT2X',parnames)],
+     freq=FALSE, xlab='deltaT2X [deg C]', main='')
 ##==============================================================================
 
 
