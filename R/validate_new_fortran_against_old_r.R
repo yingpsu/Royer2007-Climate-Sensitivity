@@ -109,10 +109,47 @@ model_F <- run_geocarbF(Matrix_56=Matrix_56,
                          ind_expected_const=ind_expected_const)
 
 ##==============================================================================
-## Compare
+## Compare output
+
+print(paste('Mean [fortran]-[r] model CO2 bias (ppmv) is: ',mean(model_F$CO2_out-model_R[,2]),sep=''))
+print(paste('Max abs([fortran]-[r]) model CO2 bias (ppmv) is: ',max(abs(model_F$CO2_out-model_R[,2])),sep=''))
+
+print(paste('Mean [fortran]-[r] model O2 bias (%) is: ',mean(model_F$O2_out-model_R[,3]),sep=''))
+print(paste('Max abs([fortran]-[r]) model O2 bias (%) is: ',max(abs(model_F$O2_out-model_R[,3])),sep=''))
+
+par(mfrow=c(2,2))
+plot(-model_R[,1], model_R[,2], col='black', pch=16, xlab='Age [Mya]', ylab='CO2 [ppmv]')
+points(-model_F$age, model_F$CO2_out, col='red', pch=16)
+plot(-model_R[,1], model_R[,3], col='black', pch=16, xlab='Age [Mya]', ylab='O2 [%]')
+points(-model_F$age, model_F$O2_out, col='red', pch=16)
+plot(-model_R[,1], model_F$CO2_out-model_R[,2], col='black', pch=16, xlab='Age [Mya]', ylab='F-R CO2 bias [ppmv]')
+plot(-model_R[,1], model_F$O2_out-model_R[,3], col='black', pch=16, xlab='Age [Mya]', ylab='F-R O2 bias [%]')
+
+##==============================================================================
+## Compare timing
+niter <- 10000
+
+tbeg <- proc.time()
+for (n in 1:niter) {
+  geoRes <- GEOCARBSULFvolc_forMCMC(Matrix_56, Matrix_12, age, ageN)
+}
+tend <- proc.time()
+dt_R <- tend[3]-tbeg[3]
 
 
 
+tbeg <- proc.time()
+for (n in 1:niter) {
+  model_F <- run_geocarbF(Matrix_56=Matrix_56,
+                         Matrix_12=Matrix_12,
+                         age=age,
+                         ageN=ageN,
+                         iteration_threshold=iteration_threshold,
+                         ind_expected_time=ind_expected_time,
+                         ind_expected_const=ind_expected_const)
+}
+tend <- proc.time()
+dt_F <- tend[3]-tbeg[3]
 
 
 ##==============================================================================

@@ -21,7 +21,7 @@ subroutine run_geocarb(Matrix_56, Matrix_12, age, ageN, iteration_threshold, CO2
 ! |
 ! | Outputs:
 ! |     CO2_out	    Modeled CO2 results [ppmv]
-! |     O2_out	    Modeled O2 results [ppmv]
+! |     O2_out	    Modeled O2 results [%]
 !  =========================================================================
 
 
@@ -34,10 +34,10 @@ integer, parameter :: DP = Selected_Real_Kind(15,307)
 
 ! explicit input
 integer, intent(IN) :: ageN                           ! time series length
+integer, intent(IN) :: iteration_threshold            ! maximum number of iterations of convergence equation
 real(DP), dimension(ageN), intent(IN) :: age          ! times of time series (myr ago)
 real(DP), dimension(56), intent(IN) :: Matrix_56      ! 56 constant parameters to be evaluated
-real(DP), dimension(58,ageN), intent(IN) :: Matrix_12 ! 12 time-sereies parameters to be evaluated, each of length ageN
-integer, intent(IN) :: iteration_threshold            ! maximum number of iterations of convergence equation
+real(DP), dimension(58,ageN), intent(IN) :: Matrix_12 ! 12 time-series parameters to be evaluated, each of length ageN
 
 ! local quantities
 integer :: i          ! number of looping for time steps
@@ -273,6 +273,7 @@ Dt = 10.0       !time-step (millions of years, Myrs)
 oxygen_0 = 38.0 !mass of atmospheric O2 at the present-day
 
 RCO2 = 10.0     !atmospheric CO2 (ratio between CO2 at time t to the Pleistocene mean [taken as 250 ppm]); this initial value is a place-holder (it is solved for explicitly)
+
 !these variables are recalculated at each time-step
 oxygen = oxygen_570
 Gy = Gy_570
@@ -303,7 +304,7 @@ Rca = Rca_570
         ! for glacial periods between 260 and 330 Myrs ago and between 35 and 0 Myrs ago;
         ! BASIC code calls for a 270-340 Myrs ago interval, but see Fielding et al 2008
         ! (GSA Special Paper 441: 343-354) for justification
-        if ((t .le. 330 .AND. t .gt. 260) .OR. (t .le. 40)) then
+        if ((t .le. 330.0 .AND. t .ge. 260.0) .OR. (t .le. 40.0)) then
             GCM = GLAC*deltaT2X/log(2.0) !in GEOCARBSULF, deltaT2X = GCM*ln(2); called capital gamma in Berner (2004)
 !!!            111 PRINT *, "GCM is: ", GCM
         else
@@ -313,7 +314,7 @@ Rca = Rca_570
 
         ! calculate factors related to vegetation type
         ! vegetation = domination by non-vascular plants
-        if (t .le. 570 .AND. t .gt. 380) then
+        if (t .le. 570.0 .AND. t .gt. 380.0) then
 
           ! effect of plants on weathering rate at time (t) to the present-day
           fE = LIFE
@@ -324,7 +325,7 @@ Rca = Rca_570
         end if
 
         ! vegetation = ramp-up to gymnosperm domination
-        if (t .le. 380 .AND. t .gt. 350) then
+        if (t .le. 380.0 .AND. t .gt. 350.0) then
 
           fE = (GYM-LIFE)*((380.0-t)/30.0)+LIFE
 
@@ -336,23 +337,23 @@ Rca = Rca_570
 
         end if
 
-        if (t .le. 350) then
+        if (t .le. 350.0) then
           fBB = (1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*(2.0*RCO2/(1.0+RCO2))**FERT
         end if
 
         ! vegetation = gymnosperm domination
-        if (t .le. 350 .AND. t .gt. 130)  then
+        if ((t .le. 350.0) .AND. (t .gt. 130.0))  then
           fE = GYM
 !!!          113 PRINT *, "fE is: ", fE
         end if
 
         ! vegetation = ramp-up to angiosperm domination
-        if (t .le. 130 .AND. t .gt. 80) then
+        if ((t .le. 130.0) .AND. (t .gt. 80.0)) then
           fE = (1.0-GYM)*((130.0-t)/50.0)+GYM
         end if
 
         ! vegetation = angiosperm domination
-        if (t .le. 80)  then
+        if (t .le. 80.0)  then
           fE = 1.0
         end if
 
@@ -376,8 +377,8 @@ Rca = Rca_570
         Fyoc=Fwca+Fmc                          !degassing + weathering flux of carbonate carbon
 
         ! calculate sink fluxes (burial)
-        CAPd34S=CAPd34S_0*((oxygen/oxygen_0)**n)  !isotopic fractionation between sulfate sulfur and pyrite sulfur (see Berner 2006a)
-        CAPd13C=CAPd13C_0+J*(oxygen/oxygen_0-1.0) !isotopic fractionation between carbonate and organic matter (see Berner 2006a)
+        CAPd34S = CAPd34S_0*((oxygen/oxygen_0)**n)  !isotopic fractionation between sulfate sulfur and pyrite sulfur (see Berner 2006a)
+        CAPd13C = CAPd13C_0+J*(oxygen/oxygen_0-1.0) !isotopic fractionation between carbonate and organic matter (see Berner 2006a)
         Fbp = (1.0/CAPd34S)*((d34S(i)-dlsy)*Fwsy+(d34S(i)-dlsa)*Fwsa + &
                 (d34S(i)-dlpy)*Fwpy+(d34S(i)-dlpa)*Fwpa + &
                 (d34S(i)-dlsa)*Fms+(d34S(i)-dlpa)*Fmp) !burial flux of pyrite
@@ -398,7 +399,7 @@ Rca = Rca_570
         fvolc = (VNV*Xvolc+1.0-Xvolc)/(VNV*Xvolc_0+1.0-Xvolc_0)  !volcanic weathering effect at time (t) relative to present-day
 
         ! calculate oxygen mass for the time-step
-        if (t.lt.570)  then
+        if (t .lt. 570.0)  then
           oxygen = oxygen+(Fbg+(15.0/8.0)*Fbp)*Dt-(Fwgy+Fwga+Fmg)*Dt-(15.0/8.0)*(Fwpy+Fwpa+Fmp)*Dt
         end if
 
@@ -429,7 +430,7 @@ Rca = Rca_570
         RCO2_old = 2.0*RCO2  !this is here simply to ensure that the convergence isn't satisfied on the first step iteration_count=0
         iteration_count = 0
 
-        if (t.le.570 .AND. t.gt.380 .AND. failed_run .eqv. .FALSE.)  then
+        if ( (t .le. 570.0) .AND. (t .gt. 380.0) .AND. (failed_run .eqv. .FALSE.))  then
           do while (abs(RCO2/RCO2_old-1.0) .gt. 0.01)
             iteration_count = iteration_count+1
             RCO2_old = RCO2
@@ -455,7 +456,7 @@ Rca = Rca_570
         ! the expressions for this time interval are more complex because the
         ! effects of plants on weathering are linearly mixed in; this helps to
         ! prevent model failure
-        if ((t.le.380) .AND. (t.gt.350) .AND. (failed_run .eqv. .FALSE.)) then
+        if ((t .le. 380.0) .AND. (t .gt. 350.0) .AND. (failed_run .eqv. .FALSE.)) then
           do while  (abs(RCO2/RCO2_old-1.0) .gt. 0.01)
             iteration_count = iteration_count+1
             RCO2_old = RCO2
@@ -490,7 +491,7 @@ Rca = Rca_570
           end do  !end of while loop
         end if    !end of t<=380 & t>350 loop
 
-        if ( (t.le.350) .AND. (failed_run .eqv. .FALSE.) ) then
+        if ( (t .le. 350.0) .AND. (failed_run .eqv. .FALSE.) ) then
           do while  (abs(RCO2/RCO2_old-1.0) .gt. 0.01)
             iteration_count = iteration_count+1
             RCO2_old = RCO2
@@ -552,7 +553,7 @@ Rca = Rca_570
         ! test for estimated oxygen at present-day to be between 19-23%, and
         ! estimated CO2 at present-day to be between 200-300 ppm; if not, the
         ! whole time-series is considered a failed run
-        if (t==0 .AND. ISNAN(oxygen+RCO2) .AND. (100.0*(oxygen/(oxygen+143.0)) .lt. 19.0) .AND. &
+        if (t==0.0 .AND. ISNAN(oxygen+RCO2) .AND. (100.0*(oxygen/(oxygen+143.0)) .lt. 19.0) .AND. &
                   (100.0*(oxygen/(oxygen+143.0)) .gt. 23.0) .AND. (RCO2 .lt. 0.8) .AND. (RCO2 .gt. 1.2))  then
           CO2_out(i) = 1.0/0.0
           O2_out(i) = 1.0/0.0
