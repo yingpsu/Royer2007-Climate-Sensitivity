@@ -21,11 +21,9 @@
 ##  o2               O2 concentration, ppmv
 ##==============================================================================
 
-source("GEOCARBSULFvolc_forMCMC.R")
-
 model_forMCMC <- function(par, par_fixed, parnames_calib, parnames_fixed,
                           age, ageN, ind_const_calib, ind_time_calib,
-						  ind_const_fixed, ind_time_fixed) {
+                          ind_const_fixed, ind_time_fixed) {
 
   # this takes in two parameter arrays: one that is all of the parameters
   # actually being calibrated, and the other that is the fixed (non-calib)

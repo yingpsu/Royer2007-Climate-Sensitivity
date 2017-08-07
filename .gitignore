@@ -1,3 +1,6 @@
+*.Rapp.history
+*.Rhistory
+.DS_Store
 *.nc
 *.RData
 *.log

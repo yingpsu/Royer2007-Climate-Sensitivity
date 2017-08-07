@@ -4,9 +4,12 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
+setwd('/Users/axw322/codes/Royer2007-Climate-Sensitivity/R')
+
 library(ncdf4)
 
-filename.mcmc <- 'geocarb_calibratedParameters_allData-allConst_12Jun2017.nc'
+#filename.mcmc <- 'geocarb_calibratedParameters_allData-allConst_12Jun2017.nc'
+filename.mcmc <- 'geocarb_calibratedParameters_allData_27Jun2017.nc'
 ncdata <- nc_open(filename.mcmc)
   parameters = t(ncvar_get(ncdata, 'geocarb_parameters'))
   parnames = ncvar_get(ncdata, 'parnames')

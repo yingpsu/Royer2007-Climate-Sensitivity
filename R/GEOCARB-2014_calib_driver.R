@@ -108,6 +108,7 @@ if(length(parnames_calib)==1){
 
 # need the physical model
 source('model_forMCMC.R')
+source("GEOCARBSULFvolc_forMCMC.R")
 
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')
@@ -122,7 +123,7 @@ library(adaptMCMC)
 accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
-niter_mcmc <- 1e4
+niter_mcmc <- 1e3
 gamma_mcmc <- 0.5
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
