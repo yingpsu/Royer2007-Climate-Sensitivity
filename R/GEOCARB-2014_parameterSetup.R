@@ -133,6 +133,91 @@ for (p in 1:length(parnames_tmp)) {
   } else {print('ERROR - unknown calibration parameter type (fitting step sizes)')}
 }
 
+# what are the orders that run_geocarb.f90 expects?
+const_names_expected <- c('ACT',     # 1
+                          'ACTcarb',
+                          'VNV',
+                          'NV',
+                          'exp_NV',
+                          'LIFE',
+                          'GYM',
+                          'FERT',
+                          'exp_fnBb',
+                          'deltaT2X',     #(10)
+                          'GLAC',     #(11)
+                          'J',     #(12)
+                          'n',     #(13)
+                          'Ws',     #(14)
+                          'exp_fD',     #(15)
+                          'Fwpa_0',     #(16)
+                          'Fwsa_0',     #(17)
+                          'Fwga_0',     #(18)
+                          'Fwca_0',     #(19)
+                          'Fmg_0',     #(20)
+                          'Fmc_0',     #(21)
+                          'Fmp_0',     #(22)
+                          'Fms_0',     #(23)
+                          'Fwsi_0',     #(24)
+                          'Xvolc_0',     #(25)
+                          'CAPd13C_0',     #(26)
+                          'CAPd34S_0',     #(27)
+                          'oxygen_570',     #(28)
+                          'Gy_570',     #(29)
+                          'Cy_570',     #(30)
+                          'Ca_570',     #(31)
+                          'Ssy_570',     #(32)
+                          'Spy_570',     #(33)
+                          'dlsy_570',     #(34)
+                          'dlcy_570',     #(35)
+                          'dlpy_570',     #(36)
+                          'dlpa_570',     #(37)
+                          'dlgy_570',     #(38)
+                          'dlga_570',     #(39)
+                          'Rcy_570',     #(40)
+                          'Rca_570',     #(41)
+                          'Rv_570',     #(42)
+                          'Rg_570',     #(43)
+                          'Fob',     #(44)
+                          'COC',     #(45)
+                          'Ga',     #(46)
+                          'Ssa',     #(47)
+                          'Spa',     #(48)
+                          'ST',     #(49)
+                          'dlst',     #(50)
+                          'CT',     #(51)
+                          'dlct',     #(52)
+                          'kwpy',     #(53)
+                          'kwsy',     #(54)
+                          'kwgy',     #(55)
+                          'kwcy')     #(56)
+
+time_names_expected <- c('Sr',     #(:,1)
+                         'd13C',     #(:,2)
+                         'd34S',     #(:,3)
+                         'fR',     #(:,4)
+                         'fL',     #(:,5)
+                         'fA',     #(:,6)
+                         'fAw_fA',     #(:,7)
+                         'fD',     #(:,8)
+                         'GEOG',     #(:,9)
+                         'RT',     #(:,10)
+                         'fSR',     #(:,11)
+                         'fC')     #(:,12)
+
+# how do we rearrange Matrix_56 to feed into run_geocarb.f90 as it expects?
+const_names_in <- c( parnames_calib[ind_const_calib],
+                     parnames_fixed[ind_const_fixed] )
+ind_expected_const <- rep(NA, length(const_names_in))
+for (pp in 1:length(ind_expected_const)) {
+  ind_expected_const[pp] <- match(const_names_expected[pp], const_names_in)
+}
+
+# how do we rearrange Matrix_56 to feed into run_geocarb.f90 as it expects?
+time_names_in <- c(unique(parnames_calib[ind_time_calib]), unique(parnames_fixed[ind_time_fixed]))
+ind_expected_time <- rep(NA, length(time_names_in))
+for (pp in 1:length(ind_expected_time)) {
+  ind_expected_time[pp] <- match(time_names_expected[pp], time_names_in)
+}
 
 # TONY TODO -- more detail Gaussian process priors for the time-varying parameters
 #time_priors <- data.frame()

@@ -40,12 +40,12 @@ real(DP), dimension(58,ageN), intent(IN) :: Matrix_12 ! 12 time-sereies paramete
 integer, intent(IN) :: iteration_threshold            ! maximum number of iterations of convergence equation
 
 ! local quantities
-integer :: i          ! number of looping
+integer :: i          ! number of looping for time steps
 real(DP) :: ACT       !Activation energy for dissolution of Mg- and Ca-silicates on land. 0.03 is equivalent to 20 kj/mol; 0.08 to 55 kj/mol; see Pg. 28 of Berner (2004)
 real(DP) :: ACTcarb   !Activation energy for dissolution of carbonates on land
 real(DP) :: VNV       !Rate of chemical weathering in volcanic silicate rocks relative to non-volcanic silicate rocks
 real(DP) :: NV        !Coefficient relating physical erosion to the mean 87Sr/86Sr of non-volcanic silicate rocks
-real(DP) :: exp_NV    !Exponent relating physical erosion to the mean 87Sr/86Sr of non-volcanic silicate rocks 
+real(DP) :: exp_NV    !Exponent relating physical erosion to the mean 87Sr/86Sr of non-volcanic silicate rocks
 real(DP) :: LIFE      !Rate of chemical weathering in a minimally-vegetated world relative to present-day (angiosperm-dominated world)
 real(DP) :: GYM       !Rate of chemical weathering by gymnosperms relative to angiosperms
 real(DP) :: FERT      !Exponent reflecting the fraction of vegetation whose growth is stimulated by elevated CO2; FERT is related to enhanced chemical weathering by the Michaelis-Menton expression [2RCO2/(1+RCO2)]^FERT
@@ -186,7 +186,7 @@ real(DP) :: RCO2
 real(DP) :: RCO2_old
 real(DP) :: Rg
 integer :: iteration_count
-LOGICAL :: failed_run
+LOGICAL :: failed_run = .FALSE.
 
 ! declare output
 real(DP), dimension(ageN) :: CO2_out
@@ -303,12 +303,12 @@ Rca = Rca_570
         ! for glacial periods between 260 and 330 Myrs ago and between 35 and 0 Myrs ago;
         ! BASIC code calls for a 270-340 Myrs ago interval, but see Fielding et al 2008
         ! (GSA Special Paper 441: 343-354) for justification
-        if ((t .le. 330 .AND. t .gt. 260) .AND. t .le. 40) then
+        if ((t .le. 330 .AND. t .gt. 260) .OR. (t .le. 40)) then
             GCM = GLAC*deltaT2X/log(2.0) !in GEOCARBSULF, deltaT2X = GCM*ln(2); called capital gamma in Berner (2004)
-            111 PRINT *, "GCM is: ", GCM
+!!!            111 PRINT *, "GCM is: ", GCM
         else
             GCM = deltaT2X/log(2.0)
-            112 PRINT *, "GCM is: ", GCM
+!!!            112 PRINT *, "GCM is: ", GCM
         end if
 
         ! calculate factors related to vegetation type
@@ -331,8 +331,8 @@ Rca = Rca_570
           ! GEOG is the change in avg land temp due to geography only, obtained via GCM runs
 !!! TW - not sure what this line is for? cannot find a corresponding one in the R version
 !!!          GEOG(i) = temp(i)-12.4
-          fBB=((380.0-t)/30.0)*((1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*(2.0*RCO2/(1.0+RCO2))**FERT) + &
-              ((t-350.0)/30.0)*(1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*RCO2**exp_fnBb
+          fBB = ((380.0-t)/30.0)*((1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*(2.0*RCO2/(1.0+RCO2))**FERT) + &
+                ((t-350.0)/30.0)*(1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*RCO2**exp_fnBb
 
         end if
 
@@ -343,7 +343,7 @@ Rca = Rca_570
         ! vegetation = gymnosperm domination
         if (t .le. 350 .AND. t .gt. 130)  then
           fE = GYM
-          113 PRINT *, "fE is: ", fE
+!!!          113 PRINT *, "fE is: ", fE
         end if
 
         ! vegetation = ramp-up to angiosperm domination
@@ -430,7 +430,7 @@ Rca = Rca_570
         iteration_count = 0
 
         if (t.le.570 .AND. t.gt.380 .AND. failed_run .eqv. .FALSE.)  then
-          do while (abs(RCO2/RCO2_old-1) .gt. 0.01)
+          do while (abs(RCO2/RCO2_old-1.0) .gt. 0.01)
             iteration_count = iteration_count+1
             RCO2_old = RCO2
             fwsi_climate = (RCO2**(exp_fnBb+ACT*GCM))*((1.0+RT(i)*GCM*log(RCO2) - &
@@ -439,9 +439,9 @@ Rca = Rca_570
                   RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             V = (RCO2**(exp_fnBb+ACT*GCM))*exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0) + &
                   RT(i)*GEOG(i))**(-(1.0-exp_fD)))*(RT(i)*GCM/RCO2)*exp(-ACT*Ws*t/570.0)*exp(ACT*GEOG(i))
-            if (ISNAN(fwsi_climate+W+V) .AND. iteration_count==iteration_threshold)  then
+            if (ISNAN(fwsi_climate+W+V) .OR. iteration_count==iteration_threshold) then
               failed_run=.TRUE.
-              !exit
+              exit
             end if
 
             if (RCO2 .gt. ((fwsi_climate - fwsi_no_climate)/(W+V))) then
@@ -476,7 +476,7 @@ Rca = Rca_570
             fwsi_climate = (t-350.0)/31.0*fwsi_climate_old+(381.0-t)/31.0*fwsi_climate_new
             Fw_v_x = (t-350.0)/31.0*(W_old + V_old)+(381.0-t)/31.0*(W_new + V_new + X_new)
 
-            if (ISNAN(fwsi_climate_old + W_old + V_old + fwsi_climate_new + W_new + V_new + X_new + fwsi_climate + Fw_v_x) .AND. &
+            if (ISNAN(fwsi_climate_old + W_old + V_old + fwsi_climate_new + W_new + V_new + X_new + fwsi_climate + Fw_v_x) .OR. &
                   iteration_count==iteration_threshold) then
               failed_run=.TRUE.
               exit
@@ -502,7 +502,7 @@ Rca = Rca_570
                    ((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             X = exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**-(1.0-exp_fD)) * &
                    (RT(i)*GCM/RCO2)*(2.0**FERT*RCO2**(FERT+ACT*GCM))*((1.0+RCO2)**-FERT)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            if (ISNAN(fwsi_climate + W+V+X) .AND. iteration_count==iteration_threshold)  then
+            if (ISNAN(fwsi_climate + W+V+X) .OR. iteration_count==iteration_threshold)  then
               failed_run=.TRUE.
               exit
             end if
@@ -517,7 +517,7 @@ Rca = Rca_570
         end if   !end of t<=350 loop
 
         ! test for failed runs when CO2 < 150 ppm or > 50000 ppm
-        if ( (RCO2 .lt. 0.6) .AND. (RCO2 .gt. 200.0)) then
+        if ( (RCO2 .lt. 0.6) .OR. (RCO2 .gt. 200.0)) then
           failed_run=.TRUE.
         end if
 
@@ -557,10 +557,9 @@ Rca = Rca_570
           CO2_out(i) = 1.0/0.0
           O2_out(i) = 1.0/0.0
         end if
-    
+
     end do  !end of nested time loop (i)
 
 RETURN
 
 END SUBROUTINE run_geocarb
-
