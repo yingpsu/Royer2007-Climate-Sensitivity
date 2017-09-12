@@ -1,9 +1,11 @@
 ##==============================================================================
+## model_forMCMC.R
 ##
 ## Input:
-##  par              vector of input parameters. first N_const_calib are the
+##  par_calib        vector of input parameters. first N_const_calib are the
 ##                   time-constant parameters. next ageN are the first
-##  par_fixed        vector structured like par, but for fixed arrays (not calibrated)
+##  par_fixed        vector structured like par_calib, but for fixed arrays
+##                   (not calibrated)
 ##  age              age, in millions of years
 ##  ageN             number of time steps
 ##  ind_const_calib  number of calibration parameters constant in time
@@ -21,9 +23,11 @@
 ##  o2               O2 concentration, ppmv
 ##==============================================================================
 
-model_forMCMC <- function(par, par_fixed, parnames_calib, parnames_fixed,
+model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed,
                           age, ageN, ind_const_calib, ind_time_calib,
-                          ind_const_fixed, ind_time_fixed) {
+                          ind_const_fixed, ind_time_fixed,
+                          ind_expected_time, ind_expected_const,
+                          iteration_threshold) {
 
   # this takes in two parameter arrays: one that is all of the parameters
   # actually being calibrated, and the other that is the fixed (non-calib)
@@ -35,22 +39,32 @@ model_forMCMC <- function(par, par_fixed, parnames_calib, parnames_fixed,
   # set up the time-constant parameter matrices
   # first length(ind_const_calib) values are the calibration parameters
   # then the fixed values come at the end
-  Matrix_56 <- matrix(c(par[ind_const_calib], par_fixed[ind_const_fixed]),
+  Matrix_56_unordered <- matrix(c(par_calib[ind_const_calib], par_fixed[ind_const_fixed]),
                       nrow=N_const_total, ncol=1)
-  rownames(Matrix_56) <- c( parnames_calib[ind_const_calib],
+  rownames(Matrix_56_unordered) <- c( parnames_calib[ind_const_calib],
                             parnames_fixed[ind_const_fixed] )
 
   # set up the time-varying parameter matrices
   # rows = time, col = different time series
-  Matrix_12 <- matrix(c(par[ind_time_calib], par_fixed[ind_time_fixed]),
+  Matrix_12_unordered <- matrix(c(par_calib[ind_time_calib], par_fixed[ind_time_fixed]),
                       nrow=ageN, ncol=N_time_total)
-  colnames(Matrix_12) <- c(unique(parnames_calib[ind_time_calib]), unique(parnames_fixed[ind_time_fixed]))
+  colnames(Matrix_12_unordered) <- c(unique(parnames_calib[ind_time_calib]), unique(parnames_fixed[ind_time_fixed]))
 
-  geoRes <- GEOCARBSULFvolc_forMCMC(Matrix_56, Matrix_12, age, ageN)
+#  geoRes <- GEOCARBSULFvolc_forMCMC(Matrix_56_unordered, Matrix_12_unordered, age, ageN)
+  geoRes <- run_geocarbF(Matrix_56=Matrix_56_unordered,
+                         Matrix_12=Matrix_12_unordered,
+                         age=age,
+                         ageN=ageN,
+                         iteration_threshold=iteration_threshold,
+                         ind_expected_time=ind_expected_time,
+                         ind_expected_const=ind_expected_const)
 
-  #merge results and export summary file to working directory
-  GEOCARB_output <- cbind(age, geoRes$CO2, geoRes$O2)
+  # for r version
+  ###GEOCARB_output <- cbind(age, geoRes$CO2, geoRes$O2)
+  # for fortran version
+  GEOCARB_output <- cbind(geoRes$age, geoRes$CO2_out, geoRes$O2_out)
   colnames(GEOCARB_output) <- c('age','co2','o2')
+
 
   return(GEOCARB_output)
 }

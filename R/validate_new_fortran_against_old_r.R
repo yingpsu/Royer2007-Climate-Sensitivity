@@ -9,6 +9,8 @@
 
 rm(list=ls())
 
+setwd('~/codes/Royer2007-Climate-Sensitivity/R')
+
 ##==============================================================================
 ## Set things up
 
@@ -56,20 +58,12 @@ source('run_geocarbF.R')
 # set up some parameters to run at
 par <- par_calib0
 par_fixed <- par_fixed0
+iteration_threshold <- 10
 
 ##==============================================================================
 ## Get output using old R code
 
-model_R <- model_forMCMC(par=par,
-                           par_fixed=par_fixed,
-                           parnames_calib=parnames_calib,
-                           parnames_fixed=parnames_fixed,
-                           age=age,
-                           ageN=ageN,
-                           ind_const_calib=ind_const_calib,
-                           ind_time_calib=ind_time_calib,
-                           ind_const_fixed=ind_const_fixed,
-                           ind_time_fixed=ind_time_fixed)
+model_R <- GEOCARBSULFvolc_forMCMC(Matrix_56, Matrix_12, age, ageN)
 
 
 ##==============================================================================

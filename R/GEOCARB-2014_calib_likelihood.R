@@ -12,7 +12,7 @@
 ## Prior distributions
 ##====================
 log_prior <- function(
-  par,
+  par_calib,
   par_fixed,
   parnames_calib,
   parnames_fixed,
@@ -28,7 +28,7 @@ log_prior <- function(
 ){
 
   # Check lower/upper bounds first
-  if( all(par <= bounds_calib[,'upper']) & all(par >= bounds_calib[,'lower']) ){
+  if( all(par_calib <= bounds_calib[,'upper']) & all(par_calib >= bounds_calib[,'lower']) ){
 
     # Gaussian process priors for the time-varying parameters
     # Might make simplifying assumption of independence between time slices
@@ -41,9 +41,9 @@ log_prior <- function(
         row_num <- match(name,input$parameter)
         col_num <- match(name,colnames(time_arrays))
         if(input[row_num, 'distribution_type']=='gaussian') {
-          lpri_new <- dnorm(x=par[ind_time_calib[((i-1)*ageN+1):(i*ageN)]], mean=time_arrays[,col_num], sd=(0.5*time_arrays[,col_num+1]), log=TRUE)
+          lpri_new <- dnorm(x=par_calib[ind_time_calib[((i-1)*ageN+1):(i*ageN)]], mean=time_arrays[,col_num], sd=(0.5*time_arrays[,col_num+1]), log=TRUE)
         } else if(input[row_num, 'distribution_type']=='lognormal') {
-          lpri_new <- dlnorm(x=par[ind_const_calib[((i-1)*ageN+1):(i*ageN)]], meanlog=log(time_arrays[,col_num]), sdlog=log(0.5*time_arrays[,col_num+1]), log=TRUE)
+          lpri_new <- dlnorm(x=par_calib[ind_const_calib[((i-1)*ageN+1):(i*ageN)]], meanlog=log(time_arrays[,col_num]), sdlog=log(0.5*time_arrays[,col_num+1]), log=TRUE)
         } else {
           print('ERROR - unknown prior distribution type')
         }
@@ -58,9 +58,9 @@ log_prior <- function(
       for (i in 1:n_const_calib) {
         row_num <- match(parnames_calib[i],input$parameter)
         if(input[row_num, 'distribution_type']=='gaussian') {
-          lpri_new <- dnorm(x=par[ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]), log=TRUE)
+          lpri_new <- dnorm(x=par_calib[ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]), log=TRUE)
         } else if(input[row_num, 'distribution_type']=='lognormal') {
-          lpri_new <- dlnorm(x=par[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]), log=TRUE)
+          lpri_new <- dlnorm(x=par_calib[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]), log=TRUE)
         } else {
           print('ERROR - unknown prior distribution type')
         }
@@ -85,7 +85,7 @@ log_prior <- function(
 ## Likelihood function
 ##====================
 log_like <- function(
-  par,
+  par_calib,
   par_fixed,
   parnames_calib,
   parnames_fixed,
@@ -96,14 +96,16 @@ log_like <- function(
   ind_const_fixed,
   ind_time_fixed,
   data_calib,
-  ind_mod2obs
+  ind_mod2obs,
+  ind_expected_time,
+  ind_expected_const,
+  iteration_threshold
 ){
 
   llike <- 0
 
-if(TRUE){
   # run the model
-  model_out <- model_forMCMC(par=par,
+  model_out <- model_forMCMC(par_calib=par_calib,
                              par_fixed=par_fixed,
                              parnames_calib=parnames_calib,
                              parnames_fixed=parnames_fixed,
@@ -112,17 +114,28 @@ if(TRUE){
                              ind_const_calib=ind_const_calib,
                              ind_time_calib=ind_time_calib,
                              ind_const_fixed=ind_const_fixed,
-                             ind_time_fixed=ind_time_fixed)
+                             ind_time_fixed=ind_time_fixed,
+                             ind_expected_time=ind_expected_time,
+                             ind_expected_const=ind_expected_const,
+                             iteration_threshold=iteration_threshold)
 
   # compare against data
   # assumption of steady state in-between model time steps
   # note that these are not necessarily sequential in time
   model_stdy <- model_out[ind_mod2obs,'co2']
+
   llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
                        xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
                        alpha=data_calib$alpha_co2[i], log=TRUE)) )
+#
+# TODO HERE NOW <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TODO HERE NOW
+# TODO HERE NOW <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TODO HERE NOW
+# TODO HERE NOW <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TODO HERE NOW
+  # need to speed up the likelihood calculation?
+
+
   if(is.na(llike)) {llike <- -Inf}
-}
+
   return(llike)
 }
 ##==============================================================================
@@ -133,7 +146,7 @@ if(TRUE){
 ## Posterior distribution
 ##=======================
 log_post <- function(
-  par,
+  par_calib,
   par_fixed,
   parnames_calib,
   parnames_fixed,
@@ -147,14 +160,17 @@ log_post <- function(
   time_arrays,
   bounds_calib,
   data_calib,
-  ind_mod2obs
+  ind_mod2obs,
+  ind_expected_time,
+  ind_expected_const,
+  iteration_threshold
 ){
 
   lpri <- 0
   llike <- 0
 
   # calculate log-prior probability at these parameter values
-  lpri <- log_prior(par=par,
+  lpri <- log_prior(par_calib=par_calib,
                     par_fixed=par_fixed,
                     parnames_calib=parnames_calib,
                     parnames_fixed=parnames_fixed,
@@ -173,7 +189,7 @@ log_post <- function(
   # prior ranges)
   # Fun note: it is faster to check is.finite() than ~is.infinite
   if(is.finite(lpri)) {
-    llike <- log_like(par=par,
+    llike <- log_like(par_calib=par_calib,
                       par_fixed=par_fixed,
                       parnames_calib=parnames_calib,
                       parnames_fixed=parnames_fixed,
@@ -184,7 +200,10 @@ log_post <- function(
                       ind_const_fixed=ind_const_fixed,
                       ind_time_fixed=ind_time_fixed,
                       data_calib=data_calib,
-                      ind_mod2obs=ind_mod2obs)
+                      ind_mod2obs=ind_mod2obs,
+                      ind_expected_time=ind_expected_time,
+                      ind_expected_const=ind_expected_const,
+                      iteration_threshold=iteration_threshold)
   }
 
   # combine

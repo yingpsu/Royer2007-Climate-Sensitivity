@@ -108,6 +108,7 @@ if(length(parnames_calib)==1){
 
 # need the physical model
 source('model_forMCMC.R')
+source('run_geocarbF.R')
 source("GEOCARBSULFvolc_forMCMC.R")
 
 # need the likelihood function and prior distributions
@@ -137,7 +138,9 @@ amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_
                   ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                   ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                   input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs)
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                  iteration_threshold=iteration_threshold)
 tend=proc.time()
 chain1 = amcmc_out1$samples
 

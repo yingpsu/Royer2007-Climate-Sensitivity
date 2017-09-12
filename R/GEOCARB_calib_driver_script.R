@@ -7,18 +7,23 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-niter_mcmc000 <- 1e7   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1         # number of CPUs to use
-setwd('/home/scrim/axw322/codes/GEOCARB/R')
-appen <- 'allData_constOnly'
 #rm(list=ls())
+
+niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1         # number of CPUs to use
+#setwd('/home/scrim/axw322/codes/GEOCARB/R')
+setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+appen <- 'test00'
+
+library(sn)
+library(adaptMCMC)
+library(ncdf4)
 
 ##==============================================================================
 ## Data
 ##=====
 
 # Read proxy data. Returns "data_calib_all"
-library(sn)
 source('GEOCARB-2014_getData.R')
 
 # remove the lowest [some number] co2 content data points (all paleosols, it turns out)
@@ -119,6 +124,9 @@ if(length(parnames_calib)==1){
 
 # need the physical model
 source('model_forMCMC.R')
+source('run_geocarbF.R')
+#DEBUG
+source('GEOCARBSULFvolc_forMCMC.R')
 
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')
@@ -129,7 +137,6 @@ source('GEOCARB-2014_calib_likelihood.R')
 # parameters, 44% for a single parameter (or Metropolis-within-Gibbs sampler),
 # and 0.234 for infinite number of parameters, using accept_mcmc_few=0.44 and
 # accept_mcmc_many=0.234.
-library(adaptMCMC)
 accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
@@ -141,14 +148,16 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 ## Actually run the calibration
 if(n_node000==1) {
   tbeg=proc.time()
-  amcmc_out1 = MCMC(log_post, niter_mcmc, par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+  amcmc_out1 = MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
                   scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(500,round(0.05*niter_mcmc)),
                   par_fixed=par_fixed0, parnames_calib=parnames_calib,
                   parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                   ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                   ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                   input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs)
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                  iteration_threshold=iteration_threshold)
   tend=proc.time()
   chain1 = amcmc_out1$samples
 } else if(n_node000 > 1) {
@@ -224,7 +233,6 @@ for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
 today=Sys.Date(); today=format(today,format="%d%b%Y")
 filename.parameters = paste('geocarb_calibratedParameters_',appen,'_',today,'.nc',sep="")
 
-library(ncdf4)
 dim.parameters <- ncdim_def('n.parameters', '', 1:ncol(parameters.posterior), unlim=FALSE)
 dim.name <- ncdim_def('name.len', '', 1:lmax, unlim=FALSE)
 dim.ensemble <- ncdim_def('n.ensemble', 'ensemble member', 1:nrow(parameters.posterior), unlim=TRUE)

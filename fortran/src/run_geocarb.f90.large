@@ -189,7 +189,7 @@ real(DP) :: RCO2
 real(DP) :: RCO2_old
 real(DP) :: Rg
 integer :: iteration_count
-LOGICAL :: failed_run
+LOGICAL :: failed_run = .FALSE.
 
 ! match constant parameters to their Matrix_56 row using the row names of Matrix_56
 ! ... or *would* use the row names in the R version.
@@ -297,7 +297,6 @@ Rca = Rca_570
 
     do i=1,ageN
 
-        failed_run = .FALSE.
         t = age(i) !age of time-step, in Myrs ago
 
         ! calculate factors that are influenced by glacial vs. non-glacial state ("GCM")
@@ -440,7 +439,7 @@ Rca = Rca_570
                   RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             V = (RCO2**(exp_fnBb+ACT*GCM))*exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0) + &
                   RT(i)*GEOG(i))**(-(1.0-exp_fD)))*(RT(i)*GCM/RCO2)*exp(-ACT*Ws*t/570.0)*exp(ACT*GEOG(i))
-            if (ISNAN(fwsi_climate+W+V) .OR. (iteration_count==iteration_threshold)) then
+            if (ISNAN(fwsi_climate+W+V) .OR. iteration_count==iteration_threshold) then
               failed_run=.TRUE.
               exit
             end if
@@ -457,7 +456,7 @@ Rca = Rca_570
         ! effects of plants on weathering are linearly mixed in; this helps to
         ! prevent model failure
         if ((t .le. 380.0) .AND. (t .gt. 350.0) .AND. (.not. failed_run)) then
-          do while (abs((RCO2/RCO2_old)-1.0) .gt. 0.01)
+          do while  (abs((RCO2/RCO2_old)-1.0) .gt. 0.01)
             iteration_count = iteration_count+1
             RCO2_old = RCO2
             fwsi_climate_old = (RCO2**(exp_fnBb+ACT*GCM))*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0) + &
@@ -493,7 +492,7 @@ Rca = Rca_570
         end if    !end of t<=380 & t>350 loop
 
         if ( (t .le. 350.0) .AND. (.not. failed_run) ) then
-          do while( abs((RCO2/RCO2_old)-1.0) .gt. 0.01)
+          do while  (abs((RCO2/RCO2_old)-1.0) .gt. 0.01)
             iteration_count = iteration_count+1
             RCO2_old = RCO2
             fwsi_climate = ((2.0**FERT)*RCO2**(FERT+ACT*GCM))*((1.0+RCO2)**(-FERT))*((1.0+RT(i)*GCM*log(RCO2) - &
@@ -505,7 +504,7 @@ Rca = Rca_570
             X = exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**-(1.0-exp_fD)) * &
                    (RT(i)*GCM/RCO2)*(2.0**FERT*RCO2**(FERT+ACT*GCM))*((1.0+RCO2)**(-FERT)) * &
                    exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            if (ISNAN(fwsi_climate + W+V+X) .OR. (iteration_count==iteration_threshold))  then
+            if (ISNAN(fwsi_climate + W+V+X) .OR. iteration_count==iteration_threshold)  then
               failed_run=.TRUE.
               exit
             end if
@@ -554,7 +553,7 @@ Rca = Rca_570
         ! test for estimated oxygen at present-day to be between 19-23%, and
         ! estimated CO2 at present-day to be between 200-300 ppm; if not, the
         ! whole time-series is considered a failed run
-        if ((t==0.0) .AND. (ISNAN(oxygen+RCO2) .OR. (100.0*(oxygen/(oxygen+143.0)) .lt. 19.0) .OR. &
+        if (t==0.0 .AND. (ISNAN(oxygen+RCO2) .OR. (100.0*(oxygen/(oxygen+143.0)) .lt. 19.0) .OR. &
                   (100.0*(oxygen/(oxygen+143.0)) .gt. 23.0) .OR. (RCO2 .lt. 0.8) .OR. (RCO2 .gt. 1.2))) then
           CO2_out(i) = 1.0/0.0
           O2_out(i) = 1.0/0.0

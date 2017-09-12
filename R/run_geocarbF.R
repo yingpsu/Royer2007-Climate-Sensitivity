@@ -43,8 +43,9 @@ run_geocarbF <- function(Matrix_56,
   # reorganzie Matrix_56 (56x1 vector) and Matrix_12 (ageNx12 time series) into
   # the orders that run_geocarb.f90 expects
   Matrix_12_ordered <- Matrix_12[,ind_expected_time]
-  Matrix_56_ordered <- Matrix_56[ind_expected_const]
+  Matrix_56_ordered <- Matrix_56[ind_expected_const,]
 
+  # fortran version
   f.output <- .Fortran('run_geocarb',
                           Matrix_56 = as.double(Matrix_56_ordered),
                           Matrix_12 = as.double(Matrix_12_ordered),
@@ -54,6 +55,8 @@ run_geocarbF <- function(Matrix_56,
                           CO2_out   = as.double(rep(-999.99, ageN)),
                           O2_out    = as.double(rep(-999.99, ageN))
                           )
+  # r version
+  ###f.output <- GEOCARBSULFvolc_forMCMC(Matrix_56_ordered, Matrix_12_ordered, age, ageN)
 
   return(f.output)
 }
