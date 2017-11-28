@@ -2,7 +2,8 @@
 all: run_geocarb.so
 
 # Fortran compiler:
-F90 = /usr/local/bin/gfortran # g95
+###F90 = /usr/local/bin/gfortran
+F90 = /usr/bin/gfortran
 
 # Directories: objpath, srcpath
 OP = ./obj

@@ -9,11 +9,11 @@
 
 #rm(list=ls())
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 5e5   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 setwd('/home/scrim/axw322/codes/GEOCARB/R')
 #setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'allBoth-stomata_DELETE'
+appen <- 'fewBoth-liverworts_g50'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- TRUE
@@ -39,9 +39,9 @@ data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , FALSE),
                         c("alkenones" , FALSE),
-                        c("stomata"   , TRUE),
+                        c("stomata"   , FALSE),
                         c("boron"     , FALSE),
-                        c("liverworts", FALSE) )
+                        c("liverworts", TRUE) )
 
 ind_data    <- which(data_to_assim[2,]==TRUE)
 n_data_sets <- length(ind_data)

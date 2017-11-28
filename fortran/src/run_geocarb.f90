@@ -465,14 +465,14 @@ Rca = Rca_570
             W_old = (exp_fnBb+ACT*GCM)*RCO2**(-exp_fnBb+ACT*GCM)*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0) + &
                       RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             V_old = RCO2**(exp_fnBb+ACT*GCM)*exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0) + &
-                      RT(i)*GEOG(i))**-(1.0-exp_fD))*(RT(i)*GCM/RCO2)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
+                      RT(i)*GEOG(i))**(-(1.0-exp_fD)))*(RT(i)*GCM/RCO2)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             fwsi_climate_new = ((2.0**FERT)*RCO2**(FERT+ACT*GCM))*((1.0+RCO2)**(-FERT))*((1.0+RT(i)*GCM*log(RCO2) - &
                                  RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            W_new = (2.0**FERT)*(FERT+ACT*GCM)*(RCO2**(FERT+ACT*GCM-1.0))*((1.0+RCO2)**-FERT)*((1.0+RT(i)*GCM*log(RCO2) - &
+            W_new = (2.0**FERT)*(FERT+ACT*GCM)*(RCO2**(FERT+ACT*GCM-1.0))*((1.0+RCO2)**(-FERT))*((1.0+RT(i)*GCM*log(RCO2) - &
                        RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            V_new = (-FERT*(1.0+RCO2)**-(1.0+FERT))*((2.0**FERT)*RCO2**(FERT+ACT*GCM))*((1.0+RT(i)*GCM*log(RCO2) - &
+            V_new = (-FERT*(1.0+RCO2)**(-(1.0+FERT)))*((2.0**FERT)*RCO2**(FERT+ACT*GCM))*((1.0+RT(i)*GCM*log(RCO2) - &
                        RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            X_new = exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**-(1.0-exp_fD)) * &
+            X_new = exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**(-(1.0-exp_fD))) * &
                        (RT(i)*GCM/RCO2)*(2.0**FERT*RCO2**(FERT+ACT*GCM))*((1.0+RCO2)**(-FERT)) * &
                        exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             fwsi_climate = (t-350.0)/31.0*fwsi_climate_old+(381.0-t)/31.0*fwsi_climate_new
@@ -500,9 +500,9 @@ Rca = Rca_570
                              RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             W = (2.0**FERT)*(FERT+ACT*GCM)*(RCO2**(FERT+ACT*GCM-1.0))*((1.0+RCO2)**(-FERT)) * &
                    ((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            V = (-FERT*(1.0+RCO2)**-(1.0+FERT))*((2.0**FERT)*RCO2**(FERT+ACT*GCM)) * &
+            V = (-FERT*(1.0+RCO2)**(-(1.0+FERT)))*((2.0**FERT)*RCO2**(FERT+ACT*GCM)) * &
                    ((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**exp_fD)*exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
-            X = exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**-(1.0-exp_fD)) * &
+            X = exp_fD*((1.0+RT(i)*GCM*log(RCO2)-RT(i)*Ws*(t/570.0)+RT(i)*GEOG(i))**(-(1.0-exp_fD))) * &
                    (RT(i)*GCM/RCO2)*(2.0**FERT*RCO2**(FERT+ACT*GCM))*((1.0+RCO2)**(-FERT)) * &
                    exp(-ACT*Ws*(t/570.0))*exp(ACT*GEOG(i))
             if (ISNAN(fwsi_climate + W+V+X) .OR. (iteration_count==iteration_threshold))  then

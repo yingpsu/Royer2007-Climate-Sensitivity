@@ -1,3 +1,5 @@
+R/old
+output
 *.Rapp.history
 *.Rhistory
 .DS_Store

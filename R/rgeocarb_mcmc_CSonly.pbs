@@ -4,4 +4,4 @@
 #PBS -j oe
 #PBS -m abe
 #PBS -M twong@psu.edu
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_CSonly_noPaleosols.log
+R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_CSonly_paleosols.log
