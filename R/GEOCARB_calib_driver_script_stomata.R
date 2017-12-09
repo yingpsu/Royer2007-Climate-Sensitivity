@@ -141,8 +141,6 @@ if(length(parnames_calib)==1){
 # need the physical model
 source('model_forMCMC.R')
 source('run_geocarbF.R')
-#DEBUG
-source('GEOCARBSULFvolc_forMCMC.R')
 
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')

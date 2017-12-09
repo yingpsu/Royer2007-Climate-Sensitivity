@@ -74,7 +74,6 @@ log_prior <- function(
     lpri <- -Inf
   }
 
-
   return(lpri)
 }
 ##==============================================================================
@@ -127,12 +126,6 @@ log_like <- function(
   llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
                        xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
                        alpha=data_calib$alpha_co2[i], log=TRUE)) )
-#
-# TODO HERE NOW <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TODO HERE NOW
-# TODO HERE NOW <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TODO HERE NOW
-# TODO HERE NOW <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TODO HERE NOW
-  # need to speed up the likelihood calculation?
-
 
   if(is.na(llike)) {llike <- -Inf}
 
@@ -213,6 +206,110 @@ log_post <- function(
 }
 ##==============================================================================
 
+
+##==============================================================================
+## Likelihood function for sensitivity analysis
+## (scales from [0,1] to the parameters' distributions)
+##=====================================================
+log_like_sensitivity <- function(
+  par_calib_scaled,
+  par_fixed,
+  parnames_calib,
+  parnames_fixed,
+  age,
+  ageN,
+  ind_const_calib,
+  ind_time_calib,
+  ind_const_fixed,
+  ind_time_fixed,
+  data_calib,
+  ind_mod2obs,
+  ind_expected_time,
+  ind_expected_const,
+  iteration_threshold,
+  input
+){
+
+  # initialize
+  par_calib <- par_calib_scaled
+
+  # scale the parameters from [0,1] to their prior distributions
+  n_const_calib <- length(ind_const_calib)
+  n_simulations <- round(length(par_calib_scaled)/length(parnames_calib))
+  if (n_const_calib > 0) {
+    if(n_simulations > 1) {
+      for (i in 1:n_const_calib) {
+        row_num <- match(parnames_calib[i],input$parameter)
+        if(input[row_num, 'distribution_type']=='gaussian') {
+          par_calib[,i] <- qnorm(p=par_calib_scaled[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+        } else if(input[row_num, 'distribution_type']=='lognormal') {
+          par_calib[,i] <- qlnorm(p=par_calib_scaled[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+        } else {
+          print('ERROR - unknown prior distribution type')
+        }
+      }
+    } else {
+      for (i in 1:n_const_calib) {
+        row_num <- match(parnames_calib[i],input$parameter)
+        if(input[row_num, 'distribution_type']=='gaussian') {
+          par_calib[i] <- qnorm(p=par_calib_scaled[ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+        } else if(input[row_num, 'distribution_type']=='lognormal') {
+          par_calib[i] <- qlnorm(p=par_calib_scaled[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+        } else {
+          print('ERROR - unknown prior distribution type')
+        }
+      }
+    }
+  }
+
+  llike <- rep(0, n_simulations)
+
+  # run the model
+  if (n_simulations > 1) {
+    model_out <- sapply(1:n_simulations, function(ss) {
+                   model_forMCMC(par_calib=par_calib[ss,],
+                                 par_fixed=par_fixed,
+                                 parnames_calib=parnames_calib,
+                                 parnames_fixed=parnames_fixed,
+                                 age=age,
+                                 ageN=ageN,
+                                 ind_const_calib=ind_const_calib,
+                                 ind_time_calib=ind_time_calib,
+                                 ind_const_fixed=ind_const_fixed,
+                                 ind_time_fixed=ind_time_fixed,
+                                 ind_expected_time=ind_expected_time,
+                                 ind_expected_const=ind_expected_const,
+                                 iteration_threshold=iteration_threshold)[,'co2']})
+    model_stdy <- model_out[ind_mod2obs,]
+    llike <- apply( X=sapply(1:length(ind_mod2obs), function(i) dsn(x=model_stdy[i,],
+                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
+                         alpha=data_calib$alpha_co2[i], log=TRUE)), MARGIN=1, FUN=sum)
+  } else {
+    model_out <- model_forMCMC(par_calib=par_calib,
+                               par_fixed=par_fixed,
+                               parnames_calib=parnames_calib,
+                               parnames_fixed=parnames_fixed,
+                               age=age,
+                               ageN=ageN,
+                               ind_const_calib=ind_const_calib,
+                               ind_time_calib=ind_time_calib,
+                               ind_const_fixed=ind_const_fixed,
+                               ind_time_fixed=ind_time_fixed,
+                               ind_expected_time=ind_expected_time,
+                               ind_expected_const=ind_expected_const,
+                               iteration_threshold=iteration_threshold)[,'co2']
+    model_stdy <- model_out[ind_mod2obs]
+    llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
+                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
+                         alpha=data_calib$alpha_co2[i], log=TRUE)) )
+  }
+
+  ind_na <- which(is.na(llike))
+  #if (length(ind_na)>0) {llike[ind_na] <- -Inf}
+
+  return(llike)
+}
+##==============================================================================
 
 
 ##==============================================================================
