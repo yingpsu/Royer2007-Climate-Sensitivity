@@ -11,9 +11,11 @@
 
 niter_mcmc000 <- 5e5   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
+co2_uncertainty_cutoff <- 20   # minimum CO2 half-uncertainty range width (avoid overfitting just a few data points)
+                               # if co2_uncertainty_cutoff < 0, we skip this filtering
 setwd('/home/scrim/axw322/codes/GEOCARB/R')
 #setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'fewBoth-stomata_g50'
+appen <- 'fewConst-filt20-stomata_g50'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- TRUE
@@ -52,6 +54,15 @@ for (i in 1:n_data_sets) {
 
 data_calib <- data_calib_all[unlist(ind_assim),]
 
+# possible filtering out of some data points with too-narrow uncertainties in
+# co2 (causing overconfidence in model simulations that match those data points
+# well)
+if(co2_uncertainty_cutoff > 0) {
+  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
+  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
+  data_calib <- data_calib[-ind_filter,]
+}
+
 # assumption of steady state in-between model time steps permits figuring out
 # which model time steps each data point should be compared against in advance.
 # doing this each calibration iteration would be outrageous!
@@ -64,6 +75,7 @@ ind_mod2obs <- rep(NA,nrow(data_calib))
 for (i in 1:length(ind_mod2obs)){
   ind_mod2obs[i] <- which(age_tmp==ttmp[i])
 }
+
 ##==============================================================================
 
 
