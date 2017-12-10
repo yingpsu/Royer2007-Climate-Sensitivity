@@ -40,11 +40,11 @@ source('GEOCARB-2014_getData.R')
 #data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , FALSE),
-                        c("alkenones" , FALSE),
+data_to_assim <- cbind( c("paleosols" , TRUE),
+                        c("alkenones" , TRUE),
                         c("stomata"   , TRUE),
-                        c("boron"     , FALSE),
-                        c("liverworts", FALSE) )
+                        c("boron"     , TRUE),
+                        c("liverworts", TRUE) )
 
 ind_data    <- which(data_to_assim[2,]==TRUE)
 n_data_sets <- length(ind_data)
@@ -85,6 +85,7 @@ for (i in 1:length(ind_mod2obs)){
 
 # Read parameter information, set up the calibration parameters
 source('GEOCARB-2014_parameterSetup.R')
+n_parameters <- length(parnames_calib)
 ##==============================================================================
 
 
@@ -107,10 +108,10 @@ rownames(bounds) <- as.character(input$parameter)
 
 # only actually need the calibration parameters' bounds, so reformat the bounds
 # array to match the vector of calibration parameters
-bounds_calib <- mat.or.vec(nr=length(parnames_calib), nc=2)
+bounds_calib <- mat.or.vec(nr=n_parameters, nc=2)
 colnames(bounds_calib) <- c('lower','upper')
 rownames(bounds_calib) <- parnames_calib
-for (i in 1:length(parnames_calib)) {
+for (i in 1:n_parameters) {
   bounds_calib[i,'lower'] <- bounds[parnames_calib[i],'bound_lower']
   bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
 }
@@ -138,6 +139,7 @@ source('GEOCARB-2014_calib_likelihood.R')
 ##=============================
 
 #install.packages('sensitivity')
+#install.packages('sn')
 library(sensitivity)
 library(sn)
 
@@ -145,9 +147,16 @@ library(sn)
 ## Send in bounds of [0,1] for each parameter, and then scale within the
 ## `log_like_sensitivity` function to the parameters' distributions (using CDF)
 
-mom <- morris(model=log_like_sensitivity, factors=parnames_calib, r=1000,
-              binf=rep(0.01,length(parnames_calib)), bsup=rep(0.99,length(parnames_calib)),
-              scale=FALSE, design=list(type="oat", levels=500, grid.jump=3),
+repetitions <- 20
+levels <- 500
+grid_jump <- round(levels/2)
+perc_lower <- rep(0.01, n_parameters)
+perc_upper <- rep(0.99, n_parameters)
+
+tbeg <- proc.time()
+mom <- morris(model=log_like_sensitivity, factors=parnames_calib, r=repetitions,
+              binf=perc_lower, bsup=perc_upper, scale=FALSE,
+              design=list(type="oat", levels=levels, grid.jump=grid_jump),
               par_fixed=par_fixed0, parnames_calib=parnames_calib,
               parnames_fixed=parnames_fixed, age=age, ageN=ageN,
               ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -156,27 +165,14 @@ mom <- morris(model=log_like_sensitivity, factors=parnames_calib, r=1000,
               data_calib=data_calib, ind_mod2obs=ind_mod2obs,
               ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
               iteration_threshold=iteration_threshold)
+tend <- proc.time()
+print(paste(length(mom$y),' simulations took ',(tend-tbeg)[3]/60,' minutes',sep=''))
 
-##==============================================================================
-
-
-
-
-
-
-
-
-if(FALSE){
-
-
-
-##==============================================================================
-## Method of Morris
-
-mom <- morris(model=neg_log_likelihood, factors=parnames, r = 20, binf=bound_lower, bsup=bound_upper,
-              scale=TRUE, design=list(type="oat", levels=5, grid.jump=3),
-              parnames=parnames, data_sealevel=data_sealevel,
-              indices=indices, temperature_forcing=forcing)
+mu <- apply(mom$ee, 2, mean)
+mu_star <- apply(mom$ee, 2, function(x) mean(abs(x)))
+sigma <- apply(mom$ee, 2, sd)
+stderr_mu <- sigma/sqrt(repetitions)
+mom_table <- cbind(mu, mu_star, sigma)
 ##==============================================================================
 
 
@@ -186,47 +182,66 @@ mom <- morris(model=neg_log_likelihood, factors=parnames, r = 20, binf=bound_low
 #install.packages('lhs')
 library(lhs)
 
-n_sample <- 1000
-n_bootstrap <- 100
-
-## Need preliminary function to map ranges from [0,1] and back
-map_range <- function(X, lbin, ubin, lbout, ubout){
-    Y <- lbout + (ubout-lbout)*( (X-lbin)/(ubin-lbin) )
-    return(Y)
+## Sobol' wrapper - assumes uniform distributions on parameters
+geocarb_sobol <- function(par_calib_scaled, par_fixed, parnames_calib,
+                          parnames_fixed, age, ageN, ind_const_calib,
+                          ind_time_calib, ind_const_fixed, ind_time_fixed,
+                          input, data_calib, ind_mod2obs, ind_expected_time,
+                          ind_expected_const, iteration_threshold) {
+  ll_output <- log_like_sensitivity(par_calib_scaled,
+                par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                input=input,
+                data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                iteration_threshold=iteration_threshold)
+  ll_output_centered <- ll_output - mean(ll_output)
+  return(ll_output_centered)
 }
+
+# getting about 290000 simulations in 2 minutes (# simulations = (p+2)*n_sample)
+n_sample <- 500
+n_bootstrap <- 100
 
 ## Sample parameters (need 2 data frames)
 parameters_lhs1 <- randomLHS(n_sample, n_parameters)
 parameters_lhs2 <- randomLHS(n_sample, n_parameters)
 
-## Sobol' wrapper - assumes uniform distributions on parameters
-gmsl_sobol <- function(parameters_lhs, parnames, data_sealevel, indices,
-                       temperature_forcing, bound_lower, bound_upper) {
-  parameters <- sapply(1:length(parnames), function(pp) {
-                  map_range(parameters_lhs[,pp], 0, 1, bound_lower[pp], bound_upper[pp])})
-  nll_output <- neg_log_likelihood(parameters, parnames, data_sealevel, indices, temperature_forcing)
-  nll_output_centered <- nll_output - mean(nll_output)
-  return(nll_output_centered)
-}
+## Trim so you aren't sampling the extreme cases?
+alpha <- 0.5
+parameters_lhs1 <- (1-alpha)*parameters_lhs1 + 0.5*alpha
+parameters_lhs2 <- (1-alpha)*parameters_lhs2 + 0.5*alpha
 
 ## Actually run the Sobol'
-t.out <- system.time(s.out <- sobolSalt(model=gmsl_sobol,
+t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol,
                              parameters_lhs1,
                              parameters_lhs2,
-                             scheme='B',
-                             nboot=n_bootstrap))
+                             scheme='A',
+                             nboot=n_bootstrap,
+                             par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                             parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                             ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                             ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                             input=input,
+                             data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                             ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                             iteration_threshold=iteration_threshold))
 
+## Check convergence - is maximum confidence interval width < 10% of the highest
+## total order index?
+max_sens_ind <- 0.1*max(s.out$T$original)
+max_conf_int <- max(max(s.out$S$`max. c.i.` - s.out$S$`min. c.i.`), max(s.out$T$`max. c.i.` - s.out$T$`min. c.i.`))
+print(paste('max. sensitivity index=',max_sens_ind,' // max. conf int=',max_conf_int,sep=''))
+
+
+today <- Sys.Date(); today <- format(today,format="%d%b%Y")
+save.image(file=paste('geocarb_sensitivity_',today,'.RData', sep=''))
 
 ##==============================================================================
 
 
-##==============================================================================
-## Latin Hypercube
-
-todo
-##==============================================================================
-
-}
 
 ##==============================================================================
 ## End

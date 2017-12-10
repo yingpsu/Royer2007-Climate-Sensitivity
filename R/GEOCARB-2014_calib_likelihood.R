@@ -305,7 +305,7 @@ log_like_sensitivity <- function(
   }
 
   ind_na <- which(is.na(llike))
-  #if (length(ind_na)>0) {llike[ind_na] <- -Inf}
+  if (length(ind_na)>0) {llike[ind_na] <- -Inf}
 
   return(llike)
 }
