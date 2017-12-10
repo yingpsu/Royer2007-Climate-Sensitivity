@@ -13,6 +13,12 @@ rm(list=ls())
 co2_uncertainty_cutoff <- 20
 
 
+## which experiments to do?
+ldosobol <- TRUE
+ldomorris <- FALSE
+ldoparallel <- TRUE
+
+
 if(Sys.info()['nodename']=='Tonys-MacBook-Pro.local') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
   machine <- 'local'
@@ -21,8 +27,8 @@ if(Sys.info()['nodename']=='Tonys-MacBook-Pro.local') {
 } else {
   # assume on Napa cluster
   machine <- 'remote'
-  setwd('/home/scrim/axw322/codes/GECARB/R')
-  .Ncore <- 15  # use multiple cores to process the many tide gauge stations
+  setwd('/home/scrim/axw322/codes/GEOCARB/R')
+  .Ncore <- 5  # use multiple cores to process large data?
 }
 
 
@@ -153,6 +159,7 @@ grid_jump <- round(levels/2)
 perc_lower <- rep(0.01, n_parameters)
 perc_upper <- rep(0.99, n_parameters)
 
+if(ldomorris) {
 tbeg <- proc.time()
 mom <- morris(model=log_like_sensitivity, factors=parnames_calib, r=repetitions,
               binf=perc_lower, bsup=perc_upper, scale=FALSE,
@@ -173,6 +180,7 @@ mu_star <- apply(mom$ee, 2, function(x) mean(abs(x)))
 sigma <- apply(mom$ee, 2, sd)
 stderr_mu <- sigma/sqrt(repetitions)
 mom_table <- cbind(mu, mu_star, sigma)
+}
 ##==============================================================================
 
 
@@ -183,7 +191,7 @@ mom_table <- cbind(mu, mu_star, sigma)
 library(lhs)
 
 ## Sobol' wrapper - assumes uniform distributions on parameters
-geocarb_sobol <- function(par_calib_scaled, par_fixed, parnames_calib,
+geocarb_sobol_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           parnames_fixed, age, ageN, ind_const_calib,
                           ind_time_calib, ind_const_fixed, ind_time_fixed,
                           input, data_calib, ind_mod2obs, ind_expected_time,
@@ -201,8 +209,53 @@ geocarb_sobol <- function(par_calib_scaled, par_fixed, parnames_calib,
   return(ll_output_centered)
 }
 
+## Sobol' wrapper - assumes uniform distributions on parameters
+geocarb_sobol_par <- function(par_calib_scaled, par_fixed, parnames_calib,
+                          parnames_fixed, age, ageN, ind_const_calib,
+                          ind_time_calib, ind_const_fixed, ind_time_fixed,
+                          input, data_calib, ind_mod2obs, ind_expected_time,
+                          ind_expected_const, iteration_threshold, Ncore) {
+
+  #install.packages('foreach')
+  #install.packages('doParallel')
+  library(foreach)
+  library(doParallel)
+  cores=detectCores()
+#  cl <- makeCluster(cores[1]-1) #not to overload your computer
+  cl <- makeCluster(Ncore)
+  print(paste('Starting cluster with ',Ncore,' cores', sep=''))
+  registerDoParallel(cl)
+
+  ## initialize output/input
+  n_simulations <- nrow(par_calib_scaled)
+  export_names <- c('log_like_sensitivity', 'model_forMCMC', 'run_geocarbF',
+                    'par_fixed0','parnames_calib','parnames_fixed','age','ageN','ind_const_calib','ind_time_calib','ind_const_fixed','ind_time_fixed','input','data_calib','ind_mod2obs','ind_expected_time','ind_expected_const','iteration_threshold')
+  output <- rep(0, n_simulations)
+
+  finalOutput <- foreach(ii=1:n_simulations, .combine=c,
+                                   .packages=c('sn','stats'),
+                                   .export=export_names,
+                                   .inorder=FALSE) %dopar% {
+
+    dyn.load("../fortran/run_geocarb.so")
+    ll_output <- log_like_sensitivity(as.numeric(par_calib_scaled[ii,]),
+                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                    input=input,
+                    data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold)
+    output[ii] <- ll_output
+  }
+  stopCluster(cl)
+  ll_output_centered <- output - mean(output)
+  return(ll_output_centered)
+}
+
 # getting about 290000 simulations in 2 minutes (# simulations = (p+2)*n_sample)
-n_sample <- 500
+n_sample <- 200
 n_bootstrap <- 100
 
 ## Sample parameters (need 2 data frames)
@@ -214,8 +267,29 @@ alpha <- 0.5
 parameters_lhs1 <- (1-alpha)*parameters_lhs1 + 0.5*alpha
 parameters_lhs2 <- (1-alpha)*parameters_lhs2 + 0.5*alpha
 
+## Need data frames as input
+parameters_lhs1 <- data.frame(parameters_lhs1)
+parameters_lhs2 <- data.frame(parameters_lhs2)
+colnames(parameters_lhs1) <- colnames(parameters_lhs2) <- parnames_calib
+
 ## Actually run the Sobol'
-t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol,
+if(ldosobol) {
+  if(ldoparallel ) {
+    t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_par,
+                             parameters_lhs1,
+                             parameters_lhs2,
+                             scheme='A',
+                             nboot=n_bootstrap,
+                             par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                             parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                             ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                             ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                             input=input,
+                             data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                             ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                             iteration_threshold=iteration_threshold, Ncore=.Ncore))
+  } else {
+    t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_ser,
                              parameters_lhs1,
                              parameters_lhs2,
                              scheme='A',
@@ -228,13 +302,13 @@ t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol,
                              data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                              ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                              iteration_threshold=iteration_threshold))
-
+  }
 ## Check convergence - is maximum confidence interval width < 10% of the highest
 ## total order index?
 max_sens_ind <- 0.1*max(s.out$T$original)
 max_conf_int <- max(max(s.out$S$`max. c.i.` - s.out$S$`min. c.i.`), max(s.out$T$`max. c.i.` - s.out$T$`min. c.i.`))
 print(paste('max. sensitivity index=',max_sens_ind,' // max. conf int=',max_conf_int,sep=''))
-
+}
 
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 save.image(file=paste('geocarb_sensitivity_',today,'.RData', sep=''))
