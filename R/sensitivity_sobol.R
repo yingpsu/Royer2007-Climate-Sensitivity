@@ -135,8 +135,8 @@ geocarb_sobol_par <- function(par_calib_scaled){
 
 # getting about 290000 simulations in 2 minutes (# simulations = (p+2)*n_sample)
 # (290000 simulations total <=> n_sample=5000)
-n_sample <- 50
-n_bootstrap <- 10
+n_sample <- .n_sample_sobol
+n_bootstrap <- .n_bootstrap_sobol
 Ncore <- .Ncore
 
 ## Sample parameters (need 2 data frames)

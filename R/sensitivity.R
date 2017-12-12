@@ -18,6 +18,9 @@ ldosobol <- TRUE
 ldomorris <- FALSE
 ldoparallel <- TRUE
 
+.n_sample_sobol <- 100000
+.n_bootstrap_sobol <- 5000
+
 
 if(Sys.info()['nodename']=='Tonys-MacBook-Pro.local') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
@@ -28,7 +31,7 @@ if(Sys.info()['nodename']=='Tonys-MacBook-Pro.local') {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
-  .Ncore <- 5  # use multiple cores to process large data?
+  .Ncore <- 15  # use multiple cores to process large data?
 }
 
 
