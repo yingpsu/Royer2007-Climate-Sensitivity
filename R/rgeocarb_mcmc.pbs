@@ -4,4 +4,4 @@
 #PBS -j oe
 #PBS -m abe
 #PBS -M twong@psu.edu
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_liverworts.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_fewBoth_liverworts.log
+R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_stomata.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_fewConst-filt20_stomata.log
