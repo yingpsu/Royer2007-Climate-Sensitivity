@@ -49,7 +49,8 @@ geocarb_sobol_par <- function(par_calib_scaled,
                               ind_expected_time,
                               ind_expected_const,
                               iteration_threshold,
-                              Ncore) {
+                              Ncore,
+                              alpha) {
 }}
 geocarb_sobol_par <- function(par_calib_scaled){
 
@@ -100,6 +101,21 @@ geocarb_sobol_par <- function(par_calib_scaled){
       }
     }
   }
+
+if(FALSE){
+  # check that none of the normally-distributed parameters are outside any bounds
+  # (passes this check, so skipping it since with millions of parameters could
+  #  take a while)
+  ind_out <- NULL
+  for (i in 1:n_const_calib) {
+    row_num <- match(parnames_calib[i],input$parameter)
+    if(input[row_num, 'distribution_type']=='gaussian') {
+      par_min <- qnorm(p=0.5*alpha, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+      par_max <- qnorm(p=(1-0.5*alpha), mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+      if (any(par_calib[,i]<par_min | par_calib[,i]>par_max)) {ind_out <- c(ind_out, i)}
+    }
+  }
+}
 
   finalOutput <- foreach(ii=1:n_simulations,
                          .combine=c,

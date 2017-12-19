@@ -10,7 +10,7 @@
 ## Send in bounds of [0,1] for each parameter, and then scale within the
 ## `log_like_sensitivity` function to the parameters' distributions (using CDF)
 
-alpha <- 0.32
+alpha <- 0.1
 perc_lower <- rep(0.5*alpha  , n_parameters)
 perc_upper <- rep(1-0.5*alpha, n_parameters)
 
