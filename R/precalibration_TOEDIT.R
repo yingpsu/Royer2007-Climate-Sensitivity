@@ -60,10 +60,24 @@ data_calib <- data_calib_all[unlist(ind_assim),]
 # possible filtering out of some data points with too-narrow uncertainties in
 # co2 (causing overconfidence in model simulations that match those data points
 # well)
+# set to +65%, - 30% uncertain range around the central estimate
 if(co2_uncertainty_cutoff > 0) {
   co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
   ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
-  data_calib <- data_calib[-ind_filter,]
+  ind_remove <- NULL
+  for (ii in ind_filter) {
+    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
+    range_updated  <- data_calib[ii,'co2']*0.95
+    if (range_updated > range_original) {
+      # update to the wider uncertain range if +65/-30% is wider
+      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
+      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
+    } else {
+      # otherwise, remove
+      ind_remove <- c(ind_remove, ii)
+    }
+  }
+  data_calib <- data_calib[-ind_remove,]
 }
 
 # assumption of steady state in-between model time steps permits figuring out
@@ -199,7 +213,8 @@ model_out <- sapply(1:n_sample, function(ss) {
 
 ibad <- NULL
 for (ss in 1:n_sample) {
-  if( any(model_out[,ss] < 0) |
+  if( any(model_out[,ss] < 100) |
+      any(model_out[,ss] > 1e5) |
       model_out[58,ss] < 280 | model_out[58,ss] > 400) {
     ibad <- c(ibad,ss)
   }
@@ -236,7 +251,7 @@ write.csv(rbind(parameters_good, bandwidths), file=filename_out, row.names=FALSE
 ##===================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
-filename_in <- 'geocarb_precalibration_parameters_19Dec2017.csv'
+filename_in <- 'geocarb_precalibration_parameters_16Jan2018.csv'
 parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
@@ -270,8 +285,8 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           ind_time_calib, ind_const_fixed, ind_time_fixed,
                           input, ind_expected_time,
                           ind_expected_const, iteration_threshold) {
-  co2_output <- sensitivity_co2(par_calib_scaled,
-                par_fixed=par_fixed0, parnames_calib=parnames_calib,
+  co2_output <- sensitivity_co2(par_calib_scaled, l_scaled=TRUE,
+                par_fixed=par_fixed, parnames_calib=parnames_calib,
                 parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                 ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                 ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
@@ -284,15 +299,19 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
   return(co2_output_centered)
 }
 
-n_sample <- 100
-n_bootstrap <- 5
+n_sample <- 500
+n_bootstrap <- 5000
 Ncore <- 1
 
 source('GEOCARB_sensitivity_co2.R')
 
 ## Sample parameters (need 2 data frames)
-parameters_sample1 <- kde_sample(n_sample, parameters_node, bandwidths)
-parameters_sample2 <- kde_sample(n_sample, parameters_node, bandwidths)
+#parameters_sample1 <- kde_sample(n_sample, parameters_node, bandwidths)
+#parameters_sample2 <- kde_sample(n_sample, parameters_node, bandwidths)
+## Or take directly from the precalibration?
+n_half <- floor(0.5*nrow(parameters_node))
+parameters_sample1 <- parameters_node[1:n_half,]
+parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 
 ## Actually run the Sobol'
@@ -314,8 +333,273 @@ t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
 max_sens_ind <- 0.1*max(s.out$T$original)
 max_conf_int <- max(max(s.out$S$`max. c.i.` - s.out$S$`min. c.i.`), max(s.out$T$`max. c.i.` - s.out$T$`min. c.i.`))
 print(paste('0.1 * max. sensitivity index=',max_sens_ind,' // max. conf int=',max_conf_int,sep=''))
+##==============================================================================
+
+
 
 ##==============================================================================
+## Write indices, results we'd need to file
+
+today=Sys.Date(); today=format(today,format="%d%b%Y")
+file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_',today,'.txt',sep='')
+file.sobolout2 <- paste('../output/geocarb_sobol-2_',today,'.txt',sep='')
+
+headers.1st.tot <- matrix(c('Parameter', 'S1', 'S1_conf_low', 'S1_conf_high',
+                            'ST', 'ST_conf_low', 'ST_conf_high'), nrow=1)
+output.1st.tot  <- data.frame(cbind( parnames_calib,
+                                     s.out$S[,1],
+                                     s.out$S[,4],
+                                     s.out$S[,5],
+                                     s.out$T[,1],
+                                     s.out$T[,4],
+                                     s.out$T[,5]))
+write.table(headers.1st.tot, file=file.sobolout1, append=FALSE, sep = " ",
+            quote=FALSE    , row.names = FALSE , col.names=FALSE)
+write.table(output.1st.tot , file=file.sobolout1, append=TRUE , sep = " ",
+            quote=FALSE    , row.names = FALSE , col.names=FALSE)
+
+headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
+                            'S2_conf_high'), nrow=1)
+output2.indices <- s.out$S2[,1]
+output2.conf1   <- s.out$S2[,4]
+output2.conf2   <- s.out$S2[,5]
+
+# 2nd order index names ordered as: (assuming 39 parameters)
+# 1. parnames.sobol[1]-parnames.sobol[2]
+# 2. parnames.sobol[1]-parnames.sobol[3]
+# 3. parnames.sobol[1]-parnames.sobol[4]
+# ... etc ...
+# 38. parnames.sobol[1]-parnames.sobol[39] << N=2:39 => p1-p[N]
+# 39. parnames.sobol[2]-parnames.sobol[3]
+# 40. parnames.sobol[2]-parnames.sobol[4]
+# 38+37. parnames.sobol[2]-parnames.sobol[39] << N=3:39 => p2-p[N]
+# ... etc ...
+names2  <- rownames(s.out$S2)
+names2a <- rep(NA, length(names2))
+names2b <- rep(NA, length(names2))
+cnt <- 1
+for (i in seq(from=1, to=(length(parnames_calib)-1), by=1)) {         # i = index of first name
+    for (j in seq(from=(i+1), to=(length(parnames_calib)), by=1)) {   # j = index of second name
+        names2a[cnt] <- parnames_calib[i]
+        names2b[cnt] <- parnames_calib[j]
+        cnt <- cnt+1
+    }
+}
+
+output.2nd <- data.frame(cbind( names2a,
+                                names2b,
+                                output2.indices,
+                                output2.conf1,
+                                output2.conf2 ))
+write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",
+            quote=FALSE    , row.names = FALSE , col.names=FALSE)
+write.table(output.2nd     , file=file.sobolout2, append=TRUE , sep = " ",
+            quote=FALSE    , row.names = FALSE , col.names=FALSE)
+##==============================================================================
+
+
+##==============================================================================
+
+## load relevant output files
+
+setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+plotdir <- '../figures/'
+
+# Set number of parameters being analyzed
+n_params <- 56
+# Set Sobol indices file names
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_17Jan2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_17Jan2018.txt"
+s.out <- readRDS('sobol_16Jan2018.rds')
+
+##==============================================================================
+
+
+
+
+##==============================================================================
+
+## some analysis
+
+## Libraries----
+library(RColorBrewer) # good color palettes
+library(graphics)     # used when plotting polygons
+library(plotrix)      # used when plotting circles
+
+## Functions in other files
+source('sobol_functions.R')
+
+## Import data from sensitivity analysis
+# First- and total-order indices
+s1st <- read.csv(Sobol_file_1,
+                  sep=' ',
+                  header=TRUE,
+                  nrows = n_params,
+                  as.is=c(TRUE,rep(FALSE,5)))
+
+parnames.sobol <- s1st[,1]
+
+# Import second-order indices
+s2_table <- read.csv(Sobol_file_2,
+               sep=' ',
+               header=TRUE,
+               nrows = n_params*(n_params-1)/2,
+               as.is=c(TRUE,rep(FALSE,4)))
+
+# Convert second-order to upper-triangular matrix
+s2 <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+s2[1:(n_params-1), 2:n_params] = upper.diag(s2_table$S2)
+s2 <- as.data.frame(s2)
+colnames(s2) <- rownames(s2) <- s1st$Parameter
+
+# Convert confidence intervals to upper-triangular matrix
+s2_conf_low <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+s2_conf_high <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+s2_conf_low[1:(n_params-1), 2:n_params] = upper.diag(s2_table$S2_conf_low)
+s2_conf_high[1:(n_params-1), 2:n_params] = upper.diag(s2_table$S2_conf_high)
+
+s2_conf_low <- as.data.frame(s2_conf_low)
+s2_conf_high <- as.data.frame(s2_conf_high)
+colnames(s2_conf_low) <- rownames(s2_conf_low) <- s1st$Parameter
+colnames(s2_conf_high) <- rownames(s2_conf_high) <- s1st$Parameter
+
+####################################
+# Determine which indices are statistically significant
+
+sig.cutoff <- 0.01
+
+# S1 & ST: using the confidence intervals
+s1st1 <- stat_sig_s1st(s1st
+                      ,method="congtr"
+                      ,greater=sig.cutoff
+                      ,sigCri='either')
+
+# S1 & ST: using greater than a given value
+#s1st1 <- stat_sig_s1st(s1st
+#                      ,method="gtr"
+#                      ,greater=0.01
+#                      ,sigCri='either')
+
+# S2: using the confidence intervals
+s2_sig1 <- stat_sig_s2(s2
+                       ,s2_conf_low
+                       ,s2_conf_high
+                       ,method='congtr'
+                       ,greater=sig.cutoff
+                       )
+
+# S2: using greater than a given value
+#s2_sig1 <- stat_sig_s2(s2
+#                       ,s2_conf
+#                       ,greater=0.02
+#                       ,method='gtr')
+
+
+##
+## Barplots
+##
+
+
+
+##
+## Setting up for radial plots
+##
+
+# Define groups for the variables and the color schemes
+# Defining lists of the variables for each group
+
+name_list1 <- list('All' = parnames.sobol)
+
+# add Parameter symbols to plot
+name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^('NV')),
+                  'LIFE', 'GYM', 'FERT', expression('e'^('fnBb')),
+                  'dT2X', 'GLAC', 'J', 'n', 'Ws', expression('e'^('fD')), expression('Fwpa'['0']),
+                  expression('Fwsa'['0']), expression('Fwga'['0']), expression('Fwca'['0']),
+                  expression('Fmg'['0']), expression('Fmc'['0']), expression('Fmp'['0']),
+                  expression('Fms'['0']), expression('Fwsi'['0']), expression('Xvolc'['0']),
+                  expression('CAPd13C'['0']), expression('CAPd34S'['0']), expression('oxy'['570']),
+                  expression('Gy'['570']), expression('Cy'['570']), expression('Ca'['570']),
+                  expression('Ssy'['570']), expression('Spy'['570']), expression('dlsy'['570']),
+                  expression('dlcy'['570']), expression('dlpy'['570']), expression('dlpa'['570']),
+                  expression('dlgy'['570']), expression('dlga'['570']), expression('Rcy'['570']),
+                  expression('Rca'['570']), expression('Rv'['570']), expression('Rg'['570']),
+                  'Fob', 'COC', 'Ga', 'Ssa', 'Spa', 'ST', 'dlst', 'CT', 'dlct',
+                  'kwpy', 'kwsy', 'kwgy', 'kwcy'
+)
+
+source('colorblindPalette.R')
+
+# defining list of colors for each group
+col_list1 <- list("All"     = rgb(mycol[11,1],mycol[11,2],mycol[11,3]))
+
+# using function to assign variables and colors based on group
+s1st1 <- gp_name_col(name_list1
+                     ,col_list1
+                     ,s1st1)
+
+s1st1$symbols <- name_symbols
+
+
+plot.filename <- paste(plotdir,'sobol_spider',sep='')
+
+plotRadCon(df=s1st1
+           ,s2=s2
+           ,plotS2=FALSE
+           ,scaling = .36
+           ,s2_sig=s2_sig1
+           ,filename = plot.filename
+           ,plotType = 'EPS'
+           ,gpNameMult=15
+           ,RingThick=0.1
+           ,legLoc = "bottomcenter"
+           ,cex = .6
+           ,s1_col = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
+           ,st_col = rgb(mycol[6,1],mycol[6,2],mycol[6,3])
+           ,line_col = rgb(mycol[10,1],mycol[10,2],mycol[10,3])
+           ,STthick = 0.5
+           ,legFirLabs=c(.05,.77), legTotLabs=c(.05,.83), legSecLabs=c(.02,.05)
+)
+
+##
+## Further analysis for the text:
+##
+
+# what are the highest first-order indices?
+s1.sort <- s1st[rev(order(s1st[,'S1'])),1:4]
+itmp <- which(s1.sort[,'S1'] > sig.cutoff & s1.sort[,'S1_conf_low']*s1.sort[,'S1_conf_high'] > 0)
+s1.sort <- s1.sort[itmp,]
+print('********************************')
+print('significant first-order indices:')
+print(s1.sort)
+print('********************************')
+
+# what are the highest total-order indices?
+st.sort <- s1st[rev(order(s1st[,'ST'])),c(1,5:7)]
+itmp <- which(st.sort[,'ST'] > sig.cutoff & st.sort[,'ST_conf_low']*st.sort[,'ST_conf_high'] > 0)
+st.sort <- st.sort[itmp,]
+print('********************************')
+print('significant total-order indices:')
+print(st.sort)
+print('********************************')
+
+# what are the highest second-order interaction indices?
+s2.sort <- s2_table[rev(order(s2_table[,3])),]
+itmp <- which(s2.sort[,'S2'] > sig.cutoff & s2.sort[,'S2_conf_low']*s2.sort[,'S2_conf_high'] > 0)
+s2.sort <- s2.sort[itmp,]
+print('********************************')
+print('significant second-order indices:')
+print(s2.sort)
+print('********************************')
+
+##==============================================================================
+
+
+
+##==============================================================================
+## End
+##==============================================================================
+
+
 
 
 
@@ -326,8 +610,8 @@ alpha <- 0.1
 perc_lower <- rep(0.5*alpha  , n_parameters)
 perc_upper <- rep(1-0.5*alpha, n_parameters)
 
-repetitions <- c(20, 40, 80, 160, 320, 640, 1280)
-levels <- c(20, 40, 80, 160, 320, 640, 1280)
+repetitions <- c(20, 40, 80)
+levels <- c(20, 40, 80)
 
 n_rep <- length(repetitions)
 n_lev <- length(levels)

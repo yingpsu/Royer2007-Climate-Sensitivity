@@ -339,7 +339,7 @@ plot(parameters.lhs, llike_joint_wgt_bic, xlab='deltaT2X', ylab='log-like', main
 
 ## Get maximum length of parameter name, for width of array to write to netcdf
 ## this code will write an n.parameters (rows) x n.ensemble (columns) netcdf file
-## to get back into the shape BRICK expects, just transpose it
+## to get back into the shape expected, just transpose it
 lmax=0
 for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
 

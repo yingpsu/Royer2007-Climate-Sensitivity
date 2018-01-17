@@ -1,3 +1,7 @@
+*.so
+*.o
+Makefile
+figures/
 R/old
 output
 *.Rapp.history

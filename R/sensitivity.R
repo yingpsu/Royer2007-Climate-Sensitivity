@@ -18,8 +18,8 @@ ldosobol <- TRUE
 ldomorris <- FALSE
 ldoparallel <- TRUE
 
-.n_sample_sobol <- 100000
-.n_bootstrap_sobol <- 5000
+.n_sample_sobol <- 1000
+.n_bootstrap_sobol <- 50
 
 
 if(Sys.info()['nodename']=='Tonys-MacBook-Pro.local') {
@@ -67,10 +67,24 @@ data_calib <- data_calib_all[unlist(ind_assim),]
 # possible filtering out of some data points with too-narrow uncertainties in
 # co2 (causing overconfidence in model simulations that match those data points
 # well)
+# set to +65%, - 30% uncertain range around the central estimate
 if(co2_uncertainty_cutoff > 0) {
   co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
   ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
-  data_calib <- data_calib[-ind_filter,]
+  ind_remove <- NULL
+  for (ii in ind_filter) {
+    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
+    range_updated  <- data_calib[ii,'co2']*0.95
+    if (range_updated > range_original) {
+      # update to the wider uncertain range if +65/-30% is wider
+      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
+      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
+    } else {
+      # otherwise, remove
+      ind_remove <- c(ind_remove, ii)
+    }
+  }
+  data_calib <- data_calib[-ind_remove,]
 }
 
 # assumption of steady state in-between model time steps permits figuring out

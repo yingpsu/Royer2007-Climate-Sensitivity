@@ -33,7 +33,8 @@ sensitivity_co2 <- function(
 
   # scale the parameters from [0,1] to their prior distributions IF needed
   n_const_calib <- length(ind_const_calib)
-  n_simulations <- round(length(par_calib_scaled)/length(parnames_calib))
+  n_simulations <- nrow(par_calib_scaled)
+
 if(!l_scaled) {
   if (n_const_calib > 0) {
     if(n_simulations > 1) {

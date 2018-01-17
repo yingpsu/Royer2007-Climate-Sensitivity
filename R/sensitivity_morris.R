@@ -14,8 +14,8 @@ alpha <- 0.1
 perc_lower <- rep(0.5*alpha  , n_parameters)
 perc_upper <- rep(1-0.5*alpha, n_parameters)
 
-repetitions <- c(20, 40, 80, 160, 320, 640, 1280)
-levels <- c(20, 40, 80, 160, 320, 640, 1280)
+repetitions <- c(10, 20, 40, 80)
+levels <- c(10, 20, 40, 80)
 
 n_rep <- length(repetitions)
 n_lev <- length(levels)
