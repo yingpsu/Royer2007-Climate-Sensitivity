@@ -1,4 +1,4 @@
-##==============================================================================
+icol_st##==============================================================================
 ## sensitivity_geocarb.R
 ##
 ## Sensitivity experiment with GEOCARB model (Foster et al 2017 version)
@@ -428,6 +428,7 @@ library(plotrix)      # used when plotting circles
 
 ## Functions in other files
 source('sobol_functions.R')
+source('colorblindPalette.R')
 
 ## Import data from sensitivity analysis
 # First- and total-order indices
@@ -495,13 +496,46 @@ s2_sig1 <- stat_sig_s2(s2
 #                       ,method='gtr')
 
 
-##
+##==============================================================================
 ## Barplots
 ##
 
+# - along x axis, have the parameter names
+# - along y axis, have first-order indices and total sensitivity indices
+#   for the statistically significant parameters only
+# - if parameter is not statistically significant, just leave out
+
+par_indices <- seq(1,n_params)
+ind_s1_sig <- which(s1st1$s1_sig==1)
+ind_st_sig <- which(s1st1$st_sig==1)
+
+icol_st <- 3
+icol_s1 <- 11
+
+pdf(paste(plotdir,'sobol_indicies.pdf',sep=''), width=8,height=5,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(1.4,.7,.15,.2))
+ii <- 1
+plot(c(ii,ii), c(0,s.out$T$original[ii]), col='azure4', lwd=1.5, type='l',
+     xaxt='n', yaxt='n', xlab='', ylab='', xaxs='i', yaxs='i', xlim=c(0, 57), ylim=c(0, 0.74))
+for (ii in ind_st_sig) {lines(c(ii,ii), c(0,s.out$T$original[ii]), col='azure4', lwd=1.5)}
+points(par_indices[ind_st_sig], s.out$T$original[ind_st_sig],
+       col=rgb(mycol[icol_st,1],mycol[icol_st,2],mycol[icol_st,3]), pch=16, cex=1.2)
+points(par_indices[ind_s1_sig], s.out$S$original[ind_s1_sig],
+       col=rgb(mycol[icol_s1,1],mycol[icol_s1,2],mycol[icol_s1,3]), pch=16, cex=1.2)
+axis(1, at=par_indices, labels=parnames.sobol, cex.axis=.8, las=2)
+axis(2, at=c(0,.1,.2,.3,.4,.5,.6,.7), labels=c('0','0.1','0.2','0.3','0.4','0.5','0.6','0.7'), cex.axis=.8, las=1)
+mtext('Parameter', side=1, line=5.4, cex=.8)
+mtext('Sensitivity index', side=2, line=2.4, cex=.8)
+legend(1, 0.7, c('Total sensitivity', 'First-order'), pch=c(16,16), cex=.8, bty='n',
+       col=c(rgb(mycol[icol_st,1],mycol[icol_st,2],mycol[icol_st,3]), rgb(mycol[icol_s1,1],mycol[icol_s1,2],mycol[icol_s1,3])))
+dev.off()
 
 
-##
+
+
+
+
+##==============================================================================
 ## Setting up for radial plots
 ##
 
@@ -527,7 +561,6 @@ name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^
                   'kwpy', 'kwsy', 'kwgy', 'kwcy'
 )
 
-source('colorblindPalette.R')
 
 # defining list of colors for each group
 col_list1 <- list("All"     = rgb(mycol[11,1],mycol[11,2],mycol[11,3]))
