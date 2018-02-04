@@ -10,88 +10,42 @@ icol_st##=======================================================================
 ## Clear workspace
 rm(list=ls())
 
-co2_uncertainty_cutoff <- 20
 
-n_sample <- 5e5
+n_sample <- 1e5
+alpha <- 0.34
 
 
-#if(Sys.info()['nodename']=='Tonys-MBP') {
-  # Tony's local machine (if you aren't me, you almost certainly need to change this...)
-  machine <- 'local'
-  setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-  .Ncore <- 2
-#} else {
-#  # assume on Napa cluster
-#  machine <- 'remote'
-#  setwd('/home/scrim/axw322/codes/GEOCARB/R')
-#  .Ncore <- 15  # use multiple cores to process large data?
-#}
+setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
 
 
 
 ##==============================================================================
-## Data
-##=====
+## Previous Sobol results
+##=======================
 
-source('GEOCARB-2014_getData.R')
+# Read previous results
+s.out <- readRDS('../output/sobol_alpha34_18Jan2018.rds')
 
-# remove the lowest [some number] co2 content data points (all paleosols, it turns out)
-# (lowest ~40 are all from paleosols, actually)
-#ind_co2_sort_all <- order(data_calib_all$co2)
-#n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
-#data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
+# Whicih parameters to have a closer look at?
+ind.sample <- which(s.out$T[,1] > 0.05)
+ind.fix <- which(s.out$T[,1] <= 0.05)
 
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
+# Get the parameter names
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
+source('GEOCARB-2014_parameterSetup.R')
 
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
+
+# Create a parameters file for this calibration/sensitivity analysis
+calib <- read.csv('../input_data/GEOCARB_input_summaries_calib_all.csv')
+
+for (k in 1:length(ind.fix)) {
+  row = which(calib$parameter==parnames_calib[ind.fix[k]])
+  calib$calib[row] <- 0
 }
 
-data_calib <- data_calib_all[unlist(ind_assim),]
+# Write the revised file
+write.csv(x=calib, file='../input_data/GEOCARB_input_summaries_calib_newSobol.csv', row.names=FALSE)
 
-# possible filtering out of some data points with too-narrow uncertainties in
-# co2 (causing overconfidence in model simulations that match those data points
-# well)
-# set to +65%, - 30% uncertain range around the central estimate
-if(co2_uncertainty_cutoff > 0) {
-  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
-  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
-  ind_remove <- NULL
-  for (ii in ind_filter) {
-    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
-    range_updated  <- data_calib[ii,'co2']*0.95
-    if (range_updated > range_original) {
-      # update to the wider uncertain range if +65/-30% is wider
-      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
-      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
-    } else {
-      # otherwise, remove
-      ind_remove <- c(ind_remove, ii)
-    }
-  }
-  data_calib <- data_calib[-ind_remove,]
-}
-
-# assumption of steady state in-between model time steps permits figuring out
-# which model time steps each data point should be compared against in advance.
-# doing this each calibration iteration would be outrageous!
-# This assumes the model time step is 10 million years, seq(570,0,by=-10). The
-# model will choke later (in calibration) if this is not consistent with what is
-# set within the actual GEOCARB physical model.
-age_tmp <- seq(570,0,by=-10)
-ttmp <- 10*ceiling(data_calib$age/10)
-ind_mod2obs <- rep(NA,nrow(data_calib))
-for (i in 1:length(ind_mod2obs)){
-  ind_mod2obs[i] <- which(age_tmp==ttmp[i])
-}
 ##==============================================================================
 
 
@@ -100,6 +54,7 @@ for (i in 1:length(ind_mod2obs)){
 ##===========================
 
 # Read parameter information, set up the calibration parameters
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_newSobol.csv'
 source('GEOCARB-2014_parameterSetup.R')
 n_parameters <- length(parnames_calib)
 ##==============================================================================
@@ -170,7 +125,7 @@ parameters_lhs <- randomLHS(n_sample, n_parameters)
 
 
 ## Trim so you aren't sampling the extreme cases?
-alpha <- 1-.66
+alpha <- 1-alpha
 parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
 
 
@@ -257,7 +212,7 @@ write.csv(rbind(parameters_good, bandwidths), file=filename_out, row.names=FALSE
 ##===================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
-filename_in <- '../output/geocarb_precalibration_parameters_alpha34_18Jan2018.csv'
+filename_in <- '../output/geocarb_precalibration_parameters_alpha34_04Feb2018.csv'
 parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
@@ -420,12 +375,12 @@ setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
 plotdir <- '../figures/'
 
 # Set number of parameters being analyzed
-n_params <- 56
+n_params <- 27
 
 # Set Sobol indices file names
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha34_18Jan2018.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_alpha34_18Jan2018.txt"
-s.out <- readRDS('../output/sobol_alpha34_18Jan2018.rds')
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha34_04Feb2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_alpha34_04Feb2018.txt"
+s.out <- readRDS('../output/sobol_alpha34_04Feb2018.rds')
 
 ##==============================================================================
 
@@ -527,7 +482,7 @@ ind_st_sig <- which(s1st1$st_sig==1)
 icol_st <- 3
 icol_s1 <- 11
 
-pdf(paste(plotdir,'sobol_indices.pdf',sep=''), width=8,height=5,colormodel='cmyk')
+pdf(paste(plotdir,'sobol_indices_new.pdf',sep=''), width=8,height=5,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(1.4,.7,.15,.2))
 ii <- 1
 plot(c(ii,ii), c(0,s.out$T$original[ii]), col='azure4', lwd=1.5, type='l',
@@ -636,172 +591,71 @@ print('significant second-order indices:')
 print(s2.sort)
 print('********************************')
 
+# what is the total variance in output accounted for by first- and second-order
+# interations?
+print('********************************')
+print(sum(s1st1$S1[which(s1st1$s1_sig==1)]) + sum(s2 * s2_sig1, na.rm=TRUE))
+print('********************************')
 ##==============================================================================
-
-
-
-
-##==============================================================================
-## Plot and analyze the whole bunch
-
-setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-plotdir <- '../figures/'
-
-## Libraries
-library(RColorBrewer) # good color palettes
-library(graphics)     # used when plotting polygons
-library(plotrix)      # used when plotting circles
-
-## Functions in other files
-source('sobol_functions.R')
-source('colorblindPalette.R')
-
-# Set number of parameters being analyzed
-n_params <- 56
-
-# experiments
-sobol_exp <- c('a50','a34','a10','a05'); n_experiment <- length(sobol_exp)
-sobol_files <- vector('list', n_experiment); names(sobol_files) <- sobol_exp
-s1st <- vector('list', n_experiment); names(s1st) <- sobol_exp
-s1st1 <- vector('list', n_experiment); names(s1st1) <- sobol_exp
-ind_s1_sig <- vector('list', n_experiment); names(ind_s1_sig) <- sobol_exp
-ind_st_sig <- vector('list', n_experiment); names(ind_st_sig) <- sobol_exp
-
-## load relevant output files
-
-# Set Sobol indices file names
-
-sobol_files$a50 <- "../output/geocarb_sobol-1-tot_alpha50_17Jan2018.txt"
-sobol_files$a34 <- "../output/geocarb_sobol-1-tot_alpha34_18Jan2018.txt"
-sobol_files$a10 <- "../output/geocarb_sobol-1-tot_alpha10_18Jan2018.txt"
-sobol_files$a05 <- "../output/geocarb_sobol-1-tot_alpha05_18Jan2018.txt"
-
-## Import data from sensitivity analysis
-# First- and total-order indices
-for (aa in sobol_exp) {
-  s1st[[aa]] <- read.csv(sobol_files[[aa]],
-                         sep=' ',
-                         header=TRUE,
-                         nrows = n_params,
-                         as.is=c(TRUE,rep(FALSE,5)))
-}
-parnames.sobol <- s1st[[1]][,1]
-
-## Determine which indices are statistically significant
-
-sig.cutoff <- 0.01
-
-# S1 & ST: using the confidence intervals
-for (aa in sobol_exp) {
-  s1st1[[aa]] <- stat_sig_s1st(s1st[[aa]]
-                               ,method="congtr"
-                               ,greater=sig.cutoff
-                               ,sigCri='either')
-}
-
-# S1 & ST: using greater than a given value
-#for (aa in sobol_exp) {
-#  s1st1[[aa]] <- stat_sig_s1st(s1st[[aa]]
-#                               ,method="gtr"
-#                               ,greater=sig.cutoff
-#                               ,sigCri='either')
-#}
-
-
-for (aa in sobol_exp) {
-  ind_s1_sig[[aa]] <- which(s1st1[[aa]]$s1_sig==1)
-  ind_st_sig[[aa]] <- which(s1st1[[aa]]$st_sig==1)
-}
-
-st_sig <- mat.or.vec(n_params, n_experiment)
-for (ii in 1:n_experiment) {
-  st_sig[s1st1[[ii]]$ST_conf_low > sig.cutoff, ii] <- 1
-}
-
-cutoff_test <- seq(0.01, 0.15, by=0.01)
-n_test <- length(cutoff_test)
-st_sig_exp <- mat.or.vec(n_params, n_test)
-cutoff_matches <- rep(FALSE, n_test)
-for (cc in 1:n_test) {
-  st_sig_exp[s1st1$a10$ST > cutoff_test[cc], cc] <- 1
-  if(all(st_sig_exp[,cc]==s1st1$a50$st_sig)) {cutoff_matches[cc] <- TRUE}
-}
-
-wide.cutoff <- cutoff_test[which(cutoff_matches)[1]]
-print(paste('cutoff we are using: ',wide.cutoff,sep=''))
-
-
-# returns 0.06 and 0.07 for exact matches, so use cut-off of 0.05% of total
-# variance as cut-off for "importance"
-
-## Barplots
-
-par_indices <- seq(1,n_params)
-
-icol_st <- 3
-icol_s1 <- 11
-
-
-pdf(paste(plotdir,'sobol_indices_all.pdf',sep=''), width=8,height=10,colormodel='cmyk')
-par(mfrow=c(3,1), mai=c(1.2,.7,.15,.2))
-aa='a50'  # alpha=0.50
-ii <- 1
-plot(c(ii,ii), c(0,s1st1[[aa]]$ST[ii]), col='azure4', lwd=1.5, type='l',
-     xaxt='n', yaxt='n', xlab='', ylab='', xaxs='i', yaxs='i', xlim=c(0, 57), ylim=c(0, 1.05))
-for (ii in ind_st_sig[[aa]]) {lines(c(ii,ii), c(0,s1st1[[aa]]$ST[ii]), col='azure4', lwd=1.5)}
-points(par_indices[ind_st_sig[[aa]]], s1st1[[aa]]$ST[ind_st_sig[[aa]]],
-       col=rgb(mycol[icol_st,1],mycol[icol_st,2],mycol[icol_st,3]), pch=16, cex=1.2)
-points(par_indices[ind_s1_sig[[aa]]], s1st1[[aa]]$S1[ind_s1_sig[[aa]]],
-       col=rgb(mycol[icol_s1,1],mycol[icol_s1,2],mycol[icol_s1,3]), pch=16, cex=1.2)
-axis(1, at=par_indices, labels=parnames.sobol, cex.axis=1, las=2)
-axis(2, at=seq(0,1,.1), labels=c('0','0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8','0.9','1'), cex.axis=1, las=1)
-mtext('Parameter', side=1, line=7, cex=.8)
-mtext('Sensitivity index', side=2, line=3, cex=.8)
-legend(1, 1, c('Total sensitivity', 'First-order'), pch=c(16,16), cex=1, bty='n',
-       col=c(rgb(mycol[icol_st,1],mycol[icol_st,2],mycol[icol_st,3]), rgb(mycol[icol_s1,1],mycol[icol_s1,2],mycol[icol_s1,3])))
-
-par(mai=c(1.2,.7,.15,.2))
-aa='a10'  # alpha=0.10
-ii <- 1
-plot(c(ii,ii), c(0,s1st1[[aa]]$ST[ii]), col='azure4', lwd=1.5, type='l',
-     xaxt='n', yaxt='n', xlab='', ylab='', xaxs='i', yaxs='i', xlim=c(0, 57), ylim=c(0, 1.05))
-for (ii in ind_st_sig[[aa]]) {lines(c(ii,ii), c(0,s1st1[[aa]]$ST[ii]), col='azure4', lwd=1.5)}
-points(par_indices[ind_st_sig[[aa]]], s1st1[[aa]]$ST[ind_st_sig[[aa]]],
-       col=rgb(mycol[icol_st,1],mycol[icol_st,2],mycol[icol_st,3]), pch=16, cex=1.2)
-points(par_indices[ind_s1_sig[[aa]]], s1st1[[aa]]$S1[ind_s1_sig[[aa]]],
-       col=rgb(mycol[icol_s1,1],mycol[icol_s1,2],mycol[icol_s1,3]), pch=16, cex=1.2)
-lines(c(0, n_params+1), c(wide.cutoff,wide.cutoff), lwd=1.5, type='l', lty=2, col='azure4')
-axis(1, at=par_indices, labels=parnames.sobol, cex.axis=1, las=2)
-axis(2, at=seq(0,1,.1), labels=c('0','0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8','0.9','1'), cex.axis=1, las=1)
-mtext('Parameter', side=1, line=7, cex=.8)
-mtext('Sensitivity index', side=2, line=3, cex=.8)
-
-par(mai=c(1.2,.7,.15,.2))
-aa='a05'  # alpha=0.05
-ii <- 1
-plot(c(ii,ii), c(0,s1st1[[aa]]$ST[ii]), col='azure4', lwd=1.5, type='l',
-     xaxt='n', yaxt='n', xlab='', ylab='', xaxs='i', yaxs='i', xlim=c(0, 57), ylim=c(0, 1.05))
-for (ii in ind_st_sig[[aa]]) {lines(c(ii,ii), c(0,s1st1[[aa]]$ST[ii]), col='azure4', lwd=1.5)}
-points(par_indices[ind_st_sig[[aa]]], s1st1[[aa]]$ST[ind_st_sig[[aa]]],
-       col=rgb(mycol[icol_st,1],mycol[icol_st,2],mycol[icol_st,3]), pch=16, cex=1.2)
-points(par_indices[ind_s1_sig[[aa]]], s1st1[[aa]]$S1[ind_s1_sig[[aa]]],
-       col=rgb(mycol[icol_s1,1],mycol[icol_s1,2],mycol[icol_s1,3]), pch=16, cex=1.2)
-lines(c(0, n_params+1), c(wide.cutoff,wide.cutoff), lwd=1.5, type='l', lty=2, col='azure4')
-axis(1, at=par_indices, labels=parnames.sobol, cex.axis=1, las=2)
-axis(2, at=seq(0,1,.1), labels=c('0','0.1','0.2','0.3','0.4','0.5','0.6','0.7','0.8','0.9','1'), cex.axis=1, las=1)
-mtext('Parameter', side=1, line=7, cex=.8)
-mtext('Sensitivity index', side=2, line=3, cex=.8)
-
-dev.off()
 
 
 
 
 
 ##==============================================================================
+## Write calibration input files
+##==============================
 
 
+##==========
+# Full set of total sensitivity index > 0.05 from original Sobol'
+rv <- file.copy(from=filename.calibinput, to='../input_data/GEOCARB_input_summaries_calib_ST05.csv', overwrite=TRUE)
+##==========
 
+
+##==========
+# Only the parameters with significant total index after second Sobol'
+ind.fix <- which(s1st1$st_sig==0)
+
+
+#TODO
+##==========
+
+
+##==========
+# Only the parameters with significant first- or second-order index after second Sobol'
+ind_s1_sig <- which(s1st1$s1_sig==1)
+
+ind_s2_sig <- NULL
+for (p in 1:ncol(s2_sig1)) {
+    ind_s2_sig <- c(ind_s2_sig, which(s2_sig1[,p]==1))
+}
+ind_s2_sig <- unique(ind_s2_sig)
+
+ind_sig <- unique(c(ind_s1_sig, ind_s2_sig))
+
+#TODO
+
+
+ind.fix <- which(s.out$T[,1] <= 0.05)
+
+# Get the parameter names
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
+source('GEOCARB-2014_parameterSetup.R')
+
+# Create a parameters file for this calibration/sensitivity analysis
+calib <- read.csv('../input_data/GEOCARB_input_summaries_calib_all.csv')
+
+calib$calib <- 0
+
+for (k in 1:length(ind_sig)) {
+  row = which(calib$parameter==parnames_calib[ind_sig[k]])
+  calib$calib[row] <- 1
+}
+
+# Write the revised file
+write.csv(x=calib, file='../input_data/GEOCARB_input_summaries_calib_S1S2.csv', row.names=FALSE)
+##==========
 
 ##==============================================================================
 ## End

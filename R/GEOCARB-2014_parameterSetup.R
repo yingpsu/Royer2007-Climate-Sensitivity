@@ -4,6 +4,8 @@
 ## questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
+##Requires: filename.calibinput
+
 l_Godderis <- TRUE  #set to "TRUE" to run time arrays of fA, fAw/fA, fD, and GEOG
                     #from Godderis et al, 2012; set to "FALSE" to run standard
                     #time arrays from GEOCARBSULF.
@@ -17,7 +19,8 @@ iteration_threshold <- 10 #maximum number of times the convergence equation for
 # reading in the two input files
 
 # input constant parameters and time-varying parameters
-input <- read.csv("../input_data/GEOCARB_input_summaries_calib.csv")
+#input <- read.csv("../input_data/GEOCARB_input_summaries_calib.csv")
+input <- read.csv(filename.calibinput)
 
 # time-varying parameters
 #y=young; a=old; p=pyrite; s=sulfate; c=carbonate; si=silicates;

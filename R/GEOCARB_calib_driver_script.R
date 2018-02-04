@@ -11,13 +11,14 @@
 
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
-setwd('/home/scrim/axw322/codes/GEOCARB/R')
-#setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'allBoth-stomata_DELETE'
+#setwd('/home/scrim/axw322/codes/GEOCARB/R')
+setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+appen <- 'S1S2'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- TRUE
 l_write_netcdf <- FALSE
+co2_uncertainty_cutoff <- 20
 
 library(sn)
 library(adaptMCMC)
@@ -27,21 +28,20 @@ library(ncdf4)
 ## Data
 ##=====
 
-# Read proxy data. Returns "data_calib_all"
 source('GEOCARB-2014_getData.R')
 
 # remove the lowest [some number] co2 content data points (all paleosols, it turns out)
 # (lowest ~40 are all from paleosols, actually)
-ind_co2_sort_all <- order(data_calib_all$co2)
-n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
-data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
+#ind_co2_sort_all <- order(data_calib_all$co2)
+#n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
+#data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , FALSE),
-                        c("alkenones" , FALSE),
+data_to_assim <- cbind( c("paleosols" , TRUE),
+                        c("alkenones" , TRUE),
                         c("stomata"   , TRUE),
-                        c("boron"     , FALSE),
-                        c("liverworts", FALSE) )
+                        c("boron"     , TRUE),
+                        c("liverworts", TRUE) )
 
 ind_data    <- which(data_to_assim[2,]==TRUE)
 n_data_sets <- length(ind_data)
@@ -51,6 +51,29 @@ for (i in 1:n_data_sets) {
 }
 
 data_calib <- data_calib_all[unlist(ind_assim),]
+
+# possible filtering out of some data points with too-narrow uncertainties in
+# co2 (causing overconfidence in model simulations that match those data points
+# well)
+# set to +65%, - 30% uncertain range around the central estimate
+if(co2_uncertainty_cutoff > 0) {
+  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
+  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
+  ind_remove <- NULL
+  for (ii in ind_filter) {
+    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
+    range_updated  <- data_calib[ii,'co2']*0.95
+    if (range_updated > range_original) {
+      # update to the wider uncertain range if +65/-30% is wider
+      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
+      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
+    } else {
+      # otherwise, remove
+      ind_remove <- c(ind_remove, ii)
+    }
+  }
+  data_calib <- data_calib[-ind_remove,]
+}
 
 # assumption of steady state in-between model time steps permits figuring out
 # which model time steps each data point should be compared against in advance.
@@ -72,6 +95,7 @@ for (i in 1:length(ind_mod2obs)){
 ##===========================
 
 # Read parameter information, set up the calibration parameters
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_S1S2.csv'
 source('GEOCARB-2014_parameterSetup.R')
 ##==============================================================================
 
@@ -130,7 +154,7 @@ if(length(parnames_calib)==1){
 source('model_forMCMC.R')
 source('run_geocarbF.R')
 #DEBUG
-source('GEOCARBSULFvolc_forMCMC.R')
+#source('GEOCARBSULFvolc_forMCMC.R')
 
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')

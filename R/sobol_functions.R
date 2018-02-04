@@ -120,21 +120,20 @@ stat_sig_s1st <- function(df
   # testing for statistical significance
   if(method == 'sig'){
     # testing for statistical significance using the confidence intervals
-    df$s1_sig[which(abs(s1st$S1) - s1st$S1_conf > 0)] <- 1
-    df$st_sig[which(abs(s1st$ST) - s1st$ST_conf > 0)] <- 1
-  }
-  else if(method == 'gtr'){
+    df$s1_sig[which(abs(df$S1) - df$S1_conf > 0)] <- 1
+    df$st_sig[which(abs(df$ST) - df$ST_conf > 0)] <- 1
+  } else if(method == 'gtr'){
     # finding indicies that are greater than the specified values
-    df$s1_sig[which(abs(s1st$S1) > greater)] <- 1
-    df$st_sig[which(abs(s1st$ST) > greater)] <- 1
+    df$s1_sig[which(abs(df$S1) > greater)] <- 1
+    df$st_sig[which(abs(df$ST) > greater)] <- 1
   } else if(method == 'con') {
-    df$s1_sig[which(s1st$S1_conf_low * s1st$S1_conf_high > 0)] <- 1
-    df$st_sig[which(s1st$ST_conf_low * s1st$ST_conf_high > 0)] <- 1
+    df$s1_sig[which(df$S1_conf_low * df$S1_conf_high > 0)] <- 1
+    df$st_sig[which(df$ST_conf_low * df$ST_conf_high > 0)] <- 1
   } else if(method == 'congtr'){
-    df$s1_sig[which(s1st$S1_conf_low * s1st$S1_conf_high > 0 &
-                    abs(s1st$S1) > greater)] <- 1
-    df$st_sig[which(s1st$ST_conf_low * s1st$ST_conf_high > 0 &
-                    abs(s1st$ST) > greater)] <- 1
+    df$s1_sig[which(df$S1_conf_low * df$S1_conf_high > 0 &
+                    abs(df$S1) > greater)] <- 1
+    df$st_sig[which(df$ST_conf_low * df$ST_conf_high > 0 &
+                    abs(df$ST) > greater)] <- 1
   } else {
     print('Not a valid parameter for method')
   }
