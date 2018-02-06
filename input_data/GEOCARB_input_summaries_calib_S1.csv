@@ -23,7 +23,7 @@
 "deltaT2X","constant",TRUE,"lognormal",3,2.5,"1.5",Inf,1
 "GLAC","constant",TRUE,"gaussian",2,1,"1",Inf,1
 "J","constant",TRUE,"gaussian",4,2,"0",Inf,0
-"n","constant",TRUE,"gaussian",1,0.5,"0",Inf,0
+"n","constant",TRUE,"gaussian",1,0.5,"0",Inf,1
 "Ws","constant",TRUE,"gaussian",7.4,3.7,"_inf",Inf,0
 "exp_fD","constant",TRUE,"gaussian",0.65,0.325,"0",Inf,1
 "Fwpa_0","constant",TRUE,"gaussian",0.25,0.125,"0",Inf,0
@@ -38,7 +38,7 @@
 "Xvolc_0","constant",TRUE,"gaussian",0.35,0.07875,"0",1,1
 "CAPd13C_0","constant",TRUE,"gaussian",27,1.89,"0",Inf,1
 "CAPd34S_0","constant",TRUE,"gaussian",35,4.7,"0",Inf,1
-"oxygen_570","constant",TRUE,"gaussian",25,12.5,"7.5",143,0
+"oxygen_570","constant",TRUE,"gaussian",25,12.5,"7.5",143,1
 "Gy_570","constant",TRUE,"gaussian",250,62.5,"0",Inf,1
 "Cy_570","constant",TRUE,"gaussian",1000,475,"0",Inf,1
 "Ca_570","constant",TRUE,"gaussian",4000,1300,"0",Inf,1
@@ -58,8 +58,8 @@
 "COC","constant",TRUE,"gaussian",2,1,"0",Inf,0
 "Ga","constant",TRUE,"gaussian",1000,75,"0",Inf,1
 "Ssa","constant",TRUE,"gaussian",150,75,"0",Inf,1
-"Spa","constant",TRUE,"gaussian",280,140,"0",Inf,0
-"ST","constant",TRUE,"gaussian",600,300,"0",Inf,0
+"Spa","constant",TRUE,"gaussian",280,140,"0",Inf,1
+"ST","constant",TRUE,"gaussian",600,300,"0",Inf,1
 "dlst","constant",TRUE,"gaussian",4,3.055,"_inf",Inf,1
 "CT","constant",TRUE,"gaussian",6252,468.9,"0",Inf,1
 "dlct","constant",TRUE,"gaussian",-3.5,0.252,"_inf",Inf,1
