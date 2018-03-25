@@ -1,4 +1,4 @@
-icol_st##==============================================================================
+##==============================================================================
 ## sensitivity_geocarb.R
 ##
 ## Sensitivity experiment with GEOCARB model (Foster et al 2017 version)
@@ -12,8 +12,12 @@ rm(list=ls())
 
 co2_uncertainty_cutoff <- 20
 
+# latin hypercube precalibration
+alpha <- 0.34
 n_sample <- 5e5
+sens='L1'
 
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
 
 #if(Sys.info()['nodename']=='Tonys-MBP') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
@@ -170,7 +174,7 @@ parameters_lhs <- randomLHS(n_sample, n_parameters)
 
 
 ## Trim so you aren't sampling the extreme cases?
-alpha <- 1-.66
+#alpha <- 1-.66
 parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
 
 
@@ -216,7 +220,7 @@ model_out <- sapply(1:n_sample, function(ss) {
 ibad <- NULL
 for (ss in 1:n_sample) {
   if( any(model_out[,ss] < 100) |
-      any(model_out[,ss] > 1e5) |
+      any(model_out[,ss] > 1e4) |
       model_out[58,ss] < 280 | model_out[58,ss] > 400) {
     ibad <- c(ibad,ss)
   }
@@ -247,7 +251,7 @@ for (pp in 1:n_parameters){
   bandwidths[pp] <- pdf_all[[pp]]$bw
 }
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-filename_out <- paste('../output/geocarb_precalibration_parameters_alpha',100*alpha,'_',today,'.csv', sep='')
+filename_out <- paste('../output/geocarb_precalibration_parameters_alpha',100*alpha,'_sens',sens,'_',today,'.csv', sep='')
 write.csv(rbind(parameters_good, bandwidths), file=filename_out, row.names=FALSE)
 ##==============================================================================
 
@@ -257,7 +261,9 @@ write.csv(rbind(parameters_good, bandwidths), file=filename_out, row.names=FALSE
 ##===================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
-filename_in <- '../output/geocarb_precalibration_parameters_alpha34_18Jan2018.csv'
+#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
+alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
+#alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
 parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
@@ -287,7 +293,26 @@ kde_sample <- function(n_sample, nodes, bandwidths) {
 
 ##==============================================================================
 
+## Get a reference simulation for integrated sensitivity measure
+model_ref <- model_forMCMC(par_calib=par_calib0,
+              par_fixed=par_fixed0,
+              parnames_calib=parnames_calib,
+              parnames_fixed=parnames_fixed,
+              age=age,
+              ageN=ageN,
+              ind_const_calib=ind_const_calib,
+              ind_time_calib=ind_time_calib,
+              ind_const_fixed=ind_const_fixed,
+              ind_time_fixed=ind_time_fixed,
+              ind_expected_time=ind_expected_time,
+              ind_expected_const=ind_expected_const,
+              iteration_threshold=iteration_threshold)[,'co2']
+
+
 ## Sobol' wrapper - assumes uniform distributions on parameters
+
+source('GEOCARB_sensitivity_co2.R')
+
 geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           parnames_fixed, age, ageN, ind_const_calib,
                           ind_time_calib, ind_const_fixed, ind_time_fixed,
@@ -300,7 +325,7 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                 ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                 input=input, ind_expected_time=ind_expected_time,
                 ind_expected_const=ind_expected_const,
-                iteration_threshold=iteration_threshold)
+                iteration_threshold=iteration_threshold, model_ref=model_ref, sens=sens)
 #  co2_output_centered <- co2_output - mean(co2_output, na.rm=TRUE)
   co2_output_centered <- co2_output - mean(co2_output[is.finite(co2_output)])
   co2_output_centered[is.infinite(co2_output)] <- 0
@@ -308,10 +333,8 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
 }
 
 n_sample <- 500
-n_bootstrap <- 5000
+n_bootstrap <- 10000
 Ncore <- 1
-
-source('GEOCARB_sensitivity_co2.R')
 
 ## Sample parameters (need 2 data frames)
 #parameters_sample1 <- kde_sample(n_sample, parameters_node, bandwidths)
@@ -326,7 +349,7 @@ colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
                            parameters_sample1,
                            parameters_sample2,
-                           scheme='A',
+                           scheme='B',
                            nboot=n_bootstrap,
                            par_fixed=par_fixed0, parnames_calib=parnames_calib,
                            parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -346,7 +369,7 @@ saveRDS(s.out, filename.sobol)
 ## total order index?
 max_sens_ind <- 0.1*max(s.out$T$original)
 max_conf_int <- max(max(s.out$S$`max. c.i.` - s.out$S$`min. c.i.`), max(s.out$T$`max. c.i.` - s.out$T$`min. c.i.`))
-print(paste('0.1 * max. sensitivity index=',max_sens_ind,' // max. conf int=',max_conf_int,sep=''))
+print(paste('max. conf int=',max_conf_int, ' want less than:  0.1 * max. sensitivity index=',max_sens_ind, sep=''))
 ##==============================================================================
 
 
@@ -355,8 +378,8 @@ print(paste('0.1 * max. sensitivity index=',max_sens_ind,' // max. conf int=',ma
 ## Write indices, results we'd need to file
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_alpha',100*alpha,'_',today,'.txt',sep='')
-file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_',today,'.txt',sep='')
+file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_alpha',100*alpha,'_sens',sens,'_',today,'.txt',sep='')
+file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_sens',sens,'_',today,'.txt',sep='')
 
 headers.1st.tot <- matrix(c('Parameter', 'S1', 'S1_conf_low', 'S1_conf_high',
                             'ST', 'ST_conf_low', 'ST_conf_high'), nrow=1)
@@ -423,9 +446,9 @@ plotdir <- '../figures/'
 n_params <- 56
 
 # Set Sobol indices file names
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha34_18Jan2018.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_alpha34_18Jan2018.txt"
-s.out <- readRDS('../output/sobol_alpha34_18Jan2018.rds')
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_20Mar2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_20Mar2018.txt"
+s.out <- readRDS('../output/sobol_alpha0_20Mar2018.rds')
 
 ##==============================================================================
 

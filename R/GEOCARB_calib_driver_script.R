@@ -38,10 +38,10 @@ source('GEOCARB-2014_getData.R')
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
+                        c("alkenones" , FALSE),
+                        c("stomata"   , FALSE),
+                        c("boron"     , FALSE),
+                        c("liverworts", FALSE) )
 
 ind_data    <- which(data_to_assim[2,]==TRUE)
 n_data_sets <- length(ind_data)

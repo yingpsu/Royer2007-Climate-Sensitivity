@@ -13,13 +13,15 @@
 ## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+
 ## Functions in other files
 source('sobol_functions.R')
 
 # Set number of parameters being analyzed
 n_params <- 56
 
-sobol_exp <- c('a50','a34','a10','a05'); n_experiment <- length(sobol_exp)
+sobol_exp <- c('a50','a34','a10','a05','a0'); n_experiment <- length(sobol_exp)
 sobol_files <- vector('list', n_experiment); names(sobol_files) <- sobol_exp
 s1st <- vector('list', n_experiment); names(s1st) <- sobol_exp
 s1st1 <- vector('list', n_experiment); names(s1st1) <- sobol_exp
@@ -32,6 +34,7 @@ sobol_files$a50 <- "../output/geocarb_sobol-1-tot_alpha50_17Jan2018.txt"
 sobol_files$a34 <- "../output/geocarb_sobol-1-tot_alpha34_18Jan2018.txt"
 sobol_files$a10 <- "../output/geocarb_sobol-1-tot_alpha10_18Jan2018.txt"
 sobol_files$a05 <- "../output/geocarb_sobol-1-tot_alpha05_18Jan2018.txt"
+sobol_files$a0  <- "../output/geocarb_sobol-1-tot_alpha0_20Mar2018.txt"
 
 ## Import data from sensitivity analysis
 # First- and total-order indices
@@ -70,9 +73,12 @@ for (aa in sobol_exp) {
   #st[[aa]] <- s1st1[[aa]][ind_st_sig[[aa]]]
 }
 
+# testing cutoffs for which total sensitivity indices are considered "significant"
 cutoff_test <- seq(0.01, 0.3, by=0.005)
 n_test <- length(cutoff_test)
 
+# st_sig_exp has 56 rows (1 for each parameter) and n_test columns (at the tested
+# levels of significance (total sensitivity index), is the given parameter significant?)
 st_sig_exp <- vector('list', n_experiment); names(st_sig_exp) <- sobol_exp
 for (aa in sobol_exp) {st_sig_exp[[aa]] <- mat.or.vec(n_params, n_test)}
 
