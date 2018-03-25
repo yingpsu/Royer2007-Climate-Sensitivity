@@ -115,7 +115,8 @@ if(!l_scaled) {
       model_present <- sum((model_out-model_ref)^2)
     } else if (sens=='L1') {
       # L1 norm
-      model_present <- sum(abs(model_out-model_ref))
+      ##model_present <- sum(abs(model_out-model_ref))
+      model_present <- sum(abs(model_out[min(ind_mod2obs):max(ind_mod2obs)]-model_ref[min(ind_mod2obs):max(ind_mod2obs)]))
     }
   }
 
