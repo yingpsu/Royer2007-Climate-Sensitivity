@@ -25,7 +25,9 @@ sensitivity_co2 <- function(
   ind_expected_time,
   ind_expected_const,
   iteration_threshold,
-  input
+  input,
+  model_ref=NULL,
+  sens
 ){
 
   # initialize
@@ -81,7 +83,16 @@ if(!l_scaled) {
                                  ind_expected_time=ind_expected_time,
                                  ind_expected_const=ind_expected_const,
                                  iteration_threshold=iteration_threshold)[,'co2']})
-    model_present <- model_out[ageN,]
+    if (sens=='pres') {
+      # present-day CO2
+      model_present <- model_out[ageN,]
+    } else if (sens=='L2') {
+      # L2 norm
+      model_present <- apply(X=(model_out-model_ref)^2, MARGIN=2, FUN=sum)
+    } else if (sens=='L1') {
+      # L1 norm
+      model_present <- apply(X=abs(model_out-model_ref), MARGIN=2, FUN=sum)
+    }
   } else {
     model_out <- model_forMCMC(par_calib=par_calib,
                                par_fixed=par_fixed,
@@ -96,7 +107,16 @@ if(!l_scaled) {
                                ind_expected_time=ind_expected_time,
                                ind_expected_const=ind_expected_const,
                                iteration_threshold=iteration_threshold)[,'co2']
-    model_present <- model_out[ageN]
+    if (sens=='pres') {
+      # present-day CO2
+      model_present <- model_out[ageN]
+    } else if (sens=='L2') {
+      # L2 norm
+      model_present <- sum((model_out-model_ref)^2)
+    } else if (sens=='L1') {
+      # L1 norm
+      model_present <- sum(abs(model_out-model_ref))
+    }
   }
 
   ind_na <- which(is.na(model_present))

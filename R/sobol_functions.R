@@ -3,12 +3,11 @@
 ##
 ## Original codes by Calvin Whealton, Cornell University
 ## https://github.com/calvinwhealton/SensitivityAnalysisPlots
-## and
-## Perry Oddo, Penn State
+## and Perry Oddo, Penn State
 ##
 ## Modified (condensed - codes are almost entirely unchanged) for brevity by
-## Tony Wong (twong@psu.edu). The only code that was changed is the plotting
-## routine 'plotRadCon'; Tony added
+## Tony Wong (anthony.e.wong@colorado.edu).
+## The only code that was changed is the plotting routine 'plotRadCon'; added:
 ## (1) inputs for the first-, total- and second-order % values used for legend
 ## (2) generate labels for first-, total- and second-order in legend
 ## (3) write legend in black ink instead of gray
