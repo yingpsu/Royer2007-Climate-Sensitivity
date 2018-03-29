@@ -333,7 +333,7 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
 }
 
 n_sample <- 500
-n_bootstrap <- 10000
+n_bootstrap <- 5000
 Ncore <- 1
 
 ## Sample parameters (need 2 data frames)

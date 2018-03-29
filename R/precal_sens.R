@@ -1,7 +1,8 @@
 ##==============================================================================
-## sensitivity_geocarb.R
+## precal_sens.R
 ##
-## Sensitivity experiment with GEOCARB model (Foster et al 2017 version)
+## Precalibration and
+## sensitivity experiment with GEOCARB model (Foster et al 2017 version)
 ##
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
@@ -14,7 +15,8 @@ co2_uncertainty_cutoff <- 20
 
 # latin hypercube precalibration
 alpha <- 0
-n_sample <- 5e3
+n_sample <- 5.12e5
+n_sample_max <- 2.56e5 # if asking n_sample > n_sample_max, break into subsamples
 sens='L1'
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
@@ -30,7 +32,6 @@ if(Sys.info()['user']=='tony') {
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
 }
-
 
 
 ##==============================================================================
@@ -166,67 +167,189 @@ library(doParallel)
 ##==============================================================================
 
 
-##==============================================================================
-## Draw parameters by latin hypercube
-##===================================
-
-parameters_lhs <- randomLHS(n_sample, n_parameters)
-
-
-## Trim so you aren't sampling the extreme cases?
-#alpha <- 1-.66
-parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
-
-
-## scale up to the actual parameter distributions
-n_const_calib <- length(ind_const_calib)
-par_calib <- parameters_lhs  # initialize
-for (i in 1:n_const_calib) {
-  row_num <- match(parnames_calib[i],input$parameter)
-  if(input[row_num, 'distribution_type']=='gaussian') {
-    par_calib[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-  } else if(input[row_num, 'distribution_type']=='lognormal') {
-    par_calib[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-  } else {
-    print('ERROR - unknown prior distribution type')
-  }
-}
-##==============================================================================
-
-
-##==============================================================================
-## Run precalibration simulations
-##===============================
-
 tbeg <- proc.time()
 
-model_out <- sapply(1:n_sample, function(ss) {
-    model_forMCMC(par_calib=par_calib[ss,],
-                  par_fixed=par_fixed0,
-                  parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed,
-                  age=age,
-                  ageN=ageN,
-                  ind_const_calib=ind_const_calib,
-                  ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed,
-                  ind_time_fixed=ind_time_fixed,
-                  ind_expected_time=ind_expected_time,
-                  ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)[,'co2']})
+if (n_sample <= n_sample_max) {
 
-#source('precalibration_doruns.R')
+  ##====================================
+  ## Draw parameters by latin hypercube
+  ##   then
+  ## Run precalibration simulations
+  ##====================================
 
-ibad <- NULL
-for (ss in 1:n_sample) {
-  if( any(model_out[,ss] < 100) |
-      any(model_out[,ss] > 1e4) |
-      model_out[58,ss] < 280 | model_out[58,ss] > 400) {
-    ibad <- c(ibad,ss)
+  parameters_lhs <- randomLHS(n_sample, n_parameters)
+
+  ## Trim so you aren't sampling the extreme cases?
+  #alpha <- 1-.66
+  parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
+
+
+  ## scale up to the actual parameter distributions
+  n_const_calib <- length(ind_const_calib)
+  par_calib <- parameters_lhs  # initialize
+  for (i in 1:n_const_calib) {
+    row_num <- match(parnames_calib[i],input$parameter)
+    if(input[row_num, 'distribution_type']=='gaussian') {
+      par_calib[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+    } else if(input[row_num, 'distribution_type']=='lognormal') {
+      par_calib[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+    } else {
+      print('ERROR - unknown prior distribution type')
+    }
   }
+
+  model_out <- sapply(1:n_sample, function(ss) {
+      model_forMCMC(par_calib=par_calib[ss,],
+                    par_fixed=par_fixed0,
+                    parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed,
+                    age=age,
+                    ageN=ageN,
+                    ind_const_calib=ind_const_calib,
+                    ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed,
+                    ind_time_fixed=ind_time_fixed,
+                    ind_expected_time=ind_expected_time,
+                    ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold)[,'co2']})
+
+  ibad <- NULL
+  for (ss in 1:n_sample) {
+    if( any(model_out[,ss] < 100) |
+        any(model_out[,ss] > 1e4) |
+        model_out[58,ss] < 280 | model_out[58,ss] > 400) {
+      ibad <- c(ibad,ss)
+    }
+  }
+
+} else {
+
+  ## Break up into smaller LHS if asking for more than n_sample_max samples
+
+  n_full <- floor(n_sample/n_sample_max)            # full n_sample_max samples
+  n_part <- ceiling(n_sample/n_sample_max) - n_full # partial samples (< n_sample_max)
+
+good_parameters <- vector('list', n_full+n_part)
+
+  print('Breaking up into:')
+  print(paste('  ',n_full,' samples of size ',n_sample_max, sep=''))
+  print(paste('  ',n_part,' samples of size ',n_sample-n_full*n_sample_max, sep=''))
+
+  # do all the full n_sample_max samples
+  par_calib <- mat.or.vec(n_sample, n_parameters)
+
+  for (k in 1:n_full) {
+
+    ## start at NULL and add for each subsample the bad runs
+    ibad <- NULL
+
+    parameters_lhs <- randomLHS(n_sample_max, n_parameters)
+
+    ## Trim so you aren't sampling the extreme cases?
+    #alpha <- 1-.66
+    parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
+
+    ## scale up to the actual parameter distributions
+    n_const_calib <- length(ind_const_calib)
+    par_calib_subsample <- parameters_lhs  # initialize
+    for (i in 1:n_const_calib) {
+      row_num <- match(parnames_calib[i],input$parameter)
+      if(input[row_num, 'distribution_type']=='gaussian') {
+        par_calib_subsample[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+      } else if(input[row_num, 'distribution_type']=='lognormal') {
+        par_calib_subsample[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+      } else {
+        print('ERROR - unknown prior distribution type')
+      }
+    }
+    ind_subsample <- ((k-1)*n_sample_max+1):(k*n_sample_max)
+    par_calib[ind_subsample,] <- par_calib_subsample
+
+    # run model, precalibration windows
+    model_out <- sapply(1:n_sample_max, function(ss) {
+        model_forMCMC(par_calib=par_calib_subsample[ss,],
+                      par_fixed=par_fixed0,
+                      parnames_calib=parnames_calib,
+                      parnames_fixed=parnames_fixed,
+                      age=age,
+                      ageN=ageN,
+                      ind_const_calib=ind_const_calib,
+                      ind_time_calib=ind_time_calib,
+                      ind_const_fixed=ind_const_fixed,
+                      ind_time_fixed=ind_time_fixed,
+                      ind_expected_time=ind_expected_time,
+                      ind_expected_const=ind_expected_const,
+                      iteration_threshold=iteration_threshold)[,'co2']})
+    for (ss in 1:n_sample_max) {
+      if( any(model_out[,ss] < 100) |
+          any(model_out[,ss] > 1e4) |
+          model_out[58,ss] < 280 | model_out[58,ss] > 400) {
+        ibad <- c(ibad, ss)
+      }
+    }
+    good_parameters[[k]] <- par_calib_subsample[-ibad,]
+  }
+
+  # and a partial sample, if there is one
+  if (n_part) {
+
+    ## start at NULL and add for each subsample the bad runs
+    ibad <- NULL
+
+    ind_subsample <- (n_full*n_sample_max+1):n_sample
+
+    parameters_lhs <- randomLHS(length(ind_subsample), n_parameters)
+
+    ## Trim so you aren't sampling the extreme cases?
+    #alpha <- 1-.66
+    parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
+
+    ## scale up to the actual parameter distributions
+    n_const_calib <- length(ind_const_calib)
+    par_calib_subsample <- parameters_lhs  # initialize
+    for (i in 1:n_const_calib) {
+      row_num <- match(parnames_calib[i],input$parameter)
+      if(input[row_num, 'distribution_type']=='gaussian') {
+        par_calib_subsample[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+      } else if(input[row_num, 'distribution_type']=='lognormal') {
+        par_calib_subsample[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+      } else {
+        print('ERROR - unknown prior distribution type')
+      }
+    }
+    par_calib[ind_subsample,] <- par_calib_subsample
+
+    # run model, precalibration windows
+    model_out <- sapply(1:n_sample_max, function(ss) {
+        model_forMCMC(par_calib=par_calib_subsample[ss,],
+                      par_fixed=par_fixed0,
+                      parnames_calib=parnames_calib,
+                      parnames_fixed=parnames_fixed,
+                      age=age,
+                      ageN=ageN,
+                      ind_const_calib=ind_const_calib,
+                      ind_time_calib=ind_time_calib,
+                      ind_const_fixed=ind_const_fixed,
+                      ind_time_fixed=ind_time_fixed,
+                      ind_expected_time=ind_expected_time,
+                      ind_expected_const=ind_expected_const,
+                      iteration_threshold=iteration_threshold)[,'co2']})
+    for (ss in 1:n_sample_max) {
+      if( any(model_out[,ss] < 100) |
+          any(model_out[,ss] > 1e4) |
+          model_out[58,ss] < 280 | model_out[58,ss] > 400) {
+        ibad <- c(ibad, ss)
+      }
+    }
+    good_parameters[[k+1]] <- par_calib_subsample[-ibad,]
+  }
+
 }
 
-parameters_good <- par_calib[-ibad,]
+parameters_good <- NULL
+for (k in 1:(n_full + n_part)) {
+  parameters_good <- rbind(parameters_good, good_parameters[[k]])
+}
 colnames(parameters_good) <- parnames_calib
 
 tend <- proc.time()
@@ -269,7 +392,6 @@ parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
 parameters_node <- parameters_node[-(n_node+1),]
-
 
 
 kde_sample <- function(n_sample, nodes, bandwidths) {

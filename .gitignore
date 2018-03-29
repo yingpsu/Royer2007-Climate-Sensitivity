@@ -1,6 +1,10 @@
+*calibration*.csv
+precal_timing_tests.R
+*.RData
+*.rds
 *.so
 *.o
-Makefile
+fortran/Makefile
 figures/
 R/old
 output
