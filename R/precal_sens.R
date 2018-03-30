@@ -15,7 +15,7 @@ co2_uncertainty_cutoff <- 20
 
 # latin hypercube precalibration
 alpha <- 0
-n_sample <- 5.12e5
+n_sample <- 6.12e5
 n_sample_max <- 2.56e5 # if asking n_sample > n_sample_max, break into subsamples
 sens='L1'
 
@@ -297,8 +297,9 @@ good_parameters <- vector('list', n_full+n_part)
     ibad <- NULL
 
     ind_subsample <- (n_full*n_sample_max+1):n_sample
+    n_subsample <- length(ind_subsample)
 
-    parameters_lhs <- randomLHS(length(ind_subsample), n_parameters)
+    parameters_lhs <- randomLHS(n_subsample, n_parameters)
 
     ## Trim so you aren't sampling the extreme cases?
     #alpha <- 1-.66
@@ -320,7 +321,7 @@ good_parameters <- vector('list', n_full+n_part)
     par_calib[ind_subsample,] <- par_calib_subsample
 
     # run model, precalibration windows
-    model_out <- sapply(1:n_sample_max, function(ss) {
+    model_out <- sapply(1:n_subsample, function(ss) {
         model_forMCMC(par_calib=par_calib_subsample[ss,],
                       par_fixed=par_fixed0,
                       parnames_calib=parnames_calib,
@@ -334,7 +335,7 @@ good_parameters <- vector('list', n_full+n_part)
                       ind_expected_time=ind_expected_time,
                       ind_expected_const=ind_expected_const,
                       iteration_threshold=iteration_threshold)[,'co2']})
-    for (ss in 1:n_sample_max) {
+    for (ss in 1:n_subsample) {
       if( any(model_out[,ss] < 100) |
           any(model_out[,ss] > 1e4) |
           model_out[58,ss] < 280 | model_out[58,ss] > 400) {
