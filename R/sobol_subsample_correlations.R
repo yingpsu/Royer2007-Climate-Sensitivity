@@ -8,6 +8,8 @@
 ## Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+setwd('/home/scrim/axw322/codes/GEOCARB/R')
+
 s.out <- readRDS('../output/sobol_alpha0_30Mar2018.rds')
 
 # how many times to do this experiment, and then average/median the results?
