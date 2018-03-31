@@ -129,10 +129,8 @@ stat_sig_s1st <- function(df
     df$s1_sig[which(df$S1_conf_low * df$S1_conf_high > 0)] <- 1
     df$st_sig[which(df$ST_conf_low * df$ST_conf_high > 0)] <- 1
   } else if(method == 'congtr'){
-    df$s1_sig[which(df$S1_conf_low * df$S1_conf_high > 0 &
-                    abs(df$S1) > greater)] <- 1
-    df$st_sig[which(df$ST_conf_low * df$ST_conf_high > 0 &
-                    abs(df$ST) > greater)] <- 1
+    df$s1_sig[which(df$S1_conf_low > 0 & df$S1 > greater)] <- 1
+    df$st_sig[which(df$ST_conf_low > 0 & df$ST > greater)] <- 1
   } else {
     print('Not a valid parameter for method')
   }
@@ -166,25 +164,21 @@ stat_sig_s2 <- function(dfs2
                           ,method='sig'){
 
   # initializing matrix to return values
-  s2_sig <- matrix(0,nrow(s2),ncol(s2))
+  # original:  s2_sig <- matrix(0,nrow(s2),ncol(s2))
+  s2_sig <- matrix(0,nrow(dfs2),ncol(dfs2))  # corrected?
 
   # testing for statistical significance
   if(method == 'sig'){
     # testing for statistical significance using the confidence intervals
-    s2_sig[which(abs(s2) - s2_conf > 0)] <- 1
-  }
-  else if(method == 'gtr'){
+    s2_sig[which(abs(dfs2) - s2_conf > 0)] <- 1
+  } else if(method == 'gtr'){
     # finding indicies that are greater than the specified values
-    s2_sig[which(abs(s2) > greater)] <- 1
-  }
-  else if(method == 'con'){
-    s2_sig[which(dfs2Conf_low * dfs2Conf_high > 0)] <- 1
-  }
-  else if(method == 'congtr'){
-    s2_sig[which(dfs2Conf_low * dfs2Conf_high > 0 &
-                 abs(s2) > greater)] <- 1
-  }
-  else{
+    s2_sig[which(abs(dfs2) > greater)] <- 1
+  } else if(method == 'con'){
+    s2_sig[which(dfs2Conf_low > 0)] <- 1
+  } else if(method == 'congtr'){
+    s2_sig[which((dfs2Conf_low > 0) & (dfs2 > greater))] <- 1
+  } else{
     print('Not a valid parameter for method')
   }
 

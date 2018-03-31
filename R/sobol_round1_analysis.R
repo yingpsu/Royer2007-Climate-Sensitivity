@@ -21,20 +21,33 @@ source('sobol_functions.R')
 # Set number of parameters being analyzed
 n_params <- 56
 
-sobol_exp <- c('a50','a34','a10','a05','a0'); n_experiment <- length(sobol_exp)
+#sobol_exp <- c('a50','a34','a10','a05','a0'); n_experiment <- length(sobol_exp)
+sobol_exp <- c('a10','a0'); n_experiment <- length(sobol_exp)
 sobol_files <- vector('list', n_experiment); names(sobol_files) <- sobol_exp
+sobol_files2 <- vector('list', n_experiment); names(sobol_files2) <- sobol_exp
 s1st <- vector('list', n_experiment); names(s1st) <- sobol_exp
 s1st1 <- vector('list', n_experiment); names(s1st1) <- sobol_exp
+s2 <- vector('list', n_experiment); names(s2) <- sobol_exp
+s2_sig1 <- vector('list', n_experiment); names(s2_sig1) <- sobol_exp
+s2_table <- vector('list', n_experiment); names(s2_table) <- sobol_exp
+s2_conf_low <- vector('list', n_experiment); names(s2_conf_low) <- sobol_exp
+s2_conf_high <- vector('list', n_experiment); names(s2_conf_high) <- sobol_exp
 ind_s1_sig <- vector('list', n_experiment); names(ind_s1_sig) <- sobol_exp
+ind_s2_sig <- vector('list', n_experiment); names(ind_s2_sig) <- sobol_exp
 ind_st_sig <- vector('list', n_experiment); names(ind_st_sig) <- sobol_exp
 
 # Set Sobol indices file names
 
-sobol_files$a50 <- "../output/geocarb_sobol-1-tot_alpha50_17Jan2018.txt"
-sobol_files$a34 <- "../output/geocarb_sobol-1-tot_alpha34_18Jan2018.txt"
-sobol_files$a10 <- "../output/geocarb_sobol-1-tot_alpha10_18Jan2018.txt"
-sobol_files$a05 <- "../output/geocarb_sobol-1-tot_alpha05_18Jan2018.txt"
-sobol_files$a0  <- "../output/geocarb_sobol-1-tot_alpha0_20Mar2018.txt"
+#sobol_files$a50 <- "../output/geocarb_sobol-1-tot_alpha50_17Jan2018.txt"
+#sobol_files$a34 <- "../output/geocarb_sobol-1-tot_alpha34_18Jan2018.txt"
+#sobol_files$a10 <- "../output/geocarb_sobol-1-tot_alpha10_18Jan2018.txt"
+#sobol_files$a05 <- "../output/geocarb_sobol-1-tot_alpha05_18Jan2018.txt"
+#sobol_files$a0  <- "../output/geocarb_sobol-1-tot_alpha0_20Mar2018.txt"
+
+sobol_files$a10 <- "../output/geocarb_sobol-1-tot_alpha10_sensL1_31Mar2018.txt"
+sobol_files$a0  <- "../output/geocarb_sobol-1-tot_alpha0_sensL1_31Mar2018.txt"
+sobol_files2$a10 <- "../output/geocarb_sobol-2_alpha10_sensL1_31Mar2018.txt"
+sobol_files2$a0  <- "../output/geocarb_sobol-2_alpha0_sensL1_31Mar2018.txt"
 
 ## Import data from sensitivity analysis
 # First- and total-order indices
@@ -44,6 +57,28 @@ for (aa in sobol_exp) {
                          header=TRUE,
                          nrows = n_params,
                          as.is=c(TRUE,rep(FALSE,5)))
+  s2_table[[aa]] <- read.csv(sobol_files2[[aa]],
+                             sep=' ',
+                             header=TRUE,
+                             nrows = n_params*(n_params-1)/2,
+                             as.is=c(TRUE,rep(FALSE,4)))
+  # Convert second-order to upper-triangular matrix
+  s2[[aa]] <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+  s2[[aa]][1:(n_params-1), 2:n_params] = upper.diag(s2_table[[aa]]$S2)
+  s2[[aa]] <- as.data.frame(s2[[aa]])
+  colnames(s2[[aa]]) <- rownames(s2[[aa]]) <- s1st[[aa]]$Parameter
+
+  # Convert confidence intervals to upper-triangular matrix
+  s2_conf_low[[aa]] <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+  s2_conf_high[[aa]] <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+  s2_conf_low[[aa]][1:(n_params-1), 2:n_params] = upper.diag(s2_table[[aa]]$S2_conf_low)
+  s2_conf_high[[aa]][1:(n_params-1), 2:n_params] = upper.diag(s2_table[[aa]]$S2_conf_high)
+
+  s2_conf_low[[aa]] <- as.data.frame(s2_conf_low[[aa]])
+  s2_conf_high[[aa]] <- as.data.frame(s2_conf_high[[aa]])
+  colnames(s2_conf_low[[aa]]) <- rownames(s2_conf_low[[aa]]) <- s1st[[aa]]$Parameter
+  colnames(s2_conf_high[[aa]]) <- rownames(s2_conf_high[[aa]]) <- s1st[[aa]]$Parameter
+
 }
 parnames.sobol <- s1st[[1]][,1]
 
@@ -54,12 +89,20 @@ sig.cutoff <- 0.01
 # S1 & ST: using the confidence intervals
 # 'congtr' method means confidence intervals must be fully on the positive side
 # and the central estimate must be above 'sig.cutoff'
+# S2: using the confidence intervals
 for (aa in sobol_exp) {
   s1st1[[aa]] <- stat_sig_s1st(s1st[[aa]]
                                ,method="congtr"
                                ,greater=sig.cutoff
                                ,sigCri='either')
+  s2_sig1[[aa]] <- stat_sig_s2(s2[[aa]]
+                              ,s2_conf_low[[aa]]
+                              ,s2_conf_high[[aa]]
+                              ,method='congtr'
+                              ,greater=sig.cutoff
+                              )
 }
+
 
 # of the total sensitivity idnices that are significant for each experiment,
 # what lower significance cutoff can we use such that the same set of parameters
@@ -71,6 +114,12 @@ for (aa in sobol_exp) {
   ind_s1_sig[[aa]] <- which(s1st1[[aa]]$s1_sig==1)
   ind_st_sig[[aa]] <- which(s1st1[[aa]]$st_sig==1)
   #st[[aa]] <- s1st1[[aa]][ind_st_sig[[aa]]]
+  # second-order indices need to be looped over all parameters
+  ind_s2_sig[[aa]] <- NULL
+  for (p in 1:n_params) {
+    ind_s2_sig[[aa]] <- c(ind_s2_sig[[aa]], c(p,which(s2_sig1[[aa]][p,] == 1)))
+  }
+  ind_s2_sig[[aa]] <- unique(ind_s2_sig[[aa]])
 }
 
 # testing cutoffs for which total sensitivity indices are considered "significant"
@@ -102,6 +151,9 @@ for (k in 1:n_test) {
     pdiff[k] <- max(n_st_sig[,k])-min(n_st_sig[,k])
 }
 ind_agree <- which(pdiff <= 1)
+
+
+
 
 ##==============================================================================
 ## Create parameter calibration files for each of 3 sets of parameters:
