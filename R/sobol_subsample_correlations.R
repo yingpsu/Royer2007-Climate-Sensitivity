@@ -39,12 +39,15 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
               ind_expected_const=ind_expected_const,
               iteration_threshold=iteration_threshold)[,'co2']
 
+T_test <- seq(from=2, to=55, by=1)
 #T_test <- c(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55)
-T_test <- c(10, 30, 50)
+#T_test <- c(10, 30, 50)
 nT <- length(T_test)
 
 corr_s12 <- mat.or.vec(n_iter, nT)
 corr_s13 <- mat.or.vec(n_iter, nT)
+
+tbeg <- proc.time()
 
 for (iter in 1:n_iter) {
 
@@ -138,6 +141,10 @@ for (iter in 1:n_iter) {
 
 save(list=c('x1','sens1','sens2','sens3','corr','T_test','corr_s12','corr_s13'), file='sobol_corr.RData')
 
-##
-##
+tend <- proc.time()
+print(paste(n_iter,' iterations took ',(tend-tbeg)[3]/60,' minutes total', sep=''))
+
+##=============================================================================
+## End
+##=============================================================================
 ##
