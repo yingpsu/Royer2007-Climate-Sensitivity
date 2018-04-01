@@ -13,7 +13,7 @@ setwd('/home/scrim/axw322/codes/GEOCARB/R')
 s.out <- readRDS('../output/sobol_alpha0_30Mar2018.rds')
 
 # how many times to do this experiment, and then average/median the results?
-n_iter <- 10
+n_iter <- 100
 n_sample <- 50000
 
 # get the default parameter values
@@ -139,7 +139,9 @@ for (iter in 1:n_iter) {
   }
 }
 
-save(list=c('x1','sens1','sens2','sens3','corr','T_test','corr_s12','corr_s13'), file='sobol_corr.RData')
+sens_total <- s.out$T
+
+save(list=c('x1','sens1','sens2','sens3','corr','T_test','corr_s12','corr_s13','sens_total'), file='sobol_corr.RData')
 
 tend <- proc.time()
 print(paste(n_iter,' iterations took ',(tend-tbeg)[3]/60,' minutes total', sep=''))
