@@ -104,7 +104,7 @@ for (aa in sobol_exp) {
 
 
 ##==============================================================================
-## Create parameter calibration files for 28 significant parameters
+## Create parameter calibration files for T significant parameters
 
 # Get the parameter names and other input (priors, etc)
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
@@ -113,19 +113,25 @@ source('GEOCARB-2014_parameterSetup.R')
 # Create a parameters file for this calibration/sensitivity analysis
 # this "all" file has 1s for all calibration parameters (constants only), so we
 # need to reset the fixed ones to a 0 (or set all to 0 and calib ones to 1)
-calib_s1 <- read.csv('../input_data/GEOCARB_input_summaries_calib_all.csv')
+calib_sig <- read.csv('../input_data/GEOCARB_input_summaries_calib_all.csv')
 
-T <- 28
+# read correaltion experiment output
+load('../output/sobol_corr_n10.RData')
+
+corr_s12_avg <- apply(corr_s12, 2, median)
+corr_s13_avg <- apply(corr_s13, 2, median)
+
+T <- 25
 ind_large <- order(sens_total, decreasing=TRUE)[1:T]
 ind_small <- order(sens_total, decreasing=FALSE)[1:(56-T)]
 
 # File for significant parameters set
-calib_s1$calib <- 0
+calib_sig$calib <- 0
 for (k in 1:length(ind_large)) {
-  row <- which(calib_s1$parameter==parnames_calib[ind_large[k]])
-  calib_s1$calib[row] <- 1
+  row <- which(calib_sig$parameter==parnames_calib[ind_large[k]])
+  calib_sig$calib[row] <- 1
 }
-write.csv(x=calib_s1, file='../input_data/GEOCARB_input_summaries_calib_sig.csv', row.names=FALSE)
+write.csv(x=calib_sig, file=paste('../input_data/GEOCARB_input_summaries_calib_sig',T,'.csv',sep=''), row.names=FALSE)
 ##==============================================================================
 
 
