@@ -229,7 +229,7 @@ if (n_sample <= n_sample_max) {
   n_full <- floor(n_sample/n_sample_max)            # full n_sample_max samples
   n_part <- ceiling(n_sample/n_sample_max) - n_full # partial samples (< n_sample_max)
 
-good_parameters <- vector('list', n_full+n_part)
+  good_parameters <- vector('list', n_full+n_part)
 
   print('Breaking up into:')
   print(paste('  ',n_full,' samples of size ',n_sample_max, sep=''))
@@ -442,46 +442,103 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           ind_time_calib, ind_const_fixed, ind_time_fixed,
                           input, ind_expected_time,
                           ind_expected_const, iteration_threshold) {
-  co2_output <- sensitivity_co2(par_calib_scaled, l_scaled=TRUE,
-                par_fixed=par_fixed, parnames_calib=parnames_calib,
-                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                input=input, ind_expected_time=ind_expected_time,
-                ind_expected_const=ind_expected_const,
-                iteration_threshold=iteration_threshold, model_ref=model_ref, sens=sens)
-#  co2_output_centered <- co2_output - mean(co2_output, na.rm=TRUE)
-  co2_output_centered <- co2_output - mean(co2_output[is.finite(co2_output)])
-  co2_output_centered[is.infinite(co2_output)] <- 0
-  return(co2_output_centered)
+  finalOutput <- sensitivity_co2(par_calib_scaled, l_scaled=TRUE,
+                          par_fixed=par_fixed, parnames_calib=parnames_calib,
+                          parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                          ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                          ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                          input=input, ind_expected_time=ind_expected_time,
+                          ind_expected_const=ind_expected_const,
+                          iteration_threshold=iteration_threshold, model_ref=model_ref, sens=sens)
+  output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
+  finalOutput <- finalOutput - output.avg
+  return(finalOutput)
+}
+
+l_scaled <- TRUE
+export.names <- c('sensitivity_co2', 'model_forMCMC', 'model_forMCMC', 'run_geocarbF',
+                  'par_fixed0', 'parnames_calib', 'parnames_fixed', 'age', 'ageN',
+                  'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
+                  'ind_time_fixed', 'input', 'ind_expected_time',
+                  'ind_expected_const', 'iteration_threshold', 'l_scaled', 'sens',
+                  'model_ref','ind_mod2obs')
+
+
+geocarb_sobol_co2_par <- function(par_calib_scaled) {
+
+  #install.packages('foreach')
+  #install.packages('doParallel')
+  library(foreach)
+  library(doParallel)
+  cores=detectCores()
+  cl <- makeCluster(Ncore)
+  print(paste('Starting cluster with ',Ncore,' cores', sep=''))
+  registerDoParallel(cl)
+
+  nr <- nrow(par_calib_scaled)
+  output <- rep(0,nr)
+
+  finalOutput <- foreach(i=1:nr, .combine=c,
+                                 .export=export.names,
+                                 .inorder=FALSE) %dopar% {
+
+      dyn.load("../fortran/run_geocarb.so")
+
+      co2_output <- sensitivity_co2(par_calib_scaled[i,], l_scaled=TRUE,
+                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                    input=input, ind_expected_time=ind_expected_time,
+                    ind_expected_const=ind_expected_const, model_ref=model_ref,
+                    sens=sens, iteration_threshold=iteration_threshold)
+      output[i] <- co2_output
+  }
+  print(paste(' ... done.'))
+  stopCluster(cl)
+
+  # for Sobol, output must be centered at 0
+  output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
+  finalOutput <- finalOutput - output.avg
+  return(finalOutput)
 }
 
 n_sample <- 500
-n_bootstrap <- 5000
-Ncore <- 1
+n_bootstrap <- 20
+Ncore <- .Ncore
 
 ## Sample parameters (need 2 data frames)
 #parameters_sample1 <- kde_sample(n_sample, parameters_node, bandwidths)
 #parameters_sample2 <- kde_sample(n_sample, parameters_node, bandwidths)
 ## Or take directly from the precalibration?
 n_half <- floor(0.5*nrow(parameters_node))
+
+## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+n_half <- 50
 parameters_sample1 <- parameters_node[1:n_half,]
 parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
+## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 ## Actually run the Sobol'
-t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
+if(FALSE) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
+parameters_sample1,
+parameters_sample2,
+scheme='B',
+nboot=n_bootstrap,
+par_fixed=par_fixed0, parnames_calib=parnames_calib,
+parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+input=input,
+ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+iteration_threshold=iteration_threshold))}
+
+t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
                            parameters_sample1,
                            parameters_sample2,
                            scheme='B',
-                           nboot=n_bootstrap,
-                           par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                           parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                           ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                           ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                           input=input,
-                           ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                           iteration_threshold=iteration_threshold))
+                           nboot=n_bootstrap))
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 

@@ -37,35 +37,40 @@ sensitivity_co2 <- function(
   n_const_calib <- length(ind_const_calib)
   n_simulations <- nrow(par_calib_scaled)
 
-if(!l_scaled) {
-  if (n_const_calib > 0) {
-    if(n_simulations > 1) {
-      for (i in 1:n_const_calib) {
-        row_num <- match(parnames_calib[i],input$parameter)
-        if(input[row_num, 'distribution_type']=='gaussian') {
-          par_calib[,i] <- qnorm(p=par_calib_scaled[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-        } else if(input[row_num, 'distribution_type']=='lognormal') {
-          par_calib[,i] <- qlnorm(p=par_calib_scaled[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-        } else {
-          print('ERROR - unknown prior distribution type')
+  if(!l_scaled) {
+    if (n_const_calib > 0) {
+      if(n_simulations > 1) {
+        for (i in 1:n_const_calib) {
+          row_num <- match(parnames_calib[i],input$parameter)
+          if(input[row_num, 'distribution_type']=='gaussian') {
+            par_calib[,i] <- qnorm(p=par_calib_scaled[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+          } else if(input[row_num, 'distribution_type']=='lognormal') {
+            par_calib[,i] <- qlnorm(p=par_calib_scaled[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+          } else {
+            print('ERROR - unknown prior distribution type')
+          }
         }
-      }
-    } else {
-      for (i in 1:n_const_calib) {
-        row_num <- match(parnames_calib[i],input$parameter)
-        if(input[row_num, 'distribution_type']=='gaussian') {
-          par_calib[i] <- qnorm(p=par_calib_scaled[ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-        } else if(input[row_num, 'distribution_type']=='lognormal') {
-          par_calib[i] <- qlnorm(p=par_calib_scaled[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-        } else {
-          print('ERROR - unknown prior distribution type')
+      } else {
+        for (i in 1:n_const_calib) {
+          row_num <- match(parnames_calib[i],input$parameter)
+          if(input[row_num, 'distribution_type']=='gaussian') {
+            par_calib[i] <- qnorm(p=par_calib_scaled[ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+          } else if(input[row_num, 'distribution_type']=='lognormal') {
+            par_calib[i] <- qlnorm(p=par_calib_scaled[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+          } else {
+            print('ERROR - unknown prior distribution type')
+          }
         }
       }
     }
   }
-}
 
-  llike <- rep(0, n_simulations)
+  if (is.null(n_simulations)) {
+    llike <- 0
+    n_simulations <- 1
+  } else {
+    llike <- rep(0, n_simulations)
+  }
 
   # run the model
   if (n_simulations > 1) {
@@ -85,13 +90,20 @@ if(!l_scaled) {
                                  iteration_threshold=iteration_threshold)[,'co2']})
     if (sens=='pres') {
       # present-day CO2
-      model_present <- model_out[ageN,]
+      model_sens <- model_out[ageN,]
     } else if (sens=='L2') {
       # L2 norm
-      model_present <- apply(X=(model_out-model_ref)^2, MARGIN=2, FUN=sum)
+      model_sens <- apply(X=(model_out-model_ref)^2, MARGIN=2, FUN=sum)
     } else if (sens=='L1') {
       # L1 norm
-      model_present <- apply(X=abs(model_out-model_ref), MARGIN=2, FUN=sum)
+      ##model_sens <- apply(X=abs(model_out[min(ind_mod2obs):max(ind_mod2obs),]-model_ref[min(ind_mod2obs):max(ind_mod2obs)]), MARGIN=2, FUN=sum)
+      model_sens <- rep(-999, n_simulations)
+      for (ss in 1:n_simulations) {
+        mod <- model_out[min(ind_mod2obs):max(ind_mod2obs), ss]
+        icomp <- which(is.finite(mod) & !is.na(mod))
+        ref <- model_ref[min(ind_mod2obs):max(ind_mod2obs)]
+        model_sens[ss] <- sum(abs(mod[icomp]-ref[icomp]))
+      }
     }
   } else {
     model_out <- model_forMCMC(par_calib=par_calib,
@@ -107,23 +119,27 @@ if(!l_scaled) {
                                ind_expected_time=ind_expected_time,
                                ind_expected_const=ind_expected_const,
                                iteration_threshold=iteration_threshold)[,'co2']
+
     if (sens=='pres') {
       # present-day CO2
-      model_present <- model_out[ageN]
+      model_sens <- model_out[ageN]
     } else if (sens=='L2') {
       # L2 norm
-      model_present <- sum((model_out-model_ref)^2)
+      model_sens <- sum((model_out-model_ref)^2)
     } else if (sens=='L1') {
       # L1 norm
-      ##model_present <- sum(abs(model_out-model_ref))
-      model_present <- sum(abs(model_out[min(ind_mod2obs):max(ind_mod2obs)]-model_ref[min(ind_mod2obs):max(ind_mod2obs)]))
+      ##model_sens <- sum(abs(model_out-model_ref))
+      mod <- model_out[min(ind_mod2obs):max(ind_mod2obs)]
+      icomp <- which(is.finite(mod) & !is.na(mod))  # only compare valid values
+      ref <- model_ref[min(ind_mod2obs):max(ind_mod2obs)]
+      model_sens <- sum(abs(mod[icomp]-ref[icomp]))
     }
   }
 
-  ind_na <- which(is.na(model_present))
-  #if (length(ind_na)>0) {model_present[ind_na] <- -Inf}
+  #ind_na <- which(is.na(model_sens))
+  #if (length(ind_na)>0) {model_sens[ind_na] <- -Inf}
 
-  return(model_present)
+  return(model_sens)
 }
 ##==============================================================================
 
