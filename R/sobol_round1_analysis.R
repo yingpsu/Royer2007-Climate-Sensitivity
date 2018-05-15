@@ -121,7 +121,10 @@ load('../output/sobol_corr_n10.RData')
 corr_s12_avg <- apply(corr_s12, 2, median)
 corr_s13_avg <- apply(corr_s13, 2, median)
 
-T <- 25
+T <- 19
+
+sens_total <- s1st1$a0$ST
+
 ind_large <- order(sens_total, decreasing=TRUE)[1:T]
 ind_small <- order(sens_total, decreasing=FALSE)[1:(56-T)]
 
