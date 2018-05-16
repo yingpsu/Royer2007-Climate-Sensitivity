@@ -385,7 +385,8 @@ write.csv(rbind(parameters_good, bandwidths), file=filename_out, row.names=FALSE
 ##===================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
-filename_in <- filename_out
+#filename_in <- filename_out
+alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
 #alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
 #alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 #alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
@@ -514,7 +515,7 @@ Ncore <- .Ncore
 n_half <- floor(0.5*nrow(parameters_node))
 
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-n_half <- 50
+n_half <- 500
 parameters_sample1 <- parameters_node[1:n_half,]
 parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
