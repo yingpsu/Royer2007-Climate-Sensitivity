@@ -51,6 +51,8 @@ tbeg <- proc.time()
 
 for (iter in 1:n_iter) {
 
+  print(paste('iteration:',iter,'/',n_iter))
+
   # x1: as-is
   # sample a bunch of parameters
   x1 <- s.out$X1[sample(1:nrow(s.out$X1), n_sample, replace=FALSE),]
