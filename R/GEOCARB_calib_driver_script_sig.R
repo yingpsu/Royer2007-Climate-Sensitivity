@@ -9,14 +9,14 @@
 
 #rm(list=ls())
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 5e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
-setwd('/home/scrim/axw322/codes/GEOCARB/R')
-#setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'sig25'
+#setwd('/home/scrim/axw322/codes/GEOCARB/R')
+setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+appen <- 'sig22'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-l_write_rdata  <- TRUE
+l_write_rdata  <- FALSE
 l_write_netcdf <- FALSE
 co2_uncertainty_cutoff <- 20
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
