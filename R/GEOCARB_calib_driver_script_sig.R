@@ -73,8 +73,8 @@ if(co2_uncertainty_cutoff > 0) {
       ind_remove <- c(ind_remove, ii)
     }
   }
-  data_calib <- data_calib[-ind_filter,]
-  ##data_calib <- data_calib[-ind_remove,]
+  data_calib <- data_calib[-ind_filter,]    # removing all of the possibly troublesome points
+  ##data_calib <- data_calib[-ind_remove,]    # remove only those the revised range does not help
 }
 
 # assumption of steady state in-between model time steps permits figuring out
