@@ -5,6 +5,8 @@
 ## sensitivity experiment with GEOCARB model (Foster et al 2017 version)
 ##
 ## Builds off a previous LHS precalibration sample
+## Doing only first-order and total sensitivity indices for this first Sobol'
+## analysis.
 ##
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
@@ -14,9 +16,10 @@
 rm(list=ls())
 
 ## Set testing number of samples and file nameappendix here
-n_test <- 10000
-appen <- 'testpar03'
-
+n_test <- 500000
+appen <- 'sobol1T'
+.Nboot <- 10000
+.scheme <- 'A' # A = first and total indices; B = first, second and total
 
 co2_uncertainty_cutoff <- 20
 
@@ -179,7 +182,8 @@ library(doParallel)
 
 ## Read KDE results file, separate into parameters and the bandwidths
 #filename_in <- filename_out
-alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
 #alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
 #alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 #alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
@@ -301,16 +305,17 @@ geocarb_sobol_co2_par <- function(par_calib_scaled) {
   return(finalOutput)
 }
 
-n_bootstrap <- 1000
+n_bootstrap <- .Nboot
 Ncore <- .Ncore
 
 ## Sample parameters (need 2 data frames) by taking directly from the precalibration?
 n_half <- floor(0.5*nrow(parameters_node))
 
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-n_half <- n_test
+if (n_test > 0) {n_half <- n_test}
 parameters_sample1 <- parameters_node[1:n_half,]
 parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
+rm(parameters_node)
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -318,7 +323,7 @@ colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 if(FALSE) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
 parameters_sample1,
 parameters_sample2,
-scheme='B',
+scheme=.scheme,
 nboot=n_bootstrap,
 par_fixed=par_fixed0, parnames_calib=parnames_calib,
 parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -331,7 +336,7 @@ iteration_threshold=iteration_threshold))}
 t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
                            parameters_sample1,
                            parameters_sample2,
-                           scheme='B',
+                           scheme=.scheme,
                            nboot=n_bootstrap))
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))

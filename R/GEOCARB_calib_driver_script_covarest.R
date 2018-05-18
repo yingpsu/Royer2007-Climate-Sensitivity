@@ -13,10 +13,10 @@
 
 rm(list=ls())
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations to use for each subsample
+niter_mcmc000 <- 4e4   # number of MCMC iterations to use for each subsample
 n_node000 <- 1         # number of CPUs to use
-#setwd('/home/scrim/axw322/codes/GEOCARB/R')
-setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+setwd('/home/scrim/axw322/codes/GEOCARB/R')
+#setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
 appen <- 'covarest'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")

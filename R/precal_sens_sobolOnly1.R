@@ -14,8 +14,9 @@
 rm(list=ls())
 
 ## Set testing number of samples and file nameappendix here
-n_test <- 10000
-appen <- 'testpar02'
+n_test <- 200000
+appen <- 'sobol2'
+.Nboot <- 10000
 
 
 co2_uncertainty_cutoff <- 20
@@ -179,7 +180,8 @@ library(doParallel)
 
 ## Read KDE results file, separate into parameters and the bandwidths
 #filename_in <- filename_out
-alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
 #alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
 #alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 #alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
@@ -301,16 +303,17 @@ geocarb_sobol_co2_par <- function(par_calib_scaled) {
   return(finalOutput)
 }
 
-n_bootstrap <- 20
+n_bootstrap <- .Nboot
 Ncore <- .Ncore
 
 ## Sample parameters (need 2 data frames) by taking directly from the precalibration?
 n_half <- floor(0.5*nrow(parameters_node))
 
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-n_half <- n_test
+if (n_test > 0) {n_half <- n_test}
 parameters_sample1 <- parameters_node[1:n_half,]
 parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
+rm(parameters_node)
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
