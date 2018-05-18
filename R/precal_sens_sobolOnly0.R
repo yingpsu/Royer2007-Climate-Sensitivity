@@ -1,8 +1,10 @@
 ##==============================================================================
-## precal_sens.R
+## precal_sens_sobolOnly.R
 ##
 ## Precalibration and
 ## sensitivity experiment with GEOCARB model (Foster et al 2017 version)
+##
+## Builds off a previous LHS precalibration sample
 ##
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
@@ -11,12 +13,15 @@
 ## Clear workspace
 rm(list=ls())
 
+## Set testing number of samples and file nameappendix here
+n_test <- 10000
+appen <- 'testpar02'
+
+
 co2_uncertainty_cutoff <- 20
 
 # latin hypercube precalibration
 alpha <- 0
-n_sample <- 6.12e5
-n_sample_max <- 2.56e5 # if asking n_sample > n_sample_max, break into subsamples
 sens='L1'
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
@@ -167,222 +172,10 @@ library(doParallel)
 ##==============================================================================
 
 
-tbeg <- proc.time()
-
-if (n_sample <= n_sample_max) {
-
-  ##====================================
-  ## Draw parameters by latin hypercube
-  ##   then
-  ## Run precalibration simulations
-  ##====================================
-
-  parameters_lhs <- randomLHS(n_sample, n_parameters)
-
-  ## Trim so you aren't sampling the extreme cases?
-  #alpha <- 1-.66
-  parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
-
-
-  ## scale up to the actual parameter distributions
-  n_const_calib <- length(ind_const_calib)
-  par_calib <- parameters_lhs  # initialize
-  for (i in 1:n_const_calib) {
-    row_num <- match(parnames_calib[i],input$parameter)
-    if(input[row_num, 'distribution_type']=='gaussian') {
-      par_calib[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-    } else if(input[row_num, 'distribution_type']=='lognormal') {
-      par_calib[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-    } else {
-      print('ERROR - unknown prior distribution type')
-    }
-  }
-
-  model_out <- sapply(1:n_sample, function(ss) {
-      model_forMCMC(par_calib=par_calib[ss,],
-                    par_fixed=par_fixed0,
-                    parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed,
-                    age=age,
-                    ageN=ageN,
-                    ind_const_calib=ind_const_calib,
-                    ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed,
-                    ind_time_fixed=ind_time_fixed,
-                    ind_expected_time=ind_expected_time,
-                    ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold)[,'co2']})
-
-  ibad <- NULL
-  for (ss in 1:n_sample) {
-    if( any(model_out[,ss] < 100) |
-        any(model_out[,ss] > 1e4) |
-        model_out[58,ss] < 280 | model_out[58,ss] > 400) {
-      ibad <- c(ibad,ss)
-    }
-  }
-
-} else {
-
-  ## Break up into smaller LHS if asking for more than n_sample_max samples
-
-  n_full <- floor(n_sample/n_sample_max)            # full n_sample_max samples
-  n_part <- ceiling(n_sample/n_sample_max) - n_full # partial samples (< n_sample_max)
-
-  good_parameters <- vector('list', n_full+n_part)
-
-  print('Breaking up into:')
-  print(paste('  ',n_full,' samples of size ',n_sample_max, sep=''))
-  print(paste('  ',n_part,' samples of size ',n_sample-n_full*n_sample_max, sep=''))
-
-  # do all the full n_sample_max samples
-  par_calib <- mat.or.vec(n_sample, n_parameters)
-
-  for (k in 1:n_full) {
-
-    ## start at NULL and add for each subsample the bad runs
-    ibad <- NULL
-
-    parameters_lhs <- randomLHS(n_sample_max, n_parameters)
-
-    ## Trim so you aren't sampling the extreme cases?
-    #alpha <- 1-.66
-    parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
-
-    ## scale up to the actual parameter distributions
-    n_const_calib <- length(ind_const_calib)
-    par_calib_subsample <- parameters_lhs  # initialize
-    for (i in 1:n_const_calib) {
-      row_num <- match(parnames_calib[i],input$parameter)
-      if(input[row_num, 'distribution_type']=='gaussian') {
-        par_calib_subsample[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-      } else if(input[row_num, 'distribution_type']=='lognormal') {
-        par_calib_subsample[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-      } else {
-        print('ERROR - unknown prior distribution type')
-      }
-    }
-    ind_subsample <- ((k-1)*n_sample_max+1):(k*n_sample_max)
-    par_calib[ind_subsample,] <- par_calib_subsample
-
-    # run model, precalibration windows
-    model_out <- sapply(1:n_sample_max, function(ss) {
-        model_forMCMC(par_calib=par_calib_subsample[ss,],
-                      par_fixed=par_fixed0,
-                      parnames_calib=parnames_calib,
-                      parnames_fixed=parnames_fixed,
-                      age=age,
-                      ageN=ageN,
-                      ind_const_calib=ind_const_calib,
-                      ind_time_calib=ind_time_calib,
-                      ind_const_fixed=ind_const_fixed,
-                      ind_time_fixed=ind_time_fixed,
-                      ind_expected_time=ind_expected_time,
-                      ind_expected_const=ind_expected_const,
-                      iteration_threshold=iteration_threshold)[,'co2']})
-    for (ss in 1:n_sample_max) {
-      if( any(model_out[,ss] < 100) |
-          any(model_out[,ss] > 1e4) |
-          model_out[58,ss] < 280 | model_out[58,ss] > 400) {
-        ibad <- c(ibad, ss)
-      }
-    }
-    good_parameters[[k]] <- par_calib_subsample[-ibad,]
-  }
-
-  # and a partial sample, if there is one
-  if (n_part) {
-
-    ## start at NULL and add for each subsample the bad runs
-    ibad <- NULL
-
-    ind_subsample <- (n_full*n_sample_max+1):n_sample
-    n_subsample <- length(ind_subsample)
-
-    parameters_lhs <- randomLHS(n_subsample, n_parameters)
-
-    ## Trim so you aren't sampling the extreme cases?
-    #alpha <- 1-.66
-    parameters_lhs <- (1-alpha)*parameters_lhs + 0.5*alpha
-
-    ## scale up to the actual parameter distributions
-    n_const_calib <- length(ind_const_calib)
-    par_calib_subsample <- parameters_lhs  # initialize
-    for (i in 1:n_const_calib) {
-      row_num <- match(parnames_calib[i],input$parameter)
-      if(input[row_num, 'distribution_type']=='gaussian') {
-        par_calib_subsample[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-      } else if(input[row_num, 'distribution_type']=='lognormal') {
-        par_calib_subsample[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-      } else {
-        print('ERROR - unknown prior distribution type')
-      }
-    }
-    par_calib[ind_subsample,] <- par_calib_subsample
-
-    # run model, precalibration windows
-    model_out <- sapply(1:n_subsample, function(ss) {
-        model_forMCMC(par_calib=par_calib_subsample[ss,],
-                      par_fixed=par_fixed0,
-                      parnames_calib=parnames_calib,
-                      parnames_fixed=parnames_fixed,
-                      age=age,
-                      ageN=ageN,
-                      ind_const_calib=ind_const_calib,
-                      ind_time_calib=ind_time_calib,
-                      ind_const_fixed=ind_const_fixed,
-                      ind_time_fixed=ind_time_fixed,
-                      ind_expected_time=ind_expected_time,
-                      ind_expected_const=ind_expected_const,
-                      iteration_threshold=iteration_threshold)[,'co2']})
-    for (ss in 1:n_subsample) {
-      if( any(model_out[,ss] < 100) |
-          any(model_out[,ss] > 1e4) |
-          model_out[58,ss] < 280 | model_out[58,ss] > 400) {
-        ibad <- c(ibad, ss)
-      }
-    }
-    good_parameters[[k+1]] <- par_calib_subsample[-ibad,]
-  }
-
-}
-
-parameters_good <- NULL
-for (k in 1:(n_full + n_part)) {
-  parameters_good <- rbind(parameters_good, good_parameters[[k]])
-}
-colnames(parameters_good) <- parnames_calib
-
-tend <- proc.time()
-print(paste('LHS precalibration simulations and filtering took ',tend[3]-tbeg[3],' seconds', sep=''))
-
-##==============================================================================
+## this is where the LHS precalibration would go...
 
 
 ##==============================================================================
-## Fit KDEs to sample from for each parameter
-##===========================================
-
-pdf_all <- vector('list', n_parameters)
-for (pp in 1:n_parameters){
-  tmp <- density(parameters_good[,pp], kernel='gaussian', n=100)
-  pdf_all[[pp]] <- tmp; names(pdf_all)[pp] <- parnames_calib[pp]
-}
-
-## Write a CSV file with the successful parameter combinations and bandwidths
-bandwidths <- rep(NA,n_parameters)
-for (pp in 1:n_parameters){
-  bandwidths[pp] <- pdf_all[[pp]]$bw
-}
-today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-filename_out <- paste('../output/geocarb_precalibration_parameters_alpha',100*alpha,'_sens',sens,'_',today,'.csv', sep='')
-write.csv(rbind(parameters_good, bandwidths), file=filename_out, row.names=FALSE)
-##==============================================================================
-
-
-##==============================================================================
-## Function for sampling from KDEs (inflating a LHS?)
-##===================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
 #filename_in <- filename_out
@@ -395,6 +188,10 @@ n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
 parameters_node <- parameters_node[-(n_node+1),]
 
+
+##==============================================================================
+## Function for sampling from KDEs (inflating a LHS?)
+##===================================================
 
 kde_sample <- function(n_sample, nodes, bandwidths) {
   # preliminaries
@@ -504,18 +301,14 @@ geocarb_sobol_co2_par <- function(par_calib_scaled) {
   return(finalOutput)
 }
 
-n_sample <- 500
 n_bootstrap <- 20
 Ncore <- .Ncore
 
-## Sample parameters (need 2 data frames)
-#parameters_sample1 <- kde_sample(n_sample, parameters_node, bandwidths)
-#parameters_sample2 <- kde_sample(n_sample, parameters_node, bandwidths)
-## Or take directly from the precalibration?
+## Sample parameters (need 2 data frames) by taking directly from the precalibration?
 n_half <- floor(0.5*nrow(parameters_node))
 
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-n_half <- 500
+n_half <- n_test
 parameters_sample1 <- parameters_node[1:n_half,]
 parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
@@ -544,7 +337,7 @@ t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-filename.sobol <- paste('../output/sobol_alpha',100*alpha,'_',today,'.rds', sep='')
+filename.sobol <- paste('../output/sobol_alpha',100*alpha,'_',appen,'_',today,'.rds', sep='')
 saveRDS(s.out, filename.sobol)
 
 ## Check convergence - is maximum confidence interval width < 10% of the highest
@@ -560,8 +353,8 @@ print(paste('max. conf int=',max_conf_int, ' want less than:  0.1 * max. sensiti
 ## Write indices, results we'd need to file
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_alpha',100*alpha,'_sens',sens,'_',today,'.txt',sep='')
-file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_sens',sens,'_',today,'.txt',sep='')
+file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_alpha',100*alpha,'_sens',sens,'_',appen,'_',today,'.txt',sep='')
+file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_sens',sens,'_',appen,'_',today,'.txt',sep='')
 
 headers.1st.tot <- matrix(c('Parameter', 'S1', 'S1_conf_low', 'S1_conf_high',
                             'ST', 'ST_conf_low', 'ST_conf_high'), nrow=1)
