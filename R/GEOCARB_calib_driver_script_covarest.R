@@ -13,7 +13,7 @@
 
 rm(list=ls())
 
-niter_mcmc000 <- 5e3   # number of MCMC iterations to use for each subsample
+niter_mcmc000 <- 1e3   # number of MCMC iterations to use for each subsample
 n_node000 <- 1         # number of CPUs to use
 #setwd('/home/scrim/axw322/codes/GEOCARB/R')
 setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
@@ -27,6 +27,7 @@ co2_uncertainty_cutoff <- 20
 library(sn)
 library(adaptMCMC)
 library(ncdf4)
+library(magic)
 
 ##==============================================================================
 ## Data
@@ -111,6 +112,7 @@ filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all.csv'
 calib_all <- read.csv(filename.calibinput)
 source('GEOCARB-2014_parameterSetup.R')
 parnames_calib_all <- parnames_calib
+n_params <- length(parnames_calib_all)
 ##==============================================================================
 
 
@@ -118,12 +120,25 @@ parnames_calib_all <- parnames_calib
 ## Divide into parameter subsets, and calibrate
 ##=============================================
 
-# break up into subsets of size n_subset (56 parameters total, so 8 subsets)
-n_subset <- 7
-n_sets <- ceiling(n_params/n_subset)  # these codes won't work if not divisible
+# break up into subsets.
+# first subset is the expert set: {ACT, LIFE, GYM, FERT, GLAC, deltaT2X}
+# other subsets are of size n_subset (50 parameters left, so do 10 subsets of 5)
+p_expert <- c('ACT','LIFE','GYM','FERT','deltaT2X','GLAC')
+n_subset <- 5
+n_sets <- 1+ceiling((n_params-length(p_expert))/n_subset)  # these codes won't work if not divisible
 covars <- vector('list', n_sets)
 params <- rep(0, n_params)
 amcmc <- vector('list', n_sets)
+
+# set up which indices are in which subset
+ind_subset <- vector('list', n_sets)
+all_indices <- 1:n_params # and remove the ones we have assigned to a subset
+ind_subset[[1]] <- match(p_expert, parnames_calib_all)
+all_indices <- all_indices[-match(ind_subset[[1]], all_indices)]
+for (k in 2:n_sets) {
+  ind_subset[[k]] <- all_indices[1:n_subset]
+  all_indices <- all_indices[-match(ind_subset[[k]], all_indices)]
+}
 
 for (k in 1:n_sets) {
 
@@ -136,9 +151,8 @@ for (k in 1:n_sets) {
   calib_sub$calib <- 0
 
   # then set the ones we want to calibrate to 1, and write the temporary file
-  ip_subsample <- ((k-1)*n_subset+1):(k*n_subset)
-  for (j in 1:n_subset) {
-    row <- which(calib_sub$parameter==parnames_calib_all[ip_subsample[j]])
+  for (j in 1:length(ind_subset[[k]])) {
+    row <- which(calib_sub$parameter==parnames_calib_all[ind_subset[[k]][j]])
     calib_sub$calib[row] <- 1
   }
   write.csv(x=calib_sub, file='../input_data/GEOCARB_input_summaries_calib_subsample.csv', row.names=FALSE)
@@ -146,6 +160,8 @@ for (k in 1:n_sets) {
   # read those parameters and set up to calibrate em
   filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_subsample.csv'
   source('GEOCARB-2014_parameterSetup.R')
+
+  # NB:  the parameters in each subset need to be in order (increasing index)
 
   # proceed with calibration...
 
@@ -210,7 +226,7 @@ for (k in 1:n_sets) {
   print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
   ## Save the results
-  params[ip_subsample] <- chain1[niter_mcmc,]
+  params[ind_subset[[k]]] <- chain1[niter_mcmc,]
   covars[[k]] <- amcmc[[k]]$cov.jump
   rownames(covars[[k]]) <- colnames(covars[[k]]) <- parnames_calib
 
@@ -225,8 +241,7 @@ for (k in 1:n_sets) {
 # this assumes independence, which is of course not true.  but it gives a better
 # initial estimate of the transition matrix than the `step` estimates
 
-#install.packages('magic')
-library(magic)
+# need to put back in the proper order, or will indexing here take care of that?
 
 covar_full <- adiag(covars[[1]], covars[[2]])
 if (n_sets > 2) {
@@ -234,6 +249,9 @@ if (n_sets > 2) {
     covar_full <- adiag(covar_full, covars[[k]])
   }
 }
+# rearrange back into original order
+covar <- covar_full[parnames_calib_all, parnames_calib_all]
+
 names(params) <- parnames_calib_all
 
 # Save results to use later for better initial estimates
