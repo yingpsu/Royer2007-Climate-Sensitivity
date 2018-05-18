@@ -9,11 +9,11 @@
 
 #rm(list=ls())
 
-niter_mcmc000 <- 2e4   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 #setwd('/home/scrim/axw322/codes/GEOCARB/R')
 setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'sig26'
+appen <- 'Royer'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- FALSE
@@ -182,7 +182,7 @@ accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- niter_mcmc000
-gamma_mcmc <- 0.66
+gamma_mcmc <- 0.5
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
@@ -222,15 +222,17 @@ if(l_write_rdata) {
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
 if(FALSE){
-niter_extend <- 4e4
+niter_extend <- 2e4
 tbeg=proc.time()
 amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs)
+                                par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                                input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                                data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                                iteration_threshold=iteration_threshold)
 tend=proc.time()
 chain1 = amcmc_extend1$samples
 }

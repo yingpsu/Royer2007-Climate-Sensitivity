@@ -27,6 +27,7 @@ sensitivity_co2 <- function(
   iteration_threshold,
   input,
   model_ref=NULL,
+  data_calib=NULL,
   sens
 ){
 
@@ -65,12 +66,7 @@ sensitivity_co2 <- function(
     }
   }
 
-  if (is.null(n_simulations)) {
-    llike <- 0
-    n_simulations <- 1
-  } else {
-    llike <- rep(0, n_simulations)
-  }
+  if (is.null(n_simulations)) {n_simulations <- 1}
 
   # run the model
   if (n_simulations > 1) {
@@ -104,6 +100,15 @@ sensitivity_co2 <- function(
         ref <- model_ref[min(ind_mod2obs):max(ind_mod2obs)]
         model_sens[ss] <- sum(abs(mod[icomp]-ref[icomp]))
       }
+    } else if (sens=='NS') {
+      # Nash-Sutcliffe efficiency
+      model_sens <- rep(-999, n_simulations)
+      for (ss in 1:n_simulations) {
+        model_stdy <- model_out[ind_mod2obs, ss]
+        sse <- sum( (model_stdy - data_calib$co2)^2 )
+        sst <- sum( (data_calib$co2 - mean(data_calib$co2))^2 )
+        model_sens[ss] <- 1 - sse/sst
+      }
     }
   } else {
     model_out <- model_forMCMC(par_calib=par_calib,
@@ -133,6 +138,13 @@ sensitivity_co2 <- function(
       icomp <- which(is.finite(mod) & !is.na(mod))  # only compare valid values
       ref <- model_ref[min(ind_mod2obs):max(ind_mod2obs)]
       model_sens <- sum(abs(mod[icomp]-ref[icomp]))
+    } else if (sens=='NS') {
+      # Nash-Sutcliffe efficiency
+      model_stdy <- model_out[ind_mod2obs]
+      icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
+      sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
+      sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
+      model_sens <- 1 - sse/sst
     }
   }
 

@@ -17,6 +17,7 @@ rm(list=ls())
 n_test <- 200000
 appen <- 'sobol2'
 .Nboot <- 10000
+.scheme <- 'A' # A = first and total indices; B = first, second and total
 
 
 co2_uncertainty_cutoff <- 20
