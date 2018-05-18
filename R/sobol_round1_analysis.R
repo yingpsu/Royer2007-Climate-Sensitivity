@@ -116,14 +116,23 @@ source('GEOCARB-2014_parameterSetup.R')
 calib_sig <- read.csv('../input_data/GEOCARB_input_summaries_calib_all.csv')
 
 # read correaltion experiment output
-load('../output/sobol_corr_n10.RData')
+load('../output/sobol_corr_n100.RData')
 
-corr_s12_avg <- apply(corr_s12, 2, median)
 corr_s13_avg <- apply(corr_s13, 2, median)
+corr_s12_avg <- apply(corr_s12, 2, median)
+corr_s12_max <- apply(corr_s12, 2, max)
+
+t13 <- T_test[which(corr_s13_avg < 0.05)]
+t12 <- T_test[which(corr_s12_max > 0.89)]
+
+for (t in T_test) {
+  if (t %in% t13 & t %in% t12) {
+    T <- t
+    break
+  }
+}
 
 sens_total <- s1st1$a0$ST
-
-T <- 22
 
 ind_large <- order(sens_total, decreasing=TRUE)[1:T]
 ind_small <- order(sens_total, decreasing=FALSE)[1:(56-T)]

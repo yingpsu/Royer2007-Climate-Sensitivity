@@ -9,11 +9,11 @@
 
 #rm(list=ls())
 
-niter_mcmc000 <- 5e3   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 2e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 #setwd('/home/scrim/axw322/codes/GEOCARB/R')
 setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'sig22'
+appen <- 'sig26'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- FALSE
@@ -99,6 +99,17 @@ for (i in 1:length(ind_mod2obs)){
 # Read parameter information, set up the calibration parameters
 ##filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_S1.csv' # moved to top for easy modification
 source('GEOCARB-2014_parameterSetup.R')
+
+# Get improved initial parameter and transition covariance estimates
+load('initial_estimates.RData')
+
+# Update parameters
+for (p in 1:length(parnames_calib)) {
+  par_calib0[p] <- params[[parnames_calib[p]]]
+}
+
+# Update transition covariance matrix
+step_mcmc <- covar_full[parnames_calib, parnames_calib]
 ##==============================================================================
 
 
@@ -171,7 +182,7 @@ accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- niter_mcmc000
-gamma_mcmc <- 0.5
+gamma_mcmc <- 0.66
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
@@ -179,7 +190,7 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 if(n_node000==1) {
   tbeg=proc.time()
   amcmc_out1 = MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(500,round(0.05*niter_mcmc)),
+                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
                   par_fixed=par_fixed0, parnames_calib=parnames_calib,
                   parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                   ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -245,6 +256,10 @@ chain1 = amcmc_extend1$samples
 # Gelman and Rubin
 # Heidelberger and Welch
 # visual inspection
+
+# which parameters is climate sensitivity?
+ics <- which(parnames_calib=='deltaT2X')
+plot(chain1[,ics], type='l')
 
 parameters.posterior <- chain1
 covjump <- amcmc_out1$cov.jump
