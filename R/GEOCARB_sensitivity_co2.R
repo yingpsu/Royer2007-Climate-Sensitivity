@@ -105,8 +105,9 @@ sensitivity_co2 <- function(
       model_sens <- rep(-999, n_simulations)
       for (ss in 1:n_simulations) {
         model_stdy <- model_out[ind_mod2obs, ss]
-        sse <- sum( (model_stdy - data_calib$co2)^2 )
-        sst <- sum( (data_calib$co2 - mean(data_calib$co2))^2 )
+        icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
+        sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
+        sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
         model_sens[ss] <- 1 - sse/sst
       }
     }

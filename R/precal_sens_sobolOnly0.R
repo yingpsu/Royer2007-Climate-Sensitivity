@@ -14,9 +14,9 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- 500
+n_test <- 200000
 appen <- 'testNS'
-.Nboot <- 100
+.Nboot <- 0
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 
 
@@ -33,11 +33,13 @@ if(Sys.info()['user']=='tony') {
   machine <- 'local'
   setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
   .Ncore <- 2
+  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
+  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
 }
 
 
@@ -180,12 +182,8 @@ library(doParallel)
 ##==============================================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
-#filename_in <- filename_out
-alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
-#alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
-#alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
+## (Moved to beginning becase this depends on remote vs local, whehter small testing
+##  or ready to go large parameter sets)
 parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
