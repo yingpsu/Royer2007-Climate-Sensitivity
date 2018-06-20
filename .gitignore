@@ -1,3 +1,4 @@
+*.pbs.o*
 .ipynb_checkpoints
 precal_sens_a0-largest.R
 precal_sens_a10-largest.R
@@ -5,8 +6,8 @@ precal_sens_a10-largest.R
 precal_timing_tests.R
 *.RData
 *.rds
-*.so
-*.o
+fortran/*.so
+fortran/obj/*.o
 fortran/Makefile
 figures/
 R/old

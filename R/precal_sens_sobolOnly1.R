@@ -13,10 +13,10 @@
 ## Clear workspace
 rm(list=ls())
 
-## Set testing number of samples and file nameappendix here
-n_test <- 200000
-appen <- 'sobol2'
-.Nboot <- 10000
+## Set testing number of samples and file name appendix here
+n_test <- 2000
+appen <- 'testNS-small'
+.Nboot <- 0
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 
 
@@ -24,7 +24,7 @@ co2_uncertainty_cutoff <- 20
 
 # latin hypercube precalibration
 alpha <- 0
-sens='L1'
+sens='NS'
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
 
@@ -33,11 +33,13 @@ if(Sys.info()['user']=='tony') {
   machine <- 'local'
   setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
   .Ncore <- 2
+  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
+  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
 }
 
 
@@ -180,12 +182,8 @@ library(doParallel)
 ##==============================================================================
 
 ## Read KDE results file, separate into parameters and the bandwidths
-#filename_in <- filename_out
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
-alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
-#alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
-#alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
+## (Moved to beginning becase this depends on remote vs local, whehter small testing
+##  or ready to go large parameter sets)
 parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
@@ -218,7 +216,7 @@ kde_sample <- function(n_sample, nodes, bandwidths) {
 
 ##==============================================================================
 
-## Get a reference simulation for integrated sensitivity measure
+## Get a reference simulation for integrated sensitivity measure (if using L1, e.g.)
 model_ref <- model_forMCMC(par_calib=par_calib0,
               par_fixed=par_fixed0,
               parnames_calib=parnames_calib,
@@ -241,8 +239,8 @@ source('GEOCARB_sensitivity_co2.R')
 geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           parnames_fixed, age, ageN, ind_const_calib,
                           ind_time_calib, ind_const_fixed, ind_time_fixed,
-                          input, ind_expected_time,
-                          ind_expected_const, iteration_threshold) {
+                          input, ind_expected_time, ind_expected_const,
+                          data_calib, iteration_threshold) {
   finalOutput <- sensitivity_co2(par_calib_scaled, l_scaled=TRUE,
                           par_fixed=par_fixed, parnames_calib=parnames_calib,
                           parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -250,7 +248,8 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                           input=input, ind_expected_time=ind_expected_time,
                           ind_expected_const=ind_expected_const,
-                          iteration_threshold=iteration_threshold, model_ref=model_ref, sens=sens)
+                          iteration_threshold=iteration_threshold,
+                          data_calib=data_calib, model_ref=model_ref, sens=sens)
   output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
   finalOutput <- finalOutput - output.avg
   return(finalOutput)
@@ -262,7 +261,7 @@ export.names <- c('sensitivity_co2', 'model_forMCMC', 'model_forMCMC', 'run_geoc
                   'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
                   'ind_time_fixed', 'input', 'ind_expected_time',
                   'ind_expected_const', 'iteration_threshold', 'l_scaled', 'sens',
-                  'model_ref','ind_mod2obs')
+                  'model_ref', 'data_calib', 'ind_mod2obs')
 
 
 geocarb_sobol_co2_par <- function(par_calib_scaled) {
@@ -292,7 +291,8 @@ geocarb_sobol_co2_par <- function(par_calib_scaled) {
                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                     input=input, ind_expected_time=ind_expected_time,
                     ind_expected_const=ind_expected_const, model_ref=model_ref,
-                    sens=sens, iteration_threshold=iteration_threshold)
+                    sens=sens, iteration_threshold=iteration_threshold,
+                    data_calib=data_calib)
       output[i] <- co2_output
   }
   print(paste(' ... done.'))
@@ -314,7 +314,6 @@ n_half <- floor(0.5*nrow(parameters_node))
 if (n_test > 0) {n_half <- n_test}
 parameters_sample1 <- parameters_node[1:n_half,]
 parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
-rm(parameters_node)
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -322,7 +321,7 @@ colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 if(FALSE) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
 parameters_sample1,
 parameters_sample2,
-scheme='B',
+scheme=.scheme,
 nboot=n_bootstrap,
 par_fixed=par_fixed0, parnames_calib=parnames_calib,
 parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -335,7 +334,7 @@ iteration_threshold=iteration_threshold))}
 t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
                            parameters_sample1,
                            parameters_sample2,
-                           scheme='B',
+                           scheme=.scheme,
                            nboot=n_bootstrap))
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))

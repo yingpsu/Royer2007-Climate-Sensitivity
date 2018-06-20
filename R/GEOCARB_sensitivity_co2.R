@@ -31,6 +31,8 @@ sensitivity_co2 <- function(
   sens
 ){
 
+#saveRDS(par_calib_scaled, 'NS_par_debug.rds')
+
   # initialize
   par_calib <- par_calib_scaled
 
@@ -109,6 +111,10 @@ sensitivity_co2 <- function(
         sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
         sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
         model_sens[ss] <- 1 - sse/sst
+
+        # DEBUG
+        #print(paste(ss,model_sens[ss],sse,sst,length(icomp)))
+        if (is.infinite(model_sens[ss]) | is.na(model_sens[ss]) | sst==0 | length(icomp)==0) {print(paste('ss',ss,'-- sst',sst,'-- sse',sse,'-- model_sens',model_sens[ss],'-- model_out',model_out[,ss]))}
       }
     }
   } else {
@@ -146,11 +152,24 @@ sensitivity_co2 <- function(
       sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
       sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
       model_sens <- 1 - sse/sst
+
+      # DEBUG
+      #print(paste(ss,model_sens[ss],sse,sst,length(icomp)))
+      if (is.infinite(model_sens) | is.na(model_sens) | sst==0) {print(paste('sst',sst,'-- sse',sse,'-- model_sens',model_sens,'-- model_out',model_out))}
     }
   }
 
   #ind_na <- which(is.na(model_sens))
   #if (length(ind_na)>0) {model_sens[ind_na] <- -Inf}
+  #ind_inf <- which(is.infinite(model_sens))
+  #if (length(ind_inf)>0) {model_sens[ind_inf] <- NA}
+  #ind_low <- which(model_sens < -9)
+  #if (length(ind_low)>0) {model_sens[ind_low] <- NA}
+
+#  write.table(model_sens    , file='NS_sens_debug.txt', append=FALSE , sep = " ",
+#              quote=FALSE    , row.names = FALSE , col.names=FALSE)
+
+#print('debug here now')
 
   return(model_sens)
 }

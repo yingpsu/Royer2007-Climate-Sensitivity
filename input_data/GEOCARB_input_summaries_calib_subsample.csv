@@ -11,17 +11,30 @@
 "GEOG","time array",TRUE,"gaussian",NA,NA,"_inf",Inf,0
 "fSR","time array",TRUE,"gaussian",NA,NA,"0",Inf,0
 "fC","time array",TRUE,"gaussian",NA,NA,"0",Inf,0
+<<<<<<< HEAD
 "ACT","constant",TRUE,"gaussian",0.09,0.045,"0",Inf,0
+=======
+"ACT","constant",TRUE,"gaussian",0.09,0.045,"0",Inf,1
+>>>>>>> b4caf1d7bc76c95770e442cb759dfaf047395b89
 "ACTcarb","constant",TRUE,"gaussian",0.087,0.0435,"0",Inf,0
 "VNV","constant",TRUE,"gaussian",5,2.5,"0",Inf,0
 "NV","constant",TRUE,"gaussian",0.0075,0.00375,"0",Inf,0
 "exp_NV","constant",TRUE,"gaussian",0.67,0.335,"0",Inf,0
+<<<<<<< HEAD
 "LIFE","constant",TRUE,"gaussian",0.25,0.125,"0",Inf,0
 "GYM","constant",TRUE,"gaussian",0.875,0.415625,"0",Inf,0
 "FERT","constant",TRUE,"gaussian",0.4,0.2,"0",1,0
 "exp_fnBb","constant",TRUE,"gaussian",0.5,0.125,"0",Inf,0
 "deltaT2X","constant",TRUE,"lognormal",3,2.5,"1.5",Inf,0
 "GLAC","constant",TRUE,"gaussian",2,1,"1",Inf,0
+=======
+"LIFE","constant",TRUE,"gaussian",0.25,0.125,"0",Inf,1
+"GYM","constant",TRUE,"gaussian",0.875,0.415625,"0",Inf,1
+"FERT","constant",TRUE,"gaussian",0.4,0.2,"0",1,1
+"exp_fnBb","constant",TRUE,"gaussian",0.5,0.125,"0",Inf,0
+"deltaT2X","constant",TRUE,"lognormal",3,2.5,"1.5",Inf,1
+"GLAC","constant",TRUE,"gaussian",2,1,"1",Inf,1
+>>>>>>> b4caf1d7bc76c95770e442cb759dfaf047395b89
 "J","constant",TRUE,"gaussian",4,2,"0",Inf,0
 "n","constant",TRUE,"gaussian",1,0.5,"0",Inf,0
 "Ws","constant",TRUE,"gaussian",7.4,3.7,"_inf",Inf,0
@@ -62,8 +75,16 @@
 "ST","constant",TRUE,"gaussian",600,300,"0",Inf,0
 "dlst","constant",TRUE,"gaussian",4,3.055,"_inf",Inf,0
 "CT","constant",TRUE,"gaussian",6252,468.9,"0",Inf,0
+<<<<<<< HEAD
 "dlct","constant",TRUE,"gaussian",-3.5,0.252,"_inf",Inf,1
 "kwpy","constant",TRUE,"gaussian",0.01,0.005,"0",Inf,1
 "kwsy","constant",TRUE,"gaussian",0.01,0.005,"0",Inf,1
 "kwgy","constant",TRUE,"gaussian",0.018,0.009,"0",Inf,1
 "kwcy","constant",TRUE,"gaussian",0.018,0.009,"0",Inf,1
+=======
+"dlct","constant",TRUE,"gaussian",-3.5,0.252,"_inf",Inf,0
+"kwpy","constant",TRUE,"gaussian",0.01,0.005,"0",Inf,0
+"kwsy","constant",TRUE,"gaussian",0.01,0.005,"0",Inf,0
+"kwgy","constant",TRUE,"gaussian",0.018,0.009,"0",Inf,0
+"kwcy","constant",TRUE,"gaussian",0.018,0.009,"0",Inf,0
+>>>>>>> b4caf1d7bc76c95770e442cb759dfaf047395b89
