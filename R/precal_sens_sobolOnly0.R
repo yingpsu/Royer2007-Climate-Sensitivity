@@ -14,11 +14,12 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- 500
+n_test <- 4000
 appen <- 'testNS'
-.Nboot <- 100
+.Nboot <- 1000
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 
+calc_ci <- FALSE  # calculate confidence intervals via bootstrap?
 
 co2_uncertainty_cutoff <- 20
 
@@ -186,7 +187,7 @@ alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_s
 #alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
 #alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 #alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
-parameters_node <- read.csv(filename_in)
+parameters_node <- as.matrix(read.csv(filename_in))
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
 parameters_node <- parameters_node[-(n_node+1),]
@@ -320,7 +321,10 @@ colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 ## Actually run the Sobol'
-if(FALSE) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
+
+l_parallel <- FALSE
+
+if(!l_parallel) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
 parameters_sample1,
 parameters_sample2,
 scheme=.scheme,
@@ -331,13 +335,13 @@ ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
 ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
 input=input,
 ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-iteration_threshold=iteration_threshold))}
+iteration_threshold=iteration_threshold, data_calib=data_calib))}
 
-t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
+if(l_parallel) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
                            parameters_sample1,
                            parameters_sample2,
                            scheme=.scheme,
-                           nboot=n_bootstrap))
+                           nboot=n_bootstrap))}
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 
