@@ -14,15 +14,15 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- 4000
+n_test <- 5000
 appen <- 'testNS'
-.Nboot <- 1000
+.Nboot <- 0
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 
 co2_uncertainty_cutoff <- 20
 
 # latin hypercube precalibration
-alpha <- 0
+alpha <- 0.1
 sens='NS'
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
@@ -33,6 +33,7 @@ if(Sys.info()['user']=='tony') {
   setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
   .Ncore <- 2
   filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+  #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
@@ -255,8 +256,18 @@ geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
                           ind_expected_const=ind_expected_const,
                           iteration_threshold=iteration_threshold,
                           data_calib=data_calib, model_ref=model_ref, sens=sens)
+  # replace anything < -10
+  finalOutput[which(finalOutput < -10)] <- NA
+  finalOutput[which(is.nan(finalOutput))] <- NA
   output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
   finalOutput <- finalOutput - output.avg
+  finalOutput[which(is.infinite(finalOutput))] <- NA
+
+
+  write.table(finalOutput    , file='NS_sens_debug2.txt', append=FALSE , sep = " ",
+              quote=FALSE    , row.names = FALSE , col.names=FALSE)
+
+
   return(finalOutput)
 }
 
@@ -306,6 +317,7 @@ geocarb_sobol_co2_par <- function(par_calib_scaled) {
   # for Sobol, output must be centered at 0
   output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
   finalOutput <- finalOutput - output.avg
+  finalOutput[which(is.infinite(finalOutput))] <- NA
   return(finalOutput)
 }
 
@@ -317,8 +329,8 @@ n_half <- floor(0.5*nrow(parameters_node))
 
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 if (n_test > 0) {n_half <- n_test}
-parameters_sample1 <- parameters_node[1:n_half,]
-parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
+parameters_sampleA <- parameters_node[1:n_half,]
+parameters_sampleB <- parameters_node[(n_half+1):(2*n_half),]
 colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 ## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -326,9 +338,22 @@ colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
 
 l_parallel <- FALSE
 
+source('sobol.R')
+
+s.out <- sobol(parameters_sampleA, parameters_sampleB, sens,
+               par_fixed=par_fixed0, parnames_calib=parnames_calib,
+               parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+               ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+               ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+               input=input,
+               ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+               iteration_threshold=iteration_threshold, data_calib=data_calib)
+
+
+
 if(!l_parallel) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
-parameters_sample1,
-parameters_sample2,
+parameters_sampleA,
+parameters_sampleB,
 scheme=.scheme,
 nboot=n_bootstrap,
 par_fixed=par_fixed0, parnames_calib=parnames_calib,
@@ -340,8 +365,8 @@ ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
 iteration_threshold=iteration_threshold, data_calib=data_calib))}
 
 if(l_parallel) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
-                           parameters_sample1,
-                           parameters_sample2,
+                           parameters_sampleA,
+                           parameters_sampleB,
                            scheme=.scheme,
                            nboot=n_bootstrap))}
 

@@ -95,7 +95,7 @@ sensitivity_co2 <- function(
     } else if (sens=='L1') {
       # L1 norm
       ##model_sens <- apply(X=abs(model_out[min(ind_mod2obs):max(ind_mod2obs),]-model_ref[min(ind_mod2obs):max(ind_mod2obs)]), MARGIN=2, FUN=sum)
-      model_sens <- rep(-999, n_simulations)
+      model_sens <- rep(NA, n_simulations)
       for (ss in 1:n_simulations) {
         mod <- model_out[min(ind_mod2obs):max(ind_mod2obs), ss]
         icomp <- which(is.finite(mod) & !is.na(mod))
@@ -104,17 +104,13 @@ sensitivity_co2 <- function(
       }
     } else if (sens=='NS') {
       # Nash-Sutcliffe efficiency
-      model_sens <- rep(-999, n_simulations)
+      model_sens <- rep(NA, n_simulations)
       for (ss in 1:n_simulations) {
         model_stdy <- model_out[ind_mod2obs, ss]
         icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
         sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
         sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
         model_sens[ss] <- 1 - sse/sst
-
-        # DEBUG
-        #print(paste(ss,model_sens[ss],sse,sst,length(icomp)))
-        if (is.infinite(model_sens[ss]) | is.na(model_sens[ss]) | sst==0 | length(icomp)==0) {print(paste('ss',ss,'-- sst',sst,'-- sse',sse,'-- model_sens',model_sens[ss],'-- model_out',model_out[,ss]))}
       }
     }
   } else {
@@ -152,10 +148,6 @@ sensitivity_co2 <- function(
       sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
       sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
       model_sens <- 1 - sse/sst
-
-      # DEBUG
-      #print(paste(ss,model_sens[ss],sse,sst,length(icomp)))
-      if (is.infinite(model_sens) | is.na(model_sens) | sst==0) {print(paste('sst',sst,'-- sse',sse,'-- model_sens',model_sens,'-- model_out',model_out))}
     }
   }
 
@@ -166,8 +158,8 @@ sensitivity_co2 <- function(
   #ind_low <- which(model_sens < -9)
   #if (length(ind_low)>0) {model_sens[ind_low] <- NA}
 
-#  write.table(model_sens    , file='NS_sens_debug.txt', append=FALSE , sep = " ",
-#              quote=FALSE    , row.names = FALSE , col.names=FALSE)
+  write.table(model_sens    , file='NS_sens_debug.txt', append=FALSE , sep = " ",
+              quote=FALSE    , row.names = FALSE , col.names=FALSE)
 
 #print('debug here now')
 
