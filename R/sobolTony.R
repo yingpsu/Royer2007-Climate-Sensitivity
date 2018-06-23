@@ -1,5 +1,5 @@
 ##==============================================================================
-## sobol.R
+## sobolTony.R
 ##
 ## The `sensitivity` package Sobol routines all choke with NAs, which occur with
 ## some regularity due to the `failed_runs` in GEOCARB.  So, we just do the
@@ -7,18 +7,31 @@
 ##
 ## Assumes the parameters are already appropriately scale for use in the model.
 ##
+## Contains:
+##  sobolTony -- serial version, calculates indices according to Sobol' 1991
+##               verified calculation in `TEST_sobol.R` get results within <1%
+##               of the `sensitivity` package results
+##
 ## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
 
 source("sobol_model.R")
 
+#install.packages('foreach')
+#install.packages('doParallel')
+library(foreach)
+library(doParallel)
+
 ##==============================================================================
-sobol <- function(parameters_sampleA, parameters_sampleB, sens,
-                  par_fixed, parnames_calib, parnames_fixed,
-                  age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
-                  ind_time_fixed, ind_expected_time, ind_expected_const,
-                  iteration_threshold, input, model_ref=NULL, data_calib=NULL){
+sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
+                      par_fixed, parnames_calib, parnames_fixed,
+                      age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
+                      ind_time_fixed, ind_expected_time, ind_expected_const,
+                      iteration_threshold, input, model_ref=NULL, data_calib=NULL,
+                      parallel=FALSE, n_core=1, export_names=NULL){
+
+  if(parallel) {sobol_func <- sobol_model_par} else {sobol_func <- sobol_model}
 
   n_simulations <- nrow(parameters_sampleA)
   p <- ncol(parameters_sampleA)
@@ -30,11 +43,12 @@ sobol <- function(parameters_sampleA, parameters_sampleB, sens,
   print('Starting estimation of full model mean and variance...')
 
   # run the model ensemble under sample A
-  mA <- sobol_model(parameters_sampleA, sens,
-                    par_fixed, parnames_calib, parnames_fixed,
-                    age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
-                    ind_time_fixed, ind_expected_time, ind_expected_const,
-                    iteration_threshold, input, model_ref, data_calib)
+  mA <- sobol_func(parameters_sampleA, sens,
+                   par_fixed, parnames_calib, parnames_fixed,
+                   age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
+                   ind_time_fixed, ind_expected_time, ind_expected_const,
+                   iteration_threshold, input, model_ref, data_calib, n_core,
+                   export_names)
 
   # account for possible NA, and extreme values
   idrop <- which(is.na(mA) | is.nan(mA) | is.infinite(mA) | mA < -10)
@@ -64,11 +78,12 @@ sobol <- function(parameters_sampleA, parameters_sampleB, sens,
     p_BA <- parameters_sampleB
     p_BA[,i] <- parameters_sampleA[,i]
     mA_i <- mA
-    m_BA <- sobol_model(p_BA, sens,
-                        par_fixed, parnames_calib, parnames_fixed,
-                        age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
-                        ind_time_fixed, ind_expected_time, ind_expected_const,
-                        iteration_threshold, input, model_ref, data_calib)
+    m_BA <- sobol_func(p_BA, sens,
+                       par_fixed, parnames_calib, parnames_fixed,
+                       age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
+                       ind_time_fixed, ind_expected_time, ind_expected_const,
+                       iteration_threshold, input, model_ref, data_calib, n_core,
+                       export_names)
 
     # account for possible NA, and extreme values
     idrop <- which(is.na(m_BA) | is.nan(m_BA) | is.infinite(m_BA) | m_BA < -10)
@@ -97,11 +112,12 @@ sobol <- function(parameters_sampleA, parameters_sampleB, sens,
     p_AB <- parameters_sampleA
     p_AB[,i] <- parameters_sampleB[,i]
     mA_i <- mA
-    m_AB <- sobol_model(p_AB, sens,
-                        par_fixed, parnames_calib, parnames_fixed,
-                        age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
-                        ind_time_fixed, ind_expected_time, ind_expected_const,
-                        iteration_threshold, input, model_ref, data_calib)
+    m_AB <- sobol_func(p_AB, sens,
+                       par_fixed, parnames_calib, parnames_fixed,
+                       age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
+                       ind_time_fixed, ind_expected_time, ind_expected_const,
+                       iteration_threshold, input, model_ref, data_calib, n_core,
+                       export_names)
 
     # account for possible NA, and extreme values
     idrop <- which(is.na(m_AB) | is.nan(m_AB) | is.infinite(m_AB) | m_AB < -10)
@@ -128,8 +144,6 @@ sobol <- function(parameters_sampleA, parameters_sampleB, sens,
 
   return(out)
 }
-##==============================================================================
-
 
 ##==============================================================================
 ## End

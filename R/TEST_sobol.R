@@ -94,7 +94,7 @@ sobol_model <- function(parameters, xeval, model_meas, df=FALSE) {
 ## this is all from the `sobol.R` routine that we are testing
 ## So many variables declared are redundant.
 
-sobol <- function(parameters_sampleA, parameters_sampleB, xeval, model_meas){
+sobolTony <- function(parameters_sampleA, parameters_sampleB, xeval, model_meas){
 
   n_simulations <- nrow(parameters_sampleA)
   p <- ncol(parameters_sampleA)
@@ -172,21 +172,34 @@ sobol <- function(parameters_sampleA, parameters_sampleB, xeval, model_meas){
 ##==============================================================================
 ## run it
 
-s.tony <- sobol(parameters_sampleA, parameters_sampleB, xeval, model_meas)
+s.tony <- sobolTony(parameters_sampleA, parameters_sampleB, xeval, model_meas)
 
 ##==============================================================================
 ## what do the routines in the `sensitivity` package give?
 
 library(sensitivity)
 
-s.sens <- sobol2002(model=sobol_model, parameters_sampleA_df, parameters_sampleB_df,
-                    nboot=0, xeval=xeval, model_meas=model_meas)
+s.sens <- s.tony
 
+# first order indices using the vanilla Sobol' method
+s.out <- sobol(model=sobol_model, parameters_sampleA_df, parameters_sampleB_df,
+               nboot=0, xeval=xeval, model_meas=model_meas, df=TRUE)
+s.sens$S <- s.out$S$original
 
-
+# total sensitivity indices
+s.out <- sobol2002(model=sobol_model, parameters_sampleA_df, parameters_sampleB_df,
+                   nboot=0, xeval=xeval, model_meas=model_meas, df=TRUE)
+s.sens$T <- s.out$T$original
 
 ##==============================================================================
+## comparison
 
+# difference in first-order indices
+p_err <- rbind((s.tony$S - s.sens$S)/s.sens$S, (s.tony$T - s.sens$T)/s.sens$T)*100
+
+print('Percent difference between Tonys code and Sensitivity package:')
+print(paste('  S:', p_err[1,1], p_err[1,2]))
+print(paste('  T:', p_err[2,1], p_err[2,2]))
 
 ##==============================================================================
 ## End
