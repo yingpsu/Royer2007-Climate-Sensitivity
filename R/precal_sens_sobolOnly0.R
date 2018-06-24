@@ -240,7 +240,7 @@ colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 source('sobolTony.R')
 
 if (!l_parallel) {
-  s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
+  t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
                      parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                      ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -248,9 +248,9 @@ if (!l_parallel) {
                      input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
-                     n_boot=n_boot, conf=conf)
+                     n_boot=n_boot, conf=conf))
 } else {
-  s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
+  t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
                      parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                      ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -258,10 +258,8 @@ if (!l_parallel) {
                      input=input, ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
                      parallel=TRUE, n_core=Ncore, export_names=export_names,
-                     n_boot=n_boot, conf=conf)
+                     n_boot=n_boot, conf=conf))
 }
-
-
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 
