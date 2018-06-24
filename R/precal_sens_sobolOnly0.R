@@ -13,9 +13,9 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- 1000
-appen <- 'testNS'
-.Nboot <- 500
+n_test <- -10000
+appen <- 'test-sobolTony'
+.Nboot <- 1000
 .confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 l_parallel <- TRUE
