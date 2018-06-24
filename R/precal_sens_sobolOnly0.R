@@ -287,55 +287,51 @@ file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_sens',sens
 
 headers.1st.tot <- matrix(c('Parameter', 'S1', 'S1_conf_low', 'S1_conf_high',
                             'ST', 'ST_conf_low', 'ST_conf_high'), nrow=1)
-output.1st.tot  <- data.frame(cbind( parnames_calib,
-                                     s.out$S[,1],
-                                     s.out$S[,4],
-                                     s.out$S[,5],
-                                     s.out$T[,1],
-                                     s.out$T[,4],
-                                     s.out$T[,5]))
+output.1st.tot  <- data.frame(cbind( parnames_calib, s.out$S, s.out$T))
 write.table(headers.1st.tot, file=file.sobolout1, append=FALSE, sep = " ",
             quote=FALSE    , row.names = FALSE , col.names=FALSE)
 write.table(output.1st.tot , file=file.sobolout1, append=TRUE , sep = " ",
             quote=FALSE    , row.names = FALSE , col.names=FALSE)
 
-headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
-                            'S2_conf_high'), nrow=1)
-output2.indices <- s.out$S2[,1]
-output2.conf1   <- s.out$S2[,4]
-output2.conf2   <- s.out$S2[,5]
+if (.scheme=='B') {
+  headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
+                              'S2_conf_high'), nrow=1)
+  output2.indices <- s.out$S2[,1]
+  output2.conf1   <- s.out$S2[,4]
+  output2.conf2   <- s.out$S2[,5]
 
-# 2nd order index names ordered as: (assuming 39 parameters)
-# 1. parnames.sobol[1]-parnames.sobol[2]
-# 2. parnames.sobol[1]-parnames.sobol[3]
-# 3. parnames.sobol[1]-parnames.sobol[4]
-# ... etc ...
-# 38. parnames.sobol[1]-parnames.sobol[39] << N=2:39 => p1-p[N]
-# 39. parnames.sobol[2]-parnames.sobol[3]
-# 40. parnames.sobol[2]-parnames.sobol[4]
-# 38+37. parnames.sobol[2]-parnames.sobol[39] << N=3:39 => p2-p[N]
-# ... etc ...
-names2  <- rownames(s.out$S2)
-names2a <- rep(NA, length(names2))
-names2b <- rep(NA, length(names2))
-cnt <- 1
-for (i in seq(from=1, to=(length(parnames_calib)-1), by=1)) {         # i = index of first name
-    for (j in seq(from=(i+1), to=(length(parnames_calib)), by=1)) {   # j = index of second name
-        names2a[cnt] <- parnames_calib[i]
-        names2b[cnt] <- parnames_calib[j]
-        cnt <- cnt+1
-    }
+  # 2nd order index names ordered as: (assuming 39 parameters)
+  # 1. parnames.sobol[1]-parnames.sobol[2]
+  # 2. parnames.sobol[1]-parnames.sobol[3]
+  # 3. parnames.sobol[1]-parnames.sobol[4]
+  # ... etc ...
+  # 38. parnames.sobol[1]-parnames.sobol[39] << N=2:39 => p1-p[N]
+  # 39. parnames.sobol[2]-parnames.sobol[3]
+  # 40. parnames.sobol[2]-parnames.sobol[4]
+  # 38+37. parnames.sobol[2]-parnames.sobol[39] << N=3:39 => p2-p[N]
+  # ... etc ...
+  names2  <- rownames(s.out$S2)
+  names2a <- rep(NA, length(names2))
+  names2b <- rep(NA, length(names2))
+  cnt <- 1
+  for (i in seq(from=1, to=(length(parnames_calib)-1), by=1)) {         # i = index of first name
+      for (j in seq(from=(i+1), to=(length(parnames_calib)), by=1)) {   # j = index of second name
+          names2a[cnt] <- parnames_calib[i]
+          names2b[cnt] <- parnames_calib[j]
+          cnt <- cnt+1
+      }
+  }
+
+  output.2nd <- data.frame(cbind( names2a,
+                                  names2b,
+                                  output2.indices,
+                                  output2.conf1,
+                                  output2.conf2 ))
+  write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",
+              quote=FALSE    , row.names = FALSE , col.names=FALSE)
+  write.table(output.2nd     , file=file.sobolout2, append=TRUE , sep = " ",
+              quote=FALSE    , row.names = FALSE , col.names=FALSE)
 }
-
-output.2nd <- data.frame(cbind( names2a,
-                                names2b,
-                                output2.indices,
-                                output2.conf1,
-                                output2.conf2 ))
-write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",
-            quote=FALSE    , row.names = FALSE , col.names=FALSE)
-write.table(output.2nd     , file=file.sobolout2, append=TRUE , sep = " ",
-            quote=FALSE    , row.names = FALSE , col.names=FALSE)
 ##==============================================================================
 
 
