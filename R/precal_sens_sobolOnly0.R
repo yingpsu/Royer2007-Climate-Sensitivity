@@ -9,14 +9,14 @@
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
-
 ## Clear workspace
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- 100
+n_test <- 1000
 appen <- 'testNS'
-.Nboot <- 0
+.Nboot <- 200
+.confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 
 co2_uncertainty_cutoff <- 20
@@ -195,31 +195,6 @@ n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
 parameters_node <- parameters_node[-(n_node+1),]
 
-
-##==============================================================================
-## Function for sampling from KDEs (inflating a LHS?)
-##===================================================
-
-kde_sample <- function(n_sample, nodes, bandwidths) {
-  # preliminaries
-  n_node <- nrow(nodes)
-  n_par <- length(bandwidths)
-  if(n_sample > n_node) {print('ERROR: n_sample > n_node')}
-
-  # choose the node rows out of array `nodes`
-  i_sample <- sample(x=1:n_node, size=n_sample, replace=FALSE)
-
-  # sample normal random from around each of the parameter nodes from that row
-  # (this achieves joint sampling)
-  par_sample <- t(sapply(1:n_sample, function(i) {
-       rnorm(n=n_parameters, mean=as.numeric(parameters_node[i,]), sd=as.numeric(bandwidths))}))
-
-  return(par_sample)
-}
-##==============================================================================
-
-
-
 ##==============================================================================
 
 ## Get a reference simulation for integrated sensitivity measure (if using L1, e.g.)
@@ -245,7 +220,8 @@ export_names <- c('model_forMCMC', 'run_geocarbF',
                   'ind_expected_const', 'iteration_threshold', 'l_scaled', 'sens',
                   'model_ref', 'data_calib', 'ind_mod2obs')
 
-n_bootstrap <- .Nboot
+n_boot <- .Nboot
+conf <- .confidence
 Ncore <- .Ncore
 
 ## Sample parameters (need 2 data frames) by taking directly from the precalibration?
@@ -272,7 +248,8 @@ if (!l_parallel) {
                      ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                      input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const,
-                     iteration_threshold=iteration_threshold, data_calib=data_calib)
+                     iteration_threshold=iteration_threshold, data_calib=data_calib,
+                     n_boot=n_boot, conf=conf)
 } else {
   s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
@@ -281,7 +258,8 @@ if (!l_parallel) {
                      ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                      input=input, ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
-                     parallel=TRUE, n_core=Ncore, export_names=export_names)
+                     parallel=TRUE, n_core=Ncore, export_names=export_names,
+                     n_boot=n_boot, conf=conf)
 }
 
 
