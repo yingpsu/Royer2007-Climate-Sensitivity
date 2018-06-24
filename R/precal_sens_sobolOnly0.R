@@ -15,9 +15,10 @@ rm(list=ls())
 ## Set testing number of samples and file name appendix here
 n_test <- 1000
 appen <- 'testNS'
-.Nboot <- 200
+.Nboot <- 500
 .confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
+l_parallel <- TRUE
 
 co2_uncertainty_cutoff <- 20
 
@@ -236,8 +237,6 @@ colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 
 ## Actually run the Sobol'
 
-l_parallel <- FALSE
-
 source('sobolTony.R')
 
 if (!l_parallel) {
@@ -272,8 +271,8 @@ saveRDS(s.out, filename.sobol)
 
 ## Check convergence - is maximum confidence interval width < 10% of the highest
 ## total order index?
-max_sens_ind <- 0.1*max(s.out$T$original)
-max_conf_int <- max(max(s.out$S$`max. c.i.` - s.out$S$`min. c.i.`), max(s.out$T$`max. c.i.` - s.out$T$`min. c.i.`))
+max_sens_ind <- 0.1*max(s.out$T)
+max_conf_int <- max(max(s.out$S[,3]-s.out$S[,2]), max(s.out$T[,3]-s.out$T[,2]))
 print(paste('max. conf int=',max_conf_int, ' want less than:  0.1 * max. sensitivity index=',max_sens_ind, sep=''))
 ##==============================================================================
 
