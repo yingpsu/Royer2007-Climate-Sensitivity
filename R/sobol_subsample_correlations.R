@@ -112,7 +112,11 @@ for (iter in 1:n_iter) {
     ind_large <- order(s.out$T[,1], decreasing=TRUE)[1:T]
     ind_small <- order(s.out$T[,1], decreasing=FALSE)[1:(56-T)]
     x2 <- x1
-    x2[,ind_small] <- t(replicate(n_sample, par_calib0[ind_small]))
+    if (length(ind_small)==1) {
+      x2[,ind_small] <- replicate(n_sample, par_calib0[ind_small])
+    } else {
+      x2[,ind_small] <- t(replicate(n_sample, par_calib0[ind_small]))
+    }
     model2 <- sapply(1:n_sample, function(ss) {
           model_forMCMC(par_calib=x2[ss,],
                         par_fixed=par_fixed0,
@@ -170,9 +174,11 @@ for (iter in 1:n_iter) {
 
     # get rid of the bad runs
     irem <- which(is.infinite(sens1[[tt]]) | is.infinite(sens2[[tt]]) | is.infinite(sens3[[tt]]))
-    sens1[[tt]] <- sens1[[tt]][-irem]
-    sens2[[tt]] <- sens2[[tt]][-irem]
-    sens3[[tt]] <- sens3[[tt]][-irem]
+    if (length(irem)>0) {
+      sens1[[tt]] <- sens1[[tt]][-irem]
+      sens2[[tt]] <- sens2[[tt]][-irem]
+      sens3[[tt]] <- sens3[[tt]][-irem]
+    }
 
     # correlations
     corr[[tt]] <- cor(cbind(sens1[[tt]],sens2[[tt]],sens3[[tt]]))
