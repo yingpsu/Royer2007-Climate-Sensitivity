@@ -9,16 +9,16 @@
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
-
 ## Clear workspace
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- 2000
-appen <- 'testNS-small'
-.Nboot <- 0
+n_sample <- 40000
+appen <- 'NS-n40K-bs10K'
+.Nboot <- 10000
+.confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
-
+l_parallel <- TRUE
 
 co2_uncertainty_cutoff <- 20
 
@@ -34,6 +34,7 @@ if(Sys.info()['user']=='tony') {
   setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
   .Ncore <- 2
   filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+  #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
@@ -184,35 +185,16 @@ library(doParallel)
 ## Read KDE results file, separate into parameters and the bandwidths
 ## (Moved to beginning becase this depends on remote vs local, whehter small testing
 ##  or ready to go large parameter sets)
+#filename_in <- filename_out
+#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
+#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
+#alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
+#alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
 parameters_node <- read.csv(filename_in)
 n_node <- nrow(parameters_node)-1
 bandwidths <- parameters_node[n_node+1,]
 parameters_node <- parameters_node[-(n_node+1),]
-
-
-##==============================================================================
-## Function for sampling from KDEs (inflating a LHS?)
-##===================================================
-
-kde_sample <- function(n_sample, nodes, bandwidths) {
-  # preliminaries
-  n_node <- nrow(nodes)
-  n_par <- length(bandwidths)
-  if(n_sample > n_node) {print('ERROR: n_sample > n_node')}
-
-  # choose the node rows out of array `nodes`
-  i_sample <- sample(x=1:n_node, size=n_sample, replace=FALSE)
-
-  # sample normal random from around each of the parameter nodes from that row
-  # (this achieves joint sampling)
-  par_sample <- t(sapply(1:n_sample, function(i) {
-       rnorm(n=n_parameters, mean=as.numeric(parameters_node[i,]), sd=as.numeric(bandwidths))}))
-
-  return(par_sample)
-}
-##==============================================================================
-
-
 
 ##==============================================================================
 
@@ -231,111 +213,52 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
               ind_expected_const=ind_expected_const,
               iteration_threshold=iteration_threshold)[,'co2']
 
-
-## Sobol' wrapper - assumes uniform distributions on parameters
-
-source('GEOCARB_sensitivity_co2.R')
-
-geocarb_sobol_co2_ser <- function(par_calib_scaled, par_fixed, parnames_calib,
-                          parnames_fixed, age, ageN, ind_const_calib,
-                          ind_time_calib, ind_const_fixed, ind_time_fixed,
-                          input, ind_expected_time, ind_expected_const,
-                          data_calib, iteration_threshold) {
-  finalOutput <- sensitivity_co2(par_calib_scaled, l_scaled=TRUE,
-                          par_fixed=par_fixed, parnames_calib=parnames_calib,
-                          parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                          ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                          ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                          input=input, ind_expected_time=ind_expected_time,
-                          ind_expected_const=ind_expected_const,
-                          iteration_threshold=iteration_threshold,
-                          data_calib=data_calib, model_ref=model_ref, sens=sens)
-  output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
-  finalOutput <- finalOutput - output.avg
-  return(finalOutput)
-}
-
 l_scaled <- TRUE
-export.names <- c('sensitivity_co2', 'model_forMCMC', 'model_forMCMC', 'run_geocarbF',
+export_names <- c('model_forMCMC', 'run_geocarbF',
                   'par_fixed0', 'parnames_calib', 'parnames_fixed', 'age', 'ageN',
                   'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
                   'ind_time_fixed', 'input', 'ind_expected_time',
                   'ind_expected_const', 'iteration_threshold', 'l_scaled', 'sens',
                   'model_ref', 'data_calib', 'ind_mod2obs')
 
-
-geocarb_sobol_co2_par <- function(par_calib_scaled) {
-
-  #install.packages('foreach')
-  #install.packages('doParallel')
-  library(foreach)
-  library(doParallel)
-  cores=detectCores()
-  cl <- makeCluster(Ncore)
-  print(paste('Starting cluster with ',Ncore,' cores', sep=''))
-  registerDoParallel(cl)
-
-  nr <- nrow(par_calib_scaled)
-  output <- rep(0,nr)
-
-  finalOutput <- foreach(i=1:nr, .combine=c,
-                                 .export=export.names,
-                                 .inorder=FALSE) %dopar% {
-
-      dyn.load("../fortran/run_geocarb.so")
-
-      co2_output <- sensitivity_co2(par_calib_scaled[i,], l_scaled=TRUE,
-                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                    input=input, ind_expected_time=ind_expected_time,
-                    ind_expected_const=ind_expected_const, model_ref=model_ref,
-                    sens=sens, iteration_threshold=iteration_threshold,
-                    data_calib=data_calib)
-      output[i] <- co2_output
-  }
-  print(paste(' ... done.'))
-  stopCluster(cl)
-
-  # for Sobol, output must be centered at 0
-  output.avg <- mean(finalOutput[is.finite(finalOutput)], na.rm=TRUE)
-  finalOutput <- finalOutput - output.avg
-  return(finalOutput)
-}
-
-n_bootstrap <- .Nboot
+n_boot <- .Nboot
+conf <- .confidence
 Ncore <- .Ncore
 
 ## Sample parameters (need 2 data frames) by taking directly from the precalibration?
 n_half <- floor(0.5*nrow(parameters_node))
 
-## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-if (n_test > 0) {n_half <- n_test}
-parameters_sample1 <- parameters_node[1:n_half,]
-parameters_sample2 <- parameters_node[(n_half+1):(2*n_half),]
-colnames(parameters_sample1) <- colnames(parameters_sample2) <- parnames_calib
-## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+## If n_sample is given, then use parameter samples of that size
+if (n_sample > 0) {n_half <- n_sample}
+parameters_sampleA <- parameters_node[1:n_half,]
+parameters_sampleB <- parameters_node[(n_half+1):(2*n_half),]
+colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 
 ## Actually run the Sobol'
-if(FALSE) {t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_ser,
-parameters_sample1,
-parameters_sample2,
-scheme=.scheme,
-nboot=n_bootstrap,
-par_fixed=par_fixed0, parnames_calib=parnames_calib,
-parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-input=input,
-ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-iteration_threshold=iteration_threshold))}
 
-t.out <- system.time(s.out <- sobolSalt(model=geocarb_sobol_co2_par,
-                           parameters_sample1,
-                           parameters_sample2,
-                           scheme=.scheme,
-                           nboot=n_bootstrap))
+source('sobolTony.R')
+
+if (!l_parallel) {
+  t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
+                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                     input=input, ind_expected_time=ind_expected_time,
+                     ind_expected_const=ind_expected_const,
+                     iteration_threshold=iteration_threshold, data_calib=data_calib,
+                     n_boot=n_boot, conf=conf))
+} else {
+  t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
+                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                     input=input, ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                     iteration_threshold=iteration_threshold, data_calib=data_calib,
+                     parallel=TRUE, n_core=Ncore, export_names=export_names,
+                     n_boot=n_boot, conf=conf))
+}
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 
@@ -345,8 +268,8 @@ saveRDS(s.out, filename.sobol)
 
 ## Check convergence - is maximum confidence interval width < 10% of the highest
 ## total order index?
-max_sens_ind <- 0.1*max(s.out$T$original)
-max_conf_int <- max(max(s.out$S$`max. c.i.` - s.out$S$`min. c.i.`), max(s.out$T$`max. c.i.` - s.out$T$`min. c.i.`))
+max_sens_ind <- 0.1*max(s.out$T)
+max_conf_int <- max(max(s.out$S[,3]-s.out$S[,2]), max(s.out$T[,3]-s.out$T[,2]))
 print(paste('max. conf int=',max_conf_int, ' want less than:  0.1 * max. sensitivity index=',max_sens_ind, sep=''))
 ##==============================================================================
 
@@ -361,55 +284,51 @@ file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_sens',sens
 
 headers.1st.tot <- matrix(c('Parameter', 'S1', 'S1_conf_low', 'S1_conf_high',
                             'ST', 'ST_conf_low', 'ST_conf_high'), nrow=1)
-output.1st.tot  <- data.frame(cbind( parnames_calib,
-                                     s.out$S[,1],
-                                     s.out$S[,4],
-                                     s.out$S[,5],
-                                     s.out$T[,1],
-                                     s.out$T[,4],
-                                     s.out$T[,5]))
+output.1st.tot  <- data.frame(cbind( parnames_calib, s.out$S, s.out$T))
 write.table(headers.1st.tot, file=file.sobolout1, append=FALSE, sep = " ",
             quote=FALSE    , row.names = FALSE , col.names=FALSE)
 write.table(output.1st.tot , file=file.sobolout1, append=TRUE , sep = " ",
             quote=FALSE    , row.names = FALSE , col.names=FALSE)
 
-headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
-                            'S2_conf_high'), nrow=1)
-output2.indices <- s.out$S2[,1]
-output2.conf1   <- s.out$S2[,4]
-output2.conf2   <- s.out$S2[,5]
+if (.scheme=='B') {
+  headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
+                              'S2_conf_high'), nrow=1)
+  output2.indices <- s.out$S2[,1]
+  output2.conf1   <- s.out$S2[,4]
+  output2.conf2   <- s.out$S2[,5]
 
-# 2nd order index names ordered as: (assuming 39 parameters)
-# 1. parnames.sobol[1]-parnames.sobol[2]
-# 2. parnames.sobol[1]-parnames.sobol[3]
-# 3. parnames.sobol[1]-parnames.sobol[4]
-# ... etc ...
-# 38. parnames.sobol[1]-parnames.sobol[39] << N=2:39 => p1-p[N]
-# 39. parnames.sobol[2]-parnames.sobol[3]
-# 40. parnames.sobol[2]-parnames.sobol[4]
-# 38+37. parnames.sobol[2]-parnames.sobol[39] << N=3:39 => p2-p[N]
-# ... etc ...
-names2  <- rownames(s.out$S2)
-names2a <- rep(NA, length(names2))
-names2b <- rep(NA, length(names2))
-cnt <- 1
-for (i in seq(from=1, to=(length(parnames_calib)-1), by=1)) {         # i = index of first name
-    for (j in seq(from=(i+1), to=(length(parnames_calib)), by=1)) {   # j = index of second name
-        names2a[cnt] <- parnames_calib[i]
-        names2b[cnt] <- parnames_calib[j]
-        cnt <- cnt+1
-    }
+  # 2nd order index names ordered as: (assuming 39 parameters)
+  # 1. parnames.sobol[1]-parnames.sobol[2]
+  # 2. parnames.sobol[1]-parnames.sobol[3]
+  # 3. parnames.sobol[1]-parnames.sobol[4]
+  # ... etc ...
+  # 38. parnames.sobol[1]-parnames.sobol[39] << N=2:39 => p1-p[N]
+  # 39. parnames.sobol[2]-parnames.sobol[3]
+  # 40. parnames.sobol[2]-parnames.sobol[4]
+  # 38+37. parnames.sobol[2]-parnames.sobol[39] << N=3:39 => p2-p[N]
+  # ... etc ...
+  names2  <- rownames(s.out$S2)
+  names2a <- rep(NA, length(names2))
+  names2b <- rep(NA, length(names2))
+  cnt <- 1
+  for (i in seq(from=1, to=(length(parnames_calib)-1), by=1)) {         # i = index of first name
+      for (j in seq(from=(i+1), to=(length(parnames_calib)), by=1)) {   # j = index of second name
+          names2a[cnt] <- parnames_calib[i]
+          names2b[cnt] <- parnames_calib[j]
+          cnt <- cnt+1
+      }
+  }
+
+  output.2nd <- data.frame(cbind( names2a,
+                                  names2b,
+                                  output2.indices,
+                                  output2.conf1,
+                                  output2.conf2 ))
+  write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",
+              quote=FALSE    , row.names = FALSE , col.names=FALSE)
+  write.table(output.2nd     , file=file.sobolout2, append=TRUE , sep = " ",
+              quote=FALSE    , row.names = FALSE , col.names=FALSE)
 }
-
-output.2nd <- data.frame(cbind( names2a,
-                                names2b,
-                                output2.indices,
-                                output2.conf1,
-                                output2.conf2 ))
-write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",
-            quote=FALSE    , row.names = FALSE , col.names=FALSE)
-write.table(output.2nd     , file=file.sobolout2, append=TRUE , sep = " ",
-            quote=FALSE    , row.names = FALSE , col.names=FALSE)
 ##==============================================================================
 
 

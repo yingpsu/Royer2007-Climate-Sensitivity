@@ -10,21 +10,33 @@
 
 setwd('/home/scrim/axw322/codes/GEOCARB/R')
 
-s.out <- readRDS('../output/sobol_alpha0_30Mar2018.rds')
+s.out <- readRDS('../output/sobol_alpha0_NS-n40K-bs10K_25Jun2018.rds')
 
 # how many times to do this experiment, and then average/median the results?
 n_iter <- 100
-n_sample <- 50000
+n_sample <- 20000
 
 # get the default parameter values
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
 source('GEOCARB-2014_parameterSetup.R')
 
+# get the data
+co2_uncertainty_cutoff <- 20
+source('GEOCARB-2014_getData.R')
+
+# get the precalibrated parameter samples
+# make sure this is consistent with the precalibration results used for the Sobol' analysis
+#filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
+#parameters_precal <- read.csv(filename_in)
+#n_precal <- nrow(parameters_precal)-1
+#bandwidths <- parameters_precal[n_precal+1,]
+#parameters_precal <- parameters_precal[-(n_precal+1),]
+
 # need the physical model
 source('model_forMCMC.R')
 source('run_geocarbF.R')
 
-# get the reference simulation
+# get the reference simulation, if you use L1 or L2 norm as sensitivity measure
 model_ref <- model_forMCMC(par_calib=par_calib0,
               par_fixed=par_fixed0,
               parnames_calib=parnames_calib,
@@ -55,7 +67,9 @@ for (iter in 1:n_iter) {
 
   # x1: as-is
   # sample a bunch of parameters
-  x1 <- s.out$X1[sample(1:nrow(s.out$X1), n_sample, replace=FALSE),]
+  x1 <- s.out$pA[sample(1:nrow(s.out$pA), n_sample, replace=FALSE),]
+  #ind_sample <- sample(1:n_precal, n_sample, replace=FALSE)
+  #x1 <- parameters_precal[ind_sample,]
 
   model1 <- sapply(1:n_sample, function(ss) {
         model_forMCMC(par_calib=x1[ss,],
@@ -71,8 +85,17 @@ for (iter in 1:n_iter) {
                       ind_expected_time=ind_expected_time,
                       ind_expected_const=ind_expected_const,
                       iteration_threshold=iteration_threshold)[,'co2']})
-  model_present1 <- apply(X=abs(model1-model_ref), MARGIN=2, FUN=sum)
-  sens1_default <- model_present1 - mean(model_present1[is.finite(model_present1)])
+  #model_present1 <- apply(X=abs(model1-model_ref), MARGIN=2, FUN=sum)
+  #sens1_default <- model_present1 - mean(model_present1[is.finite(model_present1)])
+  # Nash-Sutcliffe efficiency
+  sens1_default <- rep(NA, n_sample)
+  for (ss in 1:n_sample) {
+    model_stdy <- model1[ind_mod2obs, ss]
+    icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
+    sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
+    sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
+    sens1_default[ss] <- 1 - sse/sst
+  }
 
   sens1 <- vector('list', nT)
   sens2 <- vector('list', nT)
@@ -104,8 +127,17 @@ for (iter in 1:n_iter) {
                         ind_expected_time=ind_expected_time,
                         ind_expected_const=ind_expected_const,
                         iteration_threshold=iteration_threshold)[,'co2']})
-    model_present2 <- apply(X=abs(model2-model_ref), MARGIN=2, FUN=sum)
-    sens2[[tt]] <- model_present2 - mean(model_present2[is.finite(model_present2)])
+    #model_present2 <- apply(X=abs(model2-model_ref), MARGIN=2, FUN=sum)
+    #sens2[[tt]] <- model_present2 - mean(model_present2[is.finite(model_present2)])
+    # Nash-Sutcliffe efficiency
+    sens2[[tt]] <- rep(NA, n_sample)
+    for (ss in 1:n_sample) {
+      model_stdy <- model2[ind_mod2obs, ss]
+      icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
+      sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
+      sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
+      sens2[[tt]][ss] <- 1 - sse/sst
+    }
 
     # x3: T most sensitive parameters fixed, other 56-T as in x1
     x3 <- x1
@@ -124,8 +156,17 @@ for (iter in 1:n_iter) {
                         ind_expected_time=ind_expected_time,
                         ind_expected_const=ind_expected_const,
                         iteration_threshold=iteration_threshold)[,'co2']})
-    model_present3 <- apply(X=abs(model3-model_ref), MARGIN=2, FUN=sum)
-    sens3[[tt]] <- model_present3 - mean(model_present3[is.finite(model_present3)])
+    #model_present3 <- apply(X=abs(model3-model_ref), MARGIN=2, FUN=sum)
+    #sens3[[tt]] <- model_present3 - mean(model_present3[is.finite(model_present3)])
+    # Nash-Sutcliffe efficiency
+    sens3[[tt]] <- rep(NA, n_sample)
+    for (ss in 1:n_sample) {
+      model_stdy <- model3[ind_mod2obs, ss]
+      icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
+      sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
+      sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
+      sens3[[tt]][ss] <- 1 - sse/sst
+    }
 
     # get rid of the bad runs
     irem <- which(is.infinite(sens1[[tt]]) | is.infinite(sens2[[tt]]) | is.infinite(sens3[[tt]]))

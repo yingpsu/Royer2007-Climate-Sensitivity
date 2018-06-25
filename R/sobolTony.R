@@ -187,8 +187,8 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
   colnames(out.T) <- c('T',paste('T.0',conf_lo, sep=''),paste('T.',conf_hi, sep=''))
   rownames(out.T) <- parnames_calib
 
-  out <- list(out.S, out.T, unique(idrop_all))
-  names(out) <- c("S", "T", "idrop")
+  out <- list(out.S, out.T, parameters_sampleA, parameters_sampleB, unique(idrop_all))
+  names(out) <- c("S", "T", "pA", "pB", "idrop")
 
   return(out)
 }

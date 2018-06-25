@@ -13,9 +13,9 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_test <- -10000
-appen <- 'test-sobolTony'
-.Nboot <- 1000
+n_sample <- 30000
+appen <- 'NS-n30K-bs10K'
+.Nboot <- 10000
 .confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 l_parallel <- TRUE
@@ -228,12 +228,11 @@ Ncore <- .Ncore
 ## Sample parameters (need 2 data frames) by taking directly from the precalibration?
 n_half <- floor(0.5*nrow(parameters_node))
 
-## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-if (n_test > 0) {n_half <- n_test}
+## If n_sample is given, then use parameter samples of that size
+if (n_sample > 0) {n_half <- n_sample}
 parameters_sampleA <- parameters_node[1:n_half,]
 parameters_sampleB <- parameters_node[(n_half+1):(2*n_half),]
 colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
-## TESTING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 ## Actually run the Sobol'
 

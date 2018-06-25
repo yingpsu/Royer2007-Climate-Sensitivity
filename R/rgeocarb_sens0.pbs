@@ -4,4 +4,4 @@
 #PBS -j oe
 #PBS -m abe
 #PBS -M twong@psu.edu
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/precal_sens_sobolOnly0.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_sens_testNS.log
+R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/precal_sens_sobolOnly0.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_sens_NS-n30K-bs10K.log
