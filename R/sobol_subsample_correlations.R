@@ -173,7 +173,8 @@ for (iter in 1:n_iter) {
     }
 
     # get rid of the bad runs
-    irem <- which(is.infinite(sens1[[tt]]) | is.infinite(sens2[[tt]]) | is.infinite(sens3[[tt]]))
+    irem <- which(is.infinite(sens1[[tt]]) | is.infinite(sens2[[tt]]) | is.infinite(sens3[[tt]]) |
+                  sens1[[tt]] < -10 | sens2[[tt]] < -10 | sens3[[tt]] < -10)
     if (length(irem)>0) {
       sens1[[tt]] <- sens1[[tt]][-irem]
       sens2[[tt]] <- sens2[[tt]][-irem]
