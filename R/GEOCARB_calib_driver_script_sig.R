@@ -9,11 +9,11 @@
 
 #rm(list=ls())
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 #setwd('/home/scrim/axw322/codes/GEOCARB/R')
 setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'Royer'
+appen <- 'sig18'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- FALSE
