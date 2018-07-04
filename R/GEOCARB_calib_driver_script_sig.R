@@ -241,7 +241,7 @@ if(n_node000==1) {
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                   iteration_threshold=iteration_threshold)
-  t.end <- proc.time()
+  tend <- proc.time()
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
