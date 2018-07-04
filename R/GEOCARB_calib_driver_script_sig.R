@@ -9,23 +9,31 @@
 
 rm(list=ls())
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1         # number of CPUs to use
-#setwd('/home/scrim/axw322/codes/GEOCARB/R')
-setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 4         # number of CPUs to use
 appen <- 'sig18+GLAC+LIFE'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-l_write_rdata  <- FALSE
-l_write_netcdf <- FALSE
 co2_uncertainty_cutoff <- 20
 
 DO_INIT_UPDATE <- TRUE
+DO_WRITE_RDATA  <- TRUE
+DO_WRITE_NETCDF <- FALSE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
 filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
 filename.par_calib  <- '../output/par_deoptim_OPT2_04Jul2018.rds'
 filename.covariance <- '../output/par_LHS2_04Jul2018.RData'
+
+if(Sys.info()['user']=='tony') {
+  # Tony's local machine (if you aren't me, you almost certainly need to change this...)
+  machine <- 'local'
+  setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+} else {
+  # assume on Napa cluster
+  machine <- 'remote'
+  setwd('/home/scrim/axw322/codes/GEOCARB/R')
+}
 
 library(sn)
 library(adaptMCMC)
@@ -244,7 +252,7 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 }
 
 # save
-if(l_write_rdata) {
+if(DO_WRITE_RDATA) {
   save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,'.RData', sep=''))
 }
 
@@ -307,7 +315,7 @@ plot(chain1[,ics], type='l')
 ## Get maximum length of parameter name, for width of array to write to netcdf
 ## this code will write an n.parameters (rows) x n.ensemble (columns) netcdf file
 ## to get back into the shape BRICK expects, just transpose it
-if(l_write_netcdf) {
+if(DO_WRITE_NETCDF) {
 
 lmax=0
 for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
