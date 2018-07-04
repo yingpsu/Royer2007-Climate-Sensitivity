@@ -11,9 +11,9 @@ rm(list=ls())
 ## all the set-up should be done starting here...
 
 ## which parts of the experiment to do?
-DO_OPT1 <- TRUE
+DO_OPT1 <- FALSE
 DO_LHS2 <- TRUE
-DO_OPT2 <- TRUE
+DO_OPT2 <- FALSE
 
 ## set up the evolutionary optimization for parameter estimates
 NITER.DEOPTIM <- 5        # number of iterations for evolutionary optimization
@@ -32,11 +32,13 @@ output.dir <- '../output/'
 co2_uncertainty_cutoff <- 20
 
 ## what sensitivity correlations output to use?
-appen <- 'sig18+GLAC+LIFE'
+#appen <- 'sig18+GLAC+LIFE'
+appen <- 'sig18'
+#appen <- 'all'
 
 filename.calib_all <- '../input_data/GEOCARB_input_summaries_calib_all.csv'
 filename.calib_sens <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.par_deoptim <- '../output/par_deoptim_03Jul2018.rds'
+filename.par_deoptim <- paste('../output/par_deoptim_OPT1_04Jul2018.rds', sep='')
 
 ## ... and ending here
 

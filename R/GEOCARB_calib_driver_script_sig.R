@@ -9,21 +9,23 @@
 
 rm(list=ls())
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 4         # number of CPUs to use
-appen <- 'sig18+GLAC+LIFE'
+niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1         # number of CPUs to use
+#appen <- 'sig18+GLAC+LIFE'
+appen <- 'sig18'
+#appen <- 'all'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
 
 DO_INIT_UPDATE <- TRUE
+
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
 filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
-filename.par_calib  <- '../output/par_deoptim_OPT2_04Jul2018.rds'
-filename.covariance <- '../output/par_LHS2_04Jul2018.RData'
+filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
 
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
@@ -114,9 +116,6 @@ for (i in 1:length(ind_mod2obs)){
 source('GEOCARB-2014_parameterSetup.R')
 
 if (DO_INIT_UPDATE) {
-  # initial calibration parameters estimate:
-  #par_calib0 <- readRDS(filename.par_calib)
-
   # initial fixed parameters estimate:
   par_new <- readRDS(filename.par_fixed)
   for (name in names(par_new)) {
@@ -241,7 +240,7 @@ if(n_node000==1) {
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                   iteration_threshold=iteration_threshold)
-  t.end <- proc.time()
+  tend <- proc.time()
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 

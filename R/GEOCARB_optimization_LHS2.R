@@ -9,6 +9,13 @@
 
 
 ##==============================================================================
+## need the physical model
+source('model_forMCMC.R')
+source('run_geocarbF.R')
+##==============================================================================
+
+
+##==============================================================================
 ## Model parameters and setup
 ##===========================
 
@@ -89,7 +96,7 @@ print(paste('precalibration took ',(tend[3]-tbeg[3])/60,' minutes', sep=''))
 print(paste('with success rate of ',nrow(parameters_good),'/',n_sample, sep=''))
 
 # write output file
-new_file <- paste(output.dir,'par_LHS2_',today,'.RData', sep='')
+new_file <- paste(output.dir,'par_LHS2_',appen,'_',today,'.RData', sep='')
 print(paste('writing file ',new_file, sep=''))
 save(list=c('parameters_good','par_calib','ibad','model_out'), file=new_file)
 ##==============================================================================

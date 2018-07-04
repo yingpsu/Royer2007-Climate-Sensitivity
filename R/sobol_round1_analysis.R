@@ -5,17 +5,14 @@
 ## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
-rm(list=ls())
-
 library(repr)
-#setwd('/home/scrim/axw322/codes/GEOCARB/R')
-setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+
 s.out <- readRDS('../output/sobol_alpha0_NS-n40K-bs10K_25Jun2018.rds')
 
-load('../output/sobol_corr_1.RData')
+load('../output/sobol_corr_100.RData')
 
-corr_s12_avg <- apply(corr_s12, 2, median)
-corr_s13_avg <- apply(corr_s13, 2, median)
+corr_s12_avg <- apply(corr_s12, 2, mean)
+corr_s13_avg <- apply(corr_s13, 2, mean)
 
 n_iter <- nrow(corr_s12)
 

@@ -183,7 +183,7 @@ print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 par_deoptim = outDEoptim$optim$bestmem
 names(par_deoptim) <- parnames_calib
 
-new_file <- paste(output.dir,'par_deoptim_OPT2_',today,'.rds', sep='')
+new_file <- paste(output.dir,'par_deoptim_OPT2_',appen,'_',today,'.rds', sep='')
 print(paste('writing file ',new_file, sep=''))
 saveRDS(par_deoptim, file=new_file)
 ##==============================================================================
