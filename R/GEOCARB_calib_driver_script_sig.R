@@ -23,9 +23,9 @@ co2_uncertainty_cutoff <- 20
 DO_INIT_UPDATE <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.par_fixed  <- '../output/par_deoptim_OPT1_03Jul2018.rds'
-filename.par_calib  <- '../output/par_deoptim_OPT2_03Jul2018.rds'
-filename.covariance <- '../output/par_LHS2_03Jul2018.RData'
+filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
+filename.par_calib  <- '../output/par_deoptim_OPT2_04Jul2018.rds'
+filename.covariance <- '../output/par_LHS2_04Jul2018.RData'
 
 library(sn)
 library(adaptMCMC)
@@ -205,8 +205,8 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 ##==============================================================================
 ## Actually run the calibration
 if(n_node000==1) {
-  tbeg=proc.time()
-  amcmc_out1 = MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+  tbeg <- proc.time()
+  amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
                   scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
                   par_fixed=par_fixed0, parnames_calib=parnames_calib,
                   parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -216,10 +216,24 @@ if(n_node000==1) {
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                   iteration_threshold=iteration_threshold)
-  tend=proc.time()
+  tend <- proc.time()
   chain1 = amcmc_out1$samples
 } else if(n_node000 > 1) {
-  # TODO -- add support for MCMC.parallel
+  tbeg <- proc.time()
+  amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
+        					dyn.libs=c('../fortran/run_geocarb.so'),
+                  packages=c('sn'),
+        					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
+        					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
+                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                  iteration_threshold=iteration_threshold)
+  t.end <- proc.time()
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
@@ -275,11 +289,13 @@ chain1 = amcmc_extend1$samples
 # visual inspection
 
 # which parameters is climate sensitivity?
+if(FALSE) {
 ics <- which(parnames_calib=='deltaT2X')
 plot(chain1[,ics], type='l')
+}
 
-parameters.posterior <- chain1
-covjump <- amcmc_out1$cov.jump
+#parameters.posterior <- chain1
+#covjump <- amcmc_out1$cov.jump
 
 ##==============================================================================
 
