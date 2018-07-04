@@ -100,6 +100,7 @@ for (i in 1:length(ind_mod2obs)){
 ##filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_S1.csv' # moved to top for easy modification
 source('GEOCARB-2014_parameterSetup.R')
 
+if (FALSE) {
 # Get improved initial parameter and transition covariance estimates
 load('initial_estimates.RData')
 
@@ -110,6 +111,7 @@ for (p in 1:length(parnames_calib)) {
 
 # Update transition covariance matrix
 step_mcmc <- covar_full[parnames_calib, parnames_calib]
+}
 ##==============================================================================
 
 

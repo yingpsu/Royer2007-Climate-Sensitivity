@@ -13,12 +13,22 @@ n_node000 <- 1         # number of CPUs to use
 appen <- ''
 #rm(list=ls())
 
+calib_all <- FALSE
+
 
 ##==============================================================================
 ## Model parameters and setup
 ##===========================
 
 # Read parameter information, set up the calibration parameters
+
+if(calib_all) {
+  filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all.csv'
+} else {
+  filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
+}
+
+
 source('GEOCARB-2014_parameterSetup.R')
 ##==============================================================================
 

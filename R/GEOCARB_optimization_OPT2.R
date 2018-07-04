@@ -1,29 +1,12 @@
 ##==============================================================================
-## GEOCARB-2014_calib_driver.R
+## GEOCARB_optimization_OPT2.R
 ##
-## Read CO2 proxy data. Set which data sets you intend to calibrate using.
-## Version for running as script on HPC.
+## only the sensitive parameters, others fixed at OPT1 values
+## Gives initial parameter estimates for MCMC
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (anthony.e.wong@coloradoe.edu)
 ##==============================================================================
 
-#rm(list=ls())
-
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1         # number of CPUs to use
-#setwd('/home/scrim/axw322/codes/GEOCARB/R')
-setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
-appen <- 'sig18+GLAC+LIFE'
-output_dir <- '../output/'
-today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-l_write_rdata  <- FALSE
-l_write_netcdf <- FALSE
-co2_uncertainty_cutoff <- 20
-filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-
-library(sn)
-library(adaptMCMC)
-library(ncdf4)
 
 ##==============================================================================
 ## Data
@@ -96,20 +79,19 @@ for (i in 1:length(ind_mod2obs)){
 ## Model parameters and setup
 ##===========================
 
-# Read parameter information, set up the calibration parameters
-##filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_S1.csv' # moved to top for easy modification
+## Read parameter information, set up the calibration parameters
+filename.calibinput <- filename.calib_sens
 source('GEOCARB-2014_parameterSetup.R')
 
-# Get improved initial parameter and transition covariance estimates
-load('initial_estimates.RData')
-
-# Update parameters
-for (p in 1:length(parnames_calib)) {
-  par_calib0[p] <- params[[parnames_calib[p]]]
+## set fixed parameters at optimized values
+if(!DO_OPT1) {par_deoptim <- readRDS(filename.par_deoptim)}
+par_fixed1 <- par_fixed0
+names_replace <- parnames_fixed[ind_const_fixed]
+for (name in parnames_fixed[ind_const_fixed]) {
+  ind_out <- match(name, parnames_fixed)
+  ind_in  <- match(name, names(par_deoptim))
+  par_fixed1[ind_out] <- par_deoptim[ind_in]
 }
-
-# Update transition covariance matrix
-step_mcmc <- covar_full[parnames_calib, parnames_calib]
 ##==============================================================================
 
 
@@ -146,60 +128,64 @@ for (i in 1:length(parnames_calib)) {
 
 
 ##==============================================================================
-## Pad if only one calibration parameter
-## (adaptMCMC requires 2 or more)
-##======================================
-if(length(parnames_calib)==1){
-  parnames_calib <- c(parnames_calib, "padding")
-  bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
-  rownames(bounds_calib) <- parnames_calib
-  par_calib0 <- c(par_calib0, 0)
-  step_mcmc <- c(step_mcmc, 1)
-}
-##==============================================================================
-
-
-##==============================================================================
-## Run the calibration
-##====================
+## Run the optimization
+##=====================
 
 # need the physical model
 source('model_forMCMC.R')
 source('run_geocarbF.R')
-#DEBUG
-#source('GEOCARBSULFvolc_forMCMC.R')
 
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')
 
 # set up and run the actual optimization
+p0.deoptim <- par_calib0             # initialize optimized initial parameters
+niter.deoptim <- NITER.DEOPTIM       # number of iterations for evolutionary optimization
+NP.deoptim <- NP.DEOPTIM             # population size for DEoptim (do at least 10*[N parameters])
+F.deoptim <- F.DEOPTIM               # as suggested by Storn et al (2006)
+CR.deoptim <- CR.DEOPTIM             # as suggested by Storn et al (2006)
 
+# get some range for each parameter prior distribution, to use as hard bounds
+bound.lower.deoptim <- rep(NA, length(par_calib0))
+bound.upper.deoptim <- rep(NA, length(par_calib0))
+p_lb <- 0.005
+p_ub <- 0.995
 
+for (ip in 1:length(par_calib0)) {
+  row_num <- match(parnames_calib[ip],input$parameter)
+  if(input[row_num, 'distribution_type']=='gaussian') {
+    bound.lower.deoptim[ip] <- qnorm(p=p_lb, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+    bound.upper.deoptim[ip] <- qnorm(p=p_ub, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+  } else if(input[row_num, 'distribution_type']=='lognormal') {
+    bound.lower.deoptim[ip] <- qlnorm(p=p_lb, meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+    bound.upper.deoptim[ip] <- qlnorm(p=p_ub, meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+  } else {
+    print('ERROR - unknown prior distribution type')
+  }
+}
 
-
-##==============================================================================
-## Actually run the optimization
 tbeg=proc.time()
-amcmc_out1 = MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
-                par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                iteration_threshold=iteration_threshold)
+
+outDEoptim <- DEoptim(neg_log_post, bound.lower.deoptim, bound.upper.deoptim,
+				DEoptim.control(NP=NP.deoptim,itermax=niter.deoptim,F=F.deoptim,CR=CR.deoptim,trace=FALSE),
+        par_fixed=par_fixed1, parnames_calib=parnames_calib,
+        parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+        ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+        ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+        input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+        data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+        ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+        iteration_threshold=iteration_threshold)
+
 tend=proc.time()
-chain1 = amcmc_out1$samples
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
+par_deoptim = outDEoptim$optim$bestmem
+names(par_deoptim) <- parnames_calib
 
-
-# save
-if(l_write_rdata) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,'.RData', sep=''))
-}
+new_file <- paste(output.dir,'par_deoptim_OPT2_',today,'.rds', sep='')
+print(paste('writing file ',new_file, sep=''))
+saveRDS(par_deoptim, file=new_file)
 ##==============================================================================
 
 
