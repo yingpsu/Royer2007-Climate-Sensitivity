@@ -7,7 +7,7 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-#rm(list=ls())
+rm(list=ls())
 
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
@@ -19,7 +19,13 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 l_write_rdata  <- FALSE
 l_write_netcdf <- FALSE
 co2_uncertainty_cutoff <- 20
+
+DO_INIT_UPDATE <- TRUE
+
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
+filename.par_fixed  <- '../output/par_deoptim_OPT1_03Jul2018.rds'
+filename.par_calib  <- '../output/par_deoptim_OPT2_03Jul2018.rds'
+filename.covariance <- '../output/par_LHS2_03Jul2018.RData'
 
 library(sn)
 library(adaptMCMC)
@@ -97,20 +103,31 @@ for (i in 1:length(ind_mod2obs)){
 ##===========================
 
 # Read parameter information, set up the calibration parameters
-##filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_S1.csv' # moved to top for easy modification
 source('GEOCARB-2014_parameterSetup.R')
 
-if (FALSE) {
-# Get improved initial parameter and transition covariance estimates
-load('initial_estimates.RData')
+if (DO_INIT_UPDATE) {
+  # initial calibration parameters estimate:
+  #par_calib0 <- readRDS(filename.par_calib)
 
-# Update parameters
-for (p in 1:length(parnames_calib)) {
-  par_calib0[p] <- params[[parnames_calib[p]]]
-}
+  # initial fixed parameters estimate:
+  par_new <- readRDS(filename.par_fixed)
+  for (name in names(par_new)) {
+    if (name %in% parnames_fixed) {
+      par_fixed0[match(name, parnames_fixed)] <- par_new[name]
+    }
+    if (name %in% parnames_calib) {
+      par_calib0[match(name, parnames_calib)] <- par_new[name]
+    }
+  }
+  # need to strip the names or MCMC will break
+  names(par_calib0) <- NULL
+  names(par_fixed0) <- NULL
 
-# Update transition covariance matrix
-step_mcmc <- covar_full[parnames_calib, parnames_calib]
+  # initial covariance estimate:
+  load(filename.covariance)
+  sd <- 2.4*2.4/length(par_calib0)
+  eps <- 0.0001
+  step_mcmc <- sd*cov(parameters_good) + sd*eps*diag(x=1, length(par_calib0))
 }
 ##==============================================================================
 
@@ -155,7 +172,7 @@ if(length(parnames_calib)==1){
   parnames_calib <- c(parnames_calib, "padding")
   bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
   rownames(bounds_calib) <- parnames_calib
-  par_calib0 <- c(par_calib0, 0)
+  par_calib <- c(par_calib, 0)
   step_mcmc <- c(step_mcmc, 1)
 }
 ##==============================================================================
@@ -168,8 +185,6 @@ if(length(parnames_calib)==1){
 # need the physical model
 source('model_forMCMC.R')
 source('run_geocarbF.R')
-#DEBUG
-#source('GEOCARBSULFvolc_forMCMC.R')
 
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')
@@ -209,11 +224,9 @@ if(n_node000==1) {
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 if(FALSE) {
-par(mfrow=c(3,2))
-for (p in 1:3) {
-  plot(chain1[,p], type='l', ylab=parnames_calib[p], xlab='Iteration')
-  hist(chain1[,p], xlab=parnames_calib[p], ylab='freq', main='')
-}
+par(mfrow=c(2,1))
+ics <- match('deltaT2X', parnames_calib)
+plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 }
 
 # save
