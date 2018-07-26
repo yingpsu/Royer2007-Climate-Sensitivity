@@ -14,6 +14,7 @@ library(compiler)
 enableJIT(3)
 
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+do_adapt000 <- TRUE    # adapt Metropolis proposal variances?
 n_node000 <- 1         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
@@ -42,7 +43,6 @@ if(Sys.info()['user']=='tony') {
 }
 
 library(sn)
-library(adaptMCMC)
 library(ncdf4)
 
 ##==============================================================================
@@ -176,20 +176,6 @@ for (i in 1:length(parnames_calib)) {
 
 
 ##==============================================================================
-## Pad if only one calibration parameter
-## (adaptMCMC requires 2 or more)
-##======================================
-if(length(parnames_calib)==1){
-  parnames_calib <- c(parnames_calib, "padding")
-  bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
-  rownames(bounds_calib) <- parnames_calib
-  par_calib <- c(par_calib, 0)
-  step_mcmc <- c(step_mcmc, 1)
-}
-##==============================================================================
-
-
-##==============================================================================
 ## Run the calibration
 ##====================
 
@@ -202,16 +188,8 @@ source('GEOCARB-2014_calib_likelihood.R')
 source('mwg.R')
 
 # set up and run the actual calibration
-# interpolate between lots of parameters and one parameter.
-# this functional form yields an acceptance rate of about 25% for as few as 10
-# parameters, 44% for a single parameter (or Metropolis-within-Gibbs sampler),
-# and 0.234 for infinite number of parameters, using accept_mcmc_few=0.44 and
-# accept_mcmc_many=0.234.
-accept_mcmc_few <- 0.44         # optimal for only one parameter
-accept_mcmc_many <- 0.234       # optimal for many parameters
-accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- niter_mcmc000
-gamma_mcmc <- 0.5
+do_adapt <- do_adapt000
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
@@ -221,7 +199,7 @@ tbeg <- proc.time()
 
 if(n_node000==1) {
   mcmc_out <- mcmc_mwg(log_post, n=niter_mcmc, init=par_calib0, scale=diag(step_mcmc),
-                     adapt=FALSE, n.start=max(5000,round(0.1*niter_mcmc)),
+                     adapt=do_adapt, n.start=max(5000,round(0.2*niter_mcmc)),
                      parallel=FALSE, n.core=1,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
                      parnames_fixed=parnames_fixed, age=age, ageN=ageN,
@@ -234,7 +212,7 @@ if(n_node000==1) {
   chain1 <- mcmc_out$samples
 } else {
   mcmc_out <- mcmc_mwg(log_post, n=niter_mcmc, init=par_calib0, scale=diag(step_mcmc),
-                     adapt=FALSE, n.start=max(5000,round(0.1*niter_mcmc)),
+                     adapt=do_adapt, n.start=max(5000,round(0.2*niter_mcmc)),
                      parallel=FALSE, n.core=1,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
                      parnames_fixed=parnames_fixed, age=age, ageN=ageN,

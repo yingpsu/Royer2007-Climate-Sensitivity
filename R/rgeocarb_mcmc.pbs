@@ -1,7 +1,8 @@
 #!/bin/bash
 #PBS -l walltime=350:00:00
-#PBS -l nodes=1:ppn=1
+#PBS -l nodes=1:ppn=16
 #PBS -j oe
 #PBS -m abe
 #PBS -M twong@psu.edu
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_sig.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_sig25.log
+###R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_sig.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_sig18+GLAC+LIFE.log
+R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/mwg_driver.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_mwg_test.log
