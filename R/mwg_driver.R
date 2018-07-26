@@ -13,7 +13,7 @@ rm(list=ls())
 library(compiler)
 enableJIT(3)
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 5e4   # number of MCMC iterations per node (Markov chain length)
 do_adapt000 <- TRUE    # adapt Metropolis proposal variances?
 n_node000 <- 1         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
@@ -136,7 +136,8 @@ if (DO_INIT_UPDATE) {
 
   # initial covariance estimate:
   load(filename.covariance)
-  sd <- 2.4*2.4/length(par_calib0)
+  ##sd <- 2.4*2.4/length(par_calib0)
+  sd <- 2.4*2.4/1  # only /1 because metropolis-within-gibbs (MWG) sampling
   eps <- 0.0001
   step_mcmc <- sd*cov(parameters_good) + sd*eps*diag(x=1, length(par_calib0))
 }
@@ -236,7 +237,7 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 
 # save
 if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,'.RData', sep=''))
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-MWG_',appen,'_',today,'.RData', sep=''))
 }
 
 ##==============================================================================
