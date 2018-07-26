@@ -13,8 +13,8 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_sample <- 40000
-appen <- 'NS-n40K-bs10K'
+n_sample <- 30000
+appen <- 'NS-n30K-bs10K'
 .Nboot <- 10000
 .confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
@@ -31,7 +31,7 @@ filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
   machine <- 'local'
-  setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+  setwd('/Users/tony/codes/GEOCARB/R')
   .Ncore <- 2
   filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
   #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
@@ -330,6 +330,12 @@ if (.scheme=='B') {
               quote=FALSE    , row.names = FALSE , col.names=FALSE)
 }
 ##==============================================================================
+
+if(FALSE){
+
+
+
+}
 
 
 ##==============================================================================

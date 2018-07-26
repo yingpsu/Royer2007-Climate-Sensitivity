@@ -49,7 +49,7 @@ filename.par_deoptim <- paste('../output/par_deoptim_OPT1_04Jul2018.rds', sep=''
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
   machine <- 'local'
-  setwd('/Users/tony/codes/Royer2007-Climate-Sensitivity/R')
+  setwd('/Users/tony/codes/GEOCARB/R')
   .Ncore <- 2
 } else {
   # assume on Napa cluster

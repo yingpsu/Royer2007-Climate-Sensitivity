@@ -1,13 +1,17 @@
 ##==============================================================================
-## GEOCARB-2014_calib_driver.R
+## mwg_driver.R
 ##
-## Read CO2 proxy data. Set which data sets you intend to calibrate using.
-## Version for running as script on HPC.
+## Driver for the Metropolis-within-Gibbs sampling.
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+
 rm(list=ls())
+
+
+library(compiler)
+enableJIT(3)
 
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
@@ -193,8 +197,9 @@ if(length(parnames_calib)==1){
 source('model_forMCMC.R')
 source('run_geocarbF.R')
 
-# need the likelihood function and prior distributions
+# need the likelihood function and prior distributions, and the MWG sampler
 source('GEOCARB-2014_calib_likelihood.R')
+source('mwg.R')
 
 # set up and run the actual calibration
 # interpolate between lots of parameters and one parameter.
@@ -211,37 +216,38 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 
 ##==============================================================================
 ## Actually run the calibration
+
+tbeg <- proc.time()
+
 if(n_node000==1) {
-  tbeg <- proc.time()
-  amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)
-  tend <- proc.time()
-  chain1 = amcmc_out1$samples
-} else if(n_node000 > 1) {
-  tbeg <- proc.time()
-  amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-        					dyn.libs=c('../fortran/run_geocarb.so'),
-                  packages=c('sn'),
-        					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
-        					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)
-  tend <- proc.time()
+  mcmc_out <- mcmc_mwg(log_post, n=niter_mcmc, init=par_calib0, scale=diag(step_mcmc),
+                     adapt=FALSE, n.start=max(5000,round(0.1*niter_mcmc)),
+                     parallel=FALSE, n.core=1,
+                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                     iteration_threshold=iteration_threshold)
+  chain1 <- mcmc_out$samples
+} else {
+  mcmc_out <- mcmc_mwg(log_post, n=niter_mcmc, init=par_calib0, scale=diag(step_mcmc),
+                     adapt=FALSE, n.start=max(5000,round(0.1*niter_mcmc)),
+                     parallel=FALSE, n.core=1,
+                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                     iteration_threshold=iteration_threshold)
+  chain1 <- mcmc_out$samples
 }
+
+tend <- proc.time()
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 if(FALSE) {
@@ -255,23 +261,6 @@ if(DO_WRITE_RDATA) {
   save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,'.RData', sep=''))
 }
 
-## Extend an MCMC chain?
-## Extend and run more MCMC samples?
-if(FALSE){
-niter_extend <- 1e4
-tbeg=proc.time()
-amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
-                                par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                                input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                                data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                                iteration_threshold=iteration_threshold)
-tend=proc.time()
-chain1 = amcmc_extend1$samples
-}
 ##==============================================================================
 
 

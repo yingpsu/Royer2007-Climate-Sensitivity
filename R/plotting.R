@@ -4,7 +4,7 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-setwd('/Users/axw322/codes/Royer2007-Climate-Sensitivity/R')
+setwd('/Users/axw322/codes/GEOCARB/R')
 
 library(ncdf4)
 

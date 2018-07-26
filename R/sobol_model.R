@@ -1,7 +1,7 @@
 ##==============================================================================
 ## sobol_model.R
 ##
-## The `sensitivity` package Sobol routines all choke with NAs, which occur with
+## The Sobol integrals will all choke with NAs, which occur with
 ## some regularity due to the `failed_runs` in GEOCARB.  So, we just do the
 ## calculation ourselves for the first-order and total sensitivity indices.
 ##

@@ -1,7 +1,0 @@
-#!/bin/bash
-#PBS -l walltime=96:00:00
-#PBS -l nodes=1:ppn=16
-#PBS -j oe
-#PBS -m abe
-#PBS -M twong@psu.edu
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/precal_sens_sobolOnly2.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_sens_sobol1T.log
