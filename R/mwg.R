@@ -38,25 +38,25 @@ mcmc_mwg <- function(log_post, n, init,
       # adaptation of variances; d=1 (Haario et al 2001) because each Metropolis
       # iteration is independent of the others
       if (t > n.start) {scale <- (2.4*2.4) * diag(cov(samples[1:(t-1),]))}
+      # new parameters are mostly the old ones...
+      par_old <- par_new <- samples[t-1,]
       # iterate over the parameters
       for (p in 1:np) {
-        # new parameters are mostly the old ones...
-        par_new <- samples[t-1,]
         # ... but replacing the pth one with a new step
-        par_new[p] <- rnorm(mean=samples[t-1,p], sd=sqrt(scale[p]), n=1)
+        par_new[p] <- rnorm(mean=par_old[p], sd=sqrt(scale[p]), n=1)
         # get log-posterior score at new parameters
         lp_new <- log_post(par_new, ...)
         # get log of the metropolis acceptance probability
         if (log(runif(1)) < lp_new - lp_old) {
           # accept!
           lp_old <- lp_new
-          samples[t,p] <- par_new[p]
           n_accept[p] <- n_accept[p]+1
         } else {
           # reject!
-          samples[t,p] <- samples[t-1,p]
+          par_new[p] <- par_old[p]
         }
       }
+      samples[t,] <- par_new
       setTxtProgressBar(pb, t)
     }
     close(pb)
@@ -64,25 +64,25 @@ mcmc_mwg <- function(log_post, n, init,
     # no adaptation of the proposal variances
     pb <- txtProgressBar(min=0,max=n,initial=0,style=3)
     for (t in 2:n) {
+      # new parameters are mostly the old ones...
+      par_old <- par_new <- samples[t-1,]
       # iterate over the parameters
       for (p in 1:np) {
-        # new parameters are mostly the old ones...
-        par_new <- samples[t-1,]
         # ... but replacing the pth one with a new step
-        par_new[p] <- rnorm(mean=samples[t-1,p], sd=sqrt(scale[p]), n=1)
+        par_new[p] <- rnorm(mean=par_old[p], sd=sqrt(scale[p]), n=1)
         # get log-posterior score at new parameters
         lp_new <- log_post(par_new, ...)
         # get log of the metropolis acceptance probability
         if (log(runif(1)) < lp_new - lp_old) {
           # accept!
           lp_old <- lp_new
-          samples[t,p] <- par_new[p]
           n_accept[p] <- n_accept[p]+1
         } else {
           # reject!
-          samples[t,p] <- samples[t-1,p]
+          par_new[p] <- par_old[p]
         }
       }
+      samples[t,] <- par_new
       setTxtProgressBar(pb, t)
     }
     close(pb)
