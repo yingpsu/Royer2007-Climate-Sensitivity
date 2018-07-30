@@ -21,7 +21,7 @@ setwd('~/codes/GEOCARB/R')
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 
 #appen <- 'sig18+GLAC+LIFE'
-appen <- 'sig18'
+appen <- 'sig18_TEST'
 #appen <- 'all'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -349,6 +349,10 @@ chain1 = amcmc_extend1$samples
 #for (p in 1:length(parnames_calib)) {plot(chain1[,p], type='l', ylab=parnames_calib[p])}
 
 
+# DON'T DO ANYTHING ELSE - GET SOME CHAINS AND THEN INTERACTIVELY DEBUG THE CONVERGENCE DIAGNOSTICS
+if(FALSE) {
+
+
 #TODO
 
 ## Gelman and Rubin diagnostics - determine and chop off for burn-in
@@ -427,3 +431,5 @@ nc_close(outnc)
 ##==============================================================================
 ## End
 ##==============================================================================
+
+}
