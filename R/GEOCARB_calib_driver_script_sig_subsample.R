@@ -21,8 +21,9 @@ setwd('~/codes/GEOCARB/R')
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 
 #appen <- 'sig18+GLAC+LIFE'
-appen <- 'sig18_TEST'
+appen <- 'sig18'
 #appen <- 'all'
+appen2 <- 'c'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
@@ -311,7 +312,7 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 
 # save
 if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,'.RData', sep=''))
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2'.RData', sep=''))
 }
 
 ## Extend an MCMC chain?
