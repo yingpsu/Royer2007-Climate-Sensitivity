@@ -1,4 +1,4 @@
-.n_node##==============================================================================
+##==============================================================================
 ## GEOCARB-2014_calib_driver_subsample.R
 ##
 ## Read CO2 proxy data. Set which data sets you intend to calibrate using.
