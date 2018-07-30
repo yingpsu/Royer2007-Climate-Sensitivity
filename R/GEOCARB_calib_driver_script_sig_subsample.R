@@ -12,10 +12,12 @@
 
 rm(list=ls())
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1         # number of CPUs to use
+setwd('~/codes/GEOCARB/R')
+
+niter_mcmc000 <- 2e5   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 15         # number of CPUs to use
 #n_data000 <- 50       # number of data points to use in each shard
-n_subsample <- 20      # number of data subsamples to use and recombine with consensus MC
+n_subsample <- 30      # number of data subsamples to use and recombine with consensus MC
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
@@ -32,19 +34,12 @@ filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appe
 filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
 filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
 
-if(Sys.info()['user']=='tony') {
-  # Tony's local machine (if you aren't me, you almost certainly need to change this...)
-  machine <- 'local'
-  setwd('~/codes/GEOCARB/R')
-} else {
-  # assume on Napa cluster
-  machine <- 'remote'
-  setwd('~/codes/GEOCARB/R')
-}
 
 library(sn)
 library(adaptMCMC)
 library(ncdf4)
+library(foreach)
+library(doParallel)
 
 ##==============================================================================
 ## Data
@@ -233,7 +228,7 @@ if(n_node000==1) {
     # run the calibraiton for that data subset
     tbeg <- proc.time()
     amcmc_out[[s]] <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
+                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.2*niter_mcmc)),
                   par_fixed=par_fixed0, parnames_calib=parnames_calib,
                   parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                   ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -246,21 +241,52 @@ if(n_node000==1) {
   }
 
 } else if(n_node000 > 1) {
-  tbeg <- proc.time()
-  amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-        					dyn.libs=c('../fortran/run_geocarb.so'),
-                  packages=c('sn'),
-        					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
-        					gamma=gamma_mcmc, n.start=max(5000,round(0.2*niter_mcmc)),
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)
-  tend <- proc.time()
+
+cores=detectCores()
+cl <- makeCluster(n_node000)
+print(paste('Starting cluster with ',n_node000,' cores', sep=''))
+registerDoParallel(cl)
+
+export_names <- c('model_forMCMC', 'run_geocarbF',
+                  'par_fixed0', 'parnames_calib', 'parnames_fixed', 'age', 'ageN',
+                  'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
+                  'ind_time_fixed', 'input', 'ind_expected_time',
+                  'ind_expected_const', 'iteration_threshold',
+                  'data_calib_subsamples', 'niter_mcmc', 'par_calib0', 'accept_mcmc',
+                  'step_mcmc', 'gamma_mcmc')
+
+output <- vector('list', n_subsample)
+
+amcmc_out <- foreach(s=1:n_subsample, .packages=c('sn','adaptMCMC'),
+                       .export=export_names,
+                       .inorder=FALSE) %dopar% {
+
+  dyn.load("../fortran/run_geocarb.so")
+
+  # map model-data time steps
+  age_tmp <- seq(570,0,by=-10)
+  ttmp <- 10*ceiling(data_calib_subsamples[[s]]$age/10)
+  ind_mod2obs <- rep(NA,nrow(data_calib_subsamples[[s]]))
+  for (i in 1:length(ind_mod2obs)){
+    ind_mod2obs[i] <- which(age_tmp==ttmp[i])
+  }
+
+  mcmc_new <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+                scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.2*niter_mcmc)),
+                par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                data_calib=data_calib_subsamples[[s]], ind_mod2obs=ind_mod2obs,
+                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                iteration_threshold=iteration_threshold)
+
+  output[[s]] <- mcmc_new
+}
+print(paste(' ... done.'))
+stopCluster(cl)
+
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
