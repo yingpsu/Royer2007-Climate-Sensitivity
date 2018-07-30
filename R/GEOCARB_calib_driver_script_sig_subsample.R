@@ -1,4 +1,4 @@
-##==============================================================================
+.n_node##==============================================================================
 ## GEOCARB-2014_calib_driver_subsample.R
 ##
 ## Read CO2 proxy data. Set which data sets you intend to calibrate using.
@@ -14,10 +14,12 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 2e5   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 15         # number of CPUs to use
-#n_data000 <- 50       # number of data points to use in each shard
-n_subsample <- 30      # number of data subsamples to use and recombine with consensus MC
+.niter_mcmc <- 1e3   # number of MCMC iterations per node (Markov chain length)
+.n_node <- 4         # number of CPUs to use
+.n_chain <- 4          # number of parallel MCMC chains, per shard (subsample)
+#.n_data <- 50       # number of data points to use in each shard
+.n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
+
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
@@ -93,19 +95,19 @@ if(co2_uncertainty_cutoff > 0) {
   ##data_calib <- data_calib[-ind_remove,]    # remove only those the revised range does not help
 }
 
-# how many of the n_data_total data points will be in each of the n_subsample subsamples?
+# how many of the n_data_total data points will be in each of the n_shard subsamples?
 n_data_total <- nrow(data_calib)
-n_data_subsample <- floor(n_data_total/n_subsample)
+n_data_subsample <- floor(n_data_total/.n_shard)
 
 # store all of the data_calib subsamples - put all remaining in the last one
-data_calib_subsamples <- vector('list', n_subsample)
+data_calib_subsamples <- vector('list', .n_shard)
 ind_remaining <- 1:n_data_total
-for (s in 1:(n_subsample-1)) {
+for (s in 1:(.n_shard-1)) {
   ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
   data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
   ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
 }
-data_calib_subsamples[[n_subsample]] <- data_calib[ind_remaining,]
+data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
 
 
 ##==============================================================================
@@ -208,16 +210,16 @@ source('GEOCARB-2014_calib_likelihood.R')
 accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
-niter_mcmc <- niter_mcmc000
+niter_mcmc <- .niter_mcmc
 gamma_mcmc <- 0.66
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
 ## Actually run the calibration
-if(n_node000==1) {
-  amcmc_out <- vector('list', n_subsample)
-  for (s in 1:n_subsample) {
-    print(paste("Calibration subsample",s,"out of",n_subsample))
+if(.n_node==1) {
+  amcmc_out <- vector('list', .n_shard)
+  for (s in 1:.n_shard) {
+    print(paste("Calibration subsample",s,"out of",.n_shard))
     # map model-data time steps
     age_tmp <- seq(570,0,by=-10)
     ttmp <- 10*ceiling(data_calib_subsamples[[s]]$age/10)
@@ -240,62 +242,65 @@ if(n_node000==1) {
     tend <- proc.time()
   }
 
-} else if(n_node000 > 1) {
+} else if(.n_node > 1) {
 
-cores=detectCores()
-cl <- makeCluster(n_node000)
-print(paste('Starting cluster with ',n_node000,' cores', sep=''))
-registerDoParallel(cl)
+  cores=detectCores()
+  cl <- makeCluster(.n_node)
+  print(paste('Starting cluster with ',.n_node,' cores', sep=''))
+  registerDoParallel(cl)
 
-export_names <- c('model_forMCMC', 'run_geocarbF',
-                  'par_fixed0', 'parnames_calib', 'parnames_fixed', 'age', 'ageN',
-                  'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
-                  'ind_time_fixed', 'input', 'ind_expected_time',
-                  'ind_expected_const', 'iteration_threshold',
-                  'data_calib_subsamples', 'niter_mcmc', 'par_calib0', 'accept_mcmc',
-                  'step_mcmc', 'gamma_mcmc')
+  export_names <- c('model_forMCMC', 'run_geocarbF',
+                    'par_fixed0', 'parnames_calib', 'parnames_fixed', 'age', 'ageN',
+                    'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
+                    'ind_time_fixed', 'input', 'ind_expected_time',
+                    'ind_expected_const', 'iteration_threshold',
+                    'data_calib_subsamples', 'niter_mcmc', 'par_calib0', 'accept_mcmc',
+                    'step_mcmc', 'gamma_mcmc')
 
-output <- vector('list', n_subsample)
+  amcmc_out <- vector('list', .n_chain)
 
-amcmc_out <- foreach(s=1:n_subsample, .packages=c('sn','adaptMCMC'),
-                       .export=export_names,
-                       .inorder=FALSE) %dopar% {
+  tbeg <- proc.time()
 
-  dyn.load("../fortran/run_geocarb.so")
+  for (chain in 1:.n_chain) {
 
-  # map model-data time steps
-  age_tmp <- seq(570,0,by=-10)
-  ttmp <- 10*ceiling(data_calib_subsamples[[s]]$age/10)
-  ind_mod2obs <- rep(NA,nrow(data_calib_subsamples[[s]]))
-  for (i in 1:length(ind_mod2obs)){
-    ind_mod2obs[i] <- which(age_tmp==ttmp[i])
+    print(paste('Starting parallel MCMC chain',chain,'out of',.n_chain))
+
+    output <- foreach(s=1:.n_shard, .packages=c('sn','adaptMCMC'),
+                           .export=export_names,
+                           .inorder=FALSE) %dopar% {
+
+      dyn.load("../fortran/run_geocarb.so")
+
+      # map model-data time steps
+      age_tmp <- seq(570,0,by=-10)
+      ttmp <- 10*ceiling(data_calib_subsamples[[s]]$age/10)
+      ind_mod2obs <- rep(NA,nrow(data_calib_subsamples[[s]]))
+      for (i in 1:length(ind_mod2obs)){
+        ind_mod2obs[i] <- which(age_tmp==ttmp[i])
+      }
+
+      mcmc_new <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+                    scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.2*niter_mcmc)),
+                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                    input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                    data_calib=data_calib_subsamples[[s]], ind_mod2obs=ind_mod2obs,
+                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold)
+    }
+    amcmc_out[[chain]] <- output
   }
-
-  mcmc_new <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.2*niter_mcmc)),
-                par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                data_calib=data_calib_subsamples[[s]], ind_mod2obs=ind_mod2obs,
-                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                iteration_threshold=iteration_threshold)
-
-  output[[s]] <- mcmc_new
-}
-print(paste(' ... done.'))
-stopCluster(cl)
+  print(paste(' ... done.'))
+  stopCluster(cl)
+  tend <- proc.time()
 
 }
+
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 
-# if a shard's chain is not converging/getting stuck, try preliminary chain to
-# get estimate of transition covariance matrix, and use that without adapting?
-if(FALSE) {
-
-}
 
 
 if(FALSE) {
@@ -350,18 +355,18 @@ chain1 = amcmc_extend1$samples
 niter.test <- seq(from=round(0.1*niter_mcmc), to=niter_mcmc, by=round(0.05*niter_mcmc))
 gr.test <- rep(0, length(niter.test))
 
-if(n_node000 == 1) {
+if(.n_chain == 1) {
   # don't do GR stats, just cut off first half of chains
   print('only one chain; will lop off first half for burn-in instead of doing GR diagnostics')
-} else if(n_node000 > 1) {
+} else if(.n_chain > 1) {
   # this case is FAR more fun
   # accumulate the names of the soon-to-be mcmc objects
   string.mcmc.list <- 'mcmc1'
-  for (m in 2:n_node000) {
+  for (m in 2:.n_chain) {
     string.mcmc.list <- paste(string.mcmc.list, ', mcmc', m, sep='')
   }
   for (i in 1:length(niter.test)) {
-    for (m in 1:n_node000) {
+    for (m in 1:.n_chain) {
       # convert each of the chains into mcmc object
       eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc.par1[[m]]$samples[1:niter.test[i],])', sep='')))
     }
@@ -369,7 +374,7 @@ if(n_node000 == 1) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list)[2])
   }
-} else {print('error - n_node000 < 1 makes no sense')}
+} else {print('error - .n_chain < 1 makes no sense')}
 
 #plot(niter.test, gr.test)
 
