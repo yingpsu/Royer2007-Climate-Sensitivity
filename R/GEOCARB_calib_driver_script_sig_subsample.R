@@ -14,9 +14,9 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-.niter_mcmc <- 2e5   # number of MCMC iterations per node (Markov chain length)
-.n_node <- 15         # number of CPUs to use
-.n_chain <- 6          # number of parallel MCMC chains, per shard (subsample)
+.niter_mcmc <- 1e4   # number of MCMC iterations per node (Markov chain length)
+.n_node <- 4         # number of CPUs to use
+.n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 
@@ -28,6 +28,13 @@ output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
 
+# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
+data_to_assim <- cbind( c("paleosols" , TRUE),
+                        c("alkenones" , TRUE),
+                        c("stomata"   , TRUE),
+                        c("boron"     , TRUE),
+                        c("liverworts", TRUE) )
+
 DO_INIT_UPDATE <- TRUE
 
 DO_WRITE_RDATA  <- TRUE
@@ -37,8 +44,6 @@ filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appe
 filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
 filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
 
-
-library(sn)
 library(adaptMCMC)
 library(ncdf4)
 library(foreach)
@@ -48,29 +53,11 @@ library(doParallel)
 ## Data
 ##=====
 
+# requires: data_to_assim (above) and filename.data (below)
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
 source('GEOCARB-2014_getData.R')
-
-# remove the lowest [some number] co2 content data points (all paleosols, it turns out)
-# (lowest ~40 are all from paleosols, actually)
-#ind_co2_sort_all <- order(data_calib_all$co2)
-#n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
-#data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
-
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
-
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
-}
-
-data_calib <- data_calib_all[unlist(ind_assim),]
 
 # possible filtering out of some data points with too-narrow uncertainties in
 # co2 (causing overconfidence in model simulations that match those data points
@@ -102,14 +89,15 @@ n_data_subsample <- floor(n_data_total/.n_shard)
 
 # store all of the data_calib subsamples - put all remaining in the last one
 data_calib_subsamples <- vector('list', .n_shard)
-ind_remaining <- 1:n_data_total
-for (s in 1:(.n_shard-1)) {
-  ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
-  data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
-  ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
+if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
+  ind_remaining <- 1:n_data_total
+  for (s in 1:(.n_shard-1)) {
+    ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
+    data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
+    ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
+  }
+  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
 }
-data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
-
 
 ##==============================================================================
 

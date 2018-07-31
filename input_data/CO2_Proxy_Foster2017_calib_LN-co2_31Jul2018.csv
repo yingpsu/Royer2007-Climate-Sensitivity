@@ -1,0 +1,1193 @@
+"","age","age_old","age_young","co2","type","co2_low","co2_high","co2_range","distribution","proxy_type","reference","meanlog_co2","sdlog_co2"
+"1",196.1,201.3,190.8,1204,"mean",602,2408,1,"skew_normal","paleosols","Suchecki et al., 1988 (reported in Ekart et al., 1999)",7.09340462586877,0.697010091893199
+"2",211.9,214,209.8,1264,"mean",632,2528,1,"skew_normal","paleosols","Suchecki et al., 1988 (reported in Ekart et al., 1999)",7.1420365747068,0.697010091893198
+"3",223.3,237,209.5,800,"mean",400,1600,1,"skew_normal","paleosols","Suchecki et al., 1988 (reported in Ekart et al., 1999)",6.68461172766793,0.697010091893198
+"4",142.2,145,139.4,560,"mean",280,1120,1,"skew_normal","paleosols","Platt, 1989 (reported in Cerling, 1991)",6.32793678372919,0.697010091893199
+"5",242.1,247.1,237,284,"mean",142,568,1,"skew_normal","paleosols","Purvis & Wright, 1991 (reported in Ekart et al., 1999)",5.64897423816121,0.697010091893198
+"6",211.9,214,209.8,667,"mean",333,1333,1,"skew_normal","paleosols","Cerling, 1991",6.50166490507958,0.697387417615607
+"8",8.4,11.4,5.3,133,"mean",67,267,1,"skew_normal","paleosols","Cerling, 1992",4.89597063889561,0.695130513997682
+"9",13.7,16,11.4,133,"mean",67,267,1,"skew_normal","paleosols","Cerling, 1992",4.89597063889561,0.695130513997682
+"11",106.8,113,100.5,600,"mean",300,1200,1,"skew_normal","paleosols","Cerling, 1992",6.39692965521615,0.697010091893198
+"12",55.5,56,55,328,"mean",164,656,1,"skew_normal","paleosols","Koch et al., 1992",5.79301360838414,0.697010091893199
+"13",56.5,57,56,428,"mean",214,856,1,"skew_normal","paleosols","Koch et al., 1992",6.0591231955818,0.697010091893199
+"14",303,307,298.9,588,"mean",294,1176,1,"skew_normal","paleosols","Kenny & Neet, 1993",6.37672694789863,0.697010091893198
+"15",344.9,346.7,343,524,"mean",262,1048,1,"skew_normal","paleosols","Muchez et al., 1993",6.26149168432104,0.697010091893199
+"16",7.7,7.8,7.5,292,"mean",146,584,1,"skew_normal","paleosols","Quade et al., 1994 (reported in Ekart et al., 1999)",5.67675380226828,0.697010091893198
+"17",10.6,11.2,9.9,448,"mean",224,896,1,"skew_normal","paleosols","Quade et al., 1994 (reported in Ekart et al., 1999)",6.10479323241498,0.697010091893198
+"18",7.1,8.9,5.3,468,"mean",234,936,1,"skew_normal","paleosols","Quade et al., 1994 (reported in Ekart et al., 1999)",6.14846829591765,0.697010091893198
+"22",7,9,5,148,"mean",74,296,1,"skew_normal","paleosols","Quade & Cerling, 1995 (reported in Ekart et al., 1999)",4.99721227376411,0.697010091893198
+"23",9,11,7,204,"mean",102,408,1,"skew_normal","paleosols","Quade & Cerling, 1995 (reported in Ekart et al., 1999)",5.31811999384422,0.697010091893199
+"24",13,15,11,296,"mean",148,592,1,"skew_normal","paleosols","Quade & Cerling, 1995 (reported in Ekart et al., 1999)",5.69035945432406,0.697010091893198
+"25",13,15,11,176,"mean",88,352,1,"skew_normal","paleosols","Quade & Cerling, 1995 (reported in Ekart et al., 1999)",5.17048399503815,0.697010091893199
+"27",303,307,298.9,250,"mean",125,500,1,"skew_normal","paleosols","Mora et al., 1996",5.52146091786225,0.697010091893198
+"28",327.1,330.9,323.2,290,"mean",145,580,1,"skew_normal","paleosols","Mora et al., 1996",5.66988092298052,0.697010091893199
+"29",327.1,330.9,323.2,210,"mean",105,420,1,"skew_normal","paleosols","Mora et al., 1996",5.34710753071747,0.697010091893199
+"30",332.6,346.7,318.5,320,"mean",160,640,1,"skew_normal","paleosols","Mora et al., 1996",5.76832099579377,0.697010091893198
+"31",338.8,346.7,330.9,190,"mean",95,380,1,"skew_normal","paleosols","Mora et al., 1996",5.24702407216049,0.697010091893198
+"32",365.6,372.2,358.9,395,"mean",198,790,1,"skew_normal","paleosols","Mora et al., 1996",5.9801499880778,0.695738823196932
+"33",365.6,372.2,358.9,600,"mean",300,1200,1,"skew_normal","paleosols","Mora et al., 1996",6.39692965521615,0.697010091893198
+"34",423.3,427.4,419.2,1680,"mean",840,3360,1,"skew_normal","paleosols","Mora et al., 1996",7.4265490723973,0.697010091893198
+"35",5,NA,NA,324,"mean",162,648,1,"skew_normal","paleosols","Ekart et al., 1999",5.78074351579233,0.697010091893199
+"36",21,NA,NA,312,"mean",156,624,1,"skew_normal","paleosols","Ekart et al., 1999",5.74300318780948,0.697010091893199
+"37",25.6,28.1,23,588,"mean",294,1176,1,"skew_normal","paleosols","Ekart et al., 1999",6.37672694789863,0.697010091893198
+"38",45,NA,NA,780,"mean",390,1560,1,"skew_normal","paleosols","Ekart et al., 1999",6.65929391968364,0.697010091893198
+"40",69.1,72.1,66,328,"mean",164,656,1,"skew_normal","paleosols","Ekart et al., 1999",5.79301360838414,0.697010091893199
+"41",69.1,72.1,66,172,"mean",86,344,1,"skew_normal","paleosols","Ekart et al., 1999",5.14749447681345,0.697010091893199
+"42",69.1,72.1,66,252,"mean",126,504,1,"skew_normal","paleosols","Ekart et al., 1999",5.52942908751142,0.697010091893198
+"43",77.9,83.6,72.1,1180,"mean",590,2360,1,"skew_normal","paleosols","Ekart et al., 1999",7.07326971745971,0.697010091893198
+"44",77.9,83.6,72.1,504,"mean",252,1008,1,"skew_normal","paleosols","Ekart et al., 1999",6.22257626807137,0.697010091893198
+"45",119.7,126.3,113,904,"mean",452,1808,1,"skew_normal","paleosols","Ekart et al., 1999",6.80682936039218,0.697010091893199
+"46",119.7,126.3,113,1084,"mean",542,2168,1,"skew_normal","paleosols","Ekart et al., 1999",6.98841318199959,0.697010091893198
+"47",119.7,126.3,113,1076,"mean",538,2152,1,"skew_normal","paleosols","Ekart et al., 1999",6.98100574072173,0.697010091893199
+"48",119.7,126.3,113,592,"mean",296,1184,1,"skew_normal","paleosols","Ekart et al., 1999",6.38350663488401,0.697010091893199
+"49",154.7,157.3,152.1,1272,"mean",636,2544,1,"skew_normal","paleosols","Ekart et al., 1999",7.14834574390007,0.697010091893199
+"50",187.7,201.3,174.1,1824,"mean",912,3648,1,"skew_normal","paleosols","Ekart et al., 1999",7.50878717063428,0.697010091893198
+"51",172.2,174.1,170.3,768,"mean",384,1536,1,"skew_normal","paleosols","Ekart et al., 1999",6.64378973314767,0.697010091893199
+"52",223.3,237,209.5,660,"mean",330,1320,1,"skew_normal","paleosols","Ekart et al., 1999",6.49223983502047,0.697010091893199
+"53",223.3,237,209.5,732,"mean",366,1464,1,"skew_normal","paleosols","Ekart et al., 1999",6.59578051396131,0.697010091893199
+"54",223.3,237,209.5,1140,"mean",570,2280,1,"skew_normal","paleosols","Ekart et al., 1999",7.03878354138854,0.697010091893198
+"55",242.1,247.1,237,244,"mean",122,488,1,"skew_normal","paleosols","Ekart et al., 1999",5.4971682252932,0.697010091893199
+"56",259.4,259.8,259,400,"mean",200,800,1,"skew_normal","paleosols","Ekart et al., 1999",5.99146454710798,0.697010091893199
+"58",303,307,298.9,608,"mean",304,1216,1,"skew_normal","paleosols","Ekart et al., 1999",6.41017488196617,0.697010091893198
+"59",344.8,347,342.5,824,"mean",412,1648,1,"skew_normal","paleosols","Ekart et al., 1999",6.71417052990947,0.697010091893199
+"60",388,393.3,382.7,624,"mean",312,1248,1,"skew_normal","paleosols","Ekart et al., 1999",6.43615036836943,0.697010091893199
+"61",130.1,133.9,126.3,1150,"mean",575,2300,1,"skew_normal","paleosols","Lee, 1999",7.0475172213573,0.697010091893198
+"62",134.3,136.5,132,653,"mean",327,1307,1,"skew_normal","paleosols","Lee & Hisada, 1999  (updated by Hong and Lee, 2012)",6.48272494226074,0.696625551529129
+"63",365.6,372.2,358.9,1140,"mean",570,2280,1,"skew_normal","paleosols","Driese et al., 2000",7.03878354138854,0.697010091893198
+"64",365.6,372.2,358.9,1260,"mean",630,2520,1,"skew_normal","paleosols","Driese et al., 2000",7.13886699994552,0.697010091893199
+"65",402.6,407.6,397.5,1320,"mean",660,2640,1,"skew_normal","paleosols","Driese et al., 2000",7.18538701558042,0.697010091893198
+"66",421.1,423,419.2,1440,"mean",720,2880,1,"skew_normal","paleosols","Driese et al., 2000",7.27239839257005,0.697010091893199
+"67",377.5,382.7,372.2,1120,"mean",560,2240,1,"skew_normal","paleosols","Cox et al., 2001",7.02108396428914,0.697010091893199
+"68",385.2,387.7,382.7,1560,"mean",780,3120,1,"skew_normal","paleosols","Cox et al., 2001",7.35244110024358,0.697010091893199
+"69",54.2,54.5,53.9,814,"mean",407,1627,1,"skew_normal","paleosols","Royer et al., 2001b",6.70165314633082,0.696701160085315
+"70",54.9,55.2,54.6,231,"mean",115,462,1,"skew_normal","paleosols","Royer et al., 2001b",5.44024850972249,0.699191381655112
+"71",56.2,56.5,55.9,461,"mean",230,922,1,"skew_normal","paleosols","Royer et al., 2001b",6.13231226623989,0.698101919687101
+"72",56.5,56.8,56.2,487,"mean",243,974,1,"skew_normal","paleosols","Royer et al., 2001b",6.18723637349154,0.698043569135825
+"73",56.7,57,56.4,579,"mean",290,1158,1,"skew_normal","paleosols","Royer et al., 2001b",6.36216529055673,0.696142470450096
+"74",57.3,57.6,57,816,"mean",408,1633,1,"skew_normal","paleosols","Royer et al., 2001b",6.70472063368731,0.697318077508656
+"75",57.7,58,57.4,474,"mean",237,948,1,"skew_normal","paleosols","Royer et al., 2001b",6.16120732169508,0.697010091893198
+"76",200.3,201.3,199.3,992,"mean",496,1984,1,"skew_normal","paleosols","Tanner et al., 2001",6.89972310728487,0.697010091893199
+"77",223.3,237,209.5,900,"mean",450,1800,1,"skew_normal","paleosols","Tanner et al., 2001",6.80239476332431,0.697010091893199
+"78",130.1,130.8,129.4,112,"mean",56,224,1,"skew_normal","paleosols","Robinson et al., 2002",4.71849887129509,0.697010091893198
+"79",64.8,65,64.7,400,"mean",200,800,1,"skew_normal","paleosols","Nordt et al., 2002",5.99146454710798,0.697010091893199
+"80",65.3,65.7,65,340,"mean",170,680,1,"skew_normal","paleosols","Nordt et al., 2002",5.82894561761021,0.697010091893198
+"81",65.9,66.3,65.5,300,"mean",150,600,1,"skew_normal","paleosols","Nordt et al., 2002",5.7037824746562,0.697010091893198
+"82",67.2,68.1,66.3,560,"mean",280,1120,1,"skew_normal","paleosols","Nordt et al., 2002",6.32793678372919,0.697010091893198
+"83",67.2,68.1,66.3,300,"mean",150,600,1,"skew_normal","paleosols","Nordt et al., 2002",5.7037824746562,0.697010091893198
+"84",77.1,80,74.3,480,"mean",240,960,1,"skew_normal","paleosols","Nordt et al., 2002",6.17378610390194,0.697010091893198
+"85",65.2,66.2,64.2,178,"mean",89,356,1,"skew_normal","paleosols","Nordt et al., 2003",5.18178355029209,0.697010091893198
+"86",65.2,66.2,64.2,163,"mean",81,326,1,"skew_normal","paleosols","Nordt et al., 2003",5.09067326801957,0.700104172436115
+"88",65.6,66.6,64.6,111,"mean",56,222,1,"skew_normal","paleosols","Nordt et al., 2003",4.71401453630371,0.692500765689351
+"89",65.8,66.8,64.8,178,"mean",89,355,1,"skew_normal","paleosols","Nordt et al., 2003",5.18037707960378,0.695595782939492
+"91",66.1,67.1,65.1,183,"mean",92,366,1,"skew_normal","paleosols","Nordt et al., 2003",5.2122109552252,0.694270104177492
+"92",66.2,67.2,65.2,277,"mean",139,555,1,"skew_normal","paleosols","Nordt et al., 2003",5.62672102343856,0.696104985435428
+"97",66.6,67.6,65.6,263,"mean",132,527,1,"skew_normal","paleosols","Nordt et al., 2003",5.57500123556387,0.696056941841846
+"98",66.7,67.7,65.7,453,"mean",226,906,1,"skew_normal","paleosols","Nordt et al., 2003",6.11478715265763,0.698121222735497
+"99",66.9,67.9,65.9,426,"mean",213,852,1,"skew_normal","paleosols","Nordt et al., 2003",6.05443934626937,0.697010091893198
+"100",66.9,67.9,65.9,265,"mean",133,531,1,"skew_normal","paleosols","Nordt et al., 2003",5.58255557473185,0.696064115129641
+"101",67,68,66,219,"mean",110,438,1,"skew_normal","paleosols","Nordt et al., 2003",5.39134963808443,0.694719488835603
+"102",67,68,66,128,"mean",64,257,1,"skew_normal","paleosols","Nordt et al., 2003",4.85397958412745,0.69897027566844
+"104",68.7,69.7,67.7,171,"mean",85,341,1,"skew_normal","paleosols","Nordt et al., 2003",5.13726686688692,0.698486705293774
+"105",68.8,69.8,67.8,110,"mean",55,219,1,"skew_normal","paleosols","Nordt et al., 2003",4.69820245752449,0.694719488835602
+"106",69,70,68,158,"mean",79,317,1,"skew_normal","paleosols","Nordt et al., 2003",5.06417481317215,0.698598676157908
+"107",69.1,70.1,68.1,138,"mean",69,277,1,"skew_normal","paleosols","Nordt et al., 2003",4.9290620053923,0.698828489902431
+"108",69.3,70.3,68.3,202,"mean",101,404,1,"skew_normal","paleosols","Nordt et al., 2003",5.30826769740121,0.697010091893198
+"109",69.4,70.4,68.4,145,"mean",73,290,1,"skew_normal","paleosols","Nordt et al., 2003",4.98017018206446,0.693554500960791
+"110",69.5,70.5,68.5,345,"mean",172,689,1,"skew_normal","paleosols","Nordt et al., 2003",5.84136787391356,0.69774035564033
+"111",69.7,70.7,68.7,204,"mean",102,407,1,"skew_normal","paleosols","Nordt et al., 2003",5.31689299936343,0.695776259368464
+"112",69.9,70.9,68.9,309,"mean",155,618,1,"skew_normal","paleosols","Nordt et al., 2003",5.73495678718847,0.69538557835874
+"113",70,71,69,375,"mean",188,751,1,"skew_normal","paleosols","Nordt et al., 2003",5.92892380729704,0.696341047880288
+"114",70.1,71.1,69.1,329,"mean",164,657,1,"skew_normal","paleosols","Nordt et al., 2003",5.7937752231544,0.697775951144877
+"115",70.2,71.2,69.2,122,"mean",61,243,1,"skew_normal","paleosols","Nordt et al., 2003",4.80196765375693,0.694945257362751
+"117",70.5,71.5,69.5,126,"mean",63,252,1,"skew_normal","paleosols","Nordt et al., 2003",4.83628190695148,0.697010091893198
+"118",71.4,72.4,70.4,254,"mean",127,508,1,"skew_normal","paleosols","Nordt et al., 2003",5.53733426701854,0.697010091893198
+"119",71.5,72.5,70.5,289,"mean",145,578,1,"skew_normal","paleosols","Nordt et al., 2003",5.66815380554648,0.695273349228472
+"120",71.6,72.6,70.6,294,"mean",147,589,1,"skew_normal","paleosols","Nordt et al., 2003",5.68442938521516,0.697864444692673
+"121",280.7,282,279.3,133,"mean",67,267,1,"skew_normal","paleosols","Tabor et al., 2004",4.89597063889561,0.695130513997681
+"122",273.7,275,272.3,133,"mean",67,267,1,"skew_normal","paleosols","Tabor et al., 2004",4.89597063889561,0.695130513997682
+"123",83.3,100.5,66,740,"mean",370,1480,1,"skew_normal","paleosols","Ghosh et al., 2005 (and 1995, 2001)",6.60665018619822,0.697010091893199
+"124",182.4,201.3,163.5,1113,"mean",556,2225,1,"skew_normal","paleosols","Ghosh et al., 2005 (and 1995, 2001)",7.01414024442546,0.697236114149876
+"125",232.7,237,228.4,585,"mean",293,1170,1,"skew_normal","paleosols","Ghosh et al., 2005 (and 1995, 2001)",6.37246581840443,0.696151361536693
+"126",242.1,247.1,237,605,"mean",303,1210,1,"skew_normal","paleosols","Ghosh et al., 2005 (and 1995, 2001)",6.40605422205008,0.696179725888586
+"127",279.4,298.9,259.8,358,"mean",179,715,1,"skew_normal","paleosols","Ghosh et al., 2005 (and 1995, 2001)",5.87983417426738,0.696307385277747
+"128",219,228.4,209.5,880,"mean",440,1760,1,"skew_normal","paleosols","Prochnow et al., 2006",6.77992190747225,0.697010091893198
+"129",219,228.4,209.5,695,"mean",348,1390,1,"skew_normal","paleosols","Prochnow et al., 2006",6.54463075294961,0.696287178035356
+"130",232.7,237,228.4,116,"mean",58,232,1,"skew_normal","paleosols","Prochnow et al., 2006",4.75359019110636,0.697010091893199
+"131",246.1,247.1,245,580,"mean",290,1160,1,"skew_normal","paleosols","Prochnow et al., 2006",6.36302810354046,0.697010091893198
+"132",246.1,247.1,245,300,"mean",150,600,1,"skew_normal","paleosols","Prochnow et al., 2006",5.7037824746562,0.697010091893198
+"133",92.2,93,91.3,772,"mean",386,1544,1,"skew_normal","paleosols","Sandler, 2006",6.64898455002478,0.697010091893198
+"134",300.2,NA,NA,882,"mean",282,1347,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.42377112367424,0.786221383466286
+"135",299.9,NA,NA,697,"mean",185,1102,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.11261890739559,0.897235667173116
+"136",299.7,NA,NA,399,"mean",88,650,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.47715458868394,1.00538976168471
+"137",298.6,NA,NA,515,"mean",266.29016064257,996,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.24416690066374,0.663256200244473
+"138",297.9,NA,NA,288,"mean",94.4692482915718,878,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.66296048013595,1.12089826258038
+"142",293.1,NA,NA,208,"mean",92.4444444444444,468,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.33753807970132,0.815449532763457
+"143",290.5,NA,NA,600,"mean",234,966,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.16424247478511,0.712872180307189
+"144",290.5,NA,NA,461,"mean",144,678,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.7444802937582,0.778984215683273
+"145",290.4,NA,NA,1700,"mean",530,2497,1,"skew_normal","paleosols","Monta_ez et al., 2007",7.04786114841297,0.779303130832884
+"146",290.4,NA,NA,419,"mean",131,616,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.64922214336734,0.778338462829526
+"147",290.2,NA,NA,411,"mean",96,538,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.42610337581481,0.866557748595182
+"148",289.9,NA,NA,620,"mean",102,770,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.635681664066,1.0163415342634
+"149",289.4,NA,NA,182,"mean",11,353,1,"skew_normal","paleosols","Monta_ez et al., 2007",4.13218166486583,1.74395157537473
+"150",288.9,NA,NA,183,"mean",24,342,1,"skew_normal","paleosols","Monta_ez et al., 2007",4.50643228370528,1.33578151049474
+"151",287.4,NA,NA,397,"mean",249,544,1,"skew_normal","paleosols","Monta_ez et al., 2007",5.90820107166032,0.392925815957557
+"152",287,NA,NA,1030,"mean",676,1396,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.87877967968264,0.364607299878179
+"153",286.9,NA,NA,1449,"mean",899,1999,1,"skew_normal","paleosols","Monta_ez et al., 2007",7.20084268448601,0.40178639715214
+"154",285.8,NA,NA,774,"mean",465,1084,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.56522529379347,0.425546315586759
+"155",285,NA,NA,792,"mean",460,1124,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.57793775996839,0.449200793746463
+"156",284.8,NA,NA,792,"mean",460,1124,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.57793775996839,0.449200793746463
+"157",284.5,NA,NA,824,"mean",480,1168,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.61841713364506,0.447108959816386
+"158",283.8,NA,NA,1012,"mean",604,1419,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.83064093754743,0.429446783843873
+"159",283.4,NA,NA,1100,"mean",679,1520,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.92354337069951,0.405167730020225
+"160",282.4,NA,NA,899,"mean",566,1233,1,"skew_normal","paleosols","Monta_ez et al., 2007",6.72789979068376,0.391475314393448
+"161",281.1,NA,NA,1248,"mean",759,1737,1,"skew_normal","paleosols","Monta_ez et al., 2007",7.04595827181837,0.416263475217909
+"162",277.6,NA,NA,1237,"mean",788,1685,1,"skew_normal","paleosols","Monta_ez et al., 2007",7.04950946632217,0.382129181014435
+"163",210.7,211.9,209.5,111,"mean",56,222,1,"skew_normal","paleosols","Cleveland et al., 2008",4.71401453630371,0.692500765689351
+"164",211.8,214,209.5,544,"mean",272,1088,1,"skew_normal","paleosols","Cleveland et al., 2008",6.29894924685594,0.697010091893199
+"165",211.8,214,209.5,643,"mean",322,1287,1,"skew_normal","paleosols","Cleveland et al., 2008",6.46731037657027,0.696619578085985
+"168",210.7,211.9,209.5,372,"mean",186,743,1,"skew_normal","paleosols","Cleveland et al., 2008",5.91822135921548,0.696333849018542
+"169",211.8,214,209.5,1667,"mean",833,3333,1,"skew_normal","paleosols","Cleveland et al., 2008",7.41833086023729,0.697160965563201
+"170",211.8,214,209.5,1702,"mean",851,3404,1,"skew_normal","paleosols","Cleveland et al., 2008",7.43955930913332,0.697010091893198
+"171",211.8,214,209.5,1596,"mean",798,3192,1,"skew_normal","paleosols","Cleveland et al., 2008",7.37525577800975,0.697010091893198
+"172",210.7,211.9,209.5,344,"mean",172,688,1,"skew_normal","paleosols","Cleveland et al., 2008",5.8406416573734,0.697010091893199
+"173",210.7,211.9,209.5,269,"mean",134,537,1,"skew_normal","paleosols","Cleveland et al., 2008",5.59191894722989,0.697947252465573
+"174",210.7,211.9,209.5,377,"mean",189,754,1,"skew_normal","paleosols","Cleveland et al., 2008",5.9335696915338,0.695678206342134
+"175",211.8,214,209.5,1443,"mean",721,2885,1,"skew_normal","paleosols","Cleveland et al., 2008",7.27395965811357,0.69718439818772
+"176",211.8,214,209.5,1191,"mean",596,2383,1,"skew_normal","paleosols","Cleveland et al., 2008",7.08317807208205,0.696799147270212
+"177",211.8,214,209.5,1349,"mean",674,2697,1,"skew_normal","paleosols","Cleveland et al., 2008",7.20656271702602,0.697196550824136
+"178",211.8,214,209.5,1678,"mean",839,3356,1,"skew_normal","paleosols","Cleveland et al., 2008",7.42535788702715,0.697010091893199
+"179",211.8,214,209.5,1295,"mean",648,2591,1,"skew_normal","paleosols","Cleveland et al., 2008",7.16684493845719,0.696816078191577
+"180",211.8,214,209.5,1516,"mean",758,3032,1,"skew_normal","paleosols","Cleveland et al., 2008",7.32383056620232,0.697010091893198
+"181",210.7,211.9,209.5,560,"mean",280,1119,1,"skew_normal","paleosols","Cleveland et al., 2008",6.32749015574059,0.696560974845459
+"182",211.8,214,209.5,1367,"mean",684,2735,1,"skew_normal","paleosols","Cleveland et al., 2008",7.22092231623932,0.696826291305696
+"183",205.4,209.5,201.3,1777,"mean",888,3553,1,"skew_normal","paleosols","Cleveland et al., 2008",7.4822596695066,0.697151622225312
+"184",205.4,209.5,201.3,1702,"mean",851,3404,1,"skew_normal","paleosols","Cleveland et al., 2008",7.43955930913332,0.697010091893198
+"185",205.4,209.5,201.3,1085,"mean",542,2169,1,"skew_normal","paleosols","Cleveland et al., 2008",6.98864375613326,0.697241951017212
+"186",205.4,209.5,201.3,1191,"mean",596,2383,1,"skew_normal","paleosols","Cleveland et al., 2008",7.08317807208205,0.696799147270212
+"187",205.4,209.5,201.3,863,"mean",431,1725,1,"skew_normal","paleosols","Cleveland et al., 2008",6.7595452097846,0.697301646845707
+"188",205.4,209.5,201.3,661,"mean",331,1322,1,"skew_normal","paleosols","Cleveland et al., 2008",6.49450969789435,0.69625002145138
+"189",205.4,209.5,201.3,1030,"mean",515,2060,1,"skew_normal","paleosols","Cleveland et al., 2008",6.93731408122368,0.697010091893199
+"190",205.4,209.5,201.3,513,"mean",257,1026,1,"skew_normal","paleosols","Cleveland et al., 2008",6.24124955531297,0.696030955261434
+"191",205.4,209.5,201.3,623,"mean",311,1245,1,"skew_normal","paleosols","Cleveland et al., 2008",6.43334186053902,0.697414098746203
+"192",205.4,209.5,201.3,1557,"mean",778,3113,1,"skew_normal","paleosols","Cleveland et al., 2008",7.35003434731,0.697171629726399
+"193",205.4,209.5,201.3,1202,"mean",601,2404,1,"skew_normal","paleosols","Cleveland et al., 2008",7.09174211509515,0.697010091893198
+"194",205.4,209.5,201.3,1967,"mean",983,3933,1,"skew_normal","paleosols","Cleveland et al., 2008",7.58388344628949,0.69713794605829
+"195",205.4,209.5,201.3,1783,"mean",891,3565,1,"skew_normal","paleosols","Cleveland et al., 2008",7.4856318801596,0.697151145759045
+"196",205.4,209.5,201.3,880,"mean",440,1759,1,"skew_normal","paleosols","Cleveland et al., 2008",6.77963773582493,0.696724336556428
+"197",205.4,209.5,201.3,843,"mean",422,1686,1,"skew_normal","paleosols","Cleveland et al., 2008",6.73755972629891,0.696414020096635
+"198",205.4,209.5,201.3,1619,"mean",809,3237,1,"skew_normal","paleosols","Cleveland et al., 2008",7.38910058549237,0.697165440728518
+"199",205.4,209.5,201.3,1214,"mean",607,2427,1,"skew_normal","paleosols","Cleveland et al., 2008",7.10146999839305,0.696802970777391
+"200",205.4,209.5,201.3,614,"mean",307,1227,1,"skew_normal","paleosols","Cleveland et al., 2008",6.41958759614905,0.696600489832653
+"201",205.4,209.5,201.3,1267,"mean",634,2534,1,"skew_normal","paleosols","Cleveland et al., 2008",7.14480165765915,0.696613416131784
+"202",205.4,209.5,201.3,773,"mean",387,1546,1,"skew_normal","paleosols","Cleveland et al., 2008",6.65092546108857,0.696360076933222
+"203",205.4,209.5,201.3,341,"mean",171,682,1,"skew_normal","paleosols","Cleveland et al., 2008",5.83334660717306,0.695537802403353
+"204",205.4,209.5,201.3,961,"mean",481,1922,1,"skew_normal","paleosols","Cleveland et al., 2008",6.868494429818,0.696487172967734
+"205",205.4,209.5,201.3,1171,"mean",586,2342,1,"skew_normal","paleosols","Cleveland et al., 2008",7.06604016686734,0.696580910047666
+"206",12.8,NA,NA,273,"mean",193,354,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",5.56599355101933,0.304993672668661
+"207",13.1,NA,NA,370,"mean",187,553,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",5.77323330918846,0.54514595488357
+"208",13.8,NA,NA,190,"mean",143,237,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",5.21545238569752,0.254015539222521
+"209",14.4,NA,NA,132,"mean",86,178,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",4.8180654232728,0.365745129241007
+"211",15.1,NA,NA,182,"mean",131,233,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",5.16311788838343,0.289525147362671
+"212",15.6,NA,NA,473,"mean",425,521,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",6.15391960533889,0.102397937744535
+"213",16,NA,NA,333,"mean",281,385,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",5.79579900181076,0.158321770218006
+"214",16.1,NA,NA,289,"mean",231,346,1,"skew_normal","paleosols","Retallack, 2009b (updated by Breecker & Retallack, 2014)",5.64442824278976,0.20313633757515
+"215",95.3,100.5,90,1307,"mean",654,2614,1,"skew_normal","paleosols","Leier et al., 2009",7.17587212282068,0.696625551529129
+"216",113.4,126.3,100.5,591,"mean",296,1182,1,"skew_normal","paleosols","Leier et al., 2009",6.38266132614505,0.696160072246087
+"217",200.4,NA,NA,1664,"mean",832,3328,1,"skew_normal","paleosols","Schaller et al., 2011",7.41697962138115,0.697010091893198
+"218",200.5,NA,NA,2087,"mean",1044,4175,1,"skew_normal","paleosols","Schaller et al., 2011",7.64384220286377,0.696889678408845
+"219",200.9,NA,NA,3515,"mean",1758,7031,1,"skew_normal","paleosols","Schaller et al., 2011",8.16500815022214,0.696938587021925
+"220",200.9,NA,NA,3294,"mean",1647,6588,1,"skew_normal","paleosols","Schaller et al., 2011",8.09985791073758,0.697010091893198
+"221",200.9,NA,NA,1299,"mean",650,2599,1,"skew_normal","paleosols","Schaller et al., 2011",7.16992719876559,0.696816675271651
+"222",201,NA,NA,1571,"mean",785,3141,1,"skew_normal","paleosols","Schaller et al., 2011",7.35899010866053,0.697170189490957
+"223",201.1,NA,NA,2472,"mean",1236,4944,1,"skew_normal","paleosols","Schaller et al., 2011",7.81278281857758,0.697010091893198
+"224",201.1,NA,NA,1761,"mean",881,3523,1,"skew_normal","paleosols","Schaller et al., 2011",7.47406290213871,0.696867396702368
+"225",201.2,NA,NA,2307,"mean",1153,4613,1,"skew_normal","paleosols","Schaller et al., 2011",7.74337810191344,0.697119097097205
+"226",201.2,NA,NA,2009,"mean",1005,4019,1,"skew_normal","paleosols","Schaller et al., 2011",7.60576560747119,0.696885005065457
+"227",201.2,NA,NA,2438,"mean",1219,4876,1,"skew_normal","paleosols","Schaller et al., 2011",7.79893331004122,0.697010091893199
+"228",201.2,NA,NA,2677,"mean",1338,5353,1,"skew_normal","paleosols","Schaller et al., 2011",7.89217183554078,0.697104026783992
+"229",201.2,NA,NA,2700,"mean",1350,5400,1,"skew_normal","paleosols","Schaller et al., 2011",7.90100705199242,0.697010091893199
+"230",201.2,NA,NA,2713,"mean",1357,5427,1,"skew_normal","paleosols","Schaller et al., 2011",7.90608671694914,0.696917455043279
+"231",201.2,NA,NA,2823,"mean",1411,5645,1,"skew_normal","paleosols","Schaller et al., 2011",7.94528971421829,0.697099167365397
+"232",201.3,NA,NA,2302,"mean",1151,4604,1,"skew_normal","paleosols","Schaller et al., 2011",7.74153358928183,0.697010091893198
+"233",201.3,NA,NA,2385,"mean",1192,4769,1,"skew_normal","paleosols","Schaller et al., 2011",7.77663988296176,0.697115531025704
+"234",201.4,NA,NA,2389,"mean",1195,4779,1,"skew_normal","paleosols","Schaller et al., 2011",7.77894403147188,0.696904895428434
+"235",201.5,NA,NA,2819,"mean",1409,5637,1,"skew_normal","paleosols","Schaller et al., 2011",7.94387139999013,0.697099293792042
+"236",201.5,NA,NA,2956,"mean",1478,5912,1,"skew_normal","paleosols","Schaller et al., 2011",7.99159228206809,0.697010091893198
+"237",201.5,NA,NA,710,"mean",355,1420,1,"skew_normal","paleosols","Schaller et al., 2011",6.56526497003536,0.697010091893199
+"238",201.7,NA,NA,1191,"mean",596,2383,1,"skew_normal","paleosols","Schaller et al., 2011",7.08317807208205,0.696799147270213
+"239",201.8,NA,NA,1495,"mean",747,2989,1,"skew_normal","paleosols","Schaller et al., 2011",7.30937967370838,0.69717833231689
+"240",201.9,NA,NA,1502,"mean",751,3004,1,"skew_normal","paleosols","Schaller et al., 2011",7.31455283232408,0.697010091893198
+"241",202.1,NA,NA,1509,"mean",754,3017,1,"skew_normal","paleosols","Schaller et al., 2011",7.31870530358351,0.697176770662009
+"242",202.2,NA,NA,1065,"mean",532,2129,1,"skew_normal","paleosols","Schaller et al., 2011",6.97002557711756,0.697246308247796
+"243",202.5,NA,NA,1613,"mean",806,3225,1,"skew_normal","paleosols","Schaller et al., 2011",7.38538598586825,0.697166018860338
+"244",203,NA,NA,1487,"mean",744,2975,1,"skew_normal","paleosols","Schaller et al., 2011",7.30502017640641,0.696841116424792
+"245",203.1,NA,NA,1298,"mean",649,2596,1,"skew_normal","paleosols","Schaller et al., 2011",7.16857989726403,0.697010091893199
+"246",203.6,NA,NA,1021,"mean",511,2043,1,"skew_normal","paleosols","Schaller et al., 2011",6.92927209251066,0.696764050047568
+"247",203.7,NA,NA,1855,"mean",927,3709,1,"skew_normal","paleosols","Schaller et al., 2011",7.52523557152772,0.697145668677493
+"248",203.9,NA,NA,983,"mean",492,1967,1,"skew_normal","paleosols","Schaller et al., 2011",6.89137176744068,0.696754546016534
+"249",211.9,NA,NA,1183,"mean",592,2367,1,"skew_normal","paleosols","Schaller et al., 2012",7.07644262219899,0.696797721667649
+"250",211.9,NA,NA,1135,"mean",568,2271,1,"skew_normal","paleosols","Schaller et al., 2012",7.03504848041336,0.696788746302341
+"251",211.9,NA,NA,1479,"mean",739,2957,1,"skew_normal","paleosols","Schaller et al., 2012",7.29861422040034,0.697180153285489
+"252",211.9,NA,NA,1376,"mean",688,2752,1,"skew_normal","paleosols","Schaller et al., 2012",7.22693601849329,0.697010091893198
+"253",205,NA,NA,1377,"mean",688,2753,1,"skew_normal","paleosols","Schaller et al., 2012",7.22711767153798,0.697192757290852
+"254",201.3,NA,NA,3457,"mean",1729,6915,1,"skew_normal","paleosols","Schaller et al., 2012",8.14837336489107,0.696937387605383
+"255",201.2,NA,NA,2049,"mean",1025,4099,1,"skew_normal","paleosols","Schaller et al., 2012",7.62547310603842,0.696887446081757
+"256",200.8,NA,NA,1499,"mean",750,2999,1,"skew_normal","paleosols","Schaller et al., 2012",7.31305369263968,0.696842468453902
+"257",200.8,NA,NA,3649,"mean",1824,7297,1,"skew_normal","paleosols","Schaller et al., 2012",8.20200287719995,0.697078999794563
+"258",200.8,NA,NA,1987,"mean",993,3973,1,"skew_normal","paleosols","Schaller et al., 2012",7.59400370992989,0.697136658665802
+"259",200.8,NA,NA,2353,"mean",1177,4707,1,"skew_normal","paleosols","Schaller et al., 2012",7.76376507433071,0.696903286475588
+"260",200.8,NA,NA,2927,"mean",1464,5855,1,"skew_normal","paleosols","Schaller et al., 2012",7.98198948527654,0.696924226210894
+"261",200.8,NA,NA,3012,"mean",1506,6024,1,"skew_normal","paleosols","Schaller et al., 2012",8.01035958891978,0.697010091893198
+"262",200.7,NA,NA,2383,"mean",1191,4765,1,"skew_normal","paleosols","Schaller et al., 2012",7.7758006927218,0.697115619546332
+"263",200.7,NA,NA,1818,"mean",909,3636,1,"skew_normal","paleosols","Schaller et al., 2012",7.50549227473742,0.697010091893198
+"264",200.7,NA,NA,2013,"mean",1006,4025,1,"skew_normal","paleosols","Schaller et al., 2012",7.60700877025617,0.697135023314269
+"265",200.7,NA,NA,1874,"mean",937,3748,1,"skew_normal","paleosols","Schaller et al., 2012",7.53583046279837,0.697010091893198
+"266",200.7,NA,NA,2303,"mean",1152,4607,1,"skew_normal","paleosols","Schaller et al., 2012",7.74229350309588,0.696900968398138
+"267",200.7,NA,NA,1992,"mean",996,3984,1,"skew_normal","paleosols","Schaller et al., 2012",7.59689443814454,0.697010091893198
+"268",200.6,NA,NA,2048,"mean",1024,4096,1,"skew_normal","paleosols","Schaller et al., 2012",7.6246189861594,0.697010091893198
+"269",200.6,NA,NA,1545,"mean",772,3089,1,"skew_normal","paleosols","Schaller et al., 2012",7.34229362147168,0.697172884998558
+"270",200.6,NA,NA,2187,"mean",1093,4373,1,"skew_normal","paleosols","Schaller et al., 2012",7.68994301979473,0.697125080230237
+"271",200.6,NA,NA,1469,"mean",735,2939,1,"skew_normal","paleosols","Schaller et al., 2012",7.29284758281588,0.696839046985438
+"272",200.6,NA,NA,1697,"mean",848,3393,1,"skew_normal","paleosols","Schaller et al., 2012",7.43617520028807,0.697158297200539
+"273",200.5,NA,NA,2997,"mean",1499,5995,1,"skew_normal","paleosols","Schaller et al., 2012",8.00561728278211,0.696926231247267
+"274",200.5,NA,NA,2750,"mean",1375,5500,1,"skew_normal","paleosols","Schaller et al., 2012",7.91935619066062,0.697010091893199
+"275",200.5,NA,NA,3395,"mean",1697,6789,1,"skew_normal","paleosols","Schaller et al., 2012",8.12983809976794,0.697084156340782
+"276",200.4,NA,NA,1921,"mean",961,3843,1,"skew_normal","paleosols","Schaller et al., 2012",7.56099149976757,0.696879277139888
+"277",200.4,NA,NA,2002,"mean",1001,4004,1,"skew_normal","paleosols","Schaller et al., 2012",7.60190195987517,0.697010091893198
+"278",200.4,NA,NA,997,"mean",499,1995,1,"skew_normal","paleosols","Schaller et al., 2012",6.90550271253774,0.696758131726807
+"279",200.4,NA,NA,1411,"mean",706,2823,1,"skew_normal","paleosols","Schaller et al., 2012",7.25258533287337,0.696832019817134
+"280",200.3,NA,NA,1766,"mean",883,3532,1,"skew_normal","paleosols","Schaller et al., 2012",7.47647238116391,0.697010091893199
+"281",200.3,NA,NA,1811,"mean",905,3621,1,"skew_normal","paleosols","Schaller et al., 2012",7.50122022673278,0.697148964011609
+"282",200.2,NA,NA,1019,"mean",509,2037,1,"skew_normal","paleosols","Schaller et al., 2012",6.92584071638866,0.697256979451074
+"283",200.2,NA,NA,610,"mean",305,1220,1,"skew_normal","paleosols","Schaller et al., 2012",6.41345895716736,0.697010091893199
+"284",199.8,NA,NA,523,"mean",262,1047,1,"skew_normal","paleosols","Schaller et al., 2012",6.26101435731582,0.696530104743129
+"285",199,NA,NA,1179,"mean",589,2357,1,"skew_normal","paleosols","Schaller et al., 2012",7.07178554329386,0.697223453450193
+"286",127.9,129.4,126.3,393,"mean",234,551,1,"skew_normal","paleosols","Huang et al., 2012",5.88352796225531,0.430593244950212
+"287",137.9,139.4,136.4,174,"mean",76,272,1,"skew_normal","paleosols","Huang et al., 2012",4.96826770329116,0.641087343937685
+"288",143.5,145,142,232,"mean",92,372,1,"skew_normal","paleosols","Huang et al., 2012",5.22034121566109,0.702445674579376
+"289",83,NA,NA,1522,"mean",761,3044,1,"skew_normal","paleosols","Hong & Lee, 2012",7.32778053842163,0.697010091893198
+"290",98,NA,NA,1520,"mean",760,3040,1,"skew_normal","paleosols","Hong & Lee, 2012",7.32646561384032,0.697010091893198
+"291",100.5,NA,NA,1368,"mean",684,2736,1,"skew_normal","paleosols","Hong & Lee, 2012",7.2211050981825,0.697010091893198
+"292",102,NA,NA,1428,"mean",714,2856,1,"skew_normal","paleosols","Hong & Lee, 2012",7.26403014289953,0.697010091893199
+"293",103.5,NA,NA,1060,"mean",530,2120,1,"skew_normal","paleosols","Hong & Lee, 2012",6.96602418710611,0.697010091893198
+"294",113.5,NA,NA,449,"mean",225,898,1,"skew_normal","paleosols","Hong & Lee, 2012",6.10813523525331,0.6958915452661
+"295",157.8,163.5,152.1,558,"mean",279,1115,1,"skew_normal","paleosols","Gutierrez & Sheldon, 2012",6.32391073285779,0.69655936438519
+"296",5.5,6.1,4.9,222,"median",112,524,1,"skew_normal","paleosols","Cotton & Sheldon, 2012  (updated by Breecker & Retallack, 2014)",5.48999527780807,0.775795958319381
+"297",50.5,50.5,50.4,684,"mean",574,807,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",6.52297653229476,0.17129648107909
+"298",50.7,50.8,50.7,397,"mean",246,533,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",5.8919264800491,0.388749438909319
+"299",50.9,50.9,50.8,178,"mean",109,246,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",5.09833970908075,0.409259993533346
+"300",51.1,51.2,51.1,1285,"mean",1026,1532,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",7.13387618801563,0.201570288364471
+"301",51.2,51.3,51.2,1354,"mean",1258,1450,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",7.2082986363375,0.0714159948613305
+"302",51.4,51.4,51.3,971,"mean",834,1108,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",6.86827263483299,0.142830817546329
+"303",51.5,51.5,51.4,1709,"mean",1436,2000,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",7.43525960457513,0.16656598309857
+"304",51.5,51.6,51.5,1299,"mean",1067,1491,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",7.13990428303325,0.168230384168221
+"305",51.8,51.8,51.7,903,"mean",738,1067,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",6.78827503795111,0.185358491760039
+"306",52,52,51.9,301,"mean",219,383,1,"skew_normal","paleosols","Hyland & Sheldon, 2013",5.66855335949857,0.281039181649409
+"307",63.6,NA,NA,235,"mean",188,281,1,"skew_normal","paleosols","Huang et al., 2013",5.43739831608185,0.202076283616239
+"308",63.7,NA,NA,212,"mean",148,276,1,"skew_normal","paleosols","Huang et al., 2013",5.30880656974063,0.313330811930218
+"309",64.6,NA,NA,200,"mean",144,255,1,"skew_normal","paleosols","Huang et al., 2013",5.25553842236721,0.287317469764526
+"310",64.7,NA,NA,289,"mean",188,390,1,"skew_normal","paleosols","Huang et al., 2013",5.60129435097682,0.366885711609282
+"311",64.9,NA,NA,175,"mean",127,223,1,"skew_normal","paleosols","Huang et al., 2013",5.12567942895936,0.283061100176719
+"312",65,NA,NA,357,"mean",260,455,1,"skew_normal","paleosols","Huang et al., 2013",5.84048952498324,0.281367264206899
+"313",65.1,NA,NA,278,"mean",200,355,1,"skew_normal","paleosols","Huang et al., 2013",5.58521757801173,0.288499107209728
+"314",65.2,NA,NA,360,"mean",189,532,1,"skew_normal","paleosols","Huang et al., 2013",5.75919525220064,0.520331977731288
+"315",65.4,NA,NA,298,"mean",196,399,1,"skew_normal","paleosols","Huang et al., 2013",5.63353803806019,0.357404154394648
+"316",66.5,NA,NA,492,"mean",395,588,1,"skew_normal","paleosols","Huang et al., 2013",6.17780635639987,0.200029176556686
+"317",68.3,NA,NA,175,"mean",102,248,1,"skew_normal","paleosols","Huang et al., 2013",5.06920077972463,0.446703650240619
+"318",52.8,52.9,52.7,400,"mean",275,530,1,"skew_normal","paleosols","Hyland et al., 2013",5.94482405210637,0.329881194546883
+"319",52.6,52.7,52.5,750,"mean",630,880,1,"skew_normal","paleosols","Hyland et al., 2013",6.61282086342892,0.168032298667083
+"320",51.9,52,51.8,1260,"mean",1075,1440,1,"skew_normal","paleosols","Hyland et al., 2013",7.1262371665659,0.146975782958636
+"321",51.8,51.9,51.7,1210,"mean",1030,1400,1,"skew_normal","paleosols","Hyland et al., 2013",7.09077079841352,0.154311931938768
+"322",51.1,51.2,51,725,"mean",640,800,1,"skew_normal","paleosols","Hyland et al., 2013",6.57303995201082,0.112193565500221
+"323",135.7,145,126.3,924,"mean",462,1847,1,"skew_normal","paleosols","Mortazavi et al., 2013",6.82844143564049,0.69673794763675
+"324",31.6,35.5,27.7,265,"mean",132,529,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Srivastava et al., 2013",5.57689517722233,0.697961438442904
+"325",31.6,35.5,27.7,377,"mean",188,754,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Srivastava et al., 2013",5.93091716541895,0.69834551499304
+"326",253.2,254.2,252.2,1325,"mean",663,2650,1,"skew_normal","paleosols","Gastaldo et al., 2014",7.18954495458307,0.69663077350364
+"327",253.2,254.2,252.2,1100,"mean",550,2200,1,"skew_normal","paleosols","Gastaldo et al., 2014",7.00306545878646,0.697010091893198
+"328",253.2,254.2,252.2,883,"mean",442,1766,1,"skew_normal","paleosols","Gastaldo et al., 2014",6.7838911316208,0.696441006941088
+"329",6.4,NA,NA,213,"median",118,376,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.35013688392778,0.58268154865629
+"330",6.7,NA,NA,283,"median",154,531,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.65585731182778,0.622353867231212
+"331",6.8,NA,NA,372,"median",227,663,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.96086250383363,0.538899128259206
+"332",8.8,NA,NA,274,"median",173,476,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.6593547243646,0.508883421219841
+"333",9.1,NA,NA,197,"median",90,485,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.34197928063387,0.846863024088448
+"334",12.7,NA,NA,267,"median",131,624,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.65567384578529,0.784826120604565
+"335",13.7,NA,NA,101,"median",31,272,1,"skew_normal","paleosols","Breecker & Retallack, 2014",4.51989463539057,1.09195919630151
+"336",17.5,NA,NA,261,"median",125,609,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.6200660025061,0.796164702971941
+"337",17.8,NA,NA,237,"median",73,1017,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.60753591859848,1.32441654864159
+"338",18,NA,NA,160,"median",47,694,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.19630978110843,1.35366434529479
+"339",18.2,NA,NA,274,"median",183,400,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.6004753499747,0.393168181111208
+"340",23,NA,NA,203,"median",97,493,1,"skew_normal","paleosols","Breecker & Retallack, 2014",5.38761007627304,0.817429386899631
+"341",100.8,NA,NA,763,"mean",382,1526,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.63791291022549,0.696351563309847
+"342",102.4,NA,NA,621,"mean",310,1242,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.43052527998631,0.697820384577057
+"343",103.1,NA,NA,792,"mean",396,1584,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.67456139181443,0.697010091893198
+"344",103.3,NA,NA,1052,"mean",526,2104,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.95844839329766,0.697010091893199
+"345",104.6,NA,NA,1246,"mean",623,2493,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.12789430115551,0.697211811655788
+"346",104.7,NA,NA,1139,"mean",570,2278,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.03834475241786,0.696568857550258
+"347",104.8,NA,NA,1254,"mean",627,2509,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.13429304349967,0.697210525023823
+"348",106.1,NA,NA,1399,"mean",700,2798,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.24387024513442,0.69665083035486
+"349",106.4,NA,NA,1474,"mean",737,2949,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.29590465050231,0.697180614703553
+"350",106.5,NA,NA,1679,"mean",840,3358,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.42625136473742,0.696710725107628
+"351",106.6,NA,NA,1497,"mean",748,2994,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.31088427147703,0.697346066848241
+"352",106.9,NA,NA,1496,"mean",748,2992,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.31055015853442,0.697010091893199
+"353",107.8,NA,NA,1201,"mean",600,2402,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.09049332892804,0.697428906162739
+"354",108.8,NA,NA,1015,"mean",508,2030,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.92313625980716,0.696514979591729
+"355",110.3,NA,NA,1065,"mean",532,2130,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.97026037402256,0.697482413676653
+"356",111.1,NA,NA,1637,"mean",818,3274,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.40031504726691,0.697317324717614
+"357",111.5,NA,NA,1966,"mean",983,3933,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.58388344628949,0.69713794605829
+"358",111.8,NA,NA,1880,"mean",940,3760,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.539027055824,0.697010091893199
+"359",112.3,NA,NA,1829,"mean",914,3658,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.51125120020248,0.697285064009165
+"360",112.7,NA,NA,1419,"mean",710,2838,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.25805991387767,0.696655892159274
+"361",113.8,NA,NA,1295,"mean",648,2590,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.16665192552293,0.696621989595647
+"362",114.8,NA,NA,1514,"mean",757,3029,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.32267553223234,0.69717611022111
+"363",114.9,NA,NA,1426,"mean",713,2853,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.2628038858139,0.697186353595796
+"364",115.3,NA,NA,1367,"mean",684,2734,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.22073946745322,0.696642423502765
+"365",116.1,NA,NA,1666,"mean",833,3331,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.41803074018026,0.696859172936186
+"366",117.8,NA,NA,1364,"mean",682,2728,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.21817683840341,0.697010091893198
+"367",123.3,NA,NA,736,"mean",368,1472,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.60123011872888,0.697010091893198
+"368",123.6,NA,NA,607,"mean",304,1214,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.40935183651283,0.696182459605064
+"369",123.7,NA,NA,824,"mean",412,1648,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.71417052990947,0.697010091893198
+"370",123.8,NA,NA,1018,"mean",509,2035,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.92534955721361,0.696763083044451
+"371",126.4,NA,NA,1065,"mean",532,2130,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.97026037402256,0.697482413676653
+"372",126.6,NA,NA,1510,"mean",755,3019,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.31969933947793,0.696843578726744
+"373",127.5,NA,NA,1704,"mean",852,3408,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.44073370738926,0.697010091893199
+"374",129.8,NA,NA,940,"mean",470,1880,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.84587987526405,0.697010091893199
+"375",130.2,NA,NA,1023,"mean",512,2046,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.93098328577554,0.696518849546829
+"376",130.8,NA,NA,842,"mean",421,1685,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",6.73607683823442,0.697308570086299
+"377",131.3,NA,NA,1910,"mean",955,3819,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.55472761385312,0.696878455159493
+"378",132,NA,NA,2562,"mean",1281,5123,1,"skew_normal; uncertainty not reported; uncertainty determined here by adopted the generalized, right-skewed errors of +100/-50% from Breeker et al. (2013, p. 3218)","paleosols","Li et al., 2014",7.84844589291797,0.696911958487693
+"379",201.5,NA,NA,710,"mean",449,971,1,"normal","paleosols","Schaller et al., 2015",6.49267467801679,0.387801028867899
+"380",201.8,NA,NA,1189.6,"mean",730,1650,1,"normal","paleosols","Schaller et al., 2015",7.00078755051853,0.410015369439325
+"381",201.8,NA,NA,1494.733333,"mean",911,2078,1,"normal","paleosols","Schaller et al., 2015",7.22685203445957,0.414606937267993
+"382",201.9,NA,NA,1502,"mean",917,2087,1,"normal","paleosols","Schaller et al., 2015",7.23229518966683,0.413479267802877
+"383",202.1,NA,NA,1508.866667,"mean",925,2092,1,"normal","paleosols","Schaller et al., 2015",7.23783478134862,0.41031505780736
+"384",202.6,NA,NA,1064.533333,"mean",662,1467,1,"normal","paleosols","Schaller et al., 2015",6.89312016703999,0.400071856053727
+"385",202.8,NA,NA,1613.266667,"mean",982,2244,1,"normal","paleosols","Schaller et al., 2015",7.30280328749853,0.415514810753333
+"386",203.3,NA,NA,1486.8,"mean",907,2066,1,"normal","paleosols","Schaller et al., 2015",7.22175604989736,0.413907523618479
+"387",203.5,NA,NA,1297.866667,"mean",801,1795,1,"normal","paleosols","Schaller et al., 2015",7.08931062399537,0.405698103196506
+"388",203.9,NA,NA,1942.533333,"mean",1155,2730,1,"normal","paleosols","Schaller et al., 2015",7.48195625556745,0.432497584737672
+"389",204.1,NA,NA,1021.333333,"mean",632,1411,1,"normal","paleosols","Schaller et al., 2015",6.85047167299984,0.403820298107362
+"390",204.4,NA,NA,1854.466667,"mean",1122,2586,1,"normal","paleosols","Schaller et al., 2015",7.44036782270722,0.419826463919257
+"391",204.6,NA,NA,1427.133333,"mean",872,1983,1,"normal","paleosols","Schaller et al., 2015",7.18157777621439,0.41307767703498
+"392",204.6,NA,NA,1973.333333,"mean",1252,2695,1,"normal","paleosols","Schaller et al., 2015",7.51582551750157,0.385464253754298
+"393",204.7,NA,NA,2023.8,"mean",1270,2778,1,"normal","paleosols","Schaller et al., 2015",7.53812935138346,0.393538206633413
+"394",205.9,NA,NA,2157.866667,"mean",1351,2965,1,"normal","paleosols","Schaller et al., 2015",7.60161632469601,0.395206266018324
+"395",205.9,NA,NA,2103.866667,"mean",1317,2891,1,"normal","paleosols","Schaller et al., 2015",7.57623472187981,0.395313895916509
+"396",207.2,NA,NA,1962.8,"mean",1246,2680,1,"normal","paleosols","Schaller et al., 2015",7.51063288642615,0.385073308326303
+"397",207.3,NA,NA,2275.6,"mean",1405,3146,1,"normal","paleosols","Schaller et al., 2015",7.65083983269303,0.40529343447336
+"398",207.5,NA,NA,2723.733333,"mean",1657,3790,1,"normal","paleosols","Schaller et al., 2015",7.82644265775152,0.415984072638399
+"399",207.8,NA,NA,2505.333333,"mean",1539,3472,1,"normal","paleosols","Schaller et al., 2015",7.74568710480956,0.409066062866011
+"400",207.9,NA,NA,2508.4,"mean",1519,3497,1,"normal","paleosols","Schaller et al., 2015",7.74273411982958,0.419250150532381
+"401",208.1,NA,NA,2953.133333,"mean",1575,4331,1,"normal","paleosols","Schaller et al., 2015",7.86778214623718,0.508590261605648
+"402",208.3,NA,NA,2953.133333,"mean",1764,4142,1,"normal","paleosols","Schaller et al., 2015",7.90213663926113,0.429175945910195
+"403",208.4,NA,NA,2831.733333,"mean",1713,3950,1,"normal","paleosols","Schaller et al., 2015",7.86373617810964,0.420062716419147
+"404",209.2,NA,NA,3191.066667,"mean",1878,4504,1,"normal","paleosols","Schaller et al., 2015",7.97534191479387,0.439816770936499
+"405",210,NA,NA,2756,"mean",1664,3848,1,"normal","paleosols","Schaller et al., 2015",7.83614421658338,0.421500600758786
+"406",210.3,NA,NA,2295.533333,"mean",1437,3154,1,"normal","paleosols","Schaller et al., 2015",7.663369826801,0.39524744824118
+"407",210.8,NA,NA,2605.6,"mean",1579,3632,1,"normal","paleosols","Schaller et al., 2015",7.78104287698841,0.418816995435213
+"408",211.6,NA,NA,1623.4,"mean",1047,2200,1,"normal","paleosols","Schaller et al., 2015",7.32494842510847,0.373333270826541
+"409",211.6,NA,NA,2236.6,"mean",1367,3106,1,"normal","paleosols","Schaller et al., 2015",7.63073242021629,0.412645513119019
+"410",211.9,NA,NA,1942.266667,"mean",1220,2664,1,"normal","paleosols","Schaller et al., 2015",7.49709508469379,0.392665143048724
+"411",213.1,NA,NA,2635.6,"mean",1574,3697,1,"normal","paleosols","Schaller et al., 2015",7.78832619395699,0.429330162883921
+"412",215,NA,NA,3194.333333,"mean",1873,4516,1,"normal","paleosols","Schaller et al., 2015",7.97533931385682,0.442494970216771
+"413",215,NA,NA,3087.8,"mean",1803,4373,1,"normal","paleosols","Schaller et al., 2015",7.94020588730812,0.445467496999431
+"414",215.1,NA,NA,3123.2,"mean",1826,4420,1,"normal","paleosols","Schaller et al., 2015",7.95188901811333,0.444469257493116
+"415",215.2,NA,NA,3722.4,"mean",2095,5350,1,"normal","paleosols","Schaller et al., 2015",8.11608033612315,0.471383968774908
+"416",215.3,NA,NA,3395.733333,"mean",1939,4853,1,"normal","paleosols","Schaller et al., 2015",8.02864000232393,0.461268752378656
+"417",215.4,NA,NA,3218.066667,"mean",1867,4569,1,"normal","paleosols","Schaller et al., 2015",7.9795688925525,0.449974560578139
+"418",215.6,NA,NA,3113.6,"mean",1808,4419,1,"normal","paleosols","Schaller et al., 2015",7.94682262304143,0.449336356656001
+"419",215.6,NA,NA,3132.333333,"mean",1844,4420,1,"normal","paleosols","Schaller et al., 2015",7.95679368959414,0.439537252263309
+"420",215.7,NA,NA,3240.6,"mean",1884,4597,1,"normal","paleosols","Schaller et al., 2015",7.98715582547127,0.448488948466496
+"421",216,NA,NA,2470.2,"mean",1505,3436,1,"normal","paleosols","Schaller et al., 2015",7.72930573014356,0.415057852051363
+"422",216.2,NA,NA,2767,"mean",1582,3952,1,"normal","paleosols","Schaller et al., 2015",7.82421110359768,0.460317086323027
+"423",218.2,NA,NA,3183.266667,"mean",1806,4561,1,"normal","paleosols","Schaller et al., 2015",7.96208345534431,0.465795212837267
+"424",218.8,NA,NA,2798.666667,"mean",1647,3950,1,"normal","paleosols","Schaller et al., 2015",7.8440907940364,0.439817584277232
+"425",222,NA,NA,2732.066667,"mean",1636,3828,1,"normal","paleosols","Schaller et al., 2015",7.82505363486777,0.427412889858328
+"426",222.3,NA,NA,2324.933333,"mean",1413,3237,1,"normal","paleosols","Schaller et al., 2015",7.66793631830539,0.416775755533368
+"427",222.4,NA,NA,3022.666667,"mean",1756,4290,1,"normal","paleosols","Schaller et al., 2015",7.91741789305856,0.449113156428463
+"428",223.2,NA,NA,2627.333333,"mean",1596,3658,1,"normal","paleosols","Schaller et al., 2015",7.78996380348028,0.417019194550502
+"429",224.3,NA,NA,3042.066667,"mean",1805,4279,1,"normal","paleosols","Schaller et al., 2015",7.9298952435919,0.433984565974715
+"430",225.8,NA,NA,2547.466667,"mean",1537,3558,1,"normal","paleosols","Schaller et al., 2015",7.75727080588219,0.422021957319103
+"431",226.2,NA,NA,3302.4,"mean",1906,4699,1,"normal","paleosols","Schaller et al., 2015",8.00393354165848,0.453685837340959
+"432",226.6,NA,NA,3182.6,"mean",1875,4491,1,"normal","paleosols","Schaller et al., 2015",7.97309730574612,0.439167283718437
+"433",227.1,NA,NA,3568.133333,"mean",2055,5081,1,"normal","paleosols","Schaller et al., 2015",8.08064724926203,0.455138553350109
+"434",229.3,NA,NA,3319.733333,"mean",1936,4704,1,"normal","paleosols","Schaller et al., 2015",8.01227387870749,0.446368436879638
+"435",229.7,NA,NA,2445.6,"mean",1505,3387,1,"normal","paleosols","Schaller et al., 2015",7.72212401500037,0.407836113187966
+"436",231,NA,NA,2516.4,"mean",1541,3492,1,"normal","paleosols","Schaller et al., 2015",7.7492083761398,0.411301019103508
+"437",231.4,NA,NA,3230.866667,"mean",1900,4562,1,"normal","paleosols","Schaller et al., 2015",7.98756278399943,0.440394335687042
+"438",232,NA,NA,2142.8,"mean",1335,2950,1,"normal","paleosols","Schaller et al., 2015",7.59312351008411,0.398646283510974
+"439",232.2,NA,NA,2884.2,"mean",1724,4045,1,"normal","paleosols","Schaller et al., 2015",7.87881964035812,0.428793613418957
+"440",100,NA,NA,746,"mean",373,1492,1,"skew_normal","paleosols","Ludvigson et al., 2015",6.61472560020376,0.697010091893198
+"441",102.5,NA,NA,886,"mean",443,1772,1,"skew_normal","paleosols","Ludvigson et al., 2015",6.78671695060508,0.697010091893198
+"442",111.5,NA,NA,996,"mean",498,1992,1,"skew_normal","paleosols","Ludvigson et al., 2015",6.9037472575846,0.697010091893198
+"443",113.5,NA,NA,1335,"mean",668,2670,1,"skew_normal","paleosols","Ludvigson et al., 2015",7.19706096246547,0.696633613776385
+"444",115.5,NA,NA,986,"mean",493,1972,1,"skew_normal","paleosols","Ludvigson et al., 2015",6.89365635460264,0.697010091893199
+"445",116,NA,NA,1071,"mean",536,2142,1,"skew_normal","paleosols","Ludvigson et al., 2015",6.97681470603925,0.696540855740137
+"446",116.5,NA,NA,1190,"mean",595,2380,1,"skew_normal","paleosols","Ludvigson et al., 2015",7.08170858610557,0.697010091893199
+"447",119.4,NA,NA,1179,"mean",590,2358,1,"skew_normal","paleosols","Ludvigson et al., 2015",7.07284580899854,0.696583820988892
+"448",1,NA,NA,244,"mean",153,403,1,"skew_normal","paleosols","Da et al., 2015",5.51468724166956,0.48694804320334
+"449",1.1,NA,NA,214,"mean",134,353,1,"skew_normal","paleosols","Da et al., 2015",5.3821539284421,0.48701321259378
+"450",1.2,NA,NA,335,"mean",210,552,1,"skew_normal","paleosols","Da et al., 2015",5.83032778849728,0.485913245737619
+"451",1.2,NA,NA,217,"mean",136,357,1,"skew_normal","paleosols","Da et al., 2015",5.39519533375785,0.485229647397762
+"452",1.2,NA,NA,193,"mean",121,319,1,"skew_normal","paleosols","Da et al., 2015",5.28049082419079,0.487401514712331
+"453",1.3,NA,NA,141,"mean",88,233,1,"skew_normal","paleosols","Da et al., 2015",4.96418763402195,0.489564040633242
+"454",1.3,NA,NA,157,"mean",98,258,1,"skew_normal","paleosols","Da et al., 2015",5.06896353179609,0.486693364593136
+"455",1.3,NA,NA,196,"mean",123,324,1,"skew_normal","paleosols","Da et al., 2015",5.29646393558237,0.486978471774868
+"456",1.4,NA,NA,194,"mean",122,321,1,"skew_normal","paleosols","Da et al., 2015",5.28773108393164,0.486405756709512
+"457",1.4,NA,NA,192,"mean",120,317,1,"skew_normal","paleosols","Da et al., 2015",5.27319675832966,0.488411851067977
+"458",1.4,NA,NA,192,"mean",120,316,1,"skew_normal","paleosols","Da et al., 2015",5.27161697818448,0.486823266803267
+"459",1.4,NA,NA,194,"mean",121,320,1,"skew_normal","paleosols","Da et al., 2015",5.28205577069526,0.488975182668396
+"460",1.5,NA,NA,239,"mean",150,394,1,"skew_normal","paleosols","Da et al., 2015",5.4934931016971,0.485548775622701
+"461",1.5,NA,NA,210,"mean",132,347,1,"skew_normal","paleosols","Da et al., 2015",5.36606335126662,0.485954646083603
+"462",1.5,NA,NA,303,"mean",190,500,1,"skew_normal","paleosols","Da et al., 2015",5.73081608529134,0.486488187482959
+"463",1.6,NA,NA,282,"mean",177,465,1,"skew_normal","paleosols","Da et al., 2015",5.65909356908059,0.485635283967979
+"464",1.6,NA,NA,230,"mean",144,380,1,"skew_normal","paleosols","Da et al., 2015",5.45499227614822,0.487882880475775
+"465",1.6,NA,NA,247,"mean",154,407,1,"skew_normal","paleosols","Da et al., 2015",5.52288289392811,0.488638382498487
+"466",1.6,NA,NA,207,"mean",130,342,1,"skew_normal","paleosols","Da et al., 2015",5.35117259375909,0.486333460138605
+"467",1.7,NA,NA,239,"mean",150,394,1,"skew_normal","paleosols","Da et al., 2015",5.4934931016971,0.485548775622701
+"468",1.8,NA,NA,230,"mean",144,379,1,"skew_normal","paleosols","Da et al., 2015",5.45367475232921,0.486558014092545
+"469",1.9,NA,NA,307,"mean",192,507,1,"skew_normal","paleosols","Da et al., 2015",5.74300318780948,0.488213552307169
+"470",1.9,NA,NA,252,"mean",158,415,1,"skew_normal","paleosols","Da et al., 2015",5.54543677662883,0.485532622099014
+"471",2.1,NA,NA,299,"mean",187,494,1,"skew_normal","paleosols","Da et al., 2015",5.71682206702125,0.488420332693185
+"472",2.1,NA,NA,300,"mean",188,495,1,"skew_normal","paleosols","Da et al., 2015",5.72049986269932,0.486755556009074
+"473",2.1,NA,NA,278,"mean",174,458,1,"skew_normal","paleosols","Da et al., 2015",5.64296224166436,0.486603757303377
+"474",2.2,NA,NA,338,"mean",212,557,1,"skew_normal","paleosols","Da et al., 2015",5.83957575729965,0.48568118447482
+"475",2.3,NA,NA,387,"mean",243,639,1,"skew_normal","paleosols","Da et al., 2015",5.97648294885904,0.486115615030555
+"476",2.3,NA,NA,342,"mean",214,564,1,"skew_normal","paleosols","Da et al., 2015",5.85051513325996,0.487239456209232
+"477",2.3,NA,NA,405,"mean",254,669,1,"skew_normal","paleosols","Da et al., 2015",6.02155916357338,0.486923483367584
+"478",2.6,NA,NA,400,"mean",251,660,1,"skew_normal","paleosols","Da et al., 2015",6.00884638707613,0.48608740109146
+"479",2.6,NA,NA,385,"mean",241,636,1,"skew_normal","paleosols","Da et al., 2015",5.96999774841539,0.487904840533498
+"481",220.1,NA,NA,215,"mean",108,430,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",5.37295821790591,0.694676971690297
+"482",214.7,NA,NA,355,"mean",178,710,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",5.87352426016372,0.695595782939492
+"483",213.5,NA,NA,443,"mean",222,886,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.09469716623868,0.695876412717258
+"484",213.3,NA,NA,500,"mean",250,1000,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.21460809842219,0.697010091893198
+"485",213.2,NA,NA,546,"mean",273,1092,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.30261897574491,0.697010091893198
+"486",213.1,NA,NA,501,"mean",251,1002,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.2176031103883,0.696007526253903
+"487",213,NA,NA,523,"mean",262,1046,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.26053657419298,0.696049658933506
+"488",212.7,NA,NA,170,"mean",85,340,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",5.13579843705026,0.697010091893199
+"489",212.6,NA,NA,738,"mean",369,1476,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.60394382460047,0.697010091893198
+"490",212.5,NA,NA,1463,"mean",732,2926,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",7.28858604777069,0.696666541144258
+"491",212.4,NA,NA,522,"mean",261,1044,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.25766758788264,0.697010091893198
+"492",212.2,NA,NA,713,"mean",357,1426,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.57018219137694,0.69630541553186
+"493",212.1,NA,NA,708,"mean",354,1416,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.56244409369372,0.697010091893198
+"495",211.7,NA,NA,683,"mean",342,1366,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.52722638859667,0.696274486053845
+"496",211.5,NA,NA,643,"mean",322,1286,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.46692172517099,0.69622876073128
+"497",211.4,NA,NA,749,"mean",375,1498,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.61940609502379,0.696339262572187
+"498",211.3,NA,NA,128,"mean",64,256,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",4.85203026391962,0.697010091893198
+"499",211.2,NA,NA,182,"mean",91,364,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",5.2040066870768,0.697010091893198
+"500",211.2,NA,NA,616,"mean",308,1232,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.42324696353352,0.697010091893198
+"501",211.1,NA,NA,726,"mean",363,1452,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.5875500148248,0.697010091893199
+"504",210.4,NA,NA,219,"mean",110,438,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",5.39134963808443,0.694719488835603
+"505",210.1,NA,NA,420,"mean",210,840,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.04025471127741,0.697010091893199
+"506",209.9,NA,NA,1080,"mean",540,2160,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.98471632011826,0.697010091893198
+"507",209.9,NA,NA,777,"mean",389,1554,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.65608343727302,0.696363421062558
+"508",209.7,NA,NA,665,"mean",333,1330,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.50053835559812,0.696254589870486
+"509",209.6,NA,NA,529,"mean",265,1058,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.27193271920223,0.696060542033041
+"510",209.5,NA,NA,1220,"mean",610,2440,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",7.1066061377273,0.697010091893198
+"511",209.3,NA,NA,1025,"mean",513,2050,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.93293545865161,0.696519807601289
+"512",209.2,NA,NA,1406,"mean",703,2812,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",7.24850407237061,0.697010091893198
+"513",209,NA,NA,1063,"mean",532,2126,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.96932052412177,0.696537325989525
+"514",208.6,NA,NA,1869,"mean",935,3738,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",7.5334262586521,0.696741150190336
+"515",208.4,NA,NA,904,"mean",452,1808,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.80682936039218,0.697010091893199
+"516",208.2,NA,NA,1179,"mean",590,2358,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",7.07284580899854,0.696583820988892
+"517",208,NA,NA,964,"mean",482,1928,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",6.87109129461055,0.697010091893198
+"518",207.4,NA,NA,1978,"mean",989,3956,1,"skew_normal","paleosols","Nordt et al., 2015 (expands and refines Atchley et al., 2013)",7.58984151218266,0.697010091893198
+"519",205.15,209,201.3,1626.42,"mean",813,3253,1,"skew_normal","paleosols","Whiteside et al., 2015",7.39403201801058,0.697164676522091
+"520",205.15,209,201.3,1233.546667,"mean",617,2467,1,"skew_normal","paleosols","Whiteside et al., 2015",7.11781357021737,0.696806328363961
+"521",205.15,209,201.3,1293.693333,"mean",647,2587,1,"skew_normal","paleosols","Whiteside et al., 2015",7.16530023834347,0.696815778267007
+"522",211.9,212.6,211.2,749,"mean",374,1498,1,"skew_normal","paleosols","Whiteside et al., 2015",6.61807098074585,0.697681817446034
+"523",211.9,212.6,211.2,786,"mean",393,1573,1,"skew_normal","paleosols","Whiteside et al., 2015",6.66727475746377,0.69732982894786
+"524",34.2,NA,NA,399,"mean",127,672,1,"normal","paleosols","Kohn et al., 2015",5.67722271349087,0.837678137100729
+"525",0.2,NA,NA,289,"mean",263,315,1,"normal","alkenones","Seki et al., 2010",5.6623633355017,0.0907120400441406
+"526",0.3,NA,NA,246,"mean",224,268,1,"normal","alkenones","Seki et al., 2010",5.50131651618295,0.0901701980967607
+"527",0.5,NA,NA,255,"mean",232,278,1,"normal","alkenones","Seki et al., 2010",5.53717924267847,0.0909459038327998
+"528",0.9,NA,NA,243,"mean",221,264,1,"normal","alkenones","Seki et al., 2010",5.48705590233203,0.0893886028912219
+"529",1,NA,NA,252,"mean",230,275,1,"normal","alkenones","Seki et al., 2010",5.52742520329488,0.0898438193111918
+"530",1.2,NA,NA,266,"mean",243,290,1,"normal","alkenones","Seki et al., 2010",5.58147118316053,0.088902447567342
+"531",1.3,NA,NA,271,"mean",246,295,1,"normal","alkenones","Seki et al., 2010",5.59615344613609,0.091328060983928
+"532",1.5,NA,NA,277,"mean",252,302,1,"normal","alkenones","Seki et al., 2010",5.61992805244315,0.0910033159369454
+"533",1.8,NA,NA,270,"mean",246,295,1,"normal","alkenones","Seki et al., 2010",5.59615344613609,0.0913280609839285
+"534",2.1,NA,NA,254,"mean",231,277,1,"normal","alkenones","Seki et al., 2010",5.53321760835457,0.0913059259379619
+"535",2.3,NA,NA,273,"mean",249,298,1,"normal","alkenones","Seki et al., 2010",5.60727319148506,0.0903208637961021
+"536",2.6,NA,NA,267,"mean",243,291,1,"normal","alkenones","Seki et al., 2010",5.58319235525602,0.0906332117601224
+"537",2.8,NA,NA,299,"mean",272,326,1,"normal","alkenones","Seki et al., 2010",5.69634972383135,0.0910522799046043
+"538",2.8,NA,NA,303,"mean",276,331,1,"normal","alkenones","Seki et al., 2010",5.71125962054711,0.0913651109453695
+"539",2.9,NA,NA,323,"mean",294,352,1,"normal","alkenones","Seki et al., 2010",5.77360547146839,0.0905274176510496
+"540",2.9,NA,NA,333,"mean",303,363,1,"normal","alkenones","Seki et al., 2010",5.80406781988711,0.0908384516860297
+"541",3,NA,NA,372,"mean",338,405,1,"normal","alkenones","Seki et al., 2010",5.91346648129478,0.0909245000099093
+"542",3.1,NA,NA,353,"mean",321,385,1,"normal","alkenones","Seki et al., 2010",5.8623422287089,0.0914076977151494
+"543",3.1,NA,NA,344,"mean",313,375,1,"normal","alkenones","Seki et al., 2010",5.83656460825528,0.0908650021692974
+"544",3.2,NA,NA,335,"mean",305,365,1,"normal","alkenones","Seki et al., 2010",5.81010456509495,0.0902932039693041
+"545",3.2,NA,NA,341,"mean",310,372,1,"normal","alkenones","Seki et al., 2010",5.82773307587617,0.091668817690643
+"546",3.6,NA,NA,362,"mean",329,395,1,"normal","alkenones","Seki et al., 2010",5.88747175783325,0.0919234576056884
+"547",3.8,NA,NA,357,"mean",325,389,1,"normal","alkenones","Seki et al., 2010",5.87370226297409,0.0903779658865628
+"548",3.9,NA,NA,338,"mean",307,368,1,"normal","alkenones","Seki et al., 2010",5.81746534287806,0.0911226074234399
+"549",4,NA,NA,329,"mean",300,359,1,"normal","alkenones","Seki et al., 2010",5.79355243157224,0.0902702451573854
+"550",4.1,NA,NA,354,"mean",322,385,1,"normal","alkenones","Seki et al., 2010",5.8638974399161,0.0898438193111925
+"551",4.3,NA,NA,381,"mean",348,414,1,"normal","alkenones","Seki et al., 2010",5.93903422679989,0.0873156606141614
+"552",4.4,NA,NA,351,"mean",320,382,1,"normal","alkenones","Seki et al., 2010",5.85687080220017,0.0890432947452679
+"553",4.6,NA,NA,370,"mean",337,402,1,"normal","alkenones","Seki et al., 2010",5.90826750948569,0.0886760320594993
+"554",4.8,NA,NA,351,"mean",320,382,1,"normal","alkenones","Seki et al., 2010",5.85687080220017,0.089043294745268
+"555",4.9,NA,NA,383,"mean",350,417,1,"normal","alkenones","Seki et al., 2010",5.94550968814113,0.0880645979445662
+"556",4.9,NA,NA,422,"mean",385,459,1,"normal","alkenones","Seki et al., 2010",6.04114677217416,0.0883933240115305
+"557",5,NA,NA,448,"mean",409,488,1,"normal","alkenones","Seki et al., 2010",6.10201528094797,0.0887922217682782
+"558",5.2,NA,NA,457,"mean",417,497,1,"normal","alkenones","Seki et al., 2010",6.12083812394772,0.0882409437649407
+"559",0.02,NA,NA,318,"mean",283,402,1,"skew_normal","alkenones","Zhang et al., 2013",5.82094949313113,0.176480671983244
+"560",0.03,NA,NA,305,"mean",273,384,1,"skew_normal","alkenones","Zhang et al., 2013",5.78005717388634,0.171536051532716
+"561",0.03,NA,NA,322,"mean",284,411,1,"skew_normal","alkenones","Zhang et al., 2013",5.83378372632872,0.185839432003913
+"562",0.04,NA,NA,308,"mean",268,400,1,"skew_normal","alkenones","Zhang et al., 2013",5.79122576380942,0.201354714643383
+"563",0.06,NA,NA,312,"mean",279,393,1,"skew_normal","alkenones","Zhang et al., 2013",5.80251069684531,0.172253564395363
+"564",0.07,NA,NA,338,"mean",304,422,1,"skew_normal","alkenones","Zhang et al., 2013",5.88101650772112,0.164902716428371
+"565",0.09,NA,NA,334,"mean",293,429,1,"skew_normal","alkenones","Zhang et al., 2013",5.87081476397254,0.19170460426152
+"566",0.11,NA,NA,332,"mean",290,429,1,"skew_normal","alkenones","Zhang et al., 2013",5.86566892095427,0.196879125078495
+"567",0.11,NA,NA,336,"mean",293,435,1,"skew_normal","alkenones","Zhang et al., 2013",5.87775932005288,0.198687862373889
+"568",0.13,NA,NA,336,"mean",305,418,1,"skew_normal","alkenones","Zhang et al., 2013",5.87789660456608,0.158463048681404
+"569",0.15,NA,NA,315,"mean",277,403,1,"skew_normal","alkenones","Zhang et al., 2013",5.81147703406701,0.1885042403954
+"570",0.16,NA,NA,316,"mean",286,395,1,"skew_normal","alkenones","Zhang et al., 2013",5.81743878786049,0.162346721531878
+"571",0.17,NA,NA,330,"mean",286,429,1,"skew_normal","alkenones","Zhang et al., 2013",5.85872436487394,0.203862383190864
+"572",0.31,NA,NA,319,"mean",275,418,1,"skew_normal","alkenones","Zhang et al., 2013",5.82612626509566,0.210521904410239
+"573",0.43,NA,NA,285,"mean",252,362,1,"skew_normal","alkenones","Zhang et al., 2013",5.7105366496686,0.182116875148723
+"574",0.58,NA,NA,302,"mean",261,393,1,"skew_normal","alkenones","Zhang et al., 2013",5.76916500959598,0.205785087260573
+"575",0.93,NA,NA,291,"mean",255,374,1,"skew_normal","alkenones","Zhang et al., 2013",5.73275967128648,0.192563334618025
+"576",1.05,NA,NA,301,"mean",261,393,1,"skew_normal","alkenones","Zhang et al., 2013",5.76916500959598,0.205785087260573
+"577",1.19,NA,NA,322,"mean",281,416,1,"skew_normal","alkenones","Zhang et al., 2013",5.8345199647975,0.197258525248558
+"578",1.21,NA,NA,311,"mean",263,414,1,"skew_normal","alkenones","Zhang et al., 2013",5.79901000300154,0.228120239835161
+"579",1.22,NA,NA,317,"mean",278,409,1,"skew_normal","alkenones","Zhang et al., 2013",5.82066813486672,0.194122872808847
+"580",1.23,NA,NA,322,"mean",278,422,1,"skew_normal","alkenones","Zhang et al., 2013",5.83631321386332,0.209855141878009
+"581",1.25,NA,NA,291,"mean",257,372,1,"skew_normal","alkenones","Zhang et al., 2013",5.73398496958418,0.185939382462477
+"582",1.27,NA,NA,309,"mean",257,416,1,"skew_normal","alkenones","Zhang et al., 2013",5.78988067257824,0.242146592378344
+"583",1.28,NA,NA,298,"mean",263,382,1,"skew_normal","alkenones","Zhang et al., 2013",5.75878732039217,0.18767339609398
+"584",1.35,NA,NA,326,"mean",276,434,1,"skew_normal","alkenones","Zhang et al., 2013",5.84672269990878,0.227583126457946
+"585",1.64,NA,NA,298,"mean",255,392,1,"skew_normal","alkenones","Zhang et al., 2013",5.75626269247444,0.216197338214141
+"586",1.73,NA,NA,312,"mean",271,405,1,"skew_normal","alkenones","Zhang et al., 2013",5.80300294399312,0.202003650938979
+"587",1.97,NA,NA,309,"mean",263,408,1,"skew_normal","alkenones","Zhang et al., 2013",5.79171060329096,0.220780160547925
+"588",2.09,NA,NA,329,"mean",275,442,1,"skew_normal","alkenones","Zhang et al., 2013",5.85404048987213,0.238591695245799
+"589",2.19,NA,NA,331,"mean",279,441,1,"skew_normal","alkenones","Zhang et al., 2013",5.86012832863411,0.230192299420343
+"590",2.3,NA,NA,337,"mean",285,450,1,"skew_normal","alkenones","Zhang et al., 2013",5.88086838151651,0.229651959227003
+"591",2.4,NA,NA,344,"mean",288,461,1,"skew_normal","alkenones","Zhang et al., 2013",5.8981792615663,0.236529656410535
+"592",2.59,NA,NA,333,"mean",280,446,1,"skew_normal","alkenones","Zhang et al., 2013",5.86755427759466,0.234061872659832
+"593",2.6,NA,NA,305,"mean",255,410,1,"skew_normal","alkenones","Zhang et al., 2013",5.77871035242839,0.23877009904489
+"594",2.72,NA,NA,317,"mean",266,424,1,"skew_normal","alkenones","Zhang et al., 2013",5.81661488200683,0.234417743738636
+"595",2.94,NA,NA,307,"mean",261,407,1,"skew_normal","alkenones","Zhang et al., 2013",5.78666679638264,0.223384411557926
+"596",3.08,NA,NA,338,"mean",290,444,1,"skew_normal","alkenones","Zhang et al., 2013",5.88285274270637,0.214158712321185
+"597",3.13,NA,NA,318,"mean",265,428,1,"skew_normal","alkenones","Zhang et al., 2013",5.81942651078401,0.241032515146978
+"598",3.32,NA,NA,336,"mean",291,437,1,"skew_normal","alkenones","Zhang et al., 2013",5.87662823113354,0.204437983140979
+"599",3.36,NA,NA,321,"mean",278,417,1,"skew_normal","alkenones","Zhang et al., 2013",5.83035366774472,0.203862383190863
+"600",3.46,NA,NA,339,"mean",299,434,1,"skew_normal","alkenones","Zhang et al., 2013",5.88674405374555,0.187338733495227
+"601",3.51,NA,NA,393,"mean",340,512,1,"skew_normal","alkenones","Zhang et al., 2013",6.03363512132486,0.205830238937808
+"602",3.52,NA,NA,346,"mean",303,445,1,"skew_normal","alkenones","Zhang et al., 2013",5.9059035438378,0.193241706434241
+"603",3.67,NA,NA,346,"mean",309,437,1,"skew_normal","alkenones","Zhang et al., 2013",5.90663723599667,0.174261738003007
+"604",3.85,NA,NA,327,"mean",291,414,1,"skew_normal","alkenones","Zhang et al., 2013",5.8495946204984,0.177253714112025
+"605",3.99,NA,NA,334,"mean",295,427,1,"skew_normal","alkenones","Zhang et al., 2013",5.87187968478422,0.185934800825951
+"606",4.11,NA,NA,348,"mean",307,445,1,"skew_normal","alkenones","Zhang et al., 2013",5.91246101487672,0.186647690589397
+"607",4.45,NA,NA,379,"mean",345,471,1,"skew_normal","alkenones","Zhang et al., 2013",5.99920125552389,0.156524314524136
+"608",4.78,NA,NA,361,"mean",332,443,1,"skew_normal","alkenones","Zhang et al., 2013",5.94935236948081,0.145021124573764
+"609",7.15,NA,NA,379,"mean",323,500,1,"skew_normal","alkenones","Zhang et al., 2013",5.99613021082242,0.219695465528011
+"610",14.1,NA,NA,341,"mean",311,421,1,"skew_normal","alkenones","Zhang et al., 2013",5.89121287293081,0.152263824650718
+"611",14.74,NA,NA,430,"mean",388,539,1,"skew_normal","alkenones","Zhang et al., 2013",6.12536045526614,0.16527106719933
+"612",15.84,NA,NA,402,"mean",375,486,1,"skew_normal","alkenones","Zhang et al., 2013",6.05656732493545,0.130363790316193
+"613",16.82,NA,NA,401,"mean",370,490,1,"skew_normal","alkenones","Zhang et al., 2013",6.05395419837147,0.141233927655011
+"614",18.26,NA,NA,412,"mean",384,499,1,"skew_normal","alkenones","Zhang et al., 2013",6.08162432416962,0.131711733390995
+"615",20.3,NA,NA,358,"mean",332,435,1,"skew_normal","alkenones","Zhang et al., 2013",5.94024050000259,0.135858474619384
+"616",22.94,NA,NA,462,"mean",430,560,1,"skew_normal","alkenones","Zhang et al., 2013",6.1958609962084,0.132811846284027
+"617",23.48,NA,NA,410,"mean",383,497,1,"skew_normal","alkenones","Zhang et al., 2013",6.07831250763864,0.131003555462301
+"618",25.3,NA,NA,416,"mean",386,506,1,"skew_normal","alkenones","Zhang et al., 2013",6.09118701937615,0.136103953919554
+"619",26.57,NA,NA,656,"mean",588,825,1,"skew_normal","alkenones","Zhang et al., 2013",6.54605516711665,0.170271885895757
+"620",27.85,NA,NA,712,"mean",626,914,1,"skew_normal","alkenones","Zhang et al., 2013",6.62859047127712,0.190294735827551
+"621",28.78,NA,NA,730,"mean",662,910,1,"skew_normal","alkenones","Zhang et al., 2013",6.65435507772395,0.15997612817293
+"622",29.21,NA,NA,854,"mean",792,1040,1,"skew_normal","alkenones","Zhang et al., 2013",6.81076869197492,0.136966383856165
+"623",29.57,NA,NA,972,"mean",905,1179,1,"skew_normal","alkenones","Zhang et al., 2013",6.94017842211865,0.132980471723838
+"624",29.64,NA,NA,895,"mean",818,1106,1,"skew_normal","alkenones","Zhang et al., 2013",6.85768375934251,0.151661950984761
+"625",30.62,NA,NA,765,"mean",709,932,1,"skew_normal","alkenones","Zhang et al., 2013",6.70059417060886,0.137500688953652
+"626",31.27,NA,NA,725,"mean",664,894,1,"skew_normal","alkenones","Zhang et al., 2013",6.64699396232497,0.149540584231231
+"627",32.04,NA,NA,743,"mean",688,906,1,"skew_normal","alkenones","Zhang et al., 2013",6.67141407198816,0.138392219900367
+"628",32.58,NA,NA,756,"mean",698,925,1,"skew_normal","alkenones","Zhang et al., 2013",6.6890064201374,0.141571925520481
+"629",32.83,NA,NA,740,"mean",671,923,1,"skew_normal","alkenones","Zhang et al., 2013",6.66819918573727,0.160318552909452
+"630",32.91,NA,NA,723,"mean",654,904,1,"skew_normal","alkenones","Zhang et al., 2013",6.64496835592469,0.162763056334834
+"631",32.97,NA,NA,727,"mean",653,912,1,"skew_normal","alkenones","Zhang et al., 2013",6.64860855967538,0.167962297065646
+"632",33.45,NA,NA,767,"mean",698,950,1,"skew_normal","alkenones","Zhang et al., 2013",6.70234054367848,0.154980360172377
+"633",33.57,NA,NA,671,"mean",612,832,1,"skew_normal","alkenones","Zhang et al., 2013",6.57028236166677,0.154405814209885
+"634",33.69,NA,NA,930,"mean",792,1234,1,"skew_normal","alkenones","Zhang et al., 2013",6.89628879813988,0.222963093831382
+"635",34.69,NA,NA,1038,"mean",953,1278,1,"skew_normal","alkenones","Zhang et al., 2013",7.00633326929584,0.147536027537018
+"636",35.29,NA,NA,879,"mean",813,1073,1,"skew_normal","alkenones","Zhang et al., 2013",6.83947242608925,0.139514522318067
+"637",35.56,NA,NA,919,"mean",825,1155,1,"skew_normal","alkenones","Zhang et al., 2013",6.88361950464529,0.169173698706676
+"638",35.86,NA,NA,947,"mean",881,1150,1,"skew_normal","alkenones","Zhang et al., 2013",6.91428742364674,0.13397228777607
+"639",36.09,NA,NA,1132,"mean",1032,1402,1,"skew_normal","alkenones","Zhang et al., 2013",7.09245450681802,0.154054347964982
+"640",36.48,NA,NA,2622,"mean",2417,3212,1,"skew_normal","alkenones","Zhang et al., 2013",7.93246572788507,0.142975735405373
+"641",36.81,NA,NA,1247,"mean",1087,1617,1,"skew_normal","alkenones","Zhang et al., 2013",7.18975237334916,0.199682148013165
+"642",37.1,NA,NA,939,"mean",877,1136,1,"skew_normal","alkenones","Zhang et al., 2013",6.90588779582664,0.13010184306334
+"643",37.43,NA,NA,1042,"mean",938,1309,1,"skew_normal","alkenones","Zhang et al., 2013",7.01038435745806,0.167563062514022
+"644",38.55,NA,NA,798,"mean",737,975,1,"skew_normal","alkenones","Zhang et al., 2013",6.74251268159359,0.140704590678721
+"645",38.25,NA,NA,898,"mean",802,1137,1,"skew_normal","alkenones","Zhang et al., 2013",6.86162855080853,0.175492543111753
+"646",38.62,NA,NA,863,"mean",754,1116,1,"skew_normal","alkenones","Zhang et al., 2013",6.82144925547461,0.197149513093353
+"647",12.81,NA,NA,283,"mean",261,306,1,"normal","alkenones","Badger et al., 2013a",5.64405275463754,0.0799755813269253
+"648",13.6,NA,NA,271,"mean",250,291,1,"normal","alkenones","Badger et al., 2013a",5.59739209251687,0.0763543393205796
+"649",13.64,NA,NA,303,"mean",280,327,1,"normal","alkenones","Badger et al., 2013a",5.71237488703325,0.0780176668855843
+"650",13.65,NA,NA,306,"mean",282,330,1,"normal","alkenones","Badger et al., 2013a",5.72049986269932,0.0790307896273466
+"651",13.66,NA,NA,305,"mean",282,328,1,"normal","alkenones","Badger et al., 2013a",5.71746033966113,0.075974327318072
+"652",13.67,NA,NA,308,"mean",284,331,1,"normal","alkenones","Badger et al., 2013a",5.72554630676913,0.076998804977825
+"653",13.67,NA,NA,289,"mean",267,312,1,"normal","alkenones","Badger et al., 2013a",5.66512592310487,0.0783112749363068
+"654",13.68,NA,NA,261,"mean",241,282,1,"normal","alkenones","Badger et al., 2013a",5.56335200221438,0.0789928563592678
+"655",13.69,NA,NA,294,"mean",272,317,1,"normal","alkenones","Badger et al., 2013a",5.68235192008664,0.0769764663572946
+"656",13.7,NA,NA,271,"mean",249,294,1,"normal","alkenones","Badger et al., 2013a",5.60051633190169,0.0835263482138509
+"657",13.71,NA,NA,301,"mean",279,324,1,"normal","alkenones","Badger et al., 2013a",5.70597764880685,0.0751825373882749
+"658",13.72,NA,NA,292,"mean",271,315,1,"normal","alkenones","Badger et al., 2013a",5.67734572985267,0.0756461487641491
+"659",13.74,NA,NA,305,"mean",283,329,1,"normal","alkenones","Badger et al., 2013a",5.7207523242043,0.0757251039310064
+"660",13.75,NA,NA,305,"mean",279,331,1,"normal","alkenones","Badger et al., 2013a",5.71666507859921,0.0859295282591923
+"661",13.76,NA,NA,292,"mean",270,315,1,"normal","alkenones","Badger et al., 2013a",5.675497298912,0.0775048810160342
+"662",13.77,NA,NA,340,"mean",313,368,1,"normal","alkenones","Badger et al., 2013a",5.82714306435454,0.0813909519759088
+"663",13.77,NA,NA,313,"mean",289,336,1,"normal","alkenones","Badger et al., 2013a",5.74176892403782,0.0757621184340242
+"664",13.78,NA,NA,313,"mean",286,339,1,"normal","alkenones","Badger et al., 2013a",5.74099595910015,0.0854778766557075
+"665",13.79,NA,NA,294,"mean",272,318,1,"normal","alkenones","Badger et al., 2013a",5.68392672453809,0.0785600471987128
+"666",13.79,NA,NA,315,"mean",288,345,1,"normal","alkenones","Badger et al., 2013a",5.75325244858365,0.0907951658608974
+"667",13.8,NA,NA,329,"mean",306,354,1,"normal","alkenones","Badger et al., 2013a",5.79644100754308,0.0732619317728618
+"668",2.81,NA,NA,282,"mean",261,304,1,"normal","alkenones","Badger et al., 2013b",5.64077405436446,0.0766786088473097
+"669",2.85,NA,NA,294,"mean",269,320,1,"normal","alkenones","Badger et al., 2013b",5.68151618769781,0.0872885715539728
+"670",2.86,NA,NA,288,"mean",269,307,1,"normal","alkenones","Badger et al., 2013b",5.66077956359452,0.0664363821818526
+"671",2.9,NA,NA,270,"mean",252,288,1,"normal","alkenones","Badger et al., 2013b",5.59619478382368,0.0671377817397006
+"672",2.92,NA,NA,278,"mean",260,297,1,"normal","alkenones","Badger et al., 2013b",5.62720688490911,0.066895999334699
+"673",2.93,NA,NA,270,"mean",252,288,1,"normal","alkenones","Badger et al., 2013b",5.59619478382368,0.0671377817397006
+"674",2.94,NA,NA,307,"mean",285,330,1,"normal","alkenones","Badger et al., 2013b",5.72579091736459,0.0737102478984287
+"675",2.98,NA,NA,258,"mean",242,275,1,"normal","alkenones","Badger et al., 2013b",5.55285441191163,0.0642728936379307
+"676",3,NA,NA,255,"mean",239,272,1,"normal","alkenones","Badger et al., 2013b",5.54113280911375,0.0650296591480719
+"677",3.02,NA,NA,265,"mean",247,283,1,"normal","alkenones","Badger et al., 2013b",5.57741761713561,0.0684084078936123
+"678",3.03,NA,NA,262,"mean",240,285,1,"normal","alkenones","Badger et al., 2013b",5.56656405180532,0.0864039894640824
+"679",3.07,NA,NA,284,"mean",253,318,1,"normal","alkenones","Badger et al., 2013b",5.64772043575385,0.114968113739829
+"680",3.09,NA,NA,254,"mean",237,271,1,"normal","alkenones","Badger et al., 2013b",5.53508948100742,0.0674028945860814
+"681",3.1,NA,NA,275,"mean",255,296,1,"normal","alkenones","Badger et al., 2013b",5.61581149974124,0.0749634105591314
+"682",3.11,NA,NA,271,"mean",253,290,1,"normal","alkenones","Badger et al., 2013b",5.60163520585402,0.0686260507144121
+"683",3.13,NA,NA,272,"mean",254,290,1,"normal","alkenones","Badger et al., 2013b",5.60360759499953,0.066642669438232
+"684",3.16,NA,NA,278,"mean",258,298,1,"normal","alkenones","Badger et al., 2013b",5.62502653571351,0.0724685801265787
+"685",3.18,NA,NA,259,"mean",239,280,1,"normal","alkenones","Badger et al., 2013b",5.55562657755038,0.079604201400022
+"686",3.19,NA,NA,274,"mean",255,294,1,"normal","alkenones","Badger et al., 2013b",5.61242165624855,0.0715546754584069
+"687",3.2,NA,NA,272,"mean",254,290,1,"normal","alkenones","Badger et al., 2013b",5.60360759499953,0.0666426694382325
+"688",3.21,NA,NA,267,"mean",245,290,1,"normal","alkenones","Badger et al., 2013b",5.58556956676262,0.0847812236610458
+"689",3.22,NA,NA,265,"mean",246,285,1,"normal","alkenones","Badger et al., 2013b",5.57891035810051,0.0739888771665801
+"690",3.24,NA,NA,273,"mean",253,293,1,"normal","alkenones","Badger et al., 2013b",5.60678104887229,0.0738005715313874
+"691",3.26,NA,NA,270,"mean",251,290,1,"normal","alkenones","Badger et al., 2013b",5.59766693105615,0.0726164407197289
+"692",3.27,NA,NA,262,"mean",244,280,1,"normal","alkenones","Badger et al., 2013b",5.56597891423123,0.0691941711155508
+"693",3.28,NA,NA,258,"mean",241,275,1,"normal","alkenones","Badger et al., 2013b",5.55078401557861,0.0663548282959716
+"694",3.29,NA,NA,276,"mean",257,295,1,"normal","alkenones","Badger et al., 2013b",5.61802572061752,0.0693338922506755
+"695",120.3,120.4,120.2,972,"mean",699,1388,1,"skew_normal","alkenones","Naafs et al., 2016",6.89263494165028,0.34489565139696
+"696",120.3,120.4,120.2,975,"mean",799,1221,1,"skew_normal","alkenones","Naafs et al., 2016",6.89539320993849,0.213213920621606
+"697",120.1,120.2,120.1,896,"mean",692,1194,1,"skew_normal","alkenones","Naafs et al., 2016",6.81232512478511,0.274259145381939
+"698",120.1,120.2,120.1,915,"mean",753,1141,1,"skew_normal","alkenones","Naafs et al., 2016",6.83186278883098,0.208955617467072
+"699",120.1,120.2,120.1,1437,"mean",934,2289,1,"skew_normal","alkenones","Naafs et al., 2016",7.2876733790907,0.450694743768578
+"700",120.1,120.2,120.1,1596,"mean",1050,2517,1,"skew_normal","alkenones","Naafs et al., 2016",7.39368421914344,0.43957495171233
+"701",119.9,120.1,119.8,1255,"mean",952,1716,1,"skew_normal","alkenones","Naafs et al., 2016",7.15315815741964,0.296234890991492
+"702",119.9,120.1,119.8,1942,"mean",1409,2829,1,"skew_normal","alkenones","Naafs et al., 2016",7.59915704160012,0.350463841240356
+"703",119.9,120.1,119.8,2187,"mean",1426,3596,1,"skew_normal","alkenones","Naafs et al., 2016",7.72510299828288,0.465051768523302
+"704",119.9,120.1,119.8,1845,"mean",1011,3440,1,"skew_normal","alkenones","Naafs et al., 2016",7.53096098469396,0.615677924637001
+"705",119.6,119.8,119.3,2058,"mean",1358,3326,1,"skew_normal","alkenones","Naafs et al., 2016",7.66164698393576,0.450374705031775
+"706",119.6,119.8,119.3,2005,"mean",1381,3099,1,"skew_normal","alkenones","Naafs et al., 2016",7.63469895559852,0.406388052236886
+"707",119.6,119.8,119.3,2005,"mean",1321,3231,1,"skew_normal","alkenones","Naafs et al., 2016",7.63334563517341,0.449693585019087
+"708",119.6,119.8,119.3,1746,"mean",1233,2600,1,"skew_normal","alkenones","Naafs et al., 2016",7.49023611358696,0.375109511142499
+"709",119.6,119.8,119.3,1634,"mean",1009,2731,1,"skew_normal","alkenones","Naafs et al., 2016",7.41456907091366,0.500628592689269
+"710",119.1,119.3,119,1379,"mean",1041,1900,1,"skew_normal","alkenones","Naafs et al., 2016",7.24877311688475,0.30251260847648
+"711",118.9,119,118.8,1904,"mean",1184,3211,1,"skew_normal","alkenones","Naafs et al., 2016",7.57549575476673,0.501621986959064
+"712",118.9,119,118.8,762,"mean",588,1014,1,"skew_normal","alkenones","Naafs et al., 2016",6.64919256602488,0.273984069839971
+"713",120.1,120.2,120.1,1117,"mean",779,1594,1,"skew_normal","alkenones","Naafs et al., 2016",7.01600645261045,0.359990516224001
+"714",120.1,120.2,120.1,1099,"mean",822,1520,1,"skew_normal","alkenones","Naafs et al., 2016",7.01910300444825,0.309075542143641
+"715",119.9,120.1,119.8,1322,"mean",856,2104,1,"skew_normal","alkenones","Naafs et al., 2016",7.20193297499967,0.452168569881089
+"716",119.9,120.1,119.8,1894,"mean",1154,3278,1,"skew_normal","alkenones","Naafs et al., 2016",7.57298910318591,0.524908761779873
+"717",119.1,119.3,119,1227,"mean",900,1735,1,"skew_normal","alkenones","Naafs et al., 2016",7.13057872785263,0.33001293475503
+"718",2.1,2.4,1.8,358,"mean",250,590,1,"skew_normal; reported distribution is normal","stomata","van der Burgh et al., 1993 (updated by Kôrschner et al., 1996)",5.95079172738101,0.431723471418452
+"719",5.1,NA,NA,358,"mean",250,590,1,"skew_normal; reported distribution is normal","stomata","van der Burgh et al., 1993 (updated by Kôrschner et al., 1996)",5.95079172738101,0.431723471418452
+"720",7.2,NA,NA,270,"mean",189,446,1,"skew_normal; reported distribution is normal","stomata","van der Burgh et al., 1993 (updated by Kôrschner et al., 1996)",5.67103298353985,0.43167838048066
+"721",8.5,NA,NA,350,"mean",245,578,1,"skew_normal; reported distribution is normal","stomata","van der Burgh et al., 1993 (updated by Kôrschner et al., 1996)",5.93041603960855,0.43154952694292
+"722",10.5,NA,NA,370,"mean",259,611,1,"skew_normal; reported distribution is normal","stomata","van der Burgh et al., 1993 (updated by Kôrschner et al., 1996)",5.98596251043557,0.431526016316485
+"723",2.8,3,2.6,276,"mean",193,455,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 1996",5.69149380392792,0.431193338866206
+"724",3.4,NA,NA,330,"median",315,349,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 1996",5.80382228051403,0.0515352560964989
+"725",4,NA,NA,363,"mean",254,598,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 1996",5.96546251048458,0.430514203461491
+"726",4.6,NA,NA,270,"mean",189,446,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 1996",5.67103298353985,0.43167838048066
+"727",168.8,174.1,163.5,879,"mean",586,1172,1,"skew_normal","stomata","Beerling et al., 1998",6.71989337985698,0.348505045946599
+"728",200.3,201.3,199.3,864,"mean",576,1152,1,"skew_normal","stomata","Beerling et al., 1998",6.70268125097586,0.348505045946599
+"729",205.4,209.5,201.3,758,"mean",505,1010,1,"skew_normal","stomata","Beerling et al., 1998",6.57113201955533,0.3485050459466
+"730",205.4,209.5,201.3,835,"mean",556,1113,1,"skew_normal","stomata","Beerling et al., 1998",6.66779132276306,0.348956988899737
+"731",44.5,47.8,41.2,768,"mean",512,1024,1,"skew_normal","stomata","McElwain, 1998",6.58489821531948,0.3485050459466
+"732",168.8,174.1,163.5,639,"mean",426,852,1,"skew_normal","stomata","McElwain, 1998",6.40101293654934,0.348505045946599
+"733",285.6,298.9,272.3,354,"mean",236,472,1,"skew_normal","stomata","McElwain, 1998",5.81040539530558,0.348505045946599
+"734",316.6,318,315.2,261,"mean",174,348,1,"skew_normal","stomata","McElwain, 1998",5.5056288894945,0.348505045946599
+"735",400.5,407.6,393.3,2282,"mean",1521,3042,1,"skew_normal","stomata","McElwain, 1998",7.67369688253927,0.3485050459466
+"736",200.7,201.3,200,716,"mean",477,954,1,"skew_normal","stomata","McElwain et al., 1999",6.51409008116831,0.348505045946599
+"737",201.3,201.8,200.8,1535,"mean",1023,2046,1,"skew_normal","stomata","McElwain et al., 1999",7.2770683562316,0.348505045946599
+"738",201.6,201.8,201.3,702,"mean",468,936,1,"skew_normal","stomata","McElwain et al., 1999",6.49504188619762,0.348505045946599
+"739",135.1,139.4,130.8,1448,"mean",965,1931,1,"skew_normal","stomata","Chen et al., 2001",7.21896069188375,0.34876548962065
+"740",172.2,174.1,170.3,1894,"mean",1263,2525,1,"skew_normal","stomata","Chen et al., 2001",7.48762073202998,0.348305961999626
+"741",187.7,201.3,174.1,735,"mean",490,980,1,"skew_normal","stomata","Chen et al., 2001",6.54097898138464,0.348505045946599
+"742",44.5,47.8,41.2,965,"mean",643,1286,1,"skew_normal","stomata","Kôrschner et al., 2001",6.81271831451759,0.3485050459466
+"743",15.2,16.7,13.7,339,"median",318,559,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.04410042796764,0.283620905369173
+"744",15.3,16.8,13.8,341,"median",319,559,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.04567028796997,0.282042296532299
+"745",15.3,16.8,13.8,313,"median",308,480,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.95194294343776,0.223079493068274
+"746",16.5,18,15,535,"median",402,704,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.27661522238853,0.281724483761188
+"747",54.2,54.3,54.1,443,"median",359,623,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.15893445363787,0.277148052022083
+"748",54.3,54.4,54.2,327,"median",318,416,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.89636832152072,0.135065487446303
+"749",54.7,54.8,54.6,378,"median",343,579,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.09951646236947,0.263244949457866
+"750",55.6,55.7,55.5,479,"median",380,639,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.20003785354898,0.261314838180774
+"751",55.9,58.9,52.9,667,"median",475,748,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.39035889100456,0.228309404353154
+"752",56.1,56.2,56,307,"median",298,321,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.73426730481771,0.0373809881141699
+"753",56.1,56.2,56,307,"median",298,321,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.73426730481771,0.0373809881141699
+"754",56.1,56.2,56,307,"median",298,321,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.73426730481771,0.0373809881141698
+"755",56.1,56.2,56,520,"median",400,673,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.25160493837635,0.261590154455544
+"756",56.2,56.3,56.1,304,"median",297,311,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.71676252549097,0.0231587351029219
+"757",56.4,56.5,56.3,313,"median",304,320,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.7426743486,0.0257895760361384
+"758",56.5,56.6,56.4,316,"median",305,325,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.75206847946857,0.0319336830622365
+"759",56.6,56.7,56.5,320,"median",309,335,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.77373590436141,0.0406197468446643
+"760",56.7,56.9,56.5,315,"median",306,323,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.75061871258752,0.0271842690289541
+"761",56.7,56.9,56.5,318,"median",307,328,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.75993067798567,0.0332673016696222
+"762",56.7,56.9,56.5,318,"median",307,328,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",5.75993067798567,0.033267301669623
+"763",57.2,57.4,57,469,"median",379,631,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.19242103381182,0.256305302650643
+"764",58.1,58.4,57.8,447,"median",367,623,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.16995418342101,0.266066909251534
+"765",59.9,60.8,59,535,"median",416,680,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.27638902921571,0.247073076801806
+"766",59.9,60.8,59,574,"median",433,704,1,"skew_normal","stomata","Royer et al., 2001b (updated by Beerling et al., 2009)",6.31375804208027,0.244374667022995
+"767",270.6,272.3,268.8,343,"mean",240,566,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.90961650077259,0.431368270766792
+"768",270.6,272.3,268.8,266,"mean",186,439,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.65512304339419,0.431769285487598
+"769",270.6,272.3,268.8,290,"mean",203,479,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.74245328822635,0.431639505736641
+"770",270.6,272.3,268.8,326,"mean",228,538,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.85860209455811,0.4316487131845
+"771",270.6,272.3,268.8,342,"mean",239,564,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.90575890171479,0.431687814065753
+"772",313.5,319,308,348,"mean",244,574,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.92489881080638,0.430114329359652
+"773",313.5,319,308,351,"mean",246,579,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.93331700675268,0.430370635143374
+"774",313.5,319,308,336,"mean",235,554,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.88837510044572,0.431179231962628
+"775",313.5,319,308,308,"mean",216,508,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.80287992763132,0.429984544510839
+"776",313.5,319,308,350,"mean",245,578,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.93041603960855,0.431549526942919
+"777",313.5,319,308,366,"mean",256,604,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.97437582120719,0.431590300578973
+"778",313.5,319,308,368,"mean",258,607,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.98074418799056,0.430168647955412
+"779",313.5,319,308,358,"mean",251,591,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.95363447826894,0.430567796149538
+"780",313.5,319,308,303,"mean",212,500,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.7855971865471,0.431401790984246
+"781",313.5,319,308,367,"mean",257,606,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.97797803548227,0.431292222454616
+"782",313.5,319,308,350,"mean",245,578,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.93041603960855,0.431549526942919
+"783",313.5,319,308,401,"mean",281,662,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",6.06681011263538,0.430843226782749
+"784",313.5,319,308,287,"mean",201,474,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.73225611487708,0.431341753190694
+"785",313.5,319,308,311,"mean",218,513,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.81238545397993,0.430275025634835
+"786",313.5,319,308,284,"mean",199,469,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.72195379658539,0.431037833877256
+"787",313.5,319,308,325,"mean",228,536,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.85673989501262,0.429776135595311
+"788",324,329,319,385,"mean",270,635,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",6.02602347894553,0.429984544510839
+"789",324,329,319,392,"mean",274,647,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",6.04273720044449,0.432003306836677
+"790",324,329,319,359,"mean",251,592,1,"skew_normal; reported distribution is normal","stomata","Beerling, 2002",5.95447978700789,0.43141781579665
+"791",168.4,175.6,161.2,816,"mean",544,1088,1,"skew_normal","stomata","Beerling & Royer, 2002",6.64552283713591,0.3485050459466
+"792",63.8,66,61.6,367,"median",337,571,1,"skew_normal","stomata","Beerling et al., 2002 (updated by Beerling et al., 2009)",6.08373607000419,0.265122479396358
+"793",64.1,64.3,63.9,330,"median",321,401,1,"skew_normal","stomata","Beerling et al., 2002 (updated by Beerling et al., 2009)",5.88270127521829,0.111880205252301
+"794",65.4,66,64.8,343,"median",329,541,1,"skew_normal","stomata","Beerling et al., 2002 (updated by Beerling et al., 2009)",6.04473851480593,0.250066662690533
+"795",65.4,66,64.8,470,"median",370,642,1,"skew_normal","stomata","Beerling et al., 2002 (updated by Beerling et al., 2009)",6.18904565466412,0.277078249042074
+"796",66.5,67,66,539,"median",400,687,1,"skew_normal","stomata","Beerling et al., 2002 (updated by Beerling et al., 2009)",6.26189941966517,0.271942006919707
+"797",54.3,54.4,54.2,515,"median",393,671,1,"skew_normal","stomata","Royer, 2003 (updated by Beerling et al., 2009)",6.24128937442047,0.268970428076735
+"798",61.1,64.8,57.4,317,"median",311,325,1,"skew_normal","stomata","Royer, 2003 (updated by Beerling et al., 2009)",5.76180904725449,0.0221388310626
+"799",49.9,52,47.8,659,"mean",439,878,1,"skew_normal","stomata","Greenwood et al., 2003",6.43107300335514,0.348505045946599
+"800",409.2,410.8,407.6,2836,"mean",2505,4561,1,"skew_normal","stomata","Roth & Konrad, 2003",8.12567059511533,0.301296401441638
+"801",182.5,NA,NA,1050,"mean",800,1300,1,"skew_normal","stomata","McElwain et al., 2005",6.92736563555878,0.244106776153584
+"802",182.6,NA,NA,1550,"mean",1200,1900,1,"skew_normal","stomata","McElwain et al., 2005",7.31984300046531,0.231046652219818
+"803",182.7,NA,NA,550,"mean",400,700,1,"skew_normal","stomata","McElwain et al., 2005",6.27127244107569,0.281367264206898
+"804",182.8,NA,NA,950,"mean",700,1200,1,"skew_normal","stomata","McElwain et al., 2005",6.82057858540975,0.271000164930565
+"805",182.9,NA,NA,950,"mean",700,1200,1,"skew_normal","stomata","McElwain et al., 2005",6.82057858540975,0.271000164930564
+"806",183,NA,NA,600,"mean",500,700,1,"skew_normal","stomata","McElwain et al., 2005",6.3828442167328,0.169173698706677
+"807",104.1,107.8,100.5,710,"mean",580,1420,1,"skew_normal","stomata","Haworth et al., 2005",6.81072012706789,0.450187012528305
+"808",110.4,113,107.8,710,"mean",603,1400,1,"skew_normal","stomata","Haworth et al., 2005",6.82307235616527,0.423502258415152
+"809",116.5,120,113,700,"mean",597,1340,1,"skew_normal","stomata","Haworth et al., 2005",6.79617100316878,0.406506797926315
+"810",123,125,121,695,"mean",590,1380,1,"skew_normal","stomata","Haworth et al., 2005",6.80498065752551,0.427225856216709
+"811",124.7,126.3,123,630,"mean",530,1220,1,"skew_normal","stomata","Haworth et al., 2005",6.68974157213674,0.419187753075152
+"812",127.9,129.5,126.3,630,"mean",530,1250,1,"skew_normal","stomata","Haworth et al., 2005",6.70188791842126,0.431401790984245
+"813",130.2,130.8,129.5,550,"mean",450,1130,1,"skew_normal","stomata","Haworth et al., 2005",6.56961024723538,0.462928266992188
+"814",131.4,132,130.8,620,"mean",590,1270,1,"skew_normal","stomata","Haworth et al., 2005",6.7634473581762,0.385461091664537
+"815",133,133.9,132,650,"mean",500,1300,1,"skew_normal","stomata","Haworth et al., 2005",6.69236382093591,0.480418256599962
+"816",139.5,145,133.9,1442,"mean",961,1923,1,"skew_normal","stomata","Sun et al., 2007",7.21480807727954,0.348766573391513
+"817",139.5,145,133.9,1228,"mean",819,1638,1,"skew_normal","stomata","Sun et al., 2007",7.05465767413304,0.348505045946599
+"818",139.5,145,133.9,1151,"mean",767,1534,1,"skew_normal","stomata","Sun et al., 2007",6.98906039164723,0.348505045946599
+"819",168,168.3,167.7,1031,"mean",687,1375,1,"skew_normal","stomata","Sun et al., 2007",6.87927165116151,0.348870841889625
+"820",168,168.3,167.7,926,"mean",618,1235,1,"skew_normal","stomata","Sun et al., 2007",6.77265735325988,0.348098096105272
+"821",172.2,174.1,170.3,896,"mean",597,1195,1,"skew_normal","stomata","Sun et al., 2007",6.73890928887911,0.348925963929753
+"822",186.8,190.8,182.7,942,"mean",628,1256,1,"skew_normal","stomata","Sun et al., 2007",6.78911375674817,0.348505045946599
+"823",25.6,28.1,23,588,"mean",412,971,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.44967490882043,0.43104043590802
+"824",22.1,23.6,20.6,333,"mean",233,550,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",5.88047836589611,0.4318331822604
+"825",20,20.3,19.7,332,"mean",233,548,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",5.87865687025686,0.430001535420444
+"826",19,19.5,18.5,397,"mean",278,654,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.05536423257392,0.43012693257826
+"827",19,19.2,18.8,459,"mean",321,757,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.20040218828373,0.431351666466944
+"828",17.6,18,17.2,374,"mean",262,617,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",5.99660676383324,0.43064896694254
+"829",17.6,18,17.2,341,"mean",239,563,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",5.9048715900356,0.430795557395898
+"830",17.6,18,17.2,388,"mean",272,641,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.03441576160833,0.431002360732387
+"831",17,17.5,16.4,393,"mean",275,649,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.04610190718533,0.431723471418452
+"832",16.8,17.2,16.4,425,"mean",297,701,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.12312001291864,0.43178085403681
+"833",16.5,17.5,15.5,393,"mean",275,649,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.04610190718533,0.431723471418452
+"834",15.8,16,15.6,564,"median",414,701,1,"skew_normal","stomata","Kôrschner et al., 2008 (updated by Beerling et al., 2009)",6.28918693042995,0.264788445092046
+"835",15.7,16.4,15,555,"median",426,695,1,"skew_normal","stomata","Kôrschner et al., 2008 (updated by Beerling et al., 2009)",6.29917559591708,0.24610016550705
+"836",15.7,16.4,15,552,"median",416,693,1,"skew_normal","stomata","Kôrschner et al., 2008 (updated by Beerling et al., 2009)",6.28585762972558,0.256594445850954
+"837",15.7,16.4,15,449,"mean",314,741,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",6.17869680560217,0.431696331179233
+"838",13.9,14.3,13.5,287,"median",262,301,1,"skew_normal","stomata","Kôrschner et al., 2008 (updated by Beerling et al., 2009)",5.63772738425499,0.0697695514966868
+"839",13.9,14.3,13.5,293,"mean",205,483,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",5.75151331639549,0.430891387651357
+"840",11.6,12.2,11,332,"mean",233,548,1,"skew_normal; reported distribution is normal","stomata","Kôrschner et al., 2008",5.87865687025686,0.430001535420444
+"841",72.5,83.6,72.1,559,"mean",497,819,1,"skew_normal","stomata","Quan et al., 2009",6.45833705497485,0.251138869825363
+"842",73.1,83.6,72.1,568,"mean",508,836,1,"skew_normal","stomata","Quan et al., 2009",6.47955503033159,0.250461670582961
+"843",73.7,83.6,72.1,572,"mean",491,938,1,"skew_normal","stomata","Quan et al., 2009",6.52009703840037,0.325456629255346
+"844",74.7,83.6,72.1,589,"mean",506,1020,1,"skew_normal","stomata","Quan et al., 2009",6.57704728778289,0.352464015232201
+"845",75.4,83.6,72.1,593,"mean",520,979,1,"skew_normal","stomata","Quan et al., 2009",6.57018022705299,0.318114442872583
+"846",75.9,83.6,72.1,695,"mean",559,3251,1,"skew_normal","stomata","Quan et al., 2009",7.2064336967295,0.885190050214256
+"847",78.1,83.6,72.1,568,"mean",475,984,1,"skew_normal","stomata","Quan et al., 2009",6.52747035054345,0.366184986470662
+"848",79.9,83.6,72.1,582,"mean",497,1001,1,"skew_normal","stomata","Quan et al., 2009",6.55867240270592,0.352033386752747
+"849",81.5,83.6,72.1,585,"mean",483,1105,1,"skew_normal","stomata","Quan et al., 2009",6.59380863380221,0.416098044106271
+"850",121,123,119,867,"mean",578,1156,1,"skew_normal","stomata","Passalia, 2009",6.70614745895235,0.3485050459466
+"851",121,123,119,837,"mean",558,1116,1,"skew_normal","stomata","Passalia, 2009",6.67093255266128,0.348505045946599
+"852",121,123,119,784,"mean",523,1046,1,"skew_normal","stomata","Passalia, 2009",6.6061550543449,0.348505045946599
+"853",121,123,119,573,"mean",382,764,1,"skew_normal","stomata","Passalia, 2009",6.29199419888655,0.348505045946599
+"854",121,123,119,1060,"mean",707,1413,1,"skew_normal","stomata","Passalia, 2009",6.90725052429055,0.348149342711734
+"855",121,123,119,1060,"mean",707,1413,1,"skew_normal","stomata","Passalia, 2009",6.90725052429055,0.348149342711734
+"856",121,123,119,867,"mean",578,1156,1,"skew_normal","stomata","Passalia, 2009",6.70614745895235,0.348505045946599
+"857",121,123,119,593,"mean",395,791,1,"skew_normal","stomata","Passalia, 2009",6.32609186633439,0.349141082086463
+"858",121,123,119,908,"mean",605,1211,1,"skew_normal","stomata","Passalia, 2009",6.75221510079197,0.348920400370479
+"859",121,123,119,782,"mean",521,1043,1,"skew_normal","stomata","Passalia, 2009",6.60280324837707,0.348987335193664
+"860",121,123,119,734,"mean",489,979,1,"skew_normal","stomata","Passalia, 2009",6.53944706600269,0.34901887992235
+"861",121,123,119,769,"mean",513,1026,1,"skew_normal","stomata","Passalia, 2009",6.58684943545074,0.348505045946599
+"862",101.8,103,100.5,974,"mean",649,1298,1,"skew_normal","stomata","Passalia, 2009",6.82200630698406,0.3485050459466
+"863",101.8,103,100.5,852,"mean",568,1136,1,"skew_normal","stomata","Passalia, 2009",6.68869500900112,0.3485050459466
+"864",101.8,103,100.5,917,"mean",612,1223,1,"skew_normal","stomata","Passalia, 2009",6.76289720909975,0.348094104770055
+"865",101.8,103,100.5,954,"mean",636,1272,1,"skew_normal","stomata","Passalia, 2009",6.8017721536201,0.348505045946599
+"866",3.9,4.2,3.6,355,"mean",249,586,1,"skew_normal","stomata","Retallack, 2009a",5.94538634302086,0.430318320947829
+"867",12,12.3,11.6,468,"mean",328,773,1,"skew_normal","stomata","Retallack, 2009a",6.22164632848578,0.431021491546898
+"868",34.5,35,33.9,672,"mean",448,896,1,"skew_normal","stomata","Retallack, 2009a",6.45136682269496,0.348505045946599
+"869",35.5,36,35,746,"mean",497,995,1,"skew_normal","stomata","Retallack, 2009a",6.55566638162761,0.349010613109873
+"870",46.4,47.8,45,908,"mean",605,1210,1,"skew_normal","stomata","Retallack, 2009a",6.75180204831081,0.348505045946599
+"871",118,123,113,893,"mean",595,1190,1,"skew_normal","stomata","Retallack, 2009a",6.7351349958256,0.348505045946599
+"872",124.7,126.3,123,1008,"mean",672,1344,1,"skew_normal","stomata","Retallack, 2009a",6.85683193080312,0.348505045946599
+"873",127.9,129.5,126.3,592,"mean",395,789,1,"skew_normal","stomata","Retallack, 2009a",6.3248260428735,0.347868204187597
+"874",142,143,141,813,"mean",542,1084,1,"skew_normal","stomata","Retallack, 2009a",6.64183959171962,0.348505045946599
+"875",142,143,141,736,"mean",491,981,1,"skew_normal","stomata","Retallack, 2009a",6.54250829367994,0.347992782528357
+"876",143.5,145,142,972,"mean",648,1296,1,"skew_normal","stomata","Retallack, 2009a",6.82046428663225,0.348505045946599
+"877",148,149,147,736,"mean",491,981,1,"skew_normal","stomata","Retallack, 2009a",6.54250829367994,0.347992782528356
+"878",153.4,154.7,152.1,939,"mean",626,1252,1,"skew_normal","stomata","Retallack, 2009a",6.78592396138007,0.348505045946599
+"879",203.2,205,201.3,908,"mean",605,1210,1,"skew_normal","stomata","Retallack, 2009a",6.75180204831081,0.348505045946599
+"880",230.5,233,228,813,"mean",542,1084,1,"skew_normal","stomata","Retallack, 2009a",6.64183959171962,0.348505045946599
+"881",233.8,237,230.5,789,"mean",526,1052,1,"skew_normal","stomata","Retallack, 2009a",6.61187480301768,0.348505045946599
+"882",233.8,237,230.5,825,"mean",550,1100,1,"skew_normal","stomata","Retallack, 2009a",6.65649186850649,0.3485050459466
+"883",168.8,174.1,163.5,1422,"mean",948,1896,1,"skew_normal","stomata","Yan et al., 2009",7.20092809253499,0.348505045946599
+"884",168.8,174.1,163.5,1373,"mean",915,1830,1,"skew_normal","stomata","Yan et al., 2009",7.16549765555549,0.348505045946599
+"885",168.8,174.1,163.5,1296,"mean",864,1728,1,"skew_normal","stomata","Yan et al., 2009",7.10814635908403,0.348505045946599
+"886",168.8,174.1,163.5,1188,"mean",792,1584,1,"skew_normal","stomata","Yan et al., 2009",7.0211349820944,0.348505045946599
+"887",168.8,174.1,163.5,1134,"mean",756,1512,1,"skew_normal","stomata","Yan et al., 2009",6.97461496645951,0.348505045946599
+"888",94.5,NA,NA,366,"mean",256,603,1,"skew_normal","stomata","Barclay et al., 2010",5.97354732060337,0.430757182738788
+"889",94.4,NA,NA,381,"mean",267,628,1,"skew_normal","stomata","Barclay et al., 2010",6.01489441243422,0.430029025114355
+"890",94.3,NA,NA,384,"mean",269,634,1,"skew_normal","stomata","Barclay et al., 2010",6.02338016701953,0.431057759866213
+"891",94.3,NA,NA,410,"mean",287,676,1,"skew_normal","stomata","Barclay et al., 2010",6.08783764590129,0.430742656249145
+"892",94.2,NA,NA,444,"mean",311,733,1,"skew_normal","stomata","Barclay et al., 2010",6.16846930703294,0.431065409698493
+"893",94.1,NA,NA,457,"mean",320,753,1,"skew_normal","stomata","Barclay et al., 2010",6.19619311179683,0.430256648599379
+"894",94.1,NA,NA,360,"mean",252,595,1,"skew_normal","stomata","Barclay et al., 2010",5.95899524652853,0.431960132520262
+"895",94.1,NA,NA,446,"mean",313,737,1,"skew_normal","stomata","Barclay et al., 2010",6.17439554136474,0.430578668090539
+"896",94.1,NA,NA,396,"mean",277,654,1,"skew_normal","stomata","Barclay et al., 2010",6.05356242882227,0.431938777787666
+"897",94.1,NA,NA,448,"mean",314,740,1,"skew_normal","stomata","Barclay et al., 2010",6.17802158605323,0.431017348629709
+"898",94.1,NA,NA,508,"mean",355,838,1,"skew_normal","stomata","Barclay et al., 2010",6.30156794497875,0.431843482518559
+"899",94,NA,NA,485,"mean",340,801,1,"skew_normal","stomata","Barclay et al., 2010",6.25740328233928,0.430845460590215
+"900",94,NA,NA,425,"mean",297,701,1,"skew_normal","stomata","Barclay et al., 2010",6.12312001291864,0.43178085403681
+"901",94,NA,NA,466,"mean",326,769,1,"skew_normal","stomata","Barclay et al., 2010",6.21599417543618,0.431488151800354
+"902",94,NA,NA,370,"mean",259,610,1,"skew_normal","stomata","Barclay et al., 2010",5.98514350943345,0.430702451019305
+"903",93.9,NA,NA,431,"mean",302,711,1,"skew_normal","stomata","Barclay et al., 2010",6.13854972358905,0.430508635350509
+"904",93.9,NA,NA,436,"mean",305,720,1,"skew_normal","stomata","Barclay et al., 2010",6.14978149430876,0.431863153736758
+"905",203.7,206,201.3,2200,"mean",1650,2750,1,"skew_normal","stomata","Bonis et al., 2010",7.66394337877762,0.256836228255956
+"906",201.1,201.3,200.8,1320,"mean",880,1760,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.12649549775222,0.348505045946599
+"907",201.1,201.3,200.8,1140,"mean",760,1520,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",6.97989202356035,0.348505045946599
+"908",201.1,201.3,200.8,2792,"mean",1861,3722,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.87544284692222,0.348505045946599
+"909",201.3,201.8,200.8,2152,"mean",1435,2869,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.61531947208754,0.348329828484811
+"910",201.6,201.8,201.3,1445,"mean",964,1927,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.21740548151246,0.348244196912726
+"911",201.6,201.8,201.3,1092,"mean",728,1456,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",6.93687463847666,0.348505045946599
+"912",201.6,201.8,201.3,1195,"mean",797,1593,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.02711449435013,0.34818952255908
+"913",201.6,201.8,201.3,1236,"mean",824,1648,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.06074412018944,0.348505045946599
+"914",201.6,201.8,201.3,1113,"mean",742,1484,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",6.95592283344735,0.348505045946599
+"915",201.1,201.3,200.8,1469,"mean",979,1958,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.23310523281048,0.348505045946599
+"916",201.3,201.8,200.8,1604,"mean",1069,2139,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.32128631005373,0.34874015771217
+"917",201.6,201.8,201.3,1761,"mean",1174,2348,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.41474559066801,0.3485050459466
+"918",201.6,201.8,201.3,1600,"mean",1067,2133,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.31894548488655,0.348269383180855
+"919",201.6,201.8,201.3,1459,"mean",973,1946,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.22695767246598,0.348505045946599
+"920",201.6,201.8,201.3,881,"mean",587,1174,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",6.72159841010807,0.348505045946599
+"921",201.6,201.8,201.3,1206,"mean",804,1608,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",7.03617285945894,0.348505045946599
+"922",201.6,201.8,201.3,1122,"mean",748,1497,1,"skew_normal","stomata","Steinthorsdottir et al., 2011",6.96431068119705,0.348841020901641
+"923",3.1,3.6,2.6,357,"median",333,376,1,"skew_normal; reported distribution is normal","stomata","Stults et al., 2011",5.86886581668517,0.0610617379880698
+"924",8.5,11.6,5.3,360,"mean",252,594,1,"skew_normal; reported distribution is normal","stomata","Stults et al., 2011",5.95815420343703,0.431114402293077
+"925",47.4,48,46.8,943,"mean",853,1033,1,"skew_normal","stomata","Grein et al., 2011",6.84449100830566,0.0962649725345766
+"926",85,86.3,83.6,660,"mean",542,1896,1,"skew_normal","stomata","Wan et al., 2011",6.92138384212731,0.629607197307117
+"927",85,86.3,83.6,531,"mean",473,733,1,"skew_normal","stomata","Wan et al., 2011",6.37812054518929,0.220245784557939
+"928",85,86.3,83.6,565,"mean",512,795,1,"skew_normal","stomata","Wan et al., 2011",6.45833336984692,0.221234854207503
+"929",35.9,37.8,33.9,450,"mean",259,640,1,"skew_normal","stomata","Roth-Nebelsick et al., 2012",6.00914811902663,0.454840838374334
+"930",30.8,32,29.5,671,"mean",503,839,1,"skew_normal","stomata","Erdei et al., 2012",6.47640043828347,0.257235899581861
+"931",27,27.1,26.3,395,"mean",273,516,1,"skew_normal","stomata","Grein et al., 2013 (updates Roth-Nebelsick et al., 2004, 2012)",5.92778928033326,0.320091469455586
+"932",25,25.25,23,453,"mean",287,619,1,"skew_normal","stomata","Grein et al., 2013 (updates Roth-Nebelsick et al., 2004)",6.04379374422211,0.38645329777272
+"933",24,25.25,23,434,"mean",257,611,1,"skew_normal","stomata","Grein et al., 2013 (updates Roth-Nebelsick et al., 2004, 2012)",5.98208652203341,0.435423605613731
+"934",17.4,17.6,17.2,402,"mean",238,566,1,"skew_normal","stomata","Grein et al., 2013 (updates Roth-Nebelsick et al., 2004)",5.90543237593733,0.43557571374241
+"935",33,33.9,32,383,"mean",240,527,1,"skew_normal","stomata","Roth-Nebelsick et al., 2014",5.87391973594168,0.395472567757537
+"936",409.2,410.8,407.6,1548,"median",1092,2540,1,"skew_normal","stomata","Franks et al., 2014",7.41784275815872,0.424428836032305
+"937",317.5,318,317,332,"median",239,471,1,"skew_normal","stomata","Franks et al., 2014",5.81566082297396,0.341087618459664
+"938",311.1,323.2,298.9,340,"median",237,488,1,"skew_normal","stomata","Franks et al., 2014",5.82918777349414,0.363140197746151
+"939",316.5,318,315,388,"median",272,567,1,"skew_normal","stomata","Franks et al., 2014",5.97308068501187,0.369325463568587
+"940",277.2,282,272.3,498,"median",364,707,1,"skew_normal","stomata","Franks et al., 2014",6.22909226676666,0.333788292832008
+"941",219.2,237,201.3,889,"median",685,1203,1,"skew_normal","stomata","Franks et al., 2014",6.81099627711845,0.283146670774428
+"942",226.5,237,216,615,"median",441,877,1,"skew_normal","stomata","Franks et al., 2014",6.43277593390951,0.345646672690882
+"943",131.6,133.9,129.3,513,"median",370,736,1,"skew_normal","stomata","Franks et al., 2014",6.25736656218357,0.345779909185731
+"944",106.8,113,100.5,828,"median",651,1070,1,"skew_normal","stomata","Franks et al., 2014",6.72696178483226,0.249836767165822
+"945",106.8,113,100.5,662,"median",523,861,1,"skew_normal","stomata","Franks et al., 2014",6.50883798424633,0.250645627522096
+"946",106.8,113,100.5,734,"median",580,948,1,"skew_normal","stomata","Franks et al., 2014",6.60869130289774,0.247032281110152
+"947",48,52,44,636,"median",576,708,1,"skew_normal","stomata","Franks et al., 2014",6.45927587719481,0.103743173281431
+"948",40.9,47.8,33.9,356,"median",261,486,1,"skew_normal","stomata","Franks et al., 2014",5.87536451561159,0.312576443444349
+"949",24.9,33.9,16,389,"median",283,549,1,"skew_normal","stomata","Franks et al., 2014",5.97677266957638,0.333172251462018
+"950",12.8,23,2.6,434,"median",340,560,1,"skew_normal","stomata","Franks et al., 2014",6.0784412006697,0.250886022698328
+"951",42.9,47.9,37.8,424,"median",385,467,1,"skew_normal","stomata","Maxbauer et al., 2014",6.04978629597834,0.0970809959079925
+"952",186.8,190.8,182.7,809,"mean",540,1079,1,"skew_normal","stomata","Steinthorsdottir and Vajda, 2015",6.63767955240823,0.348039287227316
+"953",13.8,16,11.6,334,"mean",234,551,1,"skew_normal","stomata","Wang et al, 2015",5.88352796225531,0.430593244950212
+"954",9.5,10,9,351,"mean",246,579,1,"skew_normal","stomata","Wang et al, 2015",5.93331700675268,0.430370635143374
+"955",2.9,3,2.8,280,"mean",196,462,1,"skew_normal","stomata","Wang et al, 2015",5.70683977515613,0.431114402293076
+"956",2.7,2.7,2.6,279,"mean",195,460,1,"skew_normal","stomata","Wang et al, 2015",5.70211302402344,0.431504916100291
+"957",2.6,NA,NA,285,"mean",200,470,1,"skew_normal","stomata","Wang et al, 2015",5.72552503062607,0.429588493681764
+"958",1.9,NA,NA,280,"mean",196,462,1,"skew_normal","stomata","Wang et al, 2015",5.70683977515613,0.431114402293076
+"959",1,NA,NA,278,"mean",195,459,1,"skew_normal","stomata","Wang et al, 2015",5.70102488431215,0.430410712183092
+"960",97.2,100.5,93.9,1028,"mean",685,1370,1,"skew_normal","stomata","Mays et al, 2015",6.8759924285422,0.348505045946599
+"961",117,123,111,796,"mean",531,1060,1,"skew_normal","stomata","Du et al, 2016",6.62039310417403,0.347557286002413
+"962",121,125.1,116.8,824,"mean",549,1098,1,"skew_normal","stomata","Du et al, 2016",6.6546720317895,0.348505045946599
+"963",121,125.1,116.8,839,"mean",559,1119,1,"skew_normal","stomata","Du et al, 2016",6.67317009073351,0.348954564529525
+"964",112.6,115.2,110,856,"mean",571,1142,1,"skew_normal","stomata","Du et al, 2016",6.69396279993598,0.348505045946599
+"965",112.6,115.2,110,846,"mean",564,1128,1,"skew_normal","stomata","Du et al, 2016",6.68162784177803,0.348505045946599
+"966",23.5,24,23,476,"mean",352,600,1,"skew_normal","stomata","Steinthorsdottir et al., 2016a",6.13028041540712,0.268135276828795
+"967",26.5,27,26,429,"mean",317,541,1,"skew_normal","stomata","Steinthorsdottir et al., 2016a",6.02616052636188,0.268748186320355
+"968",33.5,33.9,33,409,"mean",303,516,1,"skew_normal","stomata","Steinthorsdottir et al., 2016a",5.97991978549547,0.267670440830477
+"969",34.5,35,33.9,410,"mean",303,517,1,"skew_normal","stomata","Steinthorsdottir et al., 2016a",5.9808878400089,0.26864389031464
+"970",36,36.5,35.5,365,"mean",270,460,1,"skew_normal","stomata","Steinthorsdottir et al., 2016a",5.86482422424076,0.267886925872147
+"971",204.9,208.5,201.3,1472,"mean",981,1962,1,"skew_normal","stomata","Wu et al., 2016",7.23514604984534,0.3485050459466
+"972",171.2,174.1,168.3,990,"mean",660,1320,1,"skew_normal","stomata","Wu et al., 2016",6.83881342530044,0.348505045946599
+"973",171.2,174.1,168.3,954,"mean",636,1272,1,"skew_normal","stomata","Wu et al., 2016",6.8017721536201,0.348505045946599
+"974",60,62,58,322,"mean",275,645,1,"skew_normal","stomata","Steinthorsdottir et al., 2016b",6.04301070723117,0.428615044197601
+"975",65.5,66,65,418,"mean",363,836,1,"skew_normal","stomata","Steinthorsdottir et al., 2016b",6.31151572367478,0.419437460803905
+"976",65.9,66,65.8,429,"mean",365,858,1,"skew_normal","stomata","Steinthorsdottir et al., 2016b",6.32725072653523,0.429735014592465
+"977",67,68,66,649,"mean",555,1297,1,"skew_normal","stomata","Steinthorsdottir et al., 2016b",6.74338864903144,0.426785832211544
+"978",23,23,23,516,"median",405,627,1,"skew_normal","stomata","Reichgelt et al., 2016",6.22241680386973,0.219747603646979
+"979",23,23,22.9,425,"median",372,478,1,"skew_normal","stomata","Reichgelt et al., 2016",6.0442522933823,0.126057062069379
+"980",28.5,33.9,23,390,"mean",265,715,1,"skew_normal","stomata","Sun et al., 2017",6.07600618434012,0.499042107999678
+"981",32.98,NA,NA,550,"median",455,645,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.29477386787336,0.175448806699851
+"982",33.17,NA,NA,710,"median",595,825,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.55197239594016,0.164321680338129
+"983",33.33,NA,NA,890,"median",745,1035,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.77777046203951,0.165302368692956
+"984",33.47,NA,NA,930,"median",770,1090,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.82016174503546,0.174739657779029
+"985",33.59,NA,NA,690,"median",575,805,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.52260615910796,0.169173698706677
+"986",33.96,NA,NA,870,"median",720,1020,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.75340455914421,0.175123904264304
+"987",34.21,NA,NA,960,"median",795,1125,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.85194021464643,0.17456556272829
+"988",34.42,NA,NA,940,"median",760,1120,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.82720119878476,0.194963274742816
+"989",34.63,NA,NA,810,"median",655,965,1,"skew_normal","boron","Pearson et al., 2009 (updated by Anagnostou et al., 2016)",6.67838166848712,0.194826182308017
+"990",0,NA,NA,266,"mean",254,279,1,"normal","boron","Seki et al., 2010",5.58427302441995,0.0472003472383499
+"991",0.46,NA,NA,293,"mean",281,306,1,"normal","boron","Seki et al., 2010",5.68096988564306,0.0428527110386724
+"992",0.9,NA,NA,278,"mean",265,290,1,"normal","boron","Seki et al., 2010",5.62480537448337,0.0453267546652267
+"993",1.5,NA,NA,279,"mean",266,291,1,"normal","boron","Seki et al., 2010",5.6284097879766,0.0451637821502628
+"994",2.11,NA,NA,274,"mean",262,287,1,"normal","boron","Seki et al., 2010",5.61391335976036,0.0458228113715407
+"995",2.59,NA,NA,258,"mean",246,271,1,"normal","boron","Seki et al., 2010",5.55372517840603,0.0486633403895112
+"996",2.79,NA,NA,283,"mean",270,295,1,"normal","boron","Seki et al., 2010",5.6426986576691,0.0445234528463014
+"997",2.89,NA,NA,399,"mean",386,411,1,"normal","boron","Seki et al., 2010",5.98721529198053,0.0315527917727652
+"998",2.99,NA,NA,402,"mean",389,414,1,"normal","boron","Seki et al., 2010",5.99472265872188,0.0313168768926794
+"999",3.05,NA,NA,428,"mean",415,440,1,"normal","boron","Seki et al., 2010",6.0575266235715,0.0294111031091657
+"1000",3.17,NA,NA,336,"mean",324,349,1,"normal","boron","Seki et al., 2010",5.81790771899738,0.0373713194218908
+"1001",3.5,NA,NA,366,"mean",354,379,1,"normal","boron","Seki et al., 2010",5.9034165591081,0.0343097948645144
+"1002",1.98,NA,NA,219,"mean",196,245,1,"skew_normal","boron","Bartoli et al., 2011",5.38968643488762,0.112193565500221
+"1003",2.03,NA,NA,262,"mean",236,291,1,"skew_normal","boron","Bartoli et al., 2011",5.56857753609855,0.105329479348949
+"1004",2.08,NA,NA,246,"mean",221,274,1,"skew_normal","boron","Bartoli et al., 2011",5.50564540395291,0.108081703860844
+"1005",2.16,NA,NA,221,"mean",198,247,1,"skew_normal","boron","Bartoli et al., 2011",5.39882768366126,0.111176807820027
+"1006",2.17,NA,NA,383,"mean",348,423,1,"skew_normal","boron","Bartoli et al., 2011",5.94978732941038,0.0981286902980072
+"1007",2.2,NA,NA,386,"mean",351,427,1,"skew_normal","boron","Bartoli et al., 2011",5.95878511834725,0.0985450430188894
+"1008",2.3,NA,NA,238,"mean",214,265,1,"skew_normal","boron","Bartoli et al., 2011",5.47285292050404,0.10747253079962
+"1009",2.5,NA,NA,367,"mean",334,407,1,"skew_normal","boron","Bartoli et al., 2011",5.90997708920965,0.099386910096122
+"1010",2.56,NA,NA,310,"mean",281,344,1,"skew_normal","boron","Bartoli et al., 2011",5.73949816335357,0.101707167017844
+"1011",2.6,NA,NA,203,"mean",181,227,1,"skew_normal","boron","Bartoli et al., 2011",5.31172352437361,0.113857504696262
+"1012",2.69,NA,NA,194,"mean",172,217,1,"skew_normal","boron","Bartoli et al., 2011",5.26369591517696,0.116849029330882
+"1013",2.7,NA,NA,358,"mean",325,396,1,"skew_normal","boron","Bartoli et al., 2011",5.88261969679211,0.0993450965902128
+"1014",2.71,NA,NA,314,"mean",285,348,1,"skew_normal","boron","Bartoli et al., 2011",5.75234583002156,0.10041315116394
+"1015",2.71,NA,NA,238,"mean",214,266,1,"skew_normal","boron","Bartoli et al., 2011",5.47473616190178,0.109366267507363
+"1016",2.71,NA,NA,334,"mean",303,370,1,"skew_normal","boron","Bartoli et al., 2011",5.81361790557382,0.10044176002915
+"1017",2.75,NA,NA,300,"mean",271,333,1,"skew_normal","boron","Bartoli et al., 2011",5.70513065543007,0.103585919815816
+"1018",2.77,NA,NA,404,"mean",367,446,1,"skew_normal","boron","Bartoli et al., 2011",6.00284040003732,0.0980218002477108
+"1019",2.78,NA,NA,418,"mean",381,462,1,"skew_normal","boron","Bartoli et al., 2011",6.03918213310422,0.0969198993791775
+"1020",2.78,NA,NA,316,"mean",286,350,1,"skew_normal","boron","Bartoli et al., 2011",5.75696248265166,0.101533381691245
+"1021",2.8,NA,NA,314,"mean",285,349,1,"skew_normal","boron","Bartoli et al., 2011",5.75378055123554,0.10185586808358
+"1022",2.92,NA,NA,241,"mean",217,269,1,"skew_normal","boron","Bartoli et al., 2011",5.48730436657115,0.108005592639095
+"1023",3,NA,NA,354,"mean",321,392,1,"skew_normal","boron","Bartoli et al., 2011",5.87135148146024,0.100467159059315
+"1024",3.07,NA,NA,265,"mean",239,294,1,"skew_normal","boron","Bartoli et al., 2011",5.5800216596351,0.104135237350964
+"1025",3.08,NA,NA,411,"mean",374,454,1,"skew_normal","boron","Bartoli et al., 2011",6.02117649772794,0.0974608396693308
+"1026",3.1,NA,NA,249,"mean",224,277,1,"skew_normal","boron","Bartoli et al., 2011",5.51783177902119,0.106777500544739
+"1027",3.16,NA,NA,233,"mean",209,260,1,"skew_normal","boron","Bartoli et al., 2011",5.45150794149017,0.109782114827211
+"1028",3.22,NA,NA,242,"mean",218,270,1,"skew_normal","boron","Bartoli et al., 2011",5.49145851089373,0.107559555724375
+"1029",3.24,NA,NA,330,"mean",300,366,1,"skew_normal","boron","Bartoli et al., 2011",5.80320790402878,0.0999795275911269
+"1030",3.26,NA,NA,252,"mean",226,280,1,"skew_normal","boron","Bartoli et al., 2011",5.52766230122077,0.10772432272618
+"1031",3.32,NA,NA,274,"mean",247,304,1,"skew_normal","boron","Bartoli et al., 2011",5.6132080190171,0.104398269793016
+"1032",3.4,NA,NA,255,"mean",230,284,1,"skew_normal","boron","Bartoli et al., 2011",5.5435267735422,0.106035123658188
+"1033",3.41,NA,NA,251,"mean",226,279,1,"skew_normal","boron","Bartoli et al., 2011",5.52587339054683,0.105925442447643
+"1034",3.47,NA,NA,292,"mean",264,324,1,"skew_normal","boron","Bartoli et al., 2011",5.67834630946932,0.102967866263481
+"1035",3.54,NA,NA,329,"mean",299,365,1,"skew_normal","boron","Bartoli et al., 2011",5.80017046348659,0.100282668355968
+"1036",3.59,NA,NA,282,"mean",255,314,1,"skew_normal","boron","Bartoli et al., 2011",5.64532826553334,0.104644673376242
+"1037",3.72,NA,NA,310,"mean",281,344,1,"skew_normal","boron","Bartoli et al., 2011",5.73949816335357,0.101707167017844
+"1038",3.79,NA,NA,288,"mean",260,319,1,"skew_normal","boron","Bartoli et al., 2011",5.66293636690019,0.102824601836949
+"1039",3.87,NA,NA,408,"mean",371,451,1,"skew_normal","boron","Bartoli et al., 2011",6.01383470105506,0.0981767454369194
+"1040",3.96,NA,NA,295,"mean",266,327,1,"skew_normal","boron","Bartoli et al., 2011",5.68672823983948,0.103807242921723
+"1041",4.04,NA,NA,334,"mean",303,371,1,"skew_normal","boron","Bartoli et al., 2011",5.8149674340584,0.101798809440058
+"1042",4.12,NA,NA,394,"mean",358,435,1,"skew_normal","boron","Bartoli et al., 2011",5.97793950874469,0.0979493691875605
+"1043",4.58,NA,NA,425,"mean",387,469,1,"skew_normal","boron","Bartoli et al., 2011",6.05451373073803,0.0966245422059584
+"1044",12.28,NA,NA,190,"mean",172,208,1,"skew_normal","boron","Foster et al., 2012",5.24251627825739,0.0955513582307137
+"1045",12.72,NA,NA,223,"mean",202,244,1,"skew_normal","boron","Foster et al., 2012",5.4027179613472,0.0949766355525753
+"1046",13.25,NA,NA,244,"mean",221,267,1,"skew_normal","boron","Foster et al., 2012",5.492705679959,0.0950698667459883
+"1047",13.48,NA,NA,243,"mean",220,266,1,"skew_normal","boron","Foster et al., 2012",5.48856192756703,0.095463450808248
+"1048",13.72,NA,NA,240,"mean",217,263,1,"skew_normal","boron","Foster et al., 2012",5.47602569285911,0.0966640628443561
+"1049",13.83,NA,NA,257,"mean",233,282,1,"skew_normal","boron","Foster et al., 2012",5.54647276225191,0.095966164377096
+"1050",14.17,NA,NA,268,"mean",242,295,1,"skew_normal","boron","Foster et al., 2012",5.58795654124825,0.0995706472474929
+"1051",14.31,NA,NA,272,"mean",247,299,1,"skew_normal","boron","Foster et al., 2012",5.60491595500933,0.0960599940874581
+"1052",14.8,NA,NA,374,"mean",336,415,1,"skew_normal","boron","Foster et al., 2012",5.92269484009695,0.106172098302404
+"1053",15.04,NA,NA,332,"mean",297,369,1,"skew_normal","boron","Foster et al., 2012",5.80226439142161,0.109137103190947
+"1054",15.56,NA,NA,298,"mean",270,328,1,"skew_normal","boron","Foster et al., 2012",5.69571778369126,0.0978380546181084
+"1055",15.87,NA,NA,392,"mean",351,438,1,"skew_normal","boron","Foster et al., 2012",5.97150256692116,0.111333365972159
+"1056",16.38,NA,NA,225,"mean",204,246,1,"skew_normal","boron","Foster et al., 2012",5.41172576488829,0.0941274362891539
+"1057",11.8,NA,NA,247,"mean",225,271,1,"skew_normal","boron","Foster et al., 2012",5.50910961154206,0.0935275499425276
+"1058",13.6,NA,NA,232,"mean",211,254,1,"skew_normal","boron","Foster et al., 2012",5.4445962002473,0.0932548962977801
+"1059",14.94,NA,NA,346,"mean",314,378,1,"skew_normal","boron","Foster et al., 2012",5.84214359076392,0.0932675042569944
+"1060",13.7,NA,NA,250,"mean",227,274,1,"normal","boron","Badger et al., 2013a",5.51903906193474,0.0946134029825858
+"1061",13.74,NA,NA,255,"mean",231,279,1,"normal","boron","Badger et al., 2013a",5.53681474617158,0.0949231106149071
+"1062",13.74,NA,NA,230,"mean",208,251,1,"normal","boron","Badger et al., 2013a",5.43149550941655,0.0944810547551513
+"1063",13.77,NA,NA,301,"mean",273,329,1,"normal","boron","Badger et al., 2013a",5.70276477297517,0.0938128998375372
+"1064",13.79,NA,NA,283,"mean",257,310,1,"normal","boron","Badger et al., 2013a",5.64282419118721,0.0942705647718348
+"1065",13.8,NA,NA,311,"mean",282,340,1,"normal","boron","Badger et al., 2013a",5.73542634427416,0.0940404565291393
+"1066",15.54,NA,NA,300,"mean",254,357,1,"skew_normal","boron","Greenop et al., 2014",5.70753502439909,0.171149286716099
+"1067",15.6,NA,NA,442,"mean",371,530,1,"skew_normal","boron","Greenop et al., 2014",6.0945395345768,0.179331347239921
+"1068",15.61,NA,NA,469,"mean",394,562,1,"skew_normal","boron","Greenop et al., 2014",6.15392637959581,0.178565098930815
+"1069",15.63,NA,NA,330,"mean",280,391,1,"skew_normal","boron","Greenop et al., 2014",5.80174858157731,0.16788944129959
+"1070",15.65,NA,NA,294,"mean",248,350,1,"skew_normal","boron","Greenop et al., 2014",5.68568095032422,0.173212166213888
+"1071",15.69,NA,NA,287,"mean",238,352,1,"skew_normal","boron","Greenop et al., 2014",5.66795092463479,0.196770777593642
+"1072",15.72,NA,NA,505,"mean",401,682,1,"skew_normal","boron","Greenop et al., 2014",6.25949554257502,0.267013937695781
+"1073",15.76,NA,NA,291,"mean",243,352,1,"skew_normal","boron","Greenop et al., 2014",5.67834630946932,0.186317459247988
+"1074",15.77,NA,NA,315,"mean",261,384,1,"skew_normal","boron","Greenop et al., 2014",5.75758147995521,0.194137002574091
+"1075",15.81,NA,NA,520,"mean",432,638,1,"skew_normal","boron","Greenop et al., 2014",6.26338193579445,0.196042839864763
+"1076",15.84,NA,NA,435,"mean",364,527,1,"skew_normal","boron","Greenop et al., 2014",6.08217720808905,0.18605447608814
+"1077",15.89,NA,NA,281,"mean",237,333,1,"skew_normal","boron","Greenop et al., 2014",5.63810131555779,0.170988814401897
+"1078",15.95,NA,NA,291,"mean",236,369,1,"skew_normal","boron","Greenop et al., 2014",5.68731422453307,0.224727887707157
+"1079",15.96,NA,NA,318,"mean",268,379,1,"skew_normal","boron","Greenop et al., 2014",5.76426159279664,0.174240272224015
+"1080",15.98,NA,NA,595,"mean",496,727,1,"skew_normal","boron","Greenop et al., 2014",6.39775120212922,0.192240695792215
+"1081",15.99,NA,NA,322,"mean",271,387,1,"skew_normal","boron","Greenop et al., 2014",5.78027175695474,0.179145782926499
+"1082",16.06,NA,NA,293,"mean",247,348,1,"skew_normal","boron","Greenop et al., 2014",5.68079540820123,0.172362323701441
+"1083",16.12,NA,NA,406,"mean",334,503,1,"skew_normal","boron","Greenop et al., 2014",6.01586558153822,0.205865519312634
+"1084",16.15,NA,NA,309,"mean",261,366,1,"skew_normal","boron","Greenop et al., 2014",5.73357687036203,0.169998615219061
+"1085",16.18,NA,NA,271,"mean",229,322,1,"skew_normal","boron","Greenop et al., 2014",5.60413677454932,0.171364493029154
+"1086",16.21,NA,NA,236,"mean",197,287,1,"skew_normal","boron","Greenop et al., 2014",5.4713429722488,0.189187744083812
+"1087",16.24,NA,NA,477,"mean",390,603,1,"skew_normal","boron","Greenop et al., 2014",6.18403196792544,0.219099503840717
+"1088",16.27,NA,NA,278,"mean",235,328,1,"skew_normal","boron","Greenop et al., 2014",5.62629956126415,0.167643145008715
+"1089",16.3,NA,NA,467,"mean",392,561,1,"skew_normal","boron","Greenop et al., 2014",6.15049137265658,0.180228379594748
+"1090",16.33,NA,NA,262,"mean",223,309,1,"skew_normal","boron","Greenop et al., 2014",5.57025652417893,0.163993624538864
+"1091",16.37,NA,NA,502,"mean",421,606,1,"skew_normal","boron","Greenop et al., 2014",6.22475640987585,0.183138551434312
+"1092",16.4,NA,NA,430,"mean",362,516,1,"skew_normal","boron","Greenop et al., 2014",6.06887548865367,0.178218987269583
+"1093",16.42,NA,NA,221,"mean",189,261,1,"skew_normal","boron","Greenop et al., 2014",5.40313371119117,0.16228610467708
+"1094",16.47,NA,NA,532,"mean",425,701,1,"skew_normal","boron","Greenop et al., 2014",6.3022985279795,0.251603776569703
+"1095",16.59,NA,NA,271,"mean",230,319,1,"skew_normal","boron","Greenop et al., 2014",5.60163520585402,0.164467394438993
+"1096",16.65,NA,NA,242,"mean",204,284,1,"skew_normal","boron","Greenop et al., 2014",5.48354711600271,0.166349048010516
+"1097",16.69,NA,NA,236,"mean",199,282,1,"skew_normal","boron","Greenop et al., 2014",5.4676059478313,0.175272503792951
+"1098",16.76,NA,NA,338,"mean",285,405,1,"skew_normal","boron","Greenop et al., 2014",5.8281881236876,0.17667811416191
+"1099",16.98,NA,NA,207,"mean",172,250,1,"skew_normal","boron","Greenop et al., 2014",5.33447769733785,0.188025278577794
+"1100",17.11,NA,NA,252,"mean",215,297,1,"skew_normal","boron","Greenop et al., 2014",5.53218508346518,0.162447357565413
+"1101",2.34,NA,NA,317,"median",281,354,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.75382579123376,0.116114642811534
+"1102",2.35,NA,NA,318,"median",279,357,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.7544737818005,0.12394893947775
+"1103",2.35,NA,NA,306,"median",271,342,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.71846477897115,0.116994354467712
+"1104",2.36,NA,NA,450,"median",395,505,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.10172209708824,0.12352089943784
+"1105",2.37,NA,NA,415,"median",366,463,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.0201801937438,0.118201949350569
+"1106",2.38,NA,NA,371,"median",328,416,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.9118494343227,0.119498098355861
+"1107",2.39,NA,NA,377,"median",334,421,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.92688691332954,0.116390972716969
+"1108",2.41,NA,NA,278,"median",245,310,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.61891525401196,0.118312746526257
+"1109",2.42,NA,NA,332,"median",294,371,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.79989091497306,0.116959350011854
+"1110",2.45,NA,NA,320,"median",283,358,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.76298994202197,0.11819811212049
+"1111",2.47,NA,NA,340,"median",302,379,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.82398161122865,0.114187433948701
+"1112",2.5,NA,NA,357,"median",316,398,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.87109710943567,0.115997769032147
+"1113",2.5,NA,NA,362,"median",321,403,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.88518884253835,0.114381635792555
+"1114",2.52,NA,NA,246,"median",218,275,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.50063308022783,0.116785254961115
+"1115",2.55,NA,NA,335,"median",297,374,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.80899396810862,0.115904183829176
+"1116",2.56,NA,NA,300,"median",265,335,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.69693017890564,0.117853510840642
+"1117",2.58,NA,NA,330,"median",292,368,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.79241837021861,0.116309166937267
+"1118",2.59,NA,NA,362,"median",319,405,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.88453908494569,0.120013108826324
+"1119",2.62,NA,NA,279,"median",246,311,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.6225622240558,0.117884015102839
+"1120",2.62,NA,NA,305,"median",270,340,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.71368378830429,0.115904183829175
+"1121",2.63,NA,NA,245,"median",216,274,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.49420325703612,0.119587617897006
+"1122",2.65,NA,NA,282,"median",249,315,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.63501276764517,0.118215032698039
+"1123",2.66,NA,NA,302,"median",267,336,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.70217990918173,0.115571762989621
+"1124",2.67,NA,NA,263,"median",232,294,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.5651585695025,0.119081159529818
+"1125",2.68,NA,NA,323,"median",286,360,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.771047921135,0.115697318365853
+"1126",2.69,NA,NA,284,"median",251,317,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.64217735650453,0.117374922903727
+"1127",2.7,NA,NA,276,"median",244,308,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.61363400413339,0.117114842977841
+"1128",2.7,NA,NA,234,"median",205,265,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.45136990256232,0.129075273665293
+"1129",2.7,NA,NA,319,"median",282,357,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.75982142635888,0.118571492480081
+"1130",2.71,NA,NA,262,"median",231,294,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.56299873893024,0.121253026844387
+"1131",2.75,NA,NA,339,"median",300,378,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.81933833513789,0.116199853641585
+"1132",2.75,NA,NA,321,"median",283,360,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.7657754645467,0.120999158370671
+"1133",2.76,NA,NA,358,"median",317,400,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.87518316049263,0.116929423134579
+"1134",2.78,NA,NA,279,"median",247,312,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.62619576221873,0.117458393726781
+"1135",2.8,NA,NA,281,"median",249,314,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.63342294118648,0.116616346131686
+"1136",2.83,NA,NA,317,"median",281,355,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.75523622940458,0.117532941358545
+"1137",2.83,NA,NA,361,"median",314,408,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.88033008015621,0.131666807070135
+"1138",2.84,NA,NA,388,"median",343,433,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.95423408758422,0.117152915558618
+"1139",2.85,NA,NA,308,"median",272,343,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.72176625673097,0.116610459218926
+"1140",2.86,NA,NA,445,"median",392,498,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.09093095840756,0.120336034977012
+"1141",2.91,NA,NA,371,"median",328,413,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.90823060067259,0.11585909693487
+"1142",2.92,NA,NA,377,"median",334,420,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.92569785212706,0.115195284872808
+"1143",2.94,NA,NA,337,"median",299,376,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.81501635839029,0.11521129947686
+"1144",2.95,NA,NA,358,"median",317,400,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.87518316049263,0.116929423134578
+"1145",2.95,NA,NA,419,"median",366,473,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.03086436094665,0.128945659449548
+"1146",2.96,NA,NA,346,"median",307,385,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.84004554093749,0.113828644994931
+"1147",2.98,NA,NA,328,"median",291,366,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.78797830028643,0.115294005961189
+"1148",3,NA,NA,369,"median",327,412,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.90549176012339,0.116175447122247
+"1149",3.01,NA,NA,357,"median",316,399,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.87235181523839,0.117259467314092
+"1150",3.03,NA,NA,381,"median",338,425,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.93756753220372,0.115159866148443
+"1151",3.04,NA,NA,419,"median",369,470,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.03176466937232,0.121642180502756
+"1152",3.05,NA,NA,418,"median",371,467,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.03126566013817,0.115704847307708
+"1153",3.06,NA,NA,361,"median",319,405,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.88453908494569,0.120013108826323
+"1154",3.06,NA,NA,413,"median",365,462,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.01773112233212,0.118490456699181
+"1155",3.07,NA,NA,380,"median",336,425,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.93460016444381,0.118143771057849
+"1156",3.09,NA,NA,334,"median",296,374,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.8073076258693,0.117599924058895
+"1157",3.1,NA,NA,319,"median",282,357,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.75982142635888,0.118571492480081
+"1158",3.11,NA,NA,392,"median",347,438,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.96577184516165,0.117096025061358
+"1159",3.13,NA,NA,345,"median",305,386,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.83807457303612,0.118419088849307
+"1160",3.14,NA,NA,334,"median",295,373,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.80427688799182,0.117955253442599
+"1161",3.15,NA,NA,403,"median",343,466,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.99095804064579,0.154081531321658
+"1162",3.16,NA,NA,340,"median",301,379,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.82232323491565,0.115855052397905
+"1163",3.17,NA,NA,452,"median",400,505,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.10801148819167,0.117196457538772
+"1164",3.18,NA,NA,381,"median",337,424,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.93490819279216,0.115465183974592
+"1165",3.19,NA,NA,283,"median",251,317,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.64217735650453,0.117374922903727
+"1166",3.2,NA,NA,331,"median",294,370,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.79854138648848,0.115602300600946
+"1167",3.21,NA,NA,326,"median",289,365,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.78316202084746,0.117385899097356
+"1168",3.22,NA,NA,376,"median",333,420,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.92419860062893,0.116702891704069
+"1169",3.24,NA,NA,423,"median",366,481,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.03925030175356,0.137378335129938
+"1170",3.24,NA,NA,354,"median",314,396,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.86540359858137,0.116657140168342
+"1171",3.25,NA,NA,316,"median",280,353,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.75062883005127,0.116484799243721
+"1172",3.26,NA,NA,348,"median",307,390,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.84649724335544,0.120316302769969
+"1173",3.27,NA,NA,365,"median",319,412,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.89310722606719,0.128629000224196
+"1174",3.28,NA,NA,313,"median",278,350,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.74277713408705,0.115797785246299
+"1175",2.35,NA,NA,369,"median",326,413,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.90517248716387,0.118934253319419
+"1176",2.42,NA,NA,442,"median",385,499,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.08292471501965,0.130404095458826
+"1177",2.5,NA,NA,423,"median",373,473,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.04033690406787,0.119420325816865
+"1178",2.63,NA,NA,402,"median",354,450,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.98927224794907,0.120643957719012
+"1179",2.75,NA,NA,376,"median",330,424,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.92441305484624,0.126018811356019
+"1180",2.83,NA,NA,352,"median",311,395,1,"skew_normal","boron","Martinez-Boti et al., 2015",5.85933933854018,0.120212658956547
+"1181",3.16,NA,NA,525,"median",461,592,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.25845233894033,0.125751223913122
+"1182",3.24,NA,NA,441,"median",385,499,1,"skew_normal","boron","Martinez-Boti et al., 2015",6.08292471501965,0.130404095458826
+"1183",0.54,NA,NA,162,"mean",92,233,1,"skew_normal","boron","Stap et al., 2016",4.98641351530737,0.467214294444213
+"1184",0.54,NA,NA,281,"mean",209,354,1,"skew_normal","boron","Stap et al., 2016",5.60581558254929,0.264949712836564
+"1185",0.6,NA,NA,163,"mean",92,234,1,"skew_normal","boron","Stap et al., 2016",4.98855484620337,0.469367558983772
+"1186",0.62,NA,NA,169,"mean",98,240,1,"skew_normal","boron","Stap et al., 2016",5.03280320100628,0.450331512170488
+"1187",0.76,NA,NA,175,"mean",102,249,1,"skew_normal","boron","Stap et al., 2016",5.07121285487449,0.448726938691376
+"1188",0.82,NA,NA,152,"mean",82,223,1,"skew_normal","boron","Stap et al., 2016",4.90694550936219,0.503014024569229
+"1189",0.86,NA,NA,168,"mean",98,239,1,"skew_normal","boron","Stap et al., 2016",5.03071551530104,0.448232191786498
+"1190",0.94,NA,NA,183,"mean",112,254,1,"skew_normal","boron","Stap et al., 2016",5.12791656915682,0.411699383929933
+"1191",1.82,NA,NA,250,"mean",178,322,1,"skew_normal","boron","Stap et al., 2016",5.47816754791825,0.298035746541161
+"1192",2.74,NA,NA,274,"mean",192,362,1,"skew_normal","boron","Stap et al., 2016",5.57456979192678,0.318841476599886
+"1193",2.89,NA,NA,481,"mean",400,566,1,"skew_normal","boron","Stap et al., 2016",6.16502931265558,0.174532042510836
+"1194",3.21,NA,NA,423,"mean",346,502,1,"skew_normal","boron","Stap et al., 2016",6.03251944737473,0.18711770046651
+"1195",3.66,NA,NA,357,"mean",281,434,1,"skew_normal","boron","Stap et al., 2016",5.85569960171708,0.218556196348726
+"1196",3.89,NA,NA,507,"mean",426,591,1,"skew_normal","boron","Stap et al., 2016",6.21812768183773,0.16460057115746
+"1197",4.1,NA,NA,380,"mean",305,456,1,"skew_normal","boron","Stap et al., 2016",5.9214022930609,0.202211194509756
+"1198",5.19,NA,NA,433,"mean",347,523,1,"skew_normal","boron","Stap et al., 2016",6.05445312200589,0.20627152292961
+"1199",6.35,NA,NA,332,"mean",257,408,1,"skew_normal","boron","Stap et al., 2016",5.78017162964969,0.232383440924192
+"1200",53.2,53.6,52.8,1400,"median",1165,1635,1,"normal","boron","Anagnostou et al., 2016",7.22993722466558,0.17040526454355
+"1201",45.6,45.9,45.5,1100,"median",925,1275,1,"normal","boron","Anagnostou et al., 2016",6.99024759755248,0.161348069887247
+"1202",44.4,44.5,44,920,"median",760,1080,1,"normal","boron","Anagnostou et al., 2016",6.80901737669932,0.17667811416191
+"1203",36.9,37.5,36.3,770,"median",620,920,1,"normal","boron","Anagnostou et al., 2016",6.62704657404111,0.198426800504687
+"1204",40.3,40.6,40,650,"median",540,760,1,"normal","boron","Anagnostou et al., 2016",6.46244378641935,0.171826931784689
+"1205",51.9,56,47.8,1868,"mean",1396,2861,1,"skew_normal","liverworts","Fletcher et al., 2008",7.60014638818621,0.36077958747321
+"1206",58.8,61.6,56,583,"mean",401,818,1,"skew_normal","liverworts","Fletcher et al., 2008",6.35041188195466,0.358436954109705
+"1207",70,71,69,670,"mean",459,931,1,"skew_normal","liverworts","Fletcher et al., 2008",6.48265474366881,0.355575172743317
+"1208",100.8,107.6,93.9,797,"mean",543,1085,1,"skew_normal","liverworts","Fletcher et al., 2008",6.64322229295425,0.348041861665558
+"1209",104.1,107.6,100.5,830,"mean",584,1106,1,"skew_normal","liverworts","Fletcher et al., 2008",6.68920308245525,0.321081571193779
+"1210",104.1,107.6,100.5,977,"mean",653,1340,1,"skew_normal","liverworts","Fletcher et al., 2008",6.84100101111069,0.361426952214579
+"1211",104.1,107.6,100.5,1001,"mean",649,1415,1,"skew_normal","liverworts","Fletcher et al., 2008",6.86515876339071,0.391897991123293
+"1212",111.9,113,110.8,654,"mean",448,887,1,"skew_normal","liverworts","Fletcher et al., 2008",6.44631910736228,0.34342919968111
+"1213",121.9,130.8,113,1051,"mean",819,1292,1,"skew_normal","liverworts","Fletcher et al., 2008",6.93601538409781,0.229201562070239
+"1214",139.3,142,136.5,982,"mean",755,1239,1,"skew_normal","liverworts","Fletcher et al., 2008",6.87438881543908,0.249051337790864
+"1215",161.7,166.1,157.3,698,"mean",514,933,1,"skew_normal","liverworts","Fletcher et al., 2008",6.54031423315125,0.29975222956045
+"1216",169.5,170,169,637,"mean",459,899,1,"skew_normal","liverworts","Fletcher et al., 2008",6.46516662226608,0.337989589987134
+"1217",187.7,201.3,174.1,919,"mean",685,1208,1,"skew_normal","liverworts","Fletcher et al., 2008",6.81307010837849,0.285232059502352
+"1218",205.6,237,174.1,388,"mean",275,549,1,"skew_normal","liverworts","Fletcher et al., 2008",5.96243476958805,0.347590056610342

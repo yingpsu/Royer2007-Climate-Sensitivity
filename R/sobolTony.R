@@ -30,7 +30,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
                       ind_time_fixed, ind_expected_time, ind_expected_const,
                       iteration_threshold, input, model_ref=NULL, data_calib=NULL,
                       parallel=FALSE, n_core=1, export_names=NULL,
-                      n_boot=0, conf=0.9){
+                      n_boot=0, conf=0.9, second=FALSE){
 
   if(parallel) {sobol_func <- sobol_model_par} else {sobol_func <- sobol_model}
 
@@ -44,6 +44,11 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
   CI_T <- mat.or.vec(p, 2)
   colnames(CI_S) <- c(0.5*(1-conf)*100, (conf+0.5*(1-conf))*100)
   colnames(CI_T) <- c(0.5*(1-conf)*100, (conf+0.5*(1-conf))*100)
+  if (second) {
+    n_s2 <- p*(p-1)*0.5
+    S2 <- rep(NA, n_s2)
+    CI_S2 <- mat.or.vec(n_s2, 2)
+  }
 
   conf_lo <- 100*0.5*(1-conf)
   conf_hi <- 100-conf_lo
@@ -51,6 +56,11 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
   if (nrow(parameters_sampleB) != n_simulations) {
     stop("samples A and B must have same number of parameters")
   }
+
+
+  ## ==========================
+  ## ESTIMATE MEAN AND VARIANCE
+  ## ==========================
 
   print('Starting estimation of full model mean and variance...')
 
@@ -75,6 +85,12 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
   V0 <- mean(mA^2) - m0^2
 
   print('... Done estimating full model mean and variance.')
+
+
+
+  ## ========================================
+  ## ESTIMATE FIRST-ORDER SENSITIVITY INDICES
+  ## ========================================
 
   print('Starting estimation of first-order sensitivity indices...')
 
@@ -129,6 +145,76 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
 
   print('... Done estimating first-order sensitivity indices.')
 
+
+
+  ## ===================================================
+  ## ESTIMATE SECOND-ORDER SENSITIVITY INDICES ... MAYBE
+  ## ===================================================
+
+  if(second) {
+    print('Starting estimation of second-order sensitivity indices...')
+
+    # Vik = variance by including parameters i and k
+    #    = [(1/N) sum_{j=1}^N m(xjA)*m(x-ikjB , xikjA)] - m0^2
+    # xjA   = jth parameter set of sample A
+    # x-ikjB = jth parameter set of B, but with i and k replaced by jth value from A
+    Vik <- S2 <- rep(NA, n_s2)
+    pb <- txtProgressBar(min=0,max=n_s2,initial=0,style=3)
+    cnt <- 1
+    for (i in 1:(p-1)) {
+      for (k in (i+1):p) {
+        # replace the ith column of B with that of A
+        p_BA <- parameters_sampleB
+        p_BA[,c(i,k)] <- parameters_sampleA[,c(i,k)]
+        mA_i <- mA
+        m_BA <- sobol_func(p_BA, sens, par_fixed, parnames_calib, parnames_fixed,
+                           age, ageN, ind_const_calib, ind_time_calib,
+                           ind_const_fixed, ind_time_fixed, ind_expected_time,
+                           ind_expected_const, iteration_threshold, input,
+                           model_ref, data_calib, n_core, export_names)
+
+        # account for possible NA, and extreme values
+        idrop <- which(is.na(m_BA) | is.nan(m_BA) | is.infinite(m_BA) | m_BA < -10)
+        if (length(idrop) > 0) {
+          idrop_all <- c(idrop_all, idrop)
+          m_BA <- m_BA[-idrop]
+          mA_i <- mA_i[-idrop]
+        }
+
+        Vik[cnt] <- mean(mA_i * m_BA) - m0^2
+
+        # second-order indices are Sik = Vik/V - Si - Sk
+        S2[cnt] <- Vik[cnt]/V0 - S[i] - S[k]
+
+        # confidence interval for S2[cnt]
+        if (n_boot > 0) {
+          # pick n_CI = length(m_BA) runs from m_BA, mA_i, and get
+          # Vik_CI = mean(mA_i[ind_CI]*m_BA[ind_CI]) - mean(mA_i[ind_CI])^2
+          S2_CI <- rep(NA, n_boot)
+          for (j in 1:n_boot) {
+            ind_CI <- sample(1:length(m_BA), size=length(m_BA), replace=TRUE)
+            Vik_CI <- mean(mA_i[ind_CI]*m_BA[ind_CI]) - mean(mA_i[ind_CI])^2
+            V0_CI <- mean(mA_i[ind_CI]^2) - mean(mA_i[ind_CI])^2
+            S2_CI[j] <- Vik_CI/V0_CI
+          }
+          CI_S2[cnt,] <- quantile(x=S2_CI, probs=c(0.01*conf_lo, 0.01*conf_hi))
+        }
+
+        setTxtProgressBar(pb, cnt)
+        cnt <- cnt+1
+      }
+    }
+    close(pb)
+
+    print('... Done estimating second-order sensitivity indices.')
+  }
+
+
+
+  ## ==================================
+  ## ESTIMATE TOTAL SENSITIVITY INDICES
+  ## ==================================
+
   print('Starting estimation of total sensitivity indices...')
 
   # V_i = variance by excluding parameter i
@@ -180,15 +266,33 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
 
   print('... Done estimating total sensitivity indices.')
 
+
+  ## ======
+  ## OUTPUT
+  ## ======
+
   out.S <- cbind(S, CI_S)
   colnames(out.S) <- c('S',paste('S.0',conf_lo, sep=''),paste('S.',conf_hi, sep=''))
   rownames(out.S) <- parnames_calib
   out.T <- cbind(T, CI_T)
   colnames(out.T) <- c('T',paste('T.0',conf_lo, sep=''),paste('T.',conf_hi, sep=''))
   rownames(out.T) <- parnames_calib
-
-  out <- list(out.S, out.T, parameters_sampleA, parameters_sampleB, unique(idrop_all))
-  names(out) <- c("S", "T", "pA", "pB", "idrop")
+  if(second) {
+    out.S2 <- cbind(S2, CI_S2)
+    colnames(out.S2) <- c('S2',paste('S2.0',conf_lo, sep=''),paste('S2.',conf_hi, sep=''))
+    S2.names <- NULL
+    for (i in 1:(p-1)) {
+      for (j in (i+1):p) {
+        S2.names <- rbind(S2.names, c(parnames_calib[i],parnames_calib[j]))
+      }
+    }
+    #out.S2 <- cbind(S2.names, out.S2)
+    out <- list(out.S, out.S2, out.T, S2.names, parameters_sampleA, parameters_sampleB, unique(idrop_all))
+    names(out) <- c("S", "S2", "T", "S2.names", "pA", "pB", "idrop")
+  } else {
+    out <- list(out.S, out.T, parameters_sampleA, parameters_sampleB, unique(idrop_all))
+    names(out) <- c("S", "T", "pA", "pB", "idrop")
+  }
 
   return(out)
 }

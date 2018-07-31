@@ -9,14 +9,24 @@
 
 rm(list=ls())
 
+setwd('~/codes/GEOCARB/R')
+
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
+appen2 <- 'e'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
+
+# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
+data_to_assim <- cbind( c("paleosols" , TRUE),
+                        c("alkenones" , TRUE),
+                        c("stomata"   , TRUE),
+                        c("boron"     , TRUE),
+                        c("liverworts", TRUE) )
 
 DO_INIT_UPDATE <- TRUE
 
@@ -27,17 +37,6 @@ filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appe
 filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
 filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
 
-if(Sys.info()['user']=='tony') {
-  # Tony's local machine (if you aren't me, you almost certainly need to change this...)
-  machine <- 'local'
-  setwd('~/codes/GEOCARB/R')
-} else {
-  # assume on Napa cluster
-  machine <- 'remote'
-  setwd('~/codes/GEOCARB/R')
-}
-
-library(sn)
 library(adaptMCMC)
 library(ncdf4)
 
@@ -45,29 +44,11 @@ library(ncdf4)
 ## Data
 ##=====
 
+# requires: data_to_assim (above) and filename.data (below)
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
 source('GEOCARB-2014_getData.R')
-
-# remove the lowest [some number] co2 content data points (all paleosols, it turns out)
-# (lowest ~40 are all from paleosols, actually)
-#ind_co2_sort_all <- order(data_calib_all$co2)
-#n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
-#data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
-
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
-
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
-}
-
-data_calib <- data_calib_all[unlist(ind_assim),]
 
 # possible filtering out of some data points with too-narrow uncertainties in
 # co2 (causing overconfidence in model simulations that match those data points
@@ -105,6 +86,7 @@ ind_mod2obs <- rep(NA,nrow(data_calib))
 for (i in 1:length(ind_mod2obs)){
   ind_mod2obs[i] <- which(age_tmp==ttmp[i])
 }
+
 ##==============================================================================
 
 
@@ -206,7 +188,7 @@ accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- niter_mcmc000
-gamma_mcmc <- 0.5
+gamma_mcmc <- 0.66
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
@@ -252,7 +234,7 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 
 # save
 if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,'.RData', sep=''))
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2'.RData', sep=''))
 }
 
 ## Extend an MCMC chain?

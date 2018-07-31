@@ -134,7 +134,45 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, xeval, model_meas)
   }
   close(pb)
 
+  # first-order indices are Si = Vi/V
+  S <- Vi/V
+
   print('... Done estimating first-order sensitivity indices.')
+
+
+
+  print('Starting estimation of second-order sensitivity indices...')
+
+  # Vik = variance by including parameters i and k
+  #    = [(1/N) sum_{j=1}^N m(xjA)*m(x-ikjB , xikjA)] - m0^2
+  # xjA   = jth parameter set of sample A
+  # x-ikjB = jth parameter set of B, but with i and k replaced by jth value from A
+  n_s2 <- p*(p-1)/2
+  Vik <- S2 <- rep(NA, n_s2)
+  pb <- txtProgressBar(min=0,max=n_s2,initial=0,style=3)
+  cnt <- 1
+  for (i in 1:(p-1)) {
+    for (k in (i+1):p) {
+      # replace the ith column of B with that of A
+      p_BA <- parameters_sampleB
+      p_BA[,c(i,k)] <- parameters_sampleA[,c(i,k)]
+      mA_i <- mA
+      m_BA <- sobol_model(p_BA, xeval, model_meas)
+
+      Vik[cnt] <- mean(mA_i * m_BA) - m0^2
+
+      # second-order indices are Sik = Vik/V - Si - Sk
+      S2[cnt] <- Vik[cnt]/V - S[i] - S[k]
+
+      setTxtProgressBar(pb, cnt)
+      cnt <- cnt+1
+    }
+  }
+  close(pb)
+
+  print('... Done estimating second-order sensitivity indices.')
+
+
 
   print('Starting estimation of total sensitivity indices...')
 
@@ -156,16 +194,15 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, xeval, model_meas)
   }
   close(pb)
 
-  print('... Done estimating total sensitivity indices.')
-
-  # first-order indices are Si = Vi/V
-  S <- Vi/V
-
   # total indices are Ti = 1 - V_i/V
   T <- 1 - (V_i/V)
 
-  out <- list(S, T)#, unique(idrop_all))
-  names(out) <- c("S", "T")#, "idrop")
+  print('... Done estimating total sensitivity indices.')
+
+
+
+  out <- list(S, S2, T)#, unique(idrop_all))
+  names(out) <- c("S", "S2", "T")#, "idrop")
   return(out)
 }
 
@@ -191,15 +228,20 @@ s.out <- sobol2002(model=sobol_model, parameters_sampleA_df, parameters_sampleB_
                    nboot=0, xeval=xeval, model_meas=model_meas, df=TRUE)
 s.sens$T <- s.out$T$original
 
+# second order index is necessarily 1 - (sum of first order indices)
+s.sens$S2 <- 1 - sum(s.sens$S)
+
+
 ##==============================================================================
 ## comparison
 
-# difference in first-order indices
-p_err <- rbind((s.tony$S - s.sens$S)/s.sens$S, (s.tony$T - s.sens$T)/s.sens$T)*100
+# difference in indices
+p_err <- rbind((s.tony$S - s.sens$S)/s.sens$S, (s.tony$S2 - s.sens$S2)/s.sens$S2, (s.tony$T - s.sens$T)/s.sens$T)*100
 
 print('Percent difference between Tonys code and Sensitivity package:')
 print(paste('  S:', p_err[1,1], p_err[1,2]))
-print(paste('  T:', p_err[2,1], p_err[2,2]))
+print(paste(' S2:', p_err[2,1], p_err[2,1]))
+print(paste('  T:', p_err[3,1], p_err[3,2]))
 
 ##==============================================================================
 ## End

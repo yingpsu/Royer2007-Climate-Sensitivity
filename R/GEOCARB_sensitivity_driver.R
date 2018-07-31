@@ -13,9 +13,9 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_sample <- 30000
-appen <- 'NS-n30K-bs10K'
-.Nboot <- 10000
+n_sample <- 100
+appen <- 'TEST'
+.Nboot <- 100
 .confidence <- 0.9 # for bootstrap CI
 .scheme <- 'A' # A = first and total indices; B = first, second and total
 l_parallel <- TRUE
@@ -43,19 +43,6 @@ if(Sys.info()['user']=='tony') {
   filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
 }
 
-
-##==============================================================================
-## Data
-##=====
-
-source('GEOCARB-2014_getData.R')
-
-# remove the lowest [some number] co2 content data points (all paleosols, it turns out)
-# (lowest ~40 are all from paleosols, actually)
-#ind_co2_sort_all <- order(data_calib_all$co2)
-#n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
-#data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
-
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("alkenones" , TRUE),
@@ -63,14 +50,14 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("boron"     , TRUE),
                         c("liverworts", TRUE) )
 
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
-}
+##==============================================================================
+## Data
+##=====
 
-data_calib <- data_calib_all[unlist(ind_assim),]
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
+source('GEOCARB-2014_getData.R')
 
 # possible filtering out of some data points with too-narrow uncertainties in
 # co2 (causing overconfidence in model simulations that match those data points
@@ -92,7 +79,7 @@ if(co2_uncertainty_cutoff > 0) {
       ind_remove <- c(ind_remove, ii)
     }
   }
-  data_calib <- data_calib[-ind_remove,]
+  if(length(ind_remove) > 0) {data_calib <- data_calib[-ind_remove,]}
 }
 
 # assumption of steady state in-between model time steps permits figuring out
@@ -107,6 +94,7 @@ ind_mod2obs <- rep(NA,nrow(data_calib))
 for (i in 1:length(ind_mod2obs)){
   ind_mod2obs[i] <- which(age_tmp==ttmp[i])
 }
+
 ##==============================================================================
 
 
