@@ -14,16 +14,16 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-.niter_mcmc <- 1e5   # number of MCMC iterations per node (Markov chain length)
-.n_node <- 4         # number of CPUs to use
-.n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
+.niter_mcmc <- 2e5   # number of MCMC iterations per node (Markov chain length)
+.n_node <- 15         # number of CPUs to use
+.n_chain <- 6          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
-appen2 <- 'c'
+appen2 <- 'e'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
@@ -239,7 +239,7 @@ if(.n_node==1) {
                   input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                   data_calib=data_calib_subsamples[[s]], ind_mod2obs=ind_mod2obs,
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)
+                  iteration_threshold=iteration_threshold, n_shard=.n_shard)
     tend <- proc.time()
   }
 
@@ -289,7 +289,7 @@ if(.n_node==1) {
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                     data_calib=data_calib_subsamples[[s]], ind_mod2obs=ind_mod2obs,
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold)
+                    iteration_threshold=iteration_threshold, n_shard=.n_shard)
     }
     amcmc_out[[chain]] <- output
   }
