@@ -14,9 +14,9 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-.niter_mcmc <- 1e3   # number of MCMC iterations per node (Markov chain length)
+.niter_mcmc <- 1e5   # number of MCMC iterations per node (Markov chain length)
 .n_node <- 4         # number of CPUs to use
-.n_chain <- 4          # number of parallel MCMC chains, per shard (subsample)
+.n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 

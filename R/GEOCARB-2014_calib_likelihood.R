@@ -181,7 +181,8 @@ log_post <- function(
   ind_mod2obs,
   ind_expected_time,
   ind_expected_const,
-  iteration_threshold
+  iteration_threshold,
+  n_shard=1
 ){
 
   lpri <- 0
@@ -225,7 +226,7 @@ log_post <- function(
   }
 
   # combine
-  lpost <- lpri + llike
+  lpost <- (1/n_shard)*lpri + llike
 
   return(lpost)
 }
