@@ -13,12 +13,12 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_sample <- 100
-appen <- 'TEST'
-.Nboot <- 100
+n_sample <- 5000
+appen <- 'TEST-S2'
+.Nboot <- 1000
 .confidence <- 0.9 # for bootstrap CI
-.scheme <- 'A' # A = first and total indices; B = first, second and total
-l_parallel <- TRUE
+.second <- TRUE
+l_parallel <- FALSE
 
 co2_uncertainty_cutoff <- 20
 
@@ -235,7 +235,7 @@ if (!l_parallel) {
                      input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
-                     n_boot=n_boot, conf=conf))
+                     n_boot=n_boot, conf=conf, second=.second))
 } else {
   t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
@@ -245,7 +245,7 @@ if (!l_parallel) {
                      input=input, ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
                      parallel=TRUE, n_core=Ncore, export_names=export_names,
-                     n_boot=n_boot, conf=conf))
+                     n_boot=n_boot, conf=conf, second=.second))
 }
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
@@ -278,40 +278,11 @@ write.table(headers.1st.tot, file=file.sobolout1, append=FALSE, sep = " ",
 write.table(output.1st.tot , file=file.sobolout1, append=TRUE , sep = " ",
             quote=FALSE    , row.names = FALSE , col.names=FALSE)
 
-if (.scheme=='B') {
+if (.second) {
   headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
                               'S2_conf_high'), nrow=1)
-  output2.indices <- s.out$S2[,1]
-  output2.conf1   <- s.out$S2[,4]
-  output2.conf2   <- s.out$S2[,5]
 
-  # 2nd order index names ordered as: (assuming 39 parameters)
-  # 1. parnames.sobol[1]-parnames.sobol[2]
-  # 2. parnames.sobol[1]-parnames.sobol[3]
-  # 3. parnames.sobol[1]-parnames.sobol[4]
-  # ... etc ...
-  # 38. parnames.sobol[1]-parnames.sobol[39] << N=2:39 => p1-p[N]
-  # 39. parnames.sobol[2]-parnames.sobol[3]
-  # 40. parnames.sobol[2]-parnames.sobol[4]
-  # 38+37. parnames.sobol[2]-parnames.sobol[39] << N=3:39 => p2-p[N]
-  # ... etc ...
-  names2  <- rownames(s.out$S2)
-  names2a <- rep(NA, length(names2))
-  names2b <- rep(NA, length(names2))
-  cnt <- 1
-  for (i in seq(from=1, to=(length(parnames_calib)-1), by=1)) {         # i = index of first name
-      for (j in seq(from=(i+1), to=(length(parnames_calib)), by=1)) {   # j = index of second name
-          names2a[cnt] <- parnames_calib[i]
-          names2b[cnt] <- parnames_calib[j]
-          cnt <- cnt+1
-      }
-  }
-
-  output.2nd <- data.frame(cbind( names2a,
-                                  names2b,
-                                  output2.indices,
-                                  output2.conf1,
-                                  output2.conf2 ))
+  output.2nd <- data.frame(cbind( s.out$S2.names,s.out$S2 ))
   write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",
               quote=FALSE    , row.names = FALSE , col.names=FALSE)
   write.table(output.2nd     , file=file.sobolout2, append=TRUE , sep = " ",
@@ -319,11 +290,6 @@ if (.scheme=='B') {
 }
 ##==============================================================================
 
-if(FALSE){
-
-
-
-}
 
 
 ##==============================================================================
