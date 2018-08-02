@@ -231,8 +231,8 @@ log_post <- function(
   }
 
   # combine
-  #lpost <- (1/n_shard)*lpri + llike
-  lpost <- lpri + llike
+  lpost <- (1/n_shard)*lpri + llike
+  #lpost <- lpri + llike
 
   return(lpost)
 }

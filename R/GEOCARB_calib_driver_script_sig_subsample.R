@@ -19,6 +19,7 @@ setwd('~/codes/GEOCARB/R')
 .n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
 .n_shard <- 10      # number of data subsamples to use and recombine with consensus MC
+gamma_mcmc <- 0.66
 
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
@@ -200,7 +201,6 @@ accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- .niter_mcmc
-gamma_mcmc <- 0.66
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
