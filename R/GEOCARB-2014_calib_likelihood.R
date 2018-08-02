@@ -121,24 +121,24 @@ log_like <- function(
                              iteration_threshold=iteration_threshold)[,'co2']
 
   # use the same checks as the precalibration to get rid of unphysical simulations
-  #if(any(is.infinite(model_out)) | any(model_out < 100) | any(model_out > 1e4)) {
-  #  llike <- -Inf
-  #} else {
+  if(any(is.infinite(model_out)) | any(model_out < 0) | any(model_out > 1e4)) {
+    llike <- -Inf
+  } else {
     # compare against data
     # assumption of steady state in-between model time steps
     # note that these are not necessarily sequential in time
     model_stdy <- model_out[ind_mod2obs]
-#    llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
-#                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
-#                         alpha=data_calib$alpha_co2[i], log=TRUE)) )
-    llike <- sum( sapply(1:length(model_stdy), function(i) dgamma(x=model_stdy[i],
-                         shape=data_calib$shape_co2[i], scale=data_calib$scale_co2[i],
-                         log=TRUE)) )
+    llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
+                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
+                         alpha=data_calib$alpha_co2[i], log=TRUE)) )
+#    llike <- sum( sapply(1:length(model_stdy), function(i) dgamma(x=model_stdy[i],
+#                         shape=data_calib$shape_co2[i], scale=data_calib$scale_co2[i],
+#                         log=TRUE)) )
 #    llike <- sum( sapply(1:length(model_stdy), function(i) dlnorm(x=model_stdy[i],
 #                         meanlog=data_calib$meanlog_co2[i], sdlog=data_calib$sdlog_co2[i],
 #                         log=TRUE)) )
     if(is.na(llike)) {llike <- -Inf}
-  #}
+  }
   return(llike)
 }
 ##==============================================================================
@@ -231,7 +231,8 @@ log_post <- function(
   }
 
   # combine
-  lpost <- (1/n_shard)*lpri + llike
+  #lpost <- (1/n_shard)*lpri + llike
+  lpost <- lpri + llike
 
   return(lpost)
 }

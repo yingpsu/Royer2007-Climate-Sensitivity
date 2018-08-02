@@ -35,8 +35,11 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("boron"     , TRUE),
                         c("liverworts", TRUE) )
 
-DO_INIT_UPDATE <- TRUE
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
 
+DO_INIT_UPDATE <- TRUE
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
 
@@ -53,10 +56,7 @@ library(doParallel)
 ## Data
 ##=====
 
-# requires: data_to_assim (above) and filename.data (below)
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
+# requires: data_to_assim (above) and filename.data (above)
 source('GEOCARB-2014_getData.R')
 
 # possible filtering out of some data points with too-narrow uncertainties in

@@ -189,7 +189,7 @@ plotRadCon(df=s1st1_rearr
            ,st_col = rgb(mycol[6,1],mycol[6,2],mycol[6,3])
            ,line_col = rgb(mycol[10,1],mycol[10,2],mycol[10,3])
            ,STthick = 0.5
-           ,legFirLabs=c(.05,.77), legTotLabs=c(.05,.83), legSecLabs=c(.02,.07)
+           ,legFirLabs=c(.05,.25), legTotLabs=c(.05,.75), legSecLabs=c(.02,.07)
 )
 
 
