@@ -1,14 +1,18 @@
 ##==============================================================================
-## plotting_sobol1T.R
+## plotting_sobol.R
 ##
 ## Plotting of...
 ##
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_NS-n40K-bs10K_25Jun2018.txt"
+
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_n20K-bs10K_02Aug2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_sensNS_n20K-bs10K_02Aug2018.txt"
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_sig18.csv"
 
 n_params <- 56
 plotdir <- '../figures/'
@@ -36,7 +40,35 @@ s1st <- read.csv(Sobol_file_1,
 
 parnames.sobol <- s1st[,1]
 
-####################################
+
+
+# Import second-order indices
+s2_table <- read.csv(Sobol_file_2,
+               sep=' ',
+               header=TRUE,
+               nrows = n_params*(n_params-1)/2,
+               as.is=c(TRUE,rep(FALSE,4)))
+
+# Convert second-order to upper-triangular matrix
+s2 <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+s2[1:(n_params-1), 2:n_params] = upper.diag(s2_table$S2)
+s2 <- as.data.frame(s2)
+colnames(s2) <- rownames(s2) <- parnames.sobol
+
+# Convert confidence intervals to upper-triangular matrix
+s2_conf_low <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+s2_conf_high <- matrix(nrow=n_params, ncol=n_params, byrow=FALSE)
+s2_conf_low[1:(n_params-1), 2:n_params] = upper.diag(s2_table$S2_conf_low)
+s2_conf_high[1:(n_params-1), 2:n_params] = upper.diag(s2_table$S2_conf_high)
+
+s2_conf_low <- as.data.frame(s2_conf_low)
+s2_conf_high <- as.data.frame(s2_conf_high)
+colnames(s2_conf_low) <- rownames(s2_conf_low) <- parnames.sobol
+colnames(s2_conf_high) <- rownames(s2_conf_high) <- parnames.sobol
+
+
+
+##==============================================================================
 # Determine which indices are statistically significant
 
 sig.cutoff <- 0.01
@@ -52,6 +84,114 @@ s1st1 <- stat_sig_s1st(s1st
 #                      ,method="gtr"
 #                      ,greater=0.01
 #                      ,sigCri='either')
+
+# S2: using the confidence intervals
+s2_sig1 <- stat_sig_s2(s2
+                       ,s2_conf_low
+                       ,s2_conf_high
+                       ,method='congtr'
+                       ,greater=sig.cutoff
+                       )
+
+# S2: using greater than a given value
+#s2_sig1 <- stat_sig_s2(s2
+#                       ,s2_conf
+#                       ,greater=0.02
+#                       ,method='gtr')
+
+##==============================================================================
+## Get sensitive parameter names
+source('GEOCARB-2014_parameterSetup.R')
+
+# yields parnames_calib, which are the sensitive parameters
+ind_sensit <- which(parnames.sobol %in% parnames_calib)
+ind_insens <- 1:n_params; ind_insens <- ind_insens[-ind_sensit]
+
+name_list1 <- list('Sensitive' = parnames.sobol[ind_sensit]
+               ,'Insensitive' = parnames.sobol[ind_insens]
+               )
+
+# add Parameter symbols to plot
+
+
+#
+# TODO -- THESE NEED TO BE REARRANGED SO THAT THE SENSTIVIE PARAMETERS ARE
+#         SHUFFLED DOWN TO THE FRONT, AND THE INSENSITIVE ONES TO THE BACK.
+#
+# NEEDS TO MATCH THE ORDER c(parnames.sobol[ind_sensit], parnames.sobol[ind_insens])
+#
+
+name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^('NV')),
+                  'LIFE', 'GYM', 'FERT', expression('e'^('fnBb')),
+                  'dT2X', 'GLAC', 'J', 'n', 'Ws', expression('e'^('fD')), expression('Fwpa'['0']),
+                  expression('Fwsa'['0']), expression('Fwga'['0']), expression('Fwca'['0']),
+                  expression('Fmg'['0']), expression('Fmc'['0']), expression('Fmp'['0']),
+                  expression('Fms'['0']), expression('Fwsi'['0']), expression('Xvolc'['0']),
+                  expression('FRd13C'['0']), expression('FRd34S'['0']), expression('oxy'['570']),
+                  expression('Gy'['570']), expression('Cy'['570']), expression('Ca'['570']),
+                  expression('Ssy'['570']), expression('Spy'['570']), expression('dlsy'['570']),
+                  expression('dlcy'['570']), expression('dlpy'['570']), expression('dlpa'['570']),
+                  expression('dlgy'['570']), expression('dlga'['570']), expression('Rcy'['570']),
+                  expression('Rca'['570']), expression('Rv'['570']), expression('Rg'['570']),
+                  'Fob', 'COC', 'Ga', 'Ssa', 'Spa', 'ST', 'dlst', 'CT', 'dlct',
+                  'kwpy', 'kwsy', 'kwgy', 'kwcy'
+)
+
+new_name_symbols <- c(name_symbols[ind_sensit], name_symbols[ind_insens])
+
+# defining list of colors for each group
+col_list1 <- list("Sensitive"     = rgb(mycol[11,1],mycol[11,2],mycol[11,3])
+                  ,"Insensitive" = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
+                  )
+
+# using function to assign variables and colors based on group
+s1st1 <- gp_name_col(name_list1
+                     ,col_list1
+                     ,s1st1)
+
+s1st1$symbols <- new_name_symbols
+
+
+# Things to change order of to group by sensitivity:
+# 1) s1st1
+# 2) s2
+# 3) s2_sig1
+# 4)
+
+s1st1_rearr <- rbind(s1st1[ind_sensit,], s1st1[ind_insens,])
+s1st1_rearr$symbols <- new_name_symbols # it was right already!
+s2_rearr <- rbind(s2[ind_sensit,],s2[ind_insens,]) # rearrange the rows...
+s2_rearr <- cbind(s2_rearr[,ind_sensit],s2_rearr[,ind_insens]) # ... and the columns
+s2_sig1_rearr <- rbind(s2_sig1[ind_sensit,], s2_sig1[ind_insens,])
+s2_sig1_rearr <- cbind(s2_sig1_rearr[,ind_sensit], s2_sig1_rearr[,ind_insens])
+
+##==============================================================================
+## Radial convergence plot (aka sobol spider diagram)
+##
+
+plot.filename <- paste(plotdir,'sobol_spider',sep='')
+
+plotRadCon(df=s1st1_rearr
+           ,s2=s2_rearr
+           ,plotS2=TRUE
+           ,radSc = 2
+           ,scaling=.3
+           ,widthSc = 0.5
+           ,s2_sig=s2_sig1_rearr
+           ,filename = plot.filename
+           ,plotType = 'EPS'
+           ,gpNameMult=1.7
+           ,varNameMult=1.34
+           ,RingThick=0.17
+           ,legLoc = "bottomcenter"
+           ,cex = .75
+           ,s1_col = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
+           ,st_col = rgb(mycol[6,1],mycol[6,2],mycol[6,3])
+           ,line_col = rgb(mycol[10,1],mycol[10,2],mycol[10,3])
+           ,STthick = 0.5
+           ,legFirLabs=c(.05,.77), legTotLabs=c(.05,.83), legSecLabs=c(.02,.07)
+)
+
 
 ##==============================================================================
 ## Barplots
@@ -88,66 +228,7 @@ legend(1, 0.7, c('Total sensitivity', 'First-order'), pch=c(16,16), cex=.8, bty=
 dev.off()
 
 
-
 ##==============================================================================
-## Setting up for radial plots
-##
-
-# Define groups for the variables and the color schemes
-# Defining lists of the variables for each group
-
-name_list1 <- list('All' = parnames.sobol)
-
-# add Parameter symbols to plot
-name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^('NV')),
-                  'LIFE', 'GYM', 'FERT', expression('e'^('fnBb')),
-                  'dT2X', 'GLAC', 'J', 'n', 'Ws', expression('e'^('fD')), expression('Fwpa'['0']),
-                  expression('Fwsa'['0']), expression('Fwga'['0']), expression('Fwca'['0']),
-                  expression('Fmg'['0']), expression('Fmc'['0']), expression('Fmp'['0']),
-                  expression('Fms'['0']), expression('Fwsi'['0']), expression('Xvolc'['0']),
-                  expression('CAPd13C'['0']), expression('CAPd34S'['0']), expression('oxy'['570']),
-                  expression('Gy'['570']), expression('Cy'['570']), expression('Ca'['570']),
-                  expression('Ssy'['570']), expression('Spy'['570']), expression('dlsy'['570']),
-                  expression('dlcy'['570']), expression('dlpy'['570']), expression('dlpa'['570']),
-                  expression('dlgy'['570']), expression('dlga'['570']), expression('Rcy'['570']),
-                  expression('Rca'['570']), expression('Rv'['570']), expression('Rg'['570']),
-                  'Fob', 'COC', 'Ga', 'Ssa', 'Spa', 'ST', 'dlst', 'CT', 'dlct',
-                  'kwpy', 'kwsy', 'kwgy', 'kwcy'
-)
-
-
-# defining list of colors for each group
-col_list1 <- list("All"     = rgb(mycol[11,1],mycol[11,2],mycol[11,3]))
-
-# using function to assign variables and colors based on group
-s1st1 <- gp_name_col(name_list1
-                     ,col_list1
-                     ,s1st1)
-
-s1st1$symbols <- name_symbols
-
-
-plot.filename <- paste(plotdir,'sobol_spider',sep='')
-
-plotRadCon(df=s1st1
-           ,s2=s2
-           ,plotS2=FALSE
-           ,scaling = .36
-           ,s2_sig=s2_sig1
-           ,filename = plot.filename
-           ,plotType = 'EPS'
-           ,gpNameMult=15
-           ,RingThick=0.1
-           ,legLoc = "bottomcenter"
-           ,cex = .6
-           ,s1_col = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
-           ,st_col = rgb(mycol[6,1],mycol[6,2],mycol[6,3])
-           ,line_col = rgb(mycol[10,1],mycol[10,2],mycol[10,3])
-           ,STthick = 0.5
-           ,legFirLabs=c(.05,.77), legTotLabs=c(.05,.83), legSecLabs=c(.02,.05)
-)
-
-##
 ## Further analysis for the text:
 ##
 

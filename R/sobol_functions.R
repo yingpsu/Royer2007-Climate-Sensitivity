@@ -230,7 +230,8 @@ plotRadCon <- function(df                   # dataframe with S1 and ST indices
   num_plot <- n_params#sum(df$sig)
 
   # polar cooridantes angular-values of locations
-  angles <- radSc*pi*seq(0,num_plot-1)/num_plot
+  #angles <- radSc*pi*seq(0,num_plot-1)/num_plot
+  angles <- 2*pi*seq(0,num_plot-1)/num_plot
 
   # assigning coordinates to varaibles based on groups
   df$rad <- radSc
@@ -400,7 +401,7 @@ df$ang <- angles
   ## adding text to the plots
   # adding variable names
   for(i in 1:nrow(df)){
-    if((df$ang[i]*360/(2*pi)) >= 0 & (df$ang[i]*360/(2*pi)) <= 180){
+    if(((df$ang[i]*360/(2*pi)) <= 90) | ((df$ang[i]*360/(2*pi)) >= 270)){
       if(is.na(df$ang[i]) == FALSE){
         text(varNameMult*df$rad[i]*cos(df$ang[i]), varNameMult*df$rad[i]*sin(df$ang[i]) + shift
              , df$symbols[i]#df$Symbol
@@ -408,7 +409,7 @@ df$ang <- angles
              , col = df$gp_col[i]
              , adj = 0.5#0
              , font = 1
-              #srt = df$ang[i]*360/(2*pi) #- 90 #0
+             , srt = df$ang[i]*360/(2*pi) #- 90 #0
         )
       }
     } else {
@@ -419,7 +420,7 @@ df$ang <- angles
              , cex = cex
              , adj = 0.5#0
              , font = 1
-              #srt = df$ang[i]*360/(2*pi) #+ 90 #0
+             , srt = df$ang[i]*360/(2*pi) + 180 #0
         )
       }
     }
@@ -437,19 +438,19 @@ df$ang <- angles
       text(gpNameMult*radSc*cos(angle_gp), gpNameMult*radSc*sin(angle_gp) + shift
            , sig_gps[i]
            , col = df$gp_col[which(df$gp_name %in% sig_gps[i])]#[i]]
-           , cex = cex
-           , srt =  angle_gp*360/(2*pi) - 90
-           , adj = 0.5 # for centering
-           , font = 1
+           , cex = 1.1*cex
+           #, srt =  angle_gp*360/(2*pi) - 90
+           , adj = -0.45 # for centering
+           , font = 2
       )
     } else {
       text(gpNameMult*radSc*cos(angle_gp), gpNameMult*radSc*sin(angle_gp) + shift
            , sig_gps[i]
            , col = df$gp_col[which(df$gp_name %in% sig_gps[i])]#[i]]
-           , cex = cex
-           , srt =  angle_gp*360/(2*pi) + 90
-           , adj = 0.5 # for centering
-           , font = 1
+           , cex = 1.1*cex
+           #, srt =  angle_gp*360/(2*pi) + 90
+           , adj = 1 # for centering
+           , font = 2
       )
     }
   }

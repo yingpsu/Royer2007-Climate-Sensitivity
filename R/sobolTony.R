@@ -195,7 +195,9 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
             ind_CI <- sample(1:length(m_BA), size=length(m_BA), replace=TRUE)
             Vik_CI <- mean(mA_i[ind_CI]*m_BA[ind_CI]) - mean(mA_i[ind_CI])^2
             V0_CI <- mean(mA_i[ind_CI]^2) - mean(mA_i[ind_CI])^2
-            S2_CI[j] <- Vik_CI/V0_CI
+            # we are not sampling for Si or Sk above so only consider the
+            # variation in Vik for the bootstrapping
+            S2_CI[j] <- Vik_CI/V0_CI - S[i] - S[k]
           }
           CI_S2[cnt,] <- quantile(x=S2_CI, probs=c(0.01*conf_lo, 0.01*conf_hi))
         }
