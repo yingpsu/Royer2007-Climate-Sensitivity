@@ -300,7 +300,7 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 
 # save
 if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2'.RData', sep=''))
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2,'.RData', sep=''))
 }
 
 ## Extend an MCMC chain?
@@ -327,17 +327,6 @@ chain1 = amcmc_extend1$samples
 ## Convergence diagnostics
 ##========================
 
-# visual inspection
-
-#TONY TODO
-#TONY TODO
-# for now only look at climate sensitivity
-#ind_cs <- match('deltaT2X',parnames_calib)
-#plot(chain1[,ind_cs], type='l')
-#par(mfrow=c(7,8))
-#for (p in 1:length(parnames_calib)) {plot(chain1[,p], type='l', ylab=parnames_calib[p])}
-
-
 # DON'T DO ANYTHING ELSE - GET SOME CHAINS AND THEN INTERACTIVELY DEBUG THE CONVERGENCE DIAGNOSTICS
 if(FALSE) {
 
@@ -346,7 +335,7 @@ if(FALSE) {
 
 ## Gelman and Rubin diagnostics - determine and chop off for burn-in
 niter.test <- seq(from=round(0.1*niter_mcmc), to=niter_mcmc, by=round(0.05*niter_mcmc))
-gr.test <- rep(0, length(niter.test))
+gr.test <- array(0, c(length(niter.test), .n_shard))
 
 if(.n_chain == 1) {
   # don't do GR stats, just cut off first half of chains
@@ -354,31 +343,47 @@ if(.n_chain == 1) {
 } else if(.n_chain > 1) {
   # this case is FAR more fun
   # accumulate the names of the soon-to-be mcmc objects
-  string.mcmc.list <- 'mcmc1'
-  for (m in 2:.n_chain) {
-    string.mcmc.list <- paste(string.mcmc.list, ', mcmc', m, sep='')
-  }
-  for (i in 1:length(niter.test)) {
-    for (m in 1:.n_chain) {
-      # convert each of the chains into mcmc object
-      eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc.par1[[m]]$samples[1:niter.test[i],])', sep='')))
+  for (s in 1:.n_shard) {
+    string.mcmc.list <- 'mcmc1'
+    for (m in 2:.n_chain) {
+      string.mcmc.list <- paste(string.mcmc.list, ', mcmc', m, sep='')
     }
-    eval(parse(text=paste('mcmc_chain_list = mcmc.list(list(', string.mcmc.list , '))', sep='')))
+    for (i in 1:length(niter.test)) {
+      for (m in 1:.n_chain) {
+        # convert each of the chains into mcmc object
+        eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc_out[[m]][[s]]$samples[1:niter.test[i],])', sep='')))
+      }
+      eval(parse(text=paste('mcmc_chain_list = mcmc.list(list(', string.mcmc.list , '))', sep='')))
 
-    gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list)[2])
+      gr.test[i,s] <- as.numeric(gelman.diag(mcmc_chain_list)[2])
+    }
   }
 } else {print('error - .n_chain < 1 makes no sense')}
 
-#plot(niter.test, gr.test)
-
-# Heidelberger and Welch
-# visual inspection
-
-# which parameters is climate sensitivity?
-if(FALSE) {
-ics <- which(parnames_calib=='deltaT2X')
-plot(chain1[,ics], type='l')
+# Burn-in/Warm-up
+# save a separate ifirst for each experiment
+ifirst <- rep(NA, .n_shard)
+for (s in 1:.n_shard) {
+  if(.n_chain==1) {
+    ifirst[s] <- round(0.5*niter_mcmc)
+  } else {
+    gr.max <- 1.1
+    lgr <- rep(NA, length(niter.test))
+    for (i in 1:length(niter.test)) {lgr[i] <- all(gr.test[i:length(niter.test),s] < gr.max)}
+    for (i in seq(from=length(niter.test), to=1, by=-1)) {
+      if( all(lgr[i:length(lgr)]) ) {ifirst[s] <- niter.test[i]}
+    }
+  }
 }
+
+chains_burned <- vector('list', .n_chain)
+for (m in 1:.n_chain) {
+  chains_burned[[m]] <- vector('list', .n_shard)
+  for (s in 1:.n_shard) {
+    chains_burned[[m]][[s]] <- amcmc_out[[m]][[s]]$samples[(ifirst[s]+1):niter_mcmc,]
+  }
+}
+
 
 #parameters.posterior <- chain1
 #covjump <- amcmc_out1$cov.jump
@@ -399,7 +404,7 @@ lmax=0
 for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
 
 ## Name the file
-filename.parameters = paste('geocarb_calibratedParameters_',appen,'_',today,'.nc',sep="")
+filename.parameters = paste('geocarb_calibratedParameters_',appen,'_',today,appen2,'.nc',sep="")
 
 dim.parameters <- ncdim_def('n.parameters', '', 1:ncol(parameters.posterior), unlim=FALSE)
 dim.name <- ncdim_def('name.len', '', 1:lmax, unlim=FALSE)
