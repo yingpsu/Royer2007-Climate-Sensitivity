@@ -4,5 +4,8 @@
 #PBS -j oe
 #PBS -m abe
 #PBS -M twong@psu.edu
+
 ###R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_sig.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_sig18+GLAC+LIFE.log
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/mwg_driver.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_mwg_test.log
+###R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/mwg_driver.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_mwg_test.log
+###R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_sig_subsample.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_con_test.log
+R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_sig_subsample_datatypes.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_con_datatypes.log
