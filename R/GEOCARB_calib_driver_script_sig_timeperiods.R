@@ -14,17 +14,23 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-.niter_mcmc <- 1e6   # number of MCMC iterations per node (Markov chain length)
+.niter_mcmc <- 2e6   # number of MCMC iterations per node (Markov chain length)
 .n_node <- 15         # number of CPUs to use
-.n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
+.n_chain <- 2          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
-.n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
+.n_shard <- 10      # number of data subsamples to use and recombine with consensus MC
 gamma_mcmc <- 0.66
+
+# if both are FALSE, then shards are randomly sampled
+# if both are TRUE, then we break by data type first, then by time, assuming 
+# that .n_shard is a multiple of 5 (b/c 5 data types)
+break_time <- TRUE  # break shards across time
+break_type <- FALSE # break shards across proxy data types
 
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
-appen2 <- 'h'
+appen2 <- 'tp'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
@@ -91,13 +97,21 @@ n_data_subsample <- floor(n_data_total/.n_shard)
 # store all of the data_calib subsamples - put all remaining in the last one
 data_calib_subsamples <- vector('list', .n_shard)
 if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
-  ind_remaining <- 1:n_data_total
-  for (s in 1:(.n_shard-1)) {
-    ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
+#  ind_remaining <- 1:n_data_total
+#  for (s in 1:(.n_shard-1)) {
+#    ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
+#    data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
+#    ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
+#  }
+#  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
+  age_sorted <- sort(data_calib$age)
+  d_age <- ceiling(length(age_sorted)/.n_shard)
+  breaks <- age_sorted[d_age*seq(1,(.n_shard-1))]
+  breaks <- c(0, breaks, 1e4)
+  for (s in 1:.n_shard) {
+    ind_subsample <- which((data_calib$age >= breaks[s]) & (data_calib$age < breaks[s+1]))
     data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
-    ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
   }
-  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
 }
 
 ##==============================================================================
