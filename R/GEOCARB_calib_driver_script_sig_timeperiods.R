@@ -22,7 +22,7 @@ setwd('~/codes/GEOCARB/R')
 gamma_mcmc <- 0.66
 
 # if both are FALSE, then shards are randomly sampled
-# if both are TRUE, then we break by data type first, then by time, assuming 
+# if both are TRUE, then we break by data type first, then by time, assuming
 # that .n_shard is a multiple of 5 (b/c 5 data types)
 break_time <- TRUE  # break shards across time
 break_type <- FALSE # break shards across proxy data types
@@ -94,8 +94,13 @@ if(co2_uncertainty_cutoff > 0) {
 n_data_total <- nrow(data_calib)
 n_data_subsample <- floor(n_data_total/.n_shard)
 
+# TODO -- code with the logical gates from above
+
 # store all of the data_calib subsamples - put all remaining in the last one
 data_calib_subsamples <- vector('list', .n_shard)
+proxy_types <- as.character(unique(data_calib$proxy_type))
+n_proxy <- length(proxy_types)
+n_shard_per_proxy <- .n_shard/n_proxy
 if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
 #  ind_remaining <- 1:n_data_total
 #  for (s in 1:(.n_shard-1)) {
@@ -104,15 +109,18 @@ if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
 #    ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
 #  }
 #  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
-  age_sorted <- sort(data_calib$age)
-  d_age <- ceiling(length(age_sorted)/.n_shard)
-  breaks <- age_sorted[d_age*seq(1,(.n_shard-1))]
-  breaks <- c(0, breaks, 1e4)
-  for (s in 1:.n_shard) {
-    ind_subsample <- which((data_calib$age >= breaks[s]) & (data_calib$age < breaks[s+1]))
-    data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
+  for (dtype in 1:n_proxy) {
+    age_sorted <- sort(data_calib$age[which(data_calib$proxy_type==proxy_types[dtype])])
+    d_age <- ceiling(length(age_sorted)/.n_shard)
+    breaks <- age_sorted[d_age*seq(1,(n_shard_per_proxy-1))]
+    breaks <- c(0, breaks, 1e4)
+    for (sp in 1:n_shard_per_proxy) {
+      s <- n_shard_per_proxy*(dtype-1) + sp
+      data_calib_subsamples[[s]] <- data_calib[which(data_calib$proxy_type==proxy_types[dtype]),]
+    }
   }
 }
+
 
 ##==============================================================================
 
