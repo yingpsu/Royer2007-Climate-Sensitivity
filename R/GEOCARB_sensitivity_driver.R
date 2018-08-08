@@ -1,5 +1,5 @@
 ##==============================================================================
-## precal_sens_sobolOnly.R
+## GEOCARB_sensitivity_driver.R
 ##
 ## Precalibration and
 ## sensitivity experiment with GEOCARB model (Foster et al 2017 version)
@@ -33,14 +33,16 @@ if(Sys.info()['user']=='tony') {
   machine <- 'local'
   setwd('/Users/tony/codes/GEOCARB/R')
   .Ncore <- 2
-  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
+  filename_in <- NULL
+  #filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
   #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
-  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
+  filename_in <- NULL
+  #filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
 }
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
@@ -170,19 +172,52 @@ library(doParallel)
 
 ##==============================================================================
 
-## Read KDE results file, separate into parameters and the bandwidths
-## (Moved to beginning becase this depends on remote vs local, whehter small testing
-##  or ready to go large parameter sets)
-#filename_in <- filename_out
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
-#alpha <- 0; filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL2_24Mar2018.csv'
-#alpha <- 0.10; filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
-#alpha <- 0.34; filename_in <- '../output/geocarb_precalibration_parameters_alpha34_sensL2_24Mar2018.csv'
-parameters_node <- read.csv(filename_in)
-n_node <- nrow(parameters_node)-1
-bandwidths <- parameters_node[n_node+1,]
-parameters_node <- parameters_node[-(n_node+1),]
+## Read precalibration results file, separate into parameters and the bandwidths
+## (Moved to beginning because this depends on remote vs local, whether small
+## testing or ready to go large parameter sets, and whether sampling from
+## precalibration CSV results or sampling directly from the priors.)
+if (is.null(filename_in)) {
+  # set up LHS sample
+  parameters_lhs <- randomLHS(2*n_sample, length(parnames_calib))
+  # initialize
+  parameters_node <- parameters_lhs
+  # resample for the actual parameter distirbutions
+  for (i in 1:length(parnames_calib)) {
+    # instead, draw from the priors
+    row_num <- match(parnames_calib[i],input$parameter)
+    if(input[row_num, 'distribution_type']=='gaussian') {
+      parameters_node[,i] <- qnorm(p=parameters_lhs[,i], mean=input[row_num,'mean'], sd=(0.5*input[row_num,"two_sigma"]))
+      # check if out of bounds
+      irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
+      while (length(irem) > 0) {
+        parameters_node[irem,i] <- rnorm(mean=input[row_num,'mean'], sd=(0.5*input[row_num,"two_sigma"]), n=length(irem))
+        irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
+      }
+    } else if(input[row_num, 'distribution_type']=='lognormal') {
+      parameters_node[,i] <- qlnorm(p=parameters_lhs[,i], meanlog=log(input[row_num,'mean']), sdlog=log(0.5*input[row_num,"two_sigma"]))
+      # check if out of bounds
+      irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
+      while (length(irem) > 0) {
+        parameters_node[irem,i] <- rlnorm(meanlog=log(input[row_num,'mean']), sdlog=log(0.5*input[row_num,"two_sigma"]), n=length(irem))
+        irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
+      }
+    } else {print('ERROR - unknown distribution type')}
+  }
+} else {
+  parameters_node <- read.csv(filename_in)
+  n_node <- nrow(parameters_node)-1
+  bandwidths <- parameters_node[n_node+1,]
+  parameters_node <- parameters_node[-(n_node+1),]
+}
+
+## Sample parameters (need 2 data frames of size n_sample each)
+indAvailable <- 1:nrow(parameters_node)
+indA <- sample(indAvailable, size=n_sample, replace=FALSE)
+indAvailable <- indAvailable[-indA]
+indB <- sample(indAvailable, size=n_sample, replace=FALSE)
+parameters_sampleA <- parameters_node[indA,]
+parameters_sampleB <- parameters_node[indB,]
+colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 
 ##==============================================================================
 
@@ -212,15 +247,6 @@ export_names <- c('model_forMCMC', 'run_geocarbF',
 n_boot <- .Nboot
 conf <- .confidence
 Ncore <- .Ncore
-
-## Sample parameters (need 2 data frames) by taking directly from the precalibration?
-n_half <- floor(0.5*nrow(parameters_node))
-
-## If n_sample is given, then use parameter samples of that size
-if (n_sample > 0) {n_half <- n_sample}
-parameters_sampleA <- parameters_node[1:n_half,]
-parameters_sampleB <- parameters_node[(n_half+1):(2*n_half),]
-colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 
 ## Actually run the Sobol'
 
