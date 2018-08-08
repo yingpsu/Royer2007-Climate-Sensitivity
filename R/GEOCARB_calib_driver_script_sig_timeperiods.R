@@ -18,7 +18,7 @@ setwd('~/codes/GEOCARB/R')
 .n_node <- 15         # number of CPUs to use
 .n_chain <- 2          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
-.n_shard <- 10      # number of data subsamples to use and recombine with consensus MC
+.n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 gamma_mcmc <- 0.66
 
 # if both are FALSE, then shards are randomly sampled
@@ -30,7 +30,7 @@ break_type <- FALSE # break shards across proxy data types
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
-appen2 <- 'tp'
+appen2 <- 'dttp'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
