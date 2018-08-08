@@ -110,13 +110,15 @@ if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
 #  }
 #  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
   for (dtype in 1:n_proxy) {
-    age_sorted <- sort(data_calib$age[which(data_calib$proxy_type==proxy_types[dtype])])
-    d_age <- ceiling(length(age_sorted)/.n_shard)
+    just_these_data <- data_calib[which(data_calib$proxy_type==proxy_types[dtype]),]
+    age_sorted <- sort(just_these_data$age)
+    d_age <- floor(length(age_sorted)/n_shard_per_proxy)
     breaks <- age_sorted[d_age*seq(1,(n_shard_per_proxy-1))]
     breaks <- c(0, breaks, 1e4)
     for (sp in 1:n_shard_per_proxy) {
       s <- n_shard_per_proxy*(dtype-1) + sp
-      data_calib_subsamples[[s]] <- data_calib[which(data_calib$proxy_type==proxy_types[dtype]),]
+      ind_subsample <- which((just_these_data$age >= breaks[sp]) & (just_these_data$age < breaks[sp+1]))
+      data_calib_subsamples[[s]] <- just_these_data[ind_subsample,]
     }
   }
 }
