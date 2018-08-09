@@ -136,7 +136,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
         V0_CI <- mean(mA_i[ind_CI]^2) - mean(mA_i[ind_CI])^2
         S_CI[j] <- Vi_CI/V0_CI
       }
-      CI_S[i,] <- quantile(x=S_CI, probs=c(0.01*conf_lo, 0.01*conf_hi))
+      CI_S[i,] <- quantile(x=S_CI, probs=c(0.01*conf_lo, 0.01*conf_hi), na.rm=TRUE)
     }
 
     setTxtProgressBar(pb, i)
@@ -199,7 +199,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
             # variation in Vik for the bootstrapping
             S2_CI[j] <- Vik_CI/V0_CI - S[i] - S[k]
           }
-          CI_S2[cnt,] <- quantile(x=S2_CI, probs=c(0.01*conf_lo, 0.01*conf_hi))
+          CI_S2[cnt,] <- quantile(x=S2_CI, probs=c(0.01*conf_lo, 0.01*conf_hi), na.rm=TRUE)
         }
 
         setTxtProgressBar(pb, cnt)
@@ -259,7 +259,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
         V0_CI <- mean(mA_i[ind_CI]^2) - mean(mA_i[ind_CI])^2
         T_CI[j] <- 1 - V_i_CI/V0_CI
       }
-      CI_T[i,] <- quantile(x=T_CI, probs=c(0.01*conf_lo, 0.01*conf_hi))
+      CI_T[i,] <- quantile(x=T_CI, probs=c(0.01*conf_lo, 0.01*conf_hi), na.rm=TRUE)
     }
 
     setTxtProgressBar(pb, i)

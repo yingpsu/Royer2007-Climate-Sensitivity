@@ -13,9 +13,12 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_sample <- 30000
-appen <- 'n30K-bs10K'
-.Nboot <- 10000
+#n_sample <- 30000
+#appen <- 'n30K-bs10K'
+#.Nboot <- 10000
+n_sample <- 50
+appen <- 'TEST'
+.Nboot <- 100
 .confidence <- 0.9 # for bootstrap CI
 .second <- TRUE
 l_parallel <- FALSE
@@ -24,7 +27,7 @@ co2_uncertainty_cutoff <- 20
 
 # latin hypercube precalibration
 alpha <- 0
-sens='NS'
+sens='L1' # valid values:  L1, L2, NS, pres
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
 
@@ -33,16 +36,16 @@ if(Sys.info()['user']=='tony') {
   machine <- 'local'
   setwd('/Users/tony/codes/GEOCARB/R')
   .Ncore <- 2
-  filename_in <- NULL
-  #filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_30Mar2018.csv'
-  #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_sensL2_25Mar2018.csv'
+  #filename_in <- NULL # NULL means no precalibration
+  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_30Mar2018.csv'
+  #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_25Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
-  filename_in <- NULL
-  #filename_in <- '../output/geocarb_precalibration_parameters_alpha0_sensL1_01Apr2018.csv'
+  #filename_in <- NULL
+  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_01Apr2018.csv'
 }
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
@@ -56,9 +59,9 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 ## Data
 ##=====
 
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2-filtered_09Aug2018.csv'
 source('GEOCARB-2014_getData.R')
 
 # possible filtering out of some data points with too-narrow uncertainties in
@@ -81,7 +84,9 @@ if(co2_uncertainty_cutoff > 0) {
       ind_remove <- c(ind_remove, ii)
     }
   }
-  if(length(ind_remove) > 0) {data_calib <- data_calib[-ind_remove,]}
+  ## If both commented out, not doing anything
+  ##if(length(ind_remove) > 0) {data_calib <- data_calib[-ind_remove,]}
+  ##if(length(ind_filter) > 0) {data_calib <- data_calib[-ind_filter,]}
 }
 
 # assumption of steady state in-between model time steps permits figuring out
@@ -259,7 +264,7 @@ if (!l_parallel) {
                      ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                      ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                      input=input, ind_expected_time=ind_expected_time,
-                     ind_expected_const=ind_expected_const,
+                     ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
                      n_boot=n_boot, conf=conf, second=.second))
 } else {
@@ -268,7 +273,8 @@ if (!l_parallel) {
                      parnames_fixed=parnames_fixed, age=age, ageN=ageN,
                      ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                      ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                     input=input, ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                     input=input, ind_expected_time=ind_expected_time, 
+                     ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
                      parallel=TRUE, n_core=Ncore, export_names=export_names,
                      n_boot=n_boot, conf=conf, second=.second))
@@ -277,7 +283,7 @@ if (!l_parallel) {
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-filename.sobol <- paste('../output/sobol_alpha',100*alpha,'_',appen,'_',today,'.rds', sep='')
+filename.sobol <- paste('../output/sobol_alpha',100*alpha,'_sens',sens,'_',appen,'_',today,'.rds', sep='')
 saveRDS(s.out, filename.sobol)
 
 ## Check convergence - is maximum confidence interval width < 10% of the highest
