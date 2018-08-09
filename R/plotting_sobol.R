@@ -10,9 +10,14 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_n30K-bs10K_03Aug2018.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_sensNS_n30K-bs10K_03Aug2018.txt"
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_sig18.csv"
+
+# with precalibration:
+#Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_n30K-bs10K_03Aug2018.txt"
+#Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_sensNS_n30K-bs10K_03Aug2018.txt"
+# without precalibration (draw from priors):
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_n30K-bs10K_08Aug2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_sensNS_n30K-bs10K_08Aug2018.txt"
 
 n_params <- 56
 plotdir <- '../figures/'
