@@ -14,9 +14,9 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-.niter_mcmc <- 2e6   # number of MCMC iterations per node (Markov chain length)
-.n_node <- 15         # number of CPUs to use
-.n_chain <- 2          # number of parallel MCMC chains, per shard (subsample)
+.niter_mcmc <- 2e4   # number of MCMC iterations per node (Markov chain length)
+.n_node <- 1         # number of CPUs to use
+.n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 gamma_mcmc <- 0.66
@@ -24,13 +24,13 @@ gamma_mcmc <- 0.66
 # if both are FALSE, then shards are randomly sampled
 # if both are TRUE, then we break by data type first, then by time, assuming
 # that .n_shard is a multiple of 5 (b/c 5 data types)
-break_time <- TRUE  # break shards across time
-break_type <- FALSE # break shards across proxy data types
+break_time <- FALSE  # break shards across time
+break_type <- FALSE  # break shards across proxy data types
 
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
-appen2 <- 'dttp'
+appen2 <- 'even'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
@@ -44,7 +44,8 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2-filtered_09Aug2018.csv'
 
 DO_INIT_UPDATE <- TRUE
 DO_WRITE_RDATA  <- TRUE
@@ -98,31 +99,46 @@ n_data_subsample <- floor(n_data_total/.n_shard)
 
 # store all of the data_calib subsamples - put all remaining in the last one
 data_calib_subsamples <- vector('list', .n_shard)
-proxy_types <- as.character(unique(data_calib$proxy_type))
-n_proxy <- length(proxy_types)
-n_shard_per_proxy <- .n_shard/n_proxy
-if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
-#  ind_remaining <- 1:n_data_total
-#  for (s in 1:(.n_shard-1)) {
-#    ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
-#    data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
-#    ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
-#  }
-#  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
-  for (dtype in 1:n_proxy) {
-    just_these_data <- data_calib[which(data_calib$proxy_type==proxy_types[dtype]),]
-    age_sorted <- sort(just_these_data$age)
-    d_age <- floor(length(age_sorted)/n_shard_per_proxy)
-    breaks <- age_sorted[d_age*seq(1,(n_shard_per_proxy-1))]
-    breaks <- c(0, breaks, 1e4)
-    for (sp in 1:n_shard_per_proxy) {
-      s <- n_shard_per_proxy*(dtype-1) + sp
-      ind_subsample <- which((just_these_data$age >= breaks[sp]) & (just_these_data$age < breaks[sp+1]))
-      data_calib_subsamples[[s]] <- just_these_data[ind_subsample,]
+
+if(!break_time & !break_type) {
+
+  # HERE!
+
+  # put the data points in order, and just start sorting them sequentially
+  # into shards
+  age_sort <- cbind(seq(1:length(data_calib$age)), data_calib$age)
+  age_sort <- age_sort[order(age_sort[,2]),]
+  for (ss in 1:.n_shard) {
+    ind_subsample <- age_sort[seq(ss,nrow(age_sort),.n_shard),1]
+    data_calib_subsamples[[ss]] <- data_calib[ind_subsample,]
+  }
+
+} else {
+  proxy_types <- as.character(unique(data_calib$proxy_type))
+  n_proxy <- length(proxy_types)
+  n_shard_per_proxy <- .n_shard/n_proxy
+  if(.n_shard==1) {data_calib_subsamples[[1]] <- data_calib} else {
+  #  ind_remaining <- 1:n_data_total
+  #  for (s in 1:(.n_shard-1)) {
+  #    ind_subsample <- sample(ind_remaining, size=n_data_subsample, replace=FALSE)
+  #    data_calib_subsamples[[s]] <- data_calib[ind_subsample,]
+  #    ind_remaining <- ind_remaining[-which(ind_remaining %in% ind_subsample)]
+  #  }
+  #  data_calib_subsamples[[.n_shard]] <- data_calib[ind_remaining,]
+    for (dtype in 1:n_proxy) {
+      just_these_data <- data_calib[which(data_calib$proxy_type==proxy_types[dtype]),]
+      age_sorted <- sort(just_these_data$age)
+      d_age <- floor(length(age_sorted)/n_shard_per_proxy)
+      breaks <- age_sorted[d_age*seq(1,(n_shard_per_proxy-1))]
+      breaks <- c(0, breaks, 1e4)
+      for (sp in 1:n_shard_per_proxy) {
+        s <- n_shard_per_proxy*(dtype-1) + sp
+        ind_subsample <- which((just_these_data$age >= breaks[sp]) & (just_these_data$age < breaks[sp+1]))
+        data_calib_subsamples[[s]] <- just_these_data[ind_subsample,]
+      }
     }
   }
 }
-
 
 ##==============================================================================
 
