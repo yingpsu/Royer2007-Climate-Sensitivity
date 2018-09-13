@@ -14,9 +14,9 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-.niter_mcmc <- 2e4   # number of MCMC iterations per node (Markov chain length)
-.n_node <- 1         # number of CPUs to use
-.n_chain <- 1          # number of parallel MCMC chains, per shard (subsample)
+.niter_mcmc <- 2e5   # number of MCMC iterations per node (Markov chain length)
+.n_node <- 15         # number of CPUs to use
+.n_chain <- 2          # number of parallel MCMC chains, per shard (subsample)
 #.n_data <- 50       # number of data points to use in each shard
 .n_shard <- 30      # number of data subsamples to use and recombine with consensus MC
 gamma_mcmc <- 0.66
@@ -26,11 +26,12 @@ gamma_mcmc <- 0.66
 # that .n_shard is a multiple of 5 (b/c 5 data types)
 break_time <- FALSE  # break shards across time
 break_type <- FALSE  # break shards across proxy data types
+break_ref  <- TRUE
 
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
-appen2 <- 'even'
+appen2 <- '_ref-beta'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
@@ -43,10 +44,10 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("liverworts", TRUE) )
 
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2-filtered_09Aug2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2-filtered_09Aug2018.csv'
 
 DO_INIT_UPDATE <- TRUE
 DO_WRITE_RDATA  <- TRUE
@@ -98,6 +99,8 @@ n_data_subsample <- floor(n_data_total/.n_shard)
 
 # TODO -- code with the logical gates from above
 
+if(break_ref) {.n_shard <- length(unique(data_calib$ref))}
+
 # store all of the data_calib subsamples - put all remaining in the last one
 data_calib_subsamples <- vector('list', .n_shard)
 
@@ -112,6 +115,14 @@ if(!break_time & !break_type) {
   for (ss in 1:.n_shard) {
     ind_subsample <- age_sort[seq(ss,nrow(age_sort),.n_shard),1]
     data_calib_subsamples[[ss]] <- data_calib[ind_subsample,]
+  }
+
+} else if(break_ref) {
+
+  refs <- sort(unique(data_calib$ref))
+  for (rr in 1:length(refs)) {
+    ind_subsample <- which(data_calib$ref==refs[rr])
+    data_calib_subsamples[[rr]] <- data_calib[ind_subsample,]
   }
 
 } else {
