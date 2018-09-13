@@ -119,10 +119,12 @@ if(!break_time & !break_type) {
 
 } else if(break_ref) {
 
+  n_data_per_shard <- rep(NA, .n_shard)
   refs <- sort(unique(data_calib$ref))
   for (rr in 1:length(refs)) {
     ind_subsample <- which(data_calib$ref==refs[rr])
     data_calib_subsamples[[rr]] <- data_calib[ind_subsample,]
+    n_data_per_shard[rr] <- length(ind_subsample)
   }
 
 } else {
