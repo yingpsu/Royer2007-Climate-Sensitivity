@@ -105,6 +105,9 @@ log_like <- function(
 
   llike <- 0
 
+  upper_bound_co2 <- 10000
+  lower_bound_co2 <- 0
+
   # run the model
   model_out <- model_forMCMC(par_calib=par_calib,
                              par_fixed=par_fixed,
@@ -121,7 +124,7 @@ log_like <- function(
                              iteration_threshold=iteration_threshold)[,'co2']
 
   # use the same checks as the precalibration to get rid of unphysical simulations
-  if(any(is.infinite(model_out)) | any(model_out < 0) | any(model_out > 1e4)) {
+  if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else {
     # compare against data
@@ -131,6 +134,9 @@ log_like <- function(
     llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
                          xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
                          alpha=data_calib$alpha_co2[i], log=TRUE)) )
+#    llike <- sum( sapply(1:length(model_stdy), function(i) dbeta(x=(model_stdy[i]-lower_bound_co2)/(upper_bound_co2-lower_bound_co2),
+#                         shape1=data_calib$shape1_co2[i], shape2=data_calib$shape2_co2[i],
+#                         log=TRUE)) )
 #    llike <- sum( sapply(1:length(model_stdy), function(i) dgamma(x=model_stdy[i],
 #                         shape=data_calib$shape_co2[i], scale=data_calib$scale_co2[i],
 #                         log=TRUE)) )

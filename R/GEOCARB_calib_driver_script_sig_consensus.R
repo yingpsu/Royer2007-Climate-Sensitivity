@@ -43,6 +43,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("liverworts", TRUE) )
 
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
+#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
 #filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
 filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2-filtered_09Aug2018.csv'

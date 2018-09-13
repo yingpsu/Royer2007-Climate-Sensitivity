@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB-2014_processData_gamma.R
+## GEOCARB-2014_processData_beta.R
 ##
 ## Read CO2 proxy data, with age/amount uncertainties.
 ##
@@ -37,7 +37,7 @@ dat$co2_low[ind_toolow] <- (dat$co2[ind_toolow]^2)/dat$co2_high[ind_toolow]
 ind_remove <- which(dat$co2 <= 100)
 dat <- dat[-ind_remove,]
 
-# want to determine the two gamma parameters (shape, scale; mean=shape*scale)
+# want to determine the two beta parameters (shape, scale; mean=shape*scale)
 # that give the median and 68% probability mass between upper/lower erorr bounds
 # (dat$co2_low and dat$co2_high, with dat$co2 as the mean)
 
@@ -47,9 +47,11 @@ dat <- dat[-ind_remove,]
 # quantiles
 # parameters[1]=shape
 # parameters[2]=scale
+upper_bound_co2 <- 10000
+lower_bound_co2 <- 0
 sse_quantiles <- function(parameters, q16, q84) {
-    q16.fit <- qgamma(0.16, shape=parameters[1], scale=parameters[2])
-    q84.fit <- qgamma(0.84, shape=parameters[1], scale=parameters[2])
+    q16.fit <- lower_bound_co2+(upper_bound_co2-lower_bound_co2)*qbeta(0.16, shape1=parameters[1], shape2=parameters[2])
+    q84.fit <- lower_bound_co2+(upper_bound_co2-lower_bound_co2)*qbeta(0.84, shape1=parameters[1], shape2=parameters[2])
     sse <- sqrt((q16.fit-q16)^2 + (q84.fit-q84)^2)
     return(sse)
 }
@@ -67,7 +69,7 @@ F.deoptim=0.8             # as suggested by Storn et al (2006)
 CR.deoptim=0.9            # as suggested by Storn et al (2006)
 
 parameters.co2 <- vector('list',2)
-names(parameters.co2) <- c('shape','scale')
+names(parameters.co2) <- c('shape1','shape2')
 for (p in 1:2) {parameters.co2[[p]] <- rep(NA,length(dat$co2))}
 error.co2 <- rep(NA,length(dat$co2))
 t1 <- proc.time()
@@ -77,8 +79,8 @@ for (i in 1:length(dat$co2)){
                       DEoptim.control(NP=NP.deoptim,itermax=niter.deoptim,F=F.deoptim,
                       CR=CR.deoptim,trace=FALSE),
                       q16=dat$co2_low[i], q84=dat$co2_high[i])
-  parameters.co2$shape[i] <- outDEoptim$optim$bestmem[1]
-  parameters.co2$scale[i] <- outDEoptim$optim$bestmem[2]
+  parameters.co2$shape1[i] <- outDEoptim$optim$bestmem[1]
+  parameters.co2$shape2[i] <- outDEoptim$optim$bestmem[2]
   error.co2[i] <- sse_quantiles(outDEoptim$optim$bestmem, dat$co2_low[i], dat$co2_high[i])
   setTxtProgressBar(pb, i)
 }
@@ -92,7 +94,7 @@ print(c(qgamma(p=0.16, shape=parameters.co2$shape[i], scale=parameters.co2$scale
 print(dat[i,c('co2_low','co2','co2_high')])
 
 # save workspace image
-save.image(file = "fit_co2_data_gamma.RData")
+save.image(file = "fit_co2_data_beta.RData")
 
 # write new CSV file, copy of Foster calib data set, but with the two
 # gamma parameters for each CO2 data point.
@@ -100,7 +102,7 @@ dat.co2 <- cbind(dat,parameters.co2$shape, parameters.co2$scale)
 colnames(dat.co2) <- c(colnames(dat),'shape_co2','scale_co2')
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_',today,'.csv',sep='')
+filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_',today,'.csv',sep='')
 write.csv(dat.co2, file=filename.out)
 
 ##==============================================================================
