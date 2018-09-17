@@ -104,7 +104,7 @@ if(break_ref) {.n_shard <- length(unique(data_calib$ref))}
 # store all of the data_calib subsamples - put all remaining in the last one
 data_calib_subsamples <- vector('list', .n_shard)
 
-if(!break_time & !break_type) {
+if(!break_time & !break_type & !break_ref) {
 
   # HERE!
 
