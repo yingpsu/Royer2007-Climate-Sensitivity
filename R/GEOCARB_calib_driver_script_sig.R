@@ -14,12 +14,18 @@ setwd('~/codes/GEOCARB/R')
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
-appen <- 'sig18'
-#appen <- 'all'
+#appen <- 'sig18'
+appen <- 'all'
 appen2 <- 'e'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
+
+# Distribution fit to each data point in the processing step
+#dist <- 'ga'
+#dist <- 'be'
+#dist <- 'ln'
+dist <- 'sn'
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -29,7 +35,6 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("liverworts", TRUE) )
 
 DO_INIT_UPDATE <- TRUE
-
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
 
@@ -39,56 +44,6 @@ filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep
 
 library(adaptMCMC)
 library(ncdf4)
-
-##==============================================================================
-## Data
-##=====
-
-# requires: data_to_assim (above) and filename.data (below)
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_06Jun2017.csv'
-source('GEOCARB-2014_getData.R')
-
-# possible filtering out of some data points with too-narrow uncertainties in
-# co2 (causing overconfidence in model simulations that match those data points
-# well)
-# set to +65%, - 30% uncertain range around the central estimate
-if(co2_uncertainty_cutoff > 0) {
-  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
-  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
-  ind_remove <- NULL
-  for (ii in ind_filter) {
-    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
-    range_updated  <- data_calib[ii,'co2']*0.95
-    if (range_updated > range_original) {
-      # update to the wider uncertain range if +65/-30% is wider
-      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
-      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
-    } else {
-      # otherwise, remove
-      ind_remove <- c(ind_remove, ii)
-    }
-  }
-  data_calib <- data_calib[-ind_filter,]    # removing all of the possibly troublesome points
-  ##data_calib <- data_calib[-ind_remove,]    # remove only those the revised range does not help
-}
-
-# assumption of steady state in-between model time steps permits figuring out
-# which model time steps each data point should be compared against in advance.
-# doing this each calibration iteration would be outrageous!
-# This assumes the model time step is 10 million years, seq(570,0,by=-10). The
-# model will choke later (in calibration) if this is not consistent with what is
-# set within the actual GEOCARB physical model.
-age_tmp <- seq(570,0,by=-10)
-ttmp <- 10*ceiling(data_calib$age/10)
-ind_mod2obs <- rep(NA,nrow(data_calib))
-for (i in 1:length(ind_mod2obs)){
-  ind_mod2obs[i] <- which(age_tmp==ttmp[i])
-}
-
-##==============================================================================
-
 
 ##==============================================================================
 ## Model parameters and setup
@@ -118,6 +73,14 @@ if (DO_INIT_UPDATE) {
   eps <- 0.0001
   step_mcmc <- sd*cov(parameters_good) + sd*eps*diag(x=1, length(par_calib0))
 }
+##==============================================================================
+
+
+##==============================================================================
+## Data
+##=====
+
+source('GEOCARB_fit_likelihood_surface.R')
 ##==============================================================================
 
 
@@ -204,7 +167,8 @@ if(n_node000==1) {
                   input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)
+                  iteration_threshold=iteration_threshold,
+                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
   tend <- proc.time()
   chain1 = amcmc_out1$samples
 } else if(n_node000 > 1) {
@@ -221,7 +185,8 @@ if(n_node000==1) {
                   input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                   data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold)
+                  iteration_threshold=iteration_threshold,
+                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
   tend <- proc.time()
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
@@ -250,7 +215,8 @@ amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
                                 input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                                 data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                                 ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                                iteration_threshold=iteration_threshold)
+                                iteration_threshold=iteration_threshold,
+                                loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
 tend=proc.time()
 chain1 = amcmc_extend1$samples
 }

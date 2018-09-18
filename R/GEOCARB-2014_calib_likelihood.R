@@ -100,7 +100,10 @@ log_like <- function(
   ind_mod2obs,
   ind_expected_time,
   ind_expected_const,
-  iteration_threshold
+  iteration_threshold,
+  loglikelihood_smoothed=NULL,
+  likelihood_fit=NULL,
+  idx_data=NULL
 ){
 
   llike <- 0
@@ -126,6 +129,8 @@ log_like <- function(
   # use the same checks as the precalibration to get rid of unphysical simulations
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
+  } else if(!is.null(loglikelihood_smoothed)){
+    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
   } else {
     # compare against data
     # assumption of steady state in-between model time steps
@@ -193,7 +198,10 @@ log_post <- function(
   ind_expected_time,
   ind_expected_const,
   iteration_threshold,
-  n_shard=1
+  n_shard=1,
+  loglikelihood_smoothed=NULL,
+  likelihood_fit=NULL,
+  idx_data=NULL
 ){
 
   lpri <- 0
@@ -233,7 +241,10 @@ log_post <- function(
                       ind_mod2obs=ind_mod2obs,
                       ind_expected_time=ind_expected_time,
                       ind_expected_const=ind_expected_const,
-                      iteration_threshold=iteration_threshold)
+                      iteration_threshold=iteration_threshold,
+                      loglikelihood_smoothed=loglikelihood_smoothed,
+                      likelihood_fit=likelihood_fit,
+                      idx_data=idx_data)
   }
 
   # combine
