@@ -13,12 +13,12 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-#n_sample <- 30000
-#appen <- 'n30K-bs10K'
-#.Nboot <- 10000
-n_sample <- 50
-appen <- 'TEST'
-.Nboot <- 100
+n_sample <- 30000
+appen <- 'n30K-bs10K'
+.Nboot <- 10000
+#n_sample <- 500
+#appen <- 'TEST'
+#.Nboot <- 100
 .confidence <- 0.9 # for bootstrap CI
 .second <- TRUE
 l_parallel <- FALSE

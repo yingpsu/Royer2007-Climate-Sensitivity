@@ -1,31 +1,61 @@
 ##==============================================================================
-## GEOCARB-2014_calib_driver.R
+## mwg_driver.R
 ##
-## Read CO2 proxy data. Set which data sets you intend to calibrate using.
-## Version for running as script on HPC.
+## Driver for the Metropolis-within-Gibbs sampling.
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
+
 
 rm(list=ls())
 
-setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 10         # number of CPUs to use
+library(compiler)
+enableJIT(3)
+
+niter_mcmc000 <- 5e4   # number of MCMC iterations per node (Markov chain length)
+do_adapt000 <- TRUE    # adapt Metropolis proposal variances?
+n_node000 <- 1         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
 appen <- 'sig18'
 #appen <- 'all'
-appen2 <- ''
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
 
-# Distribution fit to each data point in the processing step
-#dist <- 'ga'
-#dist <- 'be'
-#dist <- 'ln'
-dist <- 'sn'
+DO_INIT_UPDATE <- TRUE
+
+DO_WRITE_RDATA  <- TRUE
+DO_WRITE_NETCDF <- FALSE
+
+filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
+filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
+filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
+
+if(Sys.info()['user']=='tony') {
+  # Tony's local machine (if you aren't me, you almost certainly need to change this...)
+  machine <- 'local'
+  setwd('~/codes/GEOCARB/R')
+} else {
+  # assume on Napa cluster
+  machine <- 'remote'
+  setwd('~/codes/GEOCARB/R')
+}
+
+library(sn)
+library(ncdf4)
+
+##==============================================================================
+## Data
+##=====
+
+source('GEOCARB-2014_getData.R')
+
+# remove the lowest [some number] co2 content data points (all paleosols, it turns out)
+# (lowest ~40 are all from paleosols, actually)
+#ind_co2_sort_all <- order(data_calib_all$co2)
+#n_cutoff <- length(which(data_calib_all$co2 < quantile(data_calib_all$co2, 0.01)))
+#data_calib_all <- data_calib_all[-ind_co2_sort_all[1:n_cutoff], ]
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -34,17 +64,53 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("boron"     , TRUE),
                         c("liverworts", TRUE) )
 
-DO_INIT_UPDATE <- FALSE
-DO_WRITE_RDATA  <- TRUE
-DO_WRITE_NETCDF <- FALSE
+ind_data    <- which(data_to_assim[2,]==TRUE)
+n_data_sets <- length(ind_data)
+ind_assim   <- vector("list",n_data_sets)
+for (i in 1:n_data_sets) {
+  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
+}
 
-filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
-filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
+data_calib <- data_calib_all[unlist(ind_assim),]
 
-library(adaptMCMC)
-library(ncdf4)
-library(sn)
+# possible filtering out of some data points with too-narrow uncertainties in
+# co2 (causing overconfidence in model simulations that match those data points
+# well)
+# set to +65%, - 30% uncertain range around the central estimate
+if(co2_uncertainty_cutoff > 0) {
+  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
+  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
+  ind_remove <- NULL
+  for (ii in ind_filter) {
+    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
+    range_updated  <- data_calib[ii,'co2']*0.95
+    if (range_updated > range_original) {
+      # update to the wider uncertain range if +65/-30% is wider
+      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
+      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
+    } else {
+      # otherwise, remove
+      ind_remove <- c(ind_remove, ii)
+    }
+  }
+  data_calib <- data_calib[-ind_filter,]    # removing all of the possibly troublesome points
+  ##data_calib <- data_calib[-ind_remove,]    # remove only those the revised range does not help
+}
+
+# assumption of steady state in-between model time steps permits figuring out
+# which model time steps each data point should be compared against in advance.
+# doing this each calibration iteration would be outrageous!
+# This assumes the model time step is 10 million years, seq(570,0,by=-10). The
+# model will choke later (in calibration) if this is not consistent with what is
+# set within the actual GEOCARB physical model.
+age_tmp <- seq(570,0,by=-10)
+ttmp <- 10*ceiling(data_calib$age/10)
+ind_mod2obs <- rep(NA,nrow(data_calib))
+for (i in 1:length(ind_mod2obs)){
+  ind_mod2obs[i] <- which(age_tmp==ttmp[i])
+}
+##==============================================================================
+
 
 ##==============================================================================
 ## Model parameters and setup
@@ -70,18 +136,11 @@ if (DO_INIT_UPDATE) {
 
   # initial covariance estimate:
   load(filename.covariance)
-  sd <- 2.4*2.4/length(par_calib0)
+  ##sd <- 2.4*2.4/length(par_calib0)
+  sd <- 2.4*2.4/1  # only /1 because metropolis-within-gibbs (MWG) sampling
   eps <- 0.0001
   step_mcmc <- sd*cov(parameters_good) + sd*eps*diag(x=1, length(par_calib0))
 }
-##==============================================================================
-
-
-##==============================================================================
-## Data
-##=====
-
-source('GEOCARB_fit_likelihood_surface.R')
 ##==============================================================================
 
 
@@ -118,20 +177,6 @@ for (i in 1:length(parnames_calib)) {
 
 
 ##==============================================================================
-## Pad if only one calibration parameter
-## (adaptMCMC requires 2 or more)
-##======================================
-if(length(parnames_calib)==1){
-  parnames_calib <- c(parnames_calib, "padding")
-  bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
-  rownames(bounds_calib) <- parnames_calib
-  par_calib <- c(par_calib, 0)
-  step_mcmc <- c(step_mcmc, 1)
-}
-##==============================================================================
-
-
-##==============================================================================
 ## Run the calibration
 ##====================
 
@@ -139,57 +184,49 @@ if(length(parnames_calib)==1){
 source('model_forMCMC.R')
 source('run_geocarbF.R')
 
-# need the likelihood function and prior distributions
+# need the likelihood function and prior distributions, and the MWG sampler
 source('GEOCARB-2014_calib_likelihood.R')
+source('mwg.R')
 
 # set up and run the actual calibration
-# interpolate between lots of parameters and one parameter.
-# this functional form yields an acceptance rate of about 25% for as few as 10
-# parameters, 44% for a single parameter (or Metropolis-within-Gibbs sampler),
-# and 0.234 for infinite number of parameters, using accept_mcmc_few=0.44 and
-# accept_mcmc_many=0.234.
-accept_mcmc_few <- 0.44         # optimal for only one parameter
-accept_mcmc_many <- 0.234       # optimal for many parameters
-accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- niter_mcmc000
-gamma_mcmc <- 0.66
+do_adapt <- do_adapt000
 stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (niter*1 => don't stop)
 
 ##==============================================================================
 ## Actually run the calibration
+
+tbeg <- proc.time()
+
 if(n_node000==1) {
-  tbeg <- proc.time()
-  amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold,
-                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
-  tend <- proc.time()
-  chain1 = amcmc_out1$samples
-} else if(n_node000 > 1) {
-  tbeg <- proc.time()
-  amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-        					dyn.libs=c('../fortran/run_geocarb.so'),
-                  packages=c('sn'),
-        					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
-        					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold,
-                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
-  tend <- proc.time()
+  mcmc_out <- mcmc_mwg(log_post, n=niter_mcmc, init=par_calib0, scale=diag(step_mcmc),
+                     adapt=do_adapt, n.start=max(5000,round(0.2*niter_mcmc)),
+                     parallel=FALSE, n.core=1,
+                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                     iteration_threshold=iteration_threshold)
+  chain1 <- mcmc_out$samples
+} else {
+  mcmc_out <- mcmc_mwg(log_post, n=niter_mcmc, init=par_calib0, scale=diag(step_mcmc),
+                     adapt=do_adapt, n.start=max(5000,round(0.2*niter_mcmc)),
+                     parallel=FALSE, n.core=1,
+                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                     iteration_threshold=iteration_threshold)
+  chain1 <- mcmc_out$samples
 }
+
+tend <- proc.time()
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 if(FALSE) {
@@ -200,27 +237,9 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 
 # save
 if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2'.RData', sep=''))
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-MWG_',appen,'_',today,'.RData', sep=''))
 }
 
-## Extend an MCMC chain?
-## Extend and run more MCMC samples?
-if(FALSE){
-niter_extend <- 1e4
-tbeg=proc.time()
-amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
-                                par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                                ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                                ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                                input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                                data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                                ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                                iteration_threshold=iteration_threshold,
-                                loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
-tend=proc.time()
-chain1 = amcmc_extend1$samples
-}
 ##==============================================================================
 
 

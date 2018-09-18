@@ -1,0 +1,8 @@
+#!/bin/bash
+#PBS -l walltime=350:00:00
+#PBS -l nodes=1:ppn=11
+#PBS -j oe
+#PBS -m abe
+#PBS -M twong@psu.edu
+
+R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/GEOCARB_calib_driver_script_allconst.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_mcmc_allconst.log

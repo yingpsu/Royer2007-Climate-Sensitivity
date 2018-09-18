@@ -14,8 +14,8 @@ setwd('~/codes/GEOCARB/R')
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 10         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
-appen <- 'sig18'
-#appen <- 'all'
+#appen <- 'sig18'
+appen <- 'all'
 appen2 <- ''
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
