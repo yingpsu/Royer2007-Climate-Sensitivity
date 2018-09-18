@@ -200,7 +200,7 @@ plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
 
 # save
 if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2'.RData', sep=''))
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2,'.RData', sep=''))
 }
 
 ## Extend an MCMC chain?
