@@ -22,23 +22,38 @@
 ## Get a standard model simulation
 ##================================
 
-# need the physical model
-source('model_forMCMC.R')
-source('run_geocarbF.R')
-
-model_out <- model_forMCMC(par_calib=par_calib0,
-                           par_fixed=par_fixed0,
-                           parnames_calib=parnames_calib,
-                           parnames_fixed=parnames_fixed,
-                           age=age,
-                           ageN=ageN,
-                           ind_const_calib=ind_const_calib,
-                           ind_time_calib=ind_time_calib,
-                           ind_const_fixed=ind_const_fixed,
-                           ind_time_fixed=ind_time_fixed,
-                           ind_expected_time=ind_expected_time,
-                           ind_expected_const=ind_expected_const,
-                           iteration_threshold=iteration_threshold)
+if(do_sample_tvq) {
+  model_out <- model_forMCMC(par_calib=par_calib0,
+                             par_fixed=par_fixed0,
+                             parnames_calib=parnames_calib,
+                             parnames_fixed=parnames_fixed,
+                             age=age,
+                             ageN=ageN,
+                             ind_const_calib=ind_const_calib,
+                             ind_time_calib=ind_time_calib,
+                             ind_const_fixed=ind_const_fixed,
+                             ind_time_fixed=ind_time_fixed,
+                             ind_expected_time=ind_expected_time,
+                             ind_expected_const=ind_expected_const,
+                             iteration_threshold=iteration_threshold,
+                             do_sample_tvq=do_sample_tvq,
+                             par_time_center=par_time_center,
+                             par_time_stdev=par_time_stdev)
+} else {
+  model_out <- model_forMCMC(par_calib=par_calib0,
+                             par_fixed=par_fixed0,
+                             parnames_calib=parnames_calib,
+                             parnames_fixed=parnames_fixed,
+                             age=age,
+                             ageN=ageN,
+                             ind_const_calib=ind_const_calib,
+                             ind_time_calib=ind_time_calib,
+                             ind_const_fixed=ind_const_fixed,
+                             ind_time_fixed=ind_time_fixed,
+                             ind_expected_time=ind_expected_time,
+                             ind_expected_const=ind_expected_const,
+                             iteration_threshold=iteration_threshold)
+}
 ##==============================================================================
 
 

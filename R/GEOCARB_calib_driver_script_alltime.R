@@ -12,10 +12,10 @@ rm(list=ls())
 setwd('~/codes/GEOCARB/R')
 
 niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1         # number of CPUs to use
+n_node000 <- 10         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
 #appen <- 'sig18'
-appen <- 'tvq_all'
+appen <- 'all-timevar'
 appen2 <- ''
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -34,7 +34,6 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("boron"     , TRUE),
                         c("liverworts", TRUE) )
 
-DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_INIT_UPDATE <- FALSE
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
@@ -51,11 +50,8 @@ library(sn)
 ## Model parameters and setup
 ##===========================
 
-if(DO_SAMPLE_TVQ) {
-  source('GEOCARB-2014_parameterSetup_tvq.R')
-} else {
-  source('GEOCARB-2014_parameterSetup.R')
-}
+# Read parameter information, set up the calibration parameters
+source('GEOCARB-2014_parameterSetup.R')
 
 if (DO_INIT_UPDATE) {
   # initial fixed parameters estimate:
@@ -84,11 +80,6 @@ if (DO_INIT_UPDATE) {
 ##==============================================================================
 ## Data
 ##=====
-
-# need the physical model
-if(DO_SAMPLE_TVQ) {source('model_forMCMC_tvq.R')
-} else            {source('model_forMCMC.R')}
-source('run_geocarbF.R')
 
 source('GEOCARB_fit_likelihood_surface.R')
 ##==============================================================================
@@ -121,12 +112,6 @@ for (i in 1:length(parnames_calib)) {
   bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
 }
 
-# only need to rearrange if DO_SAMPLE_TVQ
-if (DO_SAMPLE_TVQ) {
-  bound_lower <- bound_lower[match(parnames_calib, as.character(input$parameter))]
-  bound_upper <- bound_upper[match(parnames_calib, as.character(input$parameter))]
-}
-
 # Other characteristics are in 'input' and 'time_arrays', which are fed into
 # the calibration MCMC call below.
 ##==============================================================================
@@ -150,6 +135,10 @@ if(length(parnames_calib)==1){
 ## Run the calibration
 ##====================
 
+# need the physical model
+source('model_forMCMC.R')
+source('run_geocarbF.R')
+
 # need the likelihood function and prior distributions
 source('GEOCARB-2014_calib_likelihood.R')
 
@@ -168,77 +157,38 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 
 ##==============================================================================
 ## Actually run the calibration
-
-if(DO_SAMPLE_TVQ) {
-  if(n_node000==1) {
-    tbeg <- proc.time()
-    amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                    scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
-                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                    input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                    data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
-                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
-    tend <- proc.time()
-    chain1 = amcmc_out1$samples
-  } else if(n_node000 > 1) {
-    tbeg <- proc.time()
-    amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-          					dyn.libs=c('../fortran/run_geocarb.so'),
-                    packages=c('sn'),
-          					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
-          					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
-                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                    input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                    data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
-                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
-    tend <- proc.time()
-  }
-} else {
-  if(n_node000==1) {
-    tbeg <- proc.time()
-    amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                    scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
-                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                    input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                    data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
-                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
-    tend <- proc.time()
-    chain1 = amcmc_out1$samples
-  } else if(n_node000 > 1) {
-    tbeg <- proc.time()
-    amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-          					dyn.libs=c('../fortran/run_geocarb.so'),
-                    packages=c('sn'),
-          					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
-          					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
-                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
-                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                    input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                    data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
-                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
-    tend <- proc.time()
-  }
+if(n_node000==1) {
+  tbeg <- proc.time()
+  amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
+                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
+                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                  iteration_threshold=iteration_threshold,
+                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
+  tend <- proc.time()
+  chain1 = amcmc_out1$samples
+} else if(n_node000 > 1) {
+  tbeg <- proc.time()
+  amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
+        					dyn.libs=c('../fortran/run_geocarb.so'),
+                  packages=c('sn'),
+        					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
+        					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
+                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                  parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                  iteration_threshold=iteration_threshold,
+                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
+  tend <- proc.time()
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 

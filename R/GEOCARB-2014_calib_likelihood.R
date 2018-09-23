@@ -24,7 +24,8 @@ log_prior <- function(
   ind_time_fixed,
   input,
   time_arrays,
-  bounds_calib
+  bounds_calib,
+  do_sample_tvq=FALSE
 ){
 
   lpri <- 0
@@ -33,23 +34,27 @@ log_prior <- function(
   if( all(par_calib <= bounds_calib[,'upper']) & all(par_calib >= bounds_calib[,'lower']) ){
 
     # Gaussian process priors for the time-varying parameters
-    # Might make simplifying assumption of independence between time slices
+    # Make simplifying assumption of independence between time slices
     lpri_time <- 0
     n_time_calib <- length(ind_time_calib)/ageN
     if (n_time_calib>0) {
-      for (i in 1:n_time_calib) {
-        lpri_new <- 0
-        name <- parnames_calib[ind_time_calib[ageN*i]]
-        row_num <- match(name,input$parameter)
-        col_num <- match(name,colnames(time_arrays))
-        if(input[row_num, 'distribution_type']=='gaussian') {
-          lpri_new <- dnorm(x=par_calib[ind_time_calib[((i-1)*ageN+1):(i*ageN)]], mean=time_arrays[,col_num], sd=(0.5*time_arrays[,col_num+1]), log=TRUE)
-        } else if(input[row_num, 'distribution_type']=='lognormal') {
-          lpri_new <- dlnorm(x=par_calib[ind_const_calib[((i-1)*ageN+1):(i*ageN)]], meanlog=log(time_arrays[,col_num]), sdlog=log(0.5*time_arrays[,col_num+1]), log=TRUE)
-        } else {
-          print('ERROR - unknown prior distribution type')
+      if (do_sample_tvq) {
+        lpri_time <- sum(dunif(x=par_calib[ind_time_calib], min=bound_lower[ind_time_calib], max=bound_upper[ind_time_calib], log=TRUE))
+      } else {
+        for (i in 1:n_time_calib) {
+          lpri_new <- 0
+          name <- parnames_calib[ind_time_calib[ageN*i]]
+          row_num <- match(name,input$parameter)
+          col_num <- match(name,colnames(time_arrays))
+          if(input[row_num, 'distribution_type']=='gaussian') {
+            lpri_new <- dnorm(x=par_calib[ind_time_calib[((i-1)*ageN+1):(i*ageN)]], mean=time_arrays[,col_num], sd=(0.5*time_arrays[,col_num+1]), log=TRUE)
+          } else if(input[row_num, 'distribution_type']=='lognormal') {
+            lpri_new <- dlnorm(x=par_calib[ind_const_calib[((i-1)*ageN+1):(i*ageN)]], meanlog=log(time_arrays[,col_num]), sdlog=log(0.5*time_arrays[,col_num+1]), log=TRUE)
+          } else {
+            print('ERROR - unknown prior distribution type')
+          }
+          lpri_time <- lpri_time + sum(lpri_new)
         }
-        lpri_time <- lpri_time + sum(lpri_new)
       }
     }
 
@@ -103,7 +108,10 @@ log_like <- function(
   iteration_threshold,
   loglikelihood_smoothed=NULL,
   likelihood_fit=NULL,
-  idx_data=NULL
+  idx_data=NULL,
+  do_sample_tvq=FALSE,
+  par_time_center=NULL,
+  par_time_stdev=NULL
 ){
 
   llike <- 0
@@ -112,19 +120,38 @@ log_like <- function(
   lower_bound_co2 <- 0
 
   # run the model
-  model_out <- model_forMCMC(par_calib=par_calib,
-                             par_fixed=par_fixed,
-                             parnames_calib=parnames_calib,
-                             parnames_fixed=parnames_fixed,
-                             age=age,
-                             ageN=ageN,
-                             ind_const_calib=ind_const_calib,
-                             ind_time_calib=ind_time_calib,
-                             ind_const_fixed=ind_const_fixed,
-                             ind_time_fixed=ind_time_fixed,
-                             ind_expected_time=ind_expected_time,
-                             ind_expected_const=ind_expected_const,
-                             iteration_threshold=iteration_threshold)[,'co2']
+  if (do_sample_tvq) {
+    model_out <- model_forMCMC(par_calib=par_calib,
+                               par_fixed=par_fixed,
+                               parnames_calib=parnames_calib,
+                               parnames_fixed=parnames_fixed,
+                               age=age,
+                               ageN=ageN,
+                               ind_const_calib=ind_const_calib,
+                               ind_time_calib=ind_time_calib,
+                               ind_const_fixed=ind_const_fixed,
+                               ind_time_fixed=ind_time_fixed,
+                               ind_expected_time=ind_expected_time,
+                               ind_expected_const=ind_expected_const,
+                               iteration_threshold=iteration_threshold,
+                               do_sample_tvq=do_sample_tvq,
+                               par_time_center=par_time_center,
+                               par_time_stdev=par_time_stdev)[,'co2']
+  } else {
+    model_out <- model_forMCMC(par_calib=par_calib,
+                               par_fixed=par_fixed,
+                               parnames_calib=parnames_calib,
+                               parnames_fixed=parnames_fixed,
+                               age=age,
+                               ageN=ageN,
+                               ind_const_calib=ind_const_calib,
+                               ind_time_calib=ind_time_calib,
+                               ind_const_fixed=ind_const_fixed,
+                               ind_time_fixed=ind_time_fixed,
+                               ind_expected_time=ind_expected_time,
+                               ind_expected_const=ind_expected_const,
+                               iteration_threshold=iteration_threshold)[,'co2']
+  }
 
   # use the same checks as the precalibration to get rid of unphysical simulations
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
@@ -201,7 +228,10 @@ log_post <- function(
   n_shard=1,
   loglikelihood_smoothed=NULL,
   likelihood_fit=NULL,
-  idx_data=NULL
+  idx_data=NULL,
+  do_sample_tvq=FALSE,
+  par_time_center=NULL,
+  par_time_stdev=NULL
 ){
 
   lpri <- 0
@@ -220,7 +250,8 @@ log_post <- function(
                     ind_time_fixed=ind_time_fixed,
                     input=input,
                     time_arrays=time_arrays,
-                    bounds_calib=bounds_calib)
+                    bounds_calib=bounds_calib,
+                    do_sample_tvq=do_sample_tvq)
 
   # calculate log-likelihood at these parameter values (with these data)
   # save time by not running model if prior is -Inf (i.e., parameters outside
@@ -244,7 +275,10 @@ log_post <- function(
                       iteration_threshold=iteration_threshold,
                       loglikelihood_smoothed=loglikelihood_smoothed,
                       likelihood_fit=likelihood_fit,
-                      idx_data=idx_data)
+                      idx_data=idx_data,
+                      do_sample_tvq=do_sample_tvq,
+                      par_time_center=par_time_center,
+                      par_time_stdev=par_time_stdev)
   }
 
   # combine

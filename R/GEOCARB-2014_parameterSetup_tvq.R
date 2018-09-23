@@ -1,10 +1,14 @@
 ##==============================================================================
-## GEOCARB-2014_parametersSetup.R
+## GEOCARB-2014_parametersSetup_tvq.R
+##
+## set up specific to sampling the time-varying parameters by CDF value
+##
+## Requires: filename.calibinput
+##
 ##
 ## questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
-##Requires: filename.calibinput
 
 l_Godderis <- TRUE  #set to "TRUE" to run time arrays of fA, fAw/fA, fD, and GEOG
                     #from Godderis et al, 2012; set to "FALSE" to run standard
@@ -18,7 +22,7 @@ iteration_threshold <- 10 #maximum number of times the convergence equation for
 
 # reading in the two input files
 
-# input constant parameters and time-varying parameters
+# input constant parameters and time-varying parameters (comes from calib driver)
 #input <- read.csv("../input_data/GEOCARB_input_summaries_calib.csv")
 input <- read.csv(filename.calibinput)
 
@@ -33,7 +37,7 @@ time_arrays <- read.csv("../input_data/GEOCARB_input_arrays.csv")
 ageN <- length(time_arrays$age) #number of time-steps
 age <- matrix (time_arrays$age, nrow=ageN, ncol=1); colnames(age) <- "age (Myrs ago)"
 
-# if using Godderis et al 2012 vlaues for fA, fAw_FA, fD, and GEOG...
+# if using Godderis et al 2012 values for fA, fAw_FA, fD, and GEOG...
 if (l_Godderis) {
   arrays_Godderis <- c('fA','fAw_fA', 'fD', 'GEOG')
   for (i in 1:length(arrays_Godderis)) {
@@ -69,35 +73,19 @@ for (i in 1:length(parnames_time)) {
   ind_time_err <- c(ind_time_err, match(paste('e',parnames_time[i],sep=''), colnames(time_arrays)))
 }
 
-par_time0 <- time_arrays[,ind_time_mean]
-par_time_fixed0 <- data.frame(par_time0[,ind_time_fixed])
-colnames(par_time_fixed0) <- parnames_time[ind_time_fixed]
-par_time_calib0 <- data.frame(par_time0[,ind_time_calib])
-colnames(par_time_calib0) <- parnames_time[ind_time_calib]
-
-# unwrap par_time_fixed0 and calib0 into long vectors
-par_time0_vec <- unlist(par_time0)
-par_time_fixed0_vec <- unlist(par_time_fixed0)
-par_time_calib0_vec <- unlist(par_time_calib0)
-
-# unwrap the names corresponding to the values
-parnames_time_fixed0_vec <- unlist(matrix(t(replicate(ageN, colnames(par_time_fixed0)))))
-parnames_time_calib0_vec <- unlist(matrix(t(replicate(ageN, colnames(par_time_calib0)))))
-
-# To wrap them back up as a matrix, just do (for example)
-#par_time0 <- matrix(par_time0_vec, nrow=ageN)
+par_time_center <- time_arrays[,ind_time_mean]
+par_time_stdev <- time_arrays[,ind_time_err]
+colnames(par_time_stdev) <- colnames(par_time_center)
 
 par_const0 <- input$mean[ind_const]
 par_const_fixed0 <- input$mean[ind_const_fixed]
 par_const_calib0 <- input$mean[ind_const_calib]
+par_time0 <- input$mean[ind_time]
+par_calib0 <- c(par_const_calib0, as.numeric(par_time0))
+par_fixed0 <- c(par_const_fixed0)
 
-par_calib0 <- c(par_const_calib0, as.numeric(par_time_calib0_vec))
-par_fixed0 <- c(par_const_fixed0, as.numeric(par_time_fixed0_vec))
-
-parnames_calib <- c( as.character(input$parameter[ind_const_calib]) ,
-                     parnames_time_calib0_vec)
-parnames_fixed <- c( as.character(input$parameter[ind_const_fixed]) ,
-                     parnames_time_fixed0_vec )
+parnames_calib <- c( as.character(input$parameter[ind_const_calib]) , parnames_time)
+parnames_fixed <- c( as.character(input$parameter[ind_const_fixed]))
 
 # change the indices fed into the calibration to reflect which values within
 # par_calib and par_fixed are constant parameters and which are time-varying
@@ -119,14 +107,8 @@ parnames_tmp <- unique(parnames_calib)
 for (p in 1:length(parnames_tmp)) {
   row_num <- match(parnames_tmp[p], input$parameter)
   if(input$type[row_num]=='time array') {
-    col_num <- match(parnames_tmp[p], colnames(time_arrays))
-    if(input[row_num, 'distribution_type']=='lognormal') {
-      ind_this_parameter <- which(parnames_calib==parnames_tmp[p])
-      step_mcmc[ind_time_parameter] <- log(0.5*time_arrays[,col_num+1])
-    } else if(input[row_num, 'distribution_type']=='gaussian') {
-      ind_this_parameter <- which(parnames_calib==parnames_tmp[p])
-      step_mcmc[ind_this_parameter] <- 0.5*time_arrays[,col_num+1]
-    } else {print('ERROR - unknown distribution type (fitting step sizes, time-varying parameters)')}
+    ind_this_parameter <- which(parnames_calib==parnames_tmp[p])
+    step_mcmc[ind_this_parameter] <- 0.1
   } else if(input$type[row_num]=='constant') {
     if(input[row_num, 'distribution_type']=='lognormal') {
       step_mcmc[p] <- log(0.5*input[row_num,"two_sigma"])
