@@ -39,7 +39,8 @@ log_prior <- function(
     n_time_calib <- length(ind_time_calib)/ageN
     if (n_time_calib>0) {
       if (do_sample_tvq) {
-        lpri_time <- sum(dunif(x=par_calib[ind_time_calib], min=bound_lower[ind_time_calib], max=bound_upper[ind_time_calib], log=TRUE))
+        #lpri_time <- sum(dunif(x=par_calib[ind_time_calib], min=bound_lower[ind_time_calib], max=bound_upper[ind_time_calib], log=TRUE))
+        lpri_time <- sum(dbeta(x=par_calib[ind_time_calib], shape1=5, shape2=5, log=TRUE))
       } else {
         for (i in 1:n_time_calib) {
           lpri_new <- 0

@@ -267,7 +267,8 @@ amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
                                 data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                                 ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                                 iteration_threshold=iteration_threshold,
-                                loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
+                                loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
+                                do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
 tend=proc.time()
 chain1 = amcmc_extend1$samples
 }
