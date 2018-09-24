@@ -22,7 +22,7 @@
 ## Get a standard model simulation
 ##================================
 
-if(do_sample_tvq) {
+if(DO_SAMPLE_TVQ) {
   model_out <- model_forMCMC(par_calib=par_calib0,
                              par_fixed=par_fixed0,
                              parnames_calib=parnames_calib,
@@ -36,7 +36,7 @@ if(do_sample_tvq) {
                              ind_expected_time=ind_expected_time,
                              ind_expected_const=ind_expected_const,
                              iteration_threshold=iteration_threshold,
-                             do_sample_tvq=do_sample_tvq,
+                             do_sample_tvq=DO_SAMPLE_TVQ,
                              par_time_center=par_time_center,
                              par_time_stdev=par_time_stdev)
 } else {
