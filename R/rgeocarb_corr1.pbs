@@ -1,7 +1,0 @@
-#!/bin/bash
-#PBS -l walltime=192:00:00
-#PBS -l nodes=1:ppn=2
-#PBS -j oe
-#PBS -m abe
-#PBS -M twong@psu.edu
-R --vanilla < /home/scrim/axw322/codes/GEOCARB/R/sobol_subsample_correlations1.R > /home/scrim/axw322/codes/GEOCARB/R/rgeocarb_corr_calc_1.log

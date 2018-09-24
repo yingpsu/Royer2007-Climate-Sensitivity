@@ -11,8 +11,8 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 10         # number of CPUs to use
+niter_mcmc000 <- 4e6   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
 #appen <- 'sig18'
 appen <- 'all-const'
@@ -265,6 +265,11 @@ if(n_node000 == 1) {
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list)[2])
   }
 } else {print('error - n_node000 < 1 makes no sense')}
+
+# save
+if(DO_WRITE_RDATA) {
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2,'.RData', sep=''))
+}
 
 #plot(niter.test, gr.test)
 

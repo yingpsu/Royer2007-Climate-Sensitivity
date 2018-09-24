@@ -266,6 +266,11 @@ if(n_node000 == 1) {
   }
 } else {print('error - n_node000 < 1 makes no sense')}
 
+# save
+if(DO_WRITE_RDATA) {
+  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2,'.RData', sep=''))
+}
+
 #plot(niter.test, gr.test)
 
 # Heidelberger and Welch
