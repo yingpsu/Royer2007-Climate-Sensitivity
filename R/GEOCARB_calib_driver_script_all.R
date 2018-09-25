@@ -11,11 +11,8 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 4e6   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 6         # number of CPUs to use
-#appen <- 'sig18+GLAC+LIFE'
-#appen <- 'sig18'
-#appen <- 'all-const'
+niter_mcmc000 <- 4e3   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1         # number of CPUs to use
 appen <- 'tvq_all'
 appen2 <- ''
 output_dir <- '../output/'
@@ -23,10 +20,11 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
 
 # Distribution fit to each data point in the processing step
-#dist <- 'ga'
-#dist <- 'be'
-#dist <- 'ln'
-dist <- 'sn'
+#dist <- 'ga'  # gamma
+#dist <- 'be'  # beta
+#dist <- 'ln'  # log-normal
+#dist <- 'sn'  # skew-normal (use this to reproduce main results)
+dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -148,7 +146,7 @@ if(DO_SAMPLE_TVQ) {
     chain1 = amcmc_out1$samples
   } else if(n_node000 > 1) {
     tbeg <- proc.time()
-    amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
+    amcmc_par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
           					dyn.libs=c('../fortran/run_geocarb.so'),
                     packages=c('sn'),
           					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
@@ -183,7 +181,7 @@ if(DO_SAMPLE_TVQ) {
     chain1 = amcmc_out1$samples
   } else if(n_node000 > 1) {
     tbeg <- proc.time()
-    amcmc.par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
+    amcmc_par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
           					dyn.libs=c('../fortran/run_geocarb.so'),
                     packages=c('sn'),
           					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
@@ -202,16 +200,8 @@ if(DO_SAMPLE_TVQ) {
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
-if(FALSE) {
-par(mfrow=c(2,1))
-ics <- match('deltaT2X', parnames_calib)
-plot(chain1[,ics], type='l', ylab=parnames_calib[ics], xlab='Iteration')
-}
-
 # save
-if(DO_WRITE_RDATA) {
-  save.image(file=paste(output_dir,'GEOCARB_MCMC-CON_',appen,'_',today,appen2,'.RData', sep=''))
-}
+if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,appen2,'.RData', sep=''))}
 
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
@@ -239,19 +229,6 @@ chain1 = amcmc_extend1$samples
 ## Convergence diagnostics
 ##========================
 
-# visual inspection
-
-#TONY TODO
-#TONY TODO
-# for now only look at climate sensitivity
-#ind_cs <- match('deltaT2X',parnames_calib)
-#plot(chain1[,ind_cs], type='l')
-#par(mfrow=c(7,8))
-#for (p in 1:length(parnames_calib)) {plot(chain1[,p], type='l', ylab=parnames_calib[p])}
-
-
-#TODO
-
 ## Gelman and Rubin diagnostics - determine and chop off for burn-in
 niter.test <- seq(from=round(0.1*niter_mcmc), to=niter_mcmc, by=round(0.05*niter_mcmc))
 gr.test <- rep(0, length(niter.test))
@@ -269,7 +246,7 @@ if(n_node000 == 1) {
   for (i in 1:length(niter.test)) {
     for (m in 1:n_node000) {
       # convert each of the chains into mcmc object
-      eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc.par1[[m]]$samples[1:niter.test[i],])', sep='')))
+      eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc_par1[[m]]$samples[1:niter.test[i],])', sep='')))
     }
     eval(parse(text=paste('mcmc_chain_list = mcmc.list(list(', string.mcmc.list , '))', sep='')))
 
@@ -279,19 +256,111 @@ if(n_node000 == 1) {
 
 #plot(niter.test, gr.test)
 
-# Heidelberger and Welch
-# visual inspection
+# save
+if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,appen2,'.RData', sep=''))}
+##==============================================================================
 
-# which parameters is climate sensitivity?
-if(FALSE) {
-ics <- which(parnames_calib=='deltaT2X')
-plot(chain1[,ics], type='l')
-}
 
-#parameters.posterior <- chain1
-#covjump <- amcmc_out1$cov.jump
+
 
 ##==============================================================================
+## Chop off burn-in
+##==============================================================================
+
+ifirst <- NA
+if(n_node000==1) {
+  ifirst <- round(0.5*niter_mcmc)
+} else {
+  gr.max <- 1.1
+  for (i in seq(from=length(niter.test), to=1, by=-1)) {
+    if( all(gr.test[i:length(gr.test)] < gr.max) ) {ifirst <- niter.test[i]}
+  }
+}
+
+
+chains_burned <- NA
+if(n_node000 > 1) {
+  chains_burned <- vector('list', n_node000)
+  for (m in 1:n_node000) {
+    chains_burned[[m]] <- amcmc_par1[[m]]$samples[(ifirst+1):niter_mcmc,]
+  }
+} else {
+  chains_burned <- amcmc_out1$samples[(ifirst+1):niter_mcmc,]
+}
+
+
+##==============================================================================
+## possible thinning?
+##==============================================================================
+
+# If no thinning, then this initialization will remain
+chains_burned_thinned <- chains_burned
+
+if(FALSE) {#==========================
+
+acf_cutoff <- 0.05
+lag_max <- 0.01*niter_mcmc # if we end up with fewer than 100 samples, what are we even doing?
+niter_thin <- rep(0, nmodel); names(niter_thin) <- types.of.model
+for (model in types.of.model) {
+  for (p in 1:length(parnames_all[[model]])) {
+    if(n_node000 > 1) {acf_tmp <- acf(x=chains_burned[[model]][[1]][,p], plot=FALSE, lag.max=lag_max)}
+    else {acf_tmp <- acf(x=chains_burned[[model]][,p], plot=FALSE, lag.max=lag_max)}
+    niter_thin[[model]] <- max(niter_thin[[model]], acf_tmp$lag[which(acf_tmp$acf < acf_cutoff)[1]])
+  }
+  nthin <- max(niter_thin, na.rm=TRUE)
+  if(n_node000 > 1) {
+    for (m in 1:n_node000) {
+      chains_burned_thinned[[model]][[m]] <- chains_burned[[model]][[m]][seq(from=1, to=nrow(chains_burned[[model]][[m]]), by=nthin),]
+    }
+  } else {
+    chains_burned_thinned[[model]] <- chains_burned[[model]][seq(from=1, to=nrow(chains_burned[[model]]), by=nthin),]
+  }
+}
+
+}#====================================
+
+
+# thin to a target number of samples?
+if(TRUE) {#===========================
+
+n.sample <- 100000
+
+if(n_node000 == 1) {
+  ind.sample <- sample(x=1:nrow(chains_burned), size=n.sample, replace=FALSE)
+  chains_burned_thinned <- chains_burned[ind.sample,]
+} else {
+  n.sample.sub <- rep(NA, n_node000)
+  # the case where desired sample size is divisible by the number of chains
+  if(round(n.sample/n_node000) == n.sample/n_node000) {
+    n.sample.sub[1:n_node000] <- n.sample/n_node000
+  } else {
+  # the case where it is not
+    n.sample.sub[2:n_node000] <- round(n.sample/n_node000)
+    n.sample.sub[1] <- n.sample - sum(n.sample.sub[2:n_node000])
+  }
+  for (m in 1:n_node000) {
+    ind.sample <- sample(x=1:nrow(chains_burned[[m]]), size=n.sample.sub[m], replace=FALSE)
+    chains_burned_thinned[[m]] <- chains_burned[[m]][ind.sample,]
+  }
+}
+
+}#====================================
+
+
+# Combine all of the chains from 'ifirst' to 'niter_mcmc' into a potpourri of
+# [alleged] samples from the posterior. Only saving the transition covariance
+# matrix for one of the chains (if in parallel).
+
+if(n_node000==1) {
+  parameters.posterior <- chains_burned_thinned
+  covjump.posterior <- amcmc_out1$cov.jump
+} else {
+  parameters.posterior <- chains_burned_thinned[[1]]
+  covjump.posterior <- amcmc_par1[[1]]$cov.jump
+  for (m in 2:n_node000) {
+    parameters.posterior <- rbind(parameters.posterior, chains_burned_thinned[[m]])
+  }
+}
 
 
 ##==============================================================================
@@ -318,7 +387,7 @@ covjump.var <- ncvar_def('covjump', '', list(dim.parameters,dim.parameters), -99
 outnc <- nc_create(filename.parameters, list(parameters.var,parnames.var, covjump.var))
 ncvar_put(outnc, parameters.var, t(parameters.posterior))
 ncvar_put(outnc, parnames.var, parnames_calib)
-ncvar_put(outnc, covjump.var, covjump)
+ncvar_put(outnc, covjump.var, covjump.posterior)
 nc_close(outnc)
 
 }

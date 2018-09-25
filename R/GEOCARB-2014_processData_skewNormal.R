@@ -71,8 +71,6 @@ cbind(niter.test, error.test, times.test)
 # fitted quantiles. this should be more than good enough.
 
 # fit the CO2 data
-# TODO -- parallelize this with a 'foreach' loop? embarassingly parallelizable,
-#         but only doing this once or twice... fun project for later.
 niter.deoptim <- 400
 parameters.co2 <- vector('list',3)
 names(parameters.co2) <- c('xi','omega','alpha')
@@ -102,20 +100,16 @@ save.image(file = "fit_co2_data_skewNormal.RData")
 dat.co2 <- cbind(dat,parameters.co2$xi, parameters.co2$omega, parameters.co2$alpha)
 colnames(dat.co2) <- c(colnames(dat),'xi_co2','omega_co2','alpha_co2')
 
-# clean out the rows that have co2=co2_low=co2_high=0. there are not useful.
-ind_co2 <- which(dat.co2$co2==0)
+# clean out the rows that have co2 <= 0, or co2_low=co2_high=0. there are not useful.
+ind_co2 <- which(dat.co2$co2 <= 0)
 ind_co2_low <- which(dat.co2$co2_low==0)
 ind_co2_high <- which(dat.co2$co2_high==0)
-irem <- intersect(intersect(ind_co2,ind_co2_high),ind_co2_low)
+irem <- unique(c( intersect(ind_co2_low,ind_co2_high),ind_co2))
 dat.co2 <- dat.co2[-irem,]
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
 filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_',today,'.csv',sep='')
 write.csv(dat.co2, file=filename.out)
-
-# TODO:
-# 1. fit age uncertainties? these are hairier - not clearly all 1-sigma, and
-#    some data points do not have age uncertainty
 
 ##==============================================================================
 ## End
