@@ -67,7 +67,7 @@ for (i in 1:length(niter.test)){
 
 cbind(niter.test, error.test, times.test)
 
-# for the first data point, 400 iterations stably gives ~0 error in the
+# for the first data point, >=300 iterations stably gives ~0 error in the
 # fitted quantiles. this should be more than good enough.
 
 # fit the CO2 data
