@@ -12,9 +12,10 @@ rm(list=ls())
 setwd('~/codes/GEOCARB/R')
 
 niter_mcmc000 <- 4e6   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 2         # number of CPUs to use
+n_node000 <- 6         # number of CPUs to use
 #appen <- 'sig18+GLAC+LIFE'
 #appen <- 'sig18'
+#appen <- 'all-const'
 appen <- 'tvq_all'
 appen2 <- ''
 output_dir <- '../output/'
@@ -35,13 +36,10 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("liverworts", TRUE) )
 
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
-DO_INIT_UPDATE <- FALSE
 DO_WRITE_RDATA  <- TRUE
-DO_WRITE_NETCDF <- FALSE
+DO_WRITE_NETCDF <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.par_fixed  <- '../output/par_deoptim_OPT1_04Jul2018.rds'
-filename.covariance <- paste('../output/par_LHS2_',appen,'_04Jul2018.RData', sep='')
 
 library(adaptMCMC)
 library(ncdf4)
@@ -53,42 +51,18 @@ library(sn)
 
 if(DO_SAMPLE_TVQ) {
   source('GEOCARB-2014_parameterSetup_tvq.R')
+  source('model_forMCMC_tvq.R')
 } else {
   source('GEOCARB-2014_parameterSetup.R')
+  source('model_forMCMC.R')
 }
-
-if (DO_INIT_UPDATE) {
-  # initial fixed parameters estimate:
-  par_new <- readRDS(filename.par_fixed)
-  for (name in names(par_new)) {
-    if (name %in% parnames_fixed) {
-      par_fixed0[match(name, parnames_fixed)] <- par_new[name]
-    }
-    if (name %in% parnames_calib) {
-      par_calib0[match(name, parnames_calib)] <- par_new[name]
-    }
-  }
-  # need to strip the names or MCMC will break
-  names(par_calib0) <- NULL
-  names(par_fixed0) <- NULL
-
-  # initial covariance estimate:
-  load(filename.covariance)
-  sd <- 2.4*2.4/length(par_calib0)
-  eps <- 0.0001
-  step_mcmc <- sd*cov(parameters_good) + sd*eps*diag(x=1, length(par_calib0))
-}
+source('run_geocarbF.R')
 ##==============================================================================
 
 
 ##==============================================================================
 ## Data
 ##=====
-
-# need the physical model
-if(DO_SAMPLE_TVQ) {source('model_forMCMC_tvq.R')
-} else            {source('model_forMCMC.R')}
-source('run_geocarbF.R')
 
 source('GEOCARB_fit_likelihood_surface.R')
 ##==============================================================================
@@ -129,20 +103,6 @@ if (DO_SAMPLE_TVQ) {
 
 # Other characteristics are in 'input' and 'time_arrays', which are fed into
 # the calibration MCMC call below.
-##==============================================================================
-
-
-##==============================================================================
-## Pad if only one calibration parameter
-## (adaptMCMC requires 2 or more)
-##======================================
-if(length(parnames_calib)==1){
-  parnames_calib <- c(parnames_calib, "padding")
-  bounds_calib <- rbind(bounds_calib,c(-Inf,Inf))
-  rownames(bounds_calib) <- parnames_calib
-  par_calib <- c(par_calib, 0)
-  step_mcmc <- c(step_mcmc, 1)
-}
 ##==============================================================================
 
 
