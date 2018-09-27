@@ -11,10 +11,9 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 4e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1         # number of CPUs to use
+niter_mcmc000 <- 6e6   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 10        # number of CPUs to use
 appen <- 'tvq_all'
-appen2 <- ''
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 co2_uncertainty_cutoff <- 20
@@ -25,6 +24,7 @@ co2_uncertainty_cutoff <- 20
 #dist <- 'ln'  # log-normal
 #dist <- 'sn'  # skew-normal (use this to reproduce main results)
 dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
+appen2 <- dist
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -376,7 +376,7 @@ lmax=0
 for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
 
 ## Name the file
-filename.parameters = paste('geocarb_calibratedParameters_',appen,'_',today,'.nc',sep="")
+filename.parameters = paste(output_dir,'geocarb_calibratedParameters_',appen,'_',today,appen2,'.nc',sep="")
 
 dim.parameters <- ncdim_def('n.parameters', '', 1:ncol(parameters.posterior), unlim=FALSE)
 dim.name <- ncdim_def('name.len', '', 1:lmax, unlim=FALSE)
