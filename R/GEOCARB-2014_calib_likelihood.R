@@ -96,6 +96,7 @@ log_like <- function(
   par_fixed,
   parnames_calib,
   parnames_fixed,
+  parnames_time,
   age,
   ageN,
   ind_const_calib,
@@ -126,6 +127,7 @@ log_like <- function(
                                par_fixed=par_fixed,
                                parnames_calib=parnames_calib,
                                parnames_fixed=parnames_fixed,
+                               parnames_time=parnames_time,
                                age=age,
                                ageN=ageN,
                                ind_const_calib=ind_const_calib,
@@ -143,6 +145,7 @@ log_like <- function(
                                par_fixed=par_fixed,
                                parnames_calib=parnames_calib,
                                parnames_fixed=parnames_fixed,
+                               parnames_time=parnames_time,
                                age=age,
                                ageN=ageN,
                                ind_const_calib=ind_const_calib,
@@ -186,13 +189,13 @@ log_like <- function(
 ##==============================================================================
 ## Negative posterior
 ##===================
-neg_log_post <- function(par_calib, par_fixed, parnames_calib, parnames_fixed,
+neg_log_post <- function(par_calib, par_fixed, parnames_calib, parnames_fixed, parnames_time,
                          age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
                          ind_time_fixed, input, time_arrays, bounds_calib, data_calib,
                          ind_mod2obs, ind_expected_time, ind_expected_const, iteration_threshold){
 
   lpost <- log_post(par_calib=par_calib, par_fixed=par_fixed, parnames_calib=parnames_calib,
-                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                 ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                 ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                 input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
@@ -212,6 +215,7 @@ log_post <- function(
   par_fixed,
   parnames_calib,
   parnames_fixed,
+  parnames_time,
   age,
   ageN,
   ind_const_calib,
@@ -263,6 +267,7 @@ log_post <- function(
                       par_fixed=par_fixed,
                       parnames_calib=parnames_calib,
                       parnames_fixed=parnames_fixed,
+                      parnames_time=parnames_time,
                       age=age,
                       ageN=ageN,
                       ind_const_calib=ind_const_calib,

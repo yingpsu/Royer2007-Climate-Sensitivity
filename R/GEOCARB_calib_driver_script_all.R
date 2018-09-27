@@ -16,7 +16,6 @@ n_node000 <- 10        # number of CPUs to use
 appen <- 'tvq_all'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-co2_uncertainty_cutoff <- 20
 
 # Distribution fit to each data point in the processing step
 #dist <- 'ga'  # gamma
@@ -93,11 +92,7 @@ for (i in 1:length(parnames_calib)) {
   bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
 }
 
-# only need to rearrange if DO_SAMPLE_TVQ
-if (DO_SAMPLE_TVQ) {
-  bound_lower <- bound_lower[match(parnames_calib, as.character(input$parameter))]
-  bound_upper <- bound_upper[match(parnames_calib, as.character(input$parameter))]
-}
+rm(list=c('bound_lower','bound_upper','bounds'))
 
 # Other characteristics are in 'input' and 'time_arrays', which are fed into
 # the calibration MCMC call below.
@@ -133,7 +128,7 @@ if(DO_SAMPLE_TVQ) {
     amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
                     scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
@@ -152,7 +147,7 @@ if(DO_SAMPLE_TVQ) {
           					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
           					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
@@ -169,7 +164,7 @@ if(DO_SAMPLE_TVQ) {
     amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
                     scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
@@ -187,7 +182,7 @@ if(DO_SAMPLE_TVQ) {
           					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
           					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                    parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                     ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                     ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
@@ -210,7 +205,7 @@ niter_extend <- 1e4
 tbeg=proc.time()
 amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
                                 par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                                parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                                parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                                 ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                                 ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                                 input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,

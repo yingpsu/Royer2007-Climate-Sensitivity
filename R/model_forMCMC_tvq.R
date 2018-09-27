@@ -16,6 +16,7 @@
 ##                   different values)
 ##  parnames_calib   calibration parameter names
 ##  parnames_fixed   fixed parameter names
+##  parnames_time    time-varying parameter names
 ##  do_sample_tvq    (logical) turn CDF samples from par_calib into time-varying
 ##                   parameter arrays?
 ##  par_time_center  centers of the time varying parameter arrays
@@ -27,7 +28,7 @@
 ##  o2               O2 concentration, ppmv
 ##==============================================================================
 
-model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed,
+model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed, parnames_time,
                           age, ageN, ind_const_calib, ind_time_calib,
                           ind_const_fixed, ind_time_fixed,
                           ind_expected_time, ind_expected_const,

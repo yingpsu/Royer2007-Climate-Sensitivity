@@ -25,10 +25,12 @@ library(doParallel)
 
 ##==============================================================================
 sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
-                      par_fixed, parnames_calib, parnames_fixed,
+                      par_fixed, parnames_calib, parnames_fixed, parnames_time,
                       age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
                       ind_time_fixed, ind_expected_time, ind_expected_const,
                       iteration_threshold, input, model_ref=NULL, data_calib=NULL,
+                      do_sample_tvq=FALSE,
+                      par_time_center=par_time_center, par_time_stdev=par_time_stdev,
                       parallel=FALSE, n_core=1, export_names=NULL,
                       n_boot=0, conf=0.9, second=FALSE){
 
@@ -66,10 +68,12 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
 
   # run the model ensemble under sample A
   mA <- sobol_func(parameters_sampleA, sens, par_fixed, parnames_calib,
-                   parnames_fixed, age, ageN, ind_const_calib, ind_time_calib,
+                   parnames_fixed, parnames_time, age, ageN, ind_const_calib, ind_time_calib,
                    ind_const_fixed, ind_time_fixed, ind_expected_time,
                    ind_expected_const, iteration_threshold, input,
-                   model_ref, data_calib, n_core, export_names)
+                   model_ref, data_calib, do_sample_tvq=do_sample_tvq,
+                   par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                   n_core, export_names)
 
   # account for possible NA, and extreme values
   idrop <- which(is.na(mA) | is.nan(mA) | is.infinite(mA) | mA < -10)
@@ -108,10 +112,12 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
                 # dropped from all and the calculation for Vi can be consistent
                 # in # samples, for bootstrap CI
     m_BA <- sobol_func(p_BA, sens, par_fixed, parnames_calib, parnames_fixed,
-                       age, ageN, ind_const_calib, ind_time_calib,
+                       parnames_time, age, ageN, ind_const_calib, ind_time_calib,
                        ind_const_fixed, ind_time_fixed, ind_expected_time,
                        ind_expected_const, iteration_threshold, input,
-                       model_ref, data_calib, n_core, export_names)
+                       model_ref, data_calib, do_sample_tvq=do_sample_tvq,
+                       par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                       n_core, export_names)
 
     # account for possible NA, and extreme values
     idrop <- which(is.na(m_BA) | is.nan(m_BA) | is.infinite(m_BA) | m_BA < -10)
@@ -168,10 +174,12 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
         p_BA[,c(i,k)] <- parameters_sampleA[,c(i,k)]
         mA_i <- mA
         m_BA <- sobol_func(p_BA, sens, par_fixed, parnames_calib, parnames_fixed,
-                           age, ageN, ind_const_calib, ind_time_calib,
+                           parnames_time, age, ageN, ind_const_calib, ind_time_calib,
                            ind_const_fixed, ind_time_fixed, ind_expected_time,
                            ind_expected_const, iteration_threshold, input,
-                           model_ref, data_calib, n_core, export_names)
+                           model_ref, data_calib, do_sample_tvq=do_sample_tvq,
+                           par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                           n_core, export_names)
 
         # account for possible NA, and extreme values
         idrop <- which(is.na(m_BA) | is.nan(m_BA) | is.infinite(m_BA) | m_BA < -10)
@@ -231,10 +239,12 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
     p_AB[,i] <- parameters_sampleB[,i]
     mA_i <- mA
     m_AB <- sobol_func(p_AB, sens, par_fixed, parnames_calib, parnames_fixed,
-                       age, ageN, ind_const_calib, ind_time_calib,
+                       parnames_time, age, ageN, ind_const_calib, ind_time_calib,
                        ind_const_fixed, ind_time_fixed, ind_expected_time,
                        ind_expected_const, iteration_threshold, input,
-                       model_ref, data_calib, n_core, export_names)
+                       model_ref, data_calib, do_sample_tvq=do_sample_tvq,
+                       par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                       n_core, export_names)
 
     # account for possible NA, and extreme values
     idrop <- which(is.na(m_AB) | is.nan(m_AB) | is.infinite(m_AB) | m_AB < -10)

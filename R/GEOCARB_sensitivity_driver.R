@@ -1,10 +1,10 @@
 ##==============================================================================
 ## GEOCARB_sensitivity_driver.R
 ##
-## Precalibration and
-## sensitivity experiment with GEOCARB model (Foster et al 2017 version)
+## Sobol' sensitivity experiment with GEOCARBSULFvolc model
 ##
-## Builds off a previous LHS precalibration sample
+## Builds off a previous calibration ensemble output for analysis
+## (posterior samples)
 ##
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
@@ -13,39 +13,32 @@
 rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
-n_sample <- 30000
-appen <- 'n30K-bs10K'
-.Nboot <- 10000
-#n_sample <- 500
-#appen <- 'TEST'
-#.Nboot <- 100
+## if there aren't enough samples on the MCMC output file, will break.
+n_sample <- 200
+.Nboot <- 50
+appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
-.second <- TRUE
-l_parallel <- FALSE
-
-co2_uncertainty_cutoff <- 20
+.second <- TRUE    # calculate second-order indices?
+l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
+do_sample_tvq <- TRUE
 
 # latin hypercube precalibration
-alpha <- 0
-sens='L1' # valid values:  L1, L2, NS, pres
+sens='NS' # valid values:  L1, L2, NS, pres
 
-filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
+# calibration parameters and input data
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all.csv'
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
 
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
   machine <- 'local'
   setwd('/Users/tony/codes/GEOCARB/R')
   .Ncore <- 2
-  #filename_in <- NULL # NULL means no precalibration
-  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_30Mar2018.csv'
-  #filename_in <- '../output/geocarb_precalibration_parameters_alpha10_25Mar2018.csv'
 } else {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('/home/scrim/axw322/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
-  #filename_in <- NULL
-  filename_in <- '../output/geocarb_precalibration_parameters_alpha0_01Apr2018.csv'
 }
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
@@ -59,35 +52,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 ## Data
 ##=====
 
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'
-#filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2-filtered_09Aug2018.csv'
 source('GEOCARB-2014_getData.R')
-
-# possible filtering out of some data points with too-narrow uncertainties in
-# co2 (causing overconfidence in model simulations that match those data points
-# well)
-# set to +65%, - 30% uncertain range around the central estimate
-if(co2_uncertainty_cutoff > 0) {
-  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
-  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
-  ind_remove <- NULL
-  for (ii in ind_filter) {
-    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
-    range_updated  <- data_calib[ii,'co2']*0.95
-    if (range_updated > range_original) {
-      # update to the wider uncertain range if +65/-30% is wider
-      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
-      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
-    } else {
-      # otherwise, remove
-      ind_remove <- c(ind_remove, ii)
-    }
-  }
-  ## If both commented out, not doing anything
-  ##if(length(ind_remove) > 0) {data_calib <- data_calib[-ind_remove,]}
-  ##if(length(ind_filter) > 0) {data_calib <- data_calib[-ind_filter,]}
-}
 
 # assumption of steady state in-between model time steps permits figuring out
 # which model time steps each data point should be compared against in advance.
@@ -101,7 +66,6 @@ ind_mod2obs <- rep(NA,nrow(data_calib))
 for (i in 1:length(ind_mod2obs)){
   ind_mod2obs[i] <- which(age_tmp==ttmp[i])
 }
-
 ##==============================================================================
 
 
@@ -110,7 +74,8 @@ for (i in 1:length(ind_mod2obs)){
 ##===========================
 
 # Read parameter information, set up the calibration parameters
-source('GEOCARB-2014_parameterSetup.R')
+source('GEOCARB-2014_parameterSetup_tvq.R')
+source('model_forMCMC_tvq.R')
 n_parameters <- length(parnames_calib)
 ##==============================================================================
 
@@ -119,7 +84,7 @@ n_parameters <- length(parnames_calib)
 ## Calibration parameter prior distributions
 ##==========================================
 
-# Get model parameter prior distributions
+# Get model parameter prior distribution bounds
 names <- as.character(input$parameter)
 bound_lower <- rep(NA, length(names))
 bound_upper <- rep(NA, length(names))
@@ -134,13 +99,15 @@ rownames(bounds) <- as.character(input$parameter)
 
 # only actually need the calibration parameters' bounds, so reformat the bounds
 # array to match the vector of calibration parameters
-bounds_calib <- mat.or.vec(nr=n_parameters, nc=2)
+bounds_calib <- mat.or.vec(nr=length(parnames_calib), nc=2)
 colnames(bounds_calib) <- c('lower','upper')
 rownames(bounds_calib) <- parnames_calib
-for (i in 1:n_parameters) {
+for (i in 1:length(parnames_calib)) {
   bounds_calib[i,'lower'] <- bounds[parnames_calib[i],'bound_lower']
   bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
 }
+
+rm(list=c('bound_lower','bound_upper','bounds'))
 
 # Other characteristics are in 'input' and 'time_arrays', which are fed into
 # the sensitivity analysis call below.
@@ -148,106 +115,72 @@ for (i in 1:n_parameters) {
 
 
 ##==============================================================================
-## Set up for optimization
-##========================
+## Set up
+##=======
 
 # need the physical model
-source('model_forMCMC.R')
 source('run_geocarbF.R')
-
-# need the likelihood function and prior distributions
-source('GEOCARB-2014_calib_likelihood.R')
 
 # needed packages
 #install.packages('sensitivity')
 #install.packages('sn')
-#install.packages('lhs')
 #install.packages('foreach')
 #install.packages('doParallel')
 library(sensitivity)
 library(sn)
-library(lhs)
 library(foreach)
 library(doParallel)
 ##==============================================================================
 
 
-## this is where the LHS precalibration would go...
-
 
 ##==============================================================================
 
-## Read precalibration results file, separate into parameters and the bandwidths
-## (Moved to beginning because this depends on remote vs local, whether small
-## testing or ready to go large parameter sets, and whether sampling from
-## precalibration CSV results or sampling directly from the priors.)
-if (is.null(filename_in)) {
-  # set up LHS sample
-  parameters_lhs <- randomLHS(2*n_sample, length(parnames_calib))
-  # initialize
-  parameters_node <- parameters_lhs
-  # resample for the actual parameter distirbutions
-  for (i in 1:length(parnames_calib)) {
-    # instead, draw from the priors
-    row_num <- match(parnames_calib[i],input$parameter)
-    if(input[row_num, 'distribution_type']=='gaussian') {
-      parameters_node[,i] <- qnorm(p=parameters_lhs[,i], mean=input[row_num,'mean'], sd=(0.5*input[row_num,"two_sigma"]))
-      # check if out of bounds
-      irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
-      while (length(irem) > 0) {
-        parameters_node[irem,i] <- rnorm(mean=input[row_num,'mean'], sd=(0.5*input[row_num,"two_sigma"]), n=length(irem))
-        irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
-      }
-    } else if(input[row_num, 'distribution_type']=='lognormal') {
-      parameters_node[,i] <- qlnorm(p=parameters_lhs[,i], meanlog=log(input[row_num,'mean']), sdlog=log(0.5*input[row_num,"two_sigma"]))
-      # check if out of bounds
-      irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
-      while (length(irem) > 0) {
-        parameters_node[irem,i] <- rlnorm(meanlog=log(input[row_num,'mean']), sdlog=log(0.5*input[row_num,"two_sigma"]), n=length(irem))
-        irem <- which(parameters_node[,i] < bounds_calib[i,1] | parameters_node[,i] > bounds_calib[i,2])
-      }
-    } else {print('ERROR - unknown distribution type')}
-  }
-} else {
-  parameters_node <- read.csv(filename_in)
-  n_node <- nrow(parameters_node)-1
-  bandwidths <- parameters_node[n_node+1,]
-  parameters_node <- parameters_node[-(n_node+1),]
-}
+## Read calibration results file, separate into two parameter data frames
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018.nc')
+parameters_mcmc <- t(ncvar_get(ncdata, 'geocarb_parameters'))
+nc_close(ncdata)
+n_ensemble <- nrow(parameters_mcmc)
 
 ## Sample parameters (need 2 data frames of size n_sample each)
-indAvailable <- 1:nrow(parameters_node)
+if(n_ensemble < 2*n_sample) {print('ERROR - not enough simulations for 2 samples of requested size')}
+indAvailable <- 1:n_ensemble
 indA <- sample(indAvailable, size=n_sample, replace=FALSE)
 indAvailable <- indAvailable[-indA]
 indB <- sample(indAvailable, size=n_sample, replace=FALSE)
-parameters_sampleA <- parameters_node[indA,]
-parameters_sampleB <- parameters_node[indB,]
+parameters_sampleA <- parameters_mcmc[indA,]
+parameters_sampleB <- parameters_mcmc[indB,]
 colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 
 ##==============================================================================
 
 ## Get a reference simulation for integrated sensitivity measure (if using L1, e.g.)
 model_ref <- model_forMCMC(par_calib=par_calib0,
-              par_fixed=par_fixed0,
-              parnames_calib=parnames_calib,
-              parnames_fixed=parnames_fixed,
-              age=age,
-              ageN=ageN,
-              ind_const_calib=ind_const_calib,
-              ind_time_calib=ind_time_calib,
-              ind_const_fixed=ind_const_fixed,
-              ind_time_fixed=ind_time_fixed,
-              ind_expected_time=ind_expected_time,
-              ind_expected_const=ind_expected_const,
-              iteration_threshold=iteration_threshold)[,'co2']
+                           par_fixed=par_fixed0,
+                           parnames_calib=parnames_calib,
+                           parnames_fixed=parnames_fixed,
+                           parnames_time=parnames_time,
+                           age=age,
+                           ageN=ageN,
+                           ind_const_calib=ind_const_calib,
+                           ind_time_calib=ind_time_calib,
+                           ind_const_fixed=ind_const_fixed,
+                           ind_time_fixed=ind_time_fixed,
+                           ind_expected_time=ind_expected_time,
+                           ind_expected_const=ind_expected_const,
+                           iteration_threshold=iteration_threshold,
+                           do_sample_tvq=do_sample_tvq,
+                           par_time_center=par_time_center,
+                           par_time_stdev=par_time_stdev)[,'co2']
 
 l_scaled <- TRUE
-export_names <- c('model_forMCMC', 'run_geocarbF',
-                  'par_fixed0', 'parnames_calib', 'parnames_fixed', 'age', 'ageN',
+export_names <- c('model_forMCMC', 'run_geocarbF', 'age', 'ageN',
+                  'par_fixed0', 'parnames_calib', 'parnames_fixed', 'parnames_time',
                   'ind_const_calib', 'ind_time_calib', 'ind_const_fixed',
                   'ind_time_fixed', 'input', 'ind_expected_time',
                   'ind_expected_const', 'iteration_threshold', 'l_scaled', 'sens',
-                  'model_ref', 'data_calib', 'ind_mod2obs')
+                  'model_ref', 'data_calib', 'ind_mod2obs', 'do_sample_tvq',
+                  'par_time_center', 'par_time_stdev')
 
 n_boot <- .Nboot
 conf <- .confidence
@@ -260,22 +193,26 @@ source('sobolTony.R')
 if (!l_parallel) {
   t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     parnames_fixed=parnames_fixed, parnames_time=parnames_time,
+                     age=age, ageN=ageN,
                      ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                      ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
                      input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
+                     do_sample_tvq=do_sample_tvq, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
                      n_boot=n_boot, conf=conf, second=.second))
 } else {
   t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                     parnames_fixed=parnames_fixed, age=age, ageN=ageN,
+                     parnames_fixed=parnames_fixed, parnames_time=parnames_time,
+                     age=age, ageN=ageN,
                      ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
                      ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                     input=input, ind_expected_time=ind_expected_time, 
+                     input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
+                     do_sample_tvq=do_sample_tvq, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
                      parallel=TRUE, n_core=Ncore, export_names=export_names,
                      n_boot=n_boot, conf=conf, second=.second))
 }

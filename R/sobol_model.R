@@ -17,10 +17,11 @@
 
 ##==============================================================================
 sobol_model <- function(parameters, sens,
-                        par_fixed, parnames_calib, parnames_fixed,
+                        par_fixed, parnames_calib, parnames_fixed, parnames_time,
                         age, ageN, ind_const_calib, ind_time_calib, ind_const_fixed,
                         ind_time_fixed, ind_expected_time, ind_expected_const,
                         iteration_threshold, input, model_ref=NULL, data_calib=NULL,
+                        do_sample_tvq=FALSE, par_time_center=NULL, par_time_stdev=NULL,
                         n_core=1, export_names=NULL
                         ){
 
@@ -33,6 +34,7 @@ sobol_model <- function(parameters, sens,
                                par_fixed=par_fixed,
                                parnames_calib=parnames_calib,
                                parnames_fixed=parnames_fixed,
+                               parnames_time=parnames_time,
                                age=age,
                                ageN=ageN,
                                ind_const_calib=ind_const_calib,
@@ -41,7 +43,10 @@ sobol_model <- function(parameters, sens,
                                ind_time_fixed=ind_time_fixed,
                                ind_expected_time=ind_expected_time,
                                ind_expected_const=ind_expected_const,
-                               iteration_threshold=iteration_threshold)[,'co2']
+                               iteration_threshold=iteration_threshold,
+                               do_sample_tvq=do_sample_tvq,
+                               par_time_center=par_time_center,
+                               par_time_stdev=par_time_stdev)[,'co2']
 
     # calculate sensitivity metric
     if (sens=='pres') {
@@ -71,6 +76,7 @@ sobol_model <- function(parameters, sens,
                                  par_fixed=par_fixed,
                                  parnames_calib=parnames_calib,
                                  parnames_fixed=parnames_fixed,
+                                 parnames_time=parnames_time,
                                  age=age,
                                  ageN=ageN,
                                  ind_const_calib=ind_const_calib,
@@ -79,7 +85,10 @@ sobol_model <- function(parameters, sens,
                                  ind_time_fixed=ind_time_fixed,
                                  ind_expected_time=ind_expected_time,
                                  ind_expected_const=ind_expected_const,
-                                 iteration_threshold=iteration_threshold)[,'co2']})
+                                 iteration_threshold=iteration_threshold,
+                                 do_sample_tvq=do_sample_tvq,
+                                 par_time_center=par_time_center,
+                                 par_time_stdev=par_time_stdev)[,'co2']})
 
     # calculate sensitivity metric
     if (sens=='pres') {
@@ -115,12 +124,13 @@ sobol_model <- function(parameters, sens,
 
 ##==============================================================================
 sobol_model_par <- function(parameters, sens,
-                            par_fixed, parnames_calib, parnames_fixed,
+                            par_fixed, parnames_calib, parnames_fixed, parnames_time,
                             age, ageN, ind_const_calib, ind_time_calib,
                             ind_const_fixed, ind_time_fixed, ind_expected_time,
                             ind_expected_const, iteration_threshold, input,
-                            model_ref=NULL, data_calib=NULL, n_core=1,
-                            export_names=NULL
+                            model_ref=NULL, data_calib=NULL, do_sample_tvq=FALSE,
+                            par_time_center=NULL, par_time_stdev=NULL,
+                            n_core=1, export_names=NULL
                             ){
 
   n_simulations <- nrow(parameters)
@@ -133,6 +143,7 @@ sobol_model_par <- function(parameters, sens,
                                par_fixed=par_fixed,
                                parnames_calib=parnames_calib,
                                parnames_fixed=parnames_fixed,
+                               parnames_time=parnames_time,
                                age=age,
                                ageN=ageN,
                                ind_const_calib=ind_const_calib,
@@ -141,7 +152,10 @@ sobol_model_par <- function(parameters, sens,
                                ind_time_fixed=ind_time_fixed,
                                ind_expected_time=ind_expected_time,
                                ind_expected_const=ind_expected_const,
-                               iteration_threshold=iteration_threshold)[,'co2']
+                               iteration_threshold=iteration_threshold,
+                               do_sample_tvq=do_sample_tvq,
+                               par_time_center=par_time_center,
+                               par_time_stdev=par_time_stdev)[,'co2']
 
     # calculate sensitivity metric
     if (sens=='pres') {
@@ -183,6 +197,7 @@ sobol_model_par <- function(parameters, sens,
                                  par_fixed=par_fixed,
                                  parnames_calib=parnames_calib,
                                  parnames_fixed=parnames_fixed,
+                                 parnames_time=parnames_time,
                                  age=age,
                                  ageN=ageN,
                                  ind_const_calib=ind_const_calib,
@@ -191,7 +206,10 @@ sobol_model_par <- function(parameters, sens,
                                  ind_time_fixed=ind_time_fixed,
                                  ind_expected_time=ind_expected_time,
                                  ind_expected_const=ind_expected_const,
-                                 iteration_threshold=iteration_threshold)[,'co2']
+                                 iteration_threshold=iteration_threshold,
+                                 do_sample_tvq=do_sample_tvq,
+                                 par_time_center=par_time_center,
+                                 par_time_stdev=par_time_stdev)[,'co2']
 
       # calculate sensitivity metric
       if (sens=='pres') {
