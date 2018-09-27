@@ -14,12 +14,12 @@ rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 200
-.Nboot <- 50
+n_sample <- 2000
+.Nboot <- 1000
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
 .second <- TRUE    # calculate second-order indices?
-l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
+l_parallel <- TRUE # use parallel evaluation of ensembles in Sobol' integration?
 do_sample_tvq <- TRUE
 
 # latin hypercube precalibration
@@ -28,6 +28,7 @@ sens='NS' # valid values:  L1, L2, NS, pres
 # calibration parameters and input data
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all.csv'
 filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
+filename.calibout <- '../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc'
 
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
@@ -126,10 +127,12 @@ source('run_geocarbF.R')
 #install.packages('sn')
 #install.packages('foreach')
 #install.packages('doParallel')
+#install.packages('ncdf4')
 library(sensitivity)
 library(sn)
 library(foreach)
 library(doParallel)
+library(ncdf4)
 ##==============================================================================
 
 
@@ -137,7 +140,7 @@ library(doParallel)
 ##==============================================================================
 
 ## Read calibration results file, separate into two parameter data frames
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018.nc')
+ncdata <- nc_open(filename.calibout)
 parameters_mcmc <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 n_ensemble <- nrow(parameters_mcmc)
