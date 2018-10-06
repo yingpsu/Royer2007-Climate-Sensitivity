@@ -15,11 +15,11 @@ rm(list=ls())
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
 n_sample <- 1000
-.Nboot <- 200
-appen <- 'test'
+.Nboot <- 100
+appen <- 'TEST-5kN-1kBS'
 .confidence <- 0.9 # for bootstrap CI
 .second <- FALSE    # calculate second-order indices?
-l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
+l_parallel <- TRUE # use parallel evaluation of ensembles in Sobol' integration?
 do_sample_tvq <- TRUE
 
 # latin hypercube precalibration
@@ -55,6 +55,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 
 source('GEOCARB-2014_getData.R')
 
+co2_uncertainty_cutoff <- 20
 
 # possible filtering out of some data points with too-narrow uncertainties in
 # co2 (causing overconfidence in model simulations that match those data points
@@ -253,7 +254,7 @@ if (!l_parallel) {
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-filename.sobol <- paste('../output/sobol_alpha',100*alpha,'_sens',sens,'_',appen,'_',today,'.rds', sep='')
+filename.sobol <- paste('../output/sobol_sens',sens,'_',appen,'_',today,'.rds', sep='')
 saveRDS(s.out, filename.sobol)
 
 ## Check convergence - is maximum confidence interval width < 10% of the highest
@@ -269,8 +270,8 @@ print(paste('max. conf int=',max_conf_int, ' want less than:  0.1 * max. sensiti
 ## Write indices, results we'd need to file
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_alpha',100*alpha,'_sens',sens,'_',appen,'_',today,'.txt',sep='')
-file.sobolout2 <- paste('../output/geocarb_sobol-2_alpha',100*alpha,'_sens',sens,'_',appen,'_',today,'.txt',sep='')
+file.sobolout1 <- paste('../output/geocarb_sobol-1-tot_sens',sens,'_',appen,'_',today,'.txt',sep='')
+file.sobolout2 <- paste('../output/geocarb_sobol-2_sens',sens,'_',appen,'_',today,'.txt',sep='')
 
 headers.1st.tot <- matrix(c('Parameter', 'S1', 'S1_conf_low', 'S1_conf_high',
                             'ST', 'ST_conf_low', 'ST_conf_high'), nrow=1)
