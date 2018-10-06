@@ -85,6 +85,7 @@ model_out <- sapply(X=1:n_ensemble,
                                             par_fixed=par_fixed0,
                                             parnames_calib=parnames_calib,
                                             parnames_fixed=parnames_fixed,
+                                            parnames_time=parnames_time,
                                             age=age,
                                             ageN=ageN,
                                             ind_const_calib=ind_const_calib,
@@ -100,11 +101,11 @@ model_out <- sapply(X=1:n_ensemble,
 n_time <- nrow(model_out)
 
 # get 5-95% range and median  are cols 1-3; max-post will be 4
-model_quantiles <- mat.or.vec(nr=n_time, nc=4)
-quantiles_i_want <- c(.05,.5,.95)
-colnames(model_quantiles) <- c('q05','q50','q95','maxpost')
+quantiles_i_want <- c(.025,.05,.5,.95,.975)
+model_quantiles <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
+colnames(model_quantiles) <- c('q025','q05','q50','q95','q975','maxpost')
 for (t in 1:n_time) {
-  model_quantiles[t,1:3] <- quantile(model_out[t,], quantiles_i_want)
+    model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out[t,], quantiles_i_want)
 }
 
 # get posterior scores
@@ -114,6 +115,7 @@ lpost_out <- sapply(X=1:n_ensemble,
                                       par_fixed=par_fixed0,
                                       parnames_calib=parnames_calib,
                                       parnames_fixed=parnames_fixed,
+                                      parnames_time=parnames_time,
                                       age=age,
                                       ageN=ageN,
                                       ind_const_calib=ind_const_calib,
@@ -224,6 +226,7 @@ model_out_nm <- sapply(X=1:n_ensemble,
                                             par_fixed=par_fixed0,
                                             parnames_calib=parnames_calib,
                                             parnames_fixed=parnames_fixed,
+                                            parnames_time=parnames_time,
                                             age=age,
                                             ageN=ageN,
                                             ind_const_calib=ind_const_calib,
@@ -251,6 +254,7 @@ lpost_out_nm <- sapply(X=1:n_ensemble,
                                       par_fixed=par_fixed0,
                                       parnames_calib=parnames_calib,
                                       parnames_fixed=parnames_fixed,
+                                      parnames_time=parnames_time,
                                       age=age,
                                       ageN=ageN,
                                       ind_const_calib=ind_const_calib,

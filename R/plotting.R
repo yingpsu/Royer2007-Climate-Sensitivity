@@ -4,14 +4,11 @@
 ## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+rm(list=ls())
+
 setwd('~/codes/GEOCARB/R')
-
-library(ncdf4)
-
-
 plot.dir <- '../figures/'
-
-load('analysis.RData')
+load('../output/analysis.RData')
 
 ##==============================================================================
 # Figure 1. Observations and fitted likelihood surface.
@@ -41,6 +38,18 @@ dev.off()
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
 #model_quantiles[,'maxpost'] <- model_out[,which.max(lpost_out)]
+
+pdf(paste(plot.dir,'model_ensemble_vs_obs.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.8,.75,.15,.15))
+plot(-time, model_quantiles[,'q50'], type='l', xlim=c(-450,0), ylim=c(0,6500), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n')
+polygon(-c(time,rev(time)), c(model_quantiles[,'q05'],rev(model_quantiles[,'q95'])), col='aquamarine1', border=NA)
+lines(--time, model_quantiles[,'maxpost'], lwd=2)
+lines(--time, model_ref, lwd=2, lty=2)
+points(-data_calib$age, data_calib$co2, pch='+', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.4, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=2.4, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+dev.off()
 
 
 ##==============================================================================
