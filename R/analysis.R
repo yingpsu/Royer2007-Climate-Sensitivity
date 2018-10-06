@@ -32,6 +32,7 @@ source('GEOCARB-2014_parameterSetup_tvq.R')
 source('model_forMCMC_tvq.R')
 source('run_geocarbF.R')
 source('GEOCARB_fit_likelihood_surface.R')
+source('likelihood_surface_quantiles.R')
 
 # Get model parameter prior distribution bounds
 names <- as.character(input$parameter)
@@ -68,7 +69,7 @@ save.image(file='../output/analysis.RData')
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018.nc')
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
 parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 parnames <- ncvar_get(ncdata, 'parnames')
 nc_close(ncdata)
@@ -172,16 +173,36 @@ save.image(file='../output/analysis.RData')
 # gray bars represent second-order sensitivity indices for the interaction
 # between the parameter pair.
 
+# TODO
+# TODO
+# TODO
+# TODO
+
+save.image(file='../output/analysis.RData')
 ##======================================
 
 
 
 # Supplementary Figures
 
+
+
 ##==============================================================================
 # Figure S1.  Histograms and parameter pairs plots for the calibrated parameters.
 # Use contours of probability density for the pairs plots.
 
+# example code
+n_pairs <- n_parameters*(n_parameters+1)*0.5
+kfits <- vector('list', )
+kfit <- kde2d(parameters[,1], parameters[,2])
+contour(kfit$x,kfit$y, kfit$z)
+
+# TODO
+# TODO
+# TODO
+# TODO
+
+save.image(file='../output/analysis.RData')
 ##======================================
 
 
@@ -193,6 +214,68 @@ save.image(file='../output/analysis.RData')
 # superimposed (+ markers), assuming a symmetric (Gaussian) error structure for
 # the proxy data as opposed to skew-normal (main text).
 
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_26Sep2018nm.nc')
+parameters_nm <- t(ncvar_get(ncdata, 'geocarb_parameters'))
+nc_close(ncdata)
+
+# run the ensemble
+model_out_nm <- sapply(X=1:n_ensemble,
+              FUN=function(k){model_forMCMC(par_calib=parameters_nm[k,],
+                                            par_fixed=par_fixed0,
+                                            parnames_calib=parnames_calib,
+                                            parnames_fixed=parnames_fixed,
+                                            age=age,
+                                            ageN=ageN,
+                                            ind_const_calib=ind_const_calib,
+                                            ind_time_calib=ind_time_calib,
+                                            ind_const_fixed=ind_const_fixed,
+                                            ind_time_fixed=ind_time_fixed,
+                                            ind_expected_time=ind_expected_time,
+                                            ind_expected_const=ind_expected_const,
+                                            iteration_threshold=iteration_threshold,
+                                            do_sample_tvq=DO_SAMPLE_TVQ,
+                                            par_time_center=par_time_center,
+                                            par_time_stdev=par_time_stdev)[,'co2']})
+
+# get 5-95% range and median  are cols 1-3; max-post will be 4
+model_quantiles_nm <- mat.or.vec(nr=n_time, nc=4)
+colnames(model_quantiles_nm) <- c('q05','q50','q95','maxpost')
+for (t in 1:n_time) {
+  model_quantiles_nm[t,1:3] <- quantile(model_out_nm[t,], quantiles_i_want)
+}
+
+# get posterior scores
+
+lpost_out_nm <- sapply(X=1:n_ensemble,
+              FUN=function(k){log_post(par_calib=parameters_nm[k,],
+                                      par_fixed=par_fixed0,
+                                      parnames_calib=parnames_calib,
+                                      parnames_fixed=parnames_fixed,
+                                      age=age,
+                                      ageN=ageN,
+                                      ind_const_calib=ind_const_calib,
+                                      ind_time_calib=ind_time_calib,
+                                      ind_const_fixed=ind_const_fixed,
+                                      ind_time_fixed=ind_time_fixed,
+                                      input=input,
+                                      time_arrays=time_arrays,
+                                      bounds_calib=bounds_calib,
+                                      data_calib=data_calib,
+                                      ind_mod2obs=ind_mod2obs,
+                                      ind_expected_time=ind_expected_time,
+                                      ind_expected_const=ind_expected_const,
+                                      iteration_threshold=iteration_threshold,
+                                      n_shard=1,
+                                      loglikelihood_smoothed=loglikelihood_smoothed,
+                                      likelihood_fit=likelihood_fit,
+                                      idx_data=idx_data,
+                                      do_sample_tvq=DO_SAMPLE_TVQ,
+                                      par_time_center=par_time_center,
+                                      par_time_stdev=par_time_stdev)})
+
+model_quantiles_nm[,'maxpost'] <- model_out_nm[,which.max(lpost_out_nm)]
+
+save.image(file='../output/analysis.RData')
 ##======================================
 
 
@@ -202,6 +285,11 @@ save.image(file='../output/analysis.RData')
 # parameter (deltaT2X), relative to previous studies), assuming a symmetric
 # (Gaussian) error structure for the proxy data as opposed to skew-normal.
 
+deltaT2X_density_nm <- density(parameters_nm[,ics], from=0, to=10)
+
+#plot(deltaT2X_density$x, deltaT2X_density$y, type='l', lwd=2); lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y, type='l', lty=2, lwd=2)
+
+save.image(file='../output/analysis.RData')
 ##======================================
 
 

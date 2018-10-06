@@ -10,16 +10,16 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_sig18.csv"
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_tvq_all.csv"
 
-# with precalibration:
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_n30K-bs10K_03Aug2018.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_sensNS_n30K-bs10K_03Aug2018.txt"
-# without precalibration (draw from priors):
-#Sobol_file_1 <- "../output/geocarb_sobol-1-tot_alpha0_sensNS_n30K-bs10K_08Aug2018.txt"
-#Sobol_file_2 <- "../output/geocarb_sobol-2_alpha0_sensNS_n30K-bs10K_08Aug2018.txt"
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_30kN-5kBS_28Sep2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_30kN-5kBS_28Sep2018.txt"
 
-n_params <- 56
+#-rw-r--r--   1 tony  staff   7.8K Sep 28 08:38 geocarb_sobol-1-tot_sensNS_30kN-5kBS_28Sep2018.txt
+#-rw-r--r--   1 tony  staff   148K Sep 28 08:38 geocarb_sobol-2_sensNS_30kN-5kBS_28Sep2018.txt
+#-rw-r--r--   1 tony  staff    16M Sep 28 08:38 sobol_sensNS_30kN-5kBS_28Sep2018.rds
+
+n_params <- 68
 plotdir <- '../figures/'
 
 ##==============================================================================
@@ -106,7 +106,7 @@ s2_sig1 <- stat_sig_s2(s2
 
 ##==============================================================================
 ## Get sensitive parameter names
-source('GEOCARB-2014_parameterSetup.R')
+source('GEOCARB-2014_parameterSetup_tvq.R')
 
 # yields parnames_calib, which are the sensitive parameters
 ind_sensit <- which(parnames.sobol %in% parnames_calib)
@@ -139,7 +139,8 @@ name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^
                   expression('dlgy'['570']), expression('dlga'['570']), expression('Rcy'['570']),
                   expression('Rca'['570']), expression('Rv'['570']), expression('Rg'['570']),
                   'Fob', 'COC', 'Ga', 'Ssa', 'Spa', 'ST', 'dlst', 'CT', 'dlct',
-                  'kwpy', 'kwsy', 'kwgy', 'kwcy'
+                  'kwpy', 'kwsy', 'kwgy', 'kwcy',
+                  "Sr", "d13C", "d34S", "fR", "fL", "fA", "fD", "fAw_fA", "RT", "GEOG", "fSR", "fC"
 )
 
 new_name_symbols <- c(name_symbols[ind_sensit], name_symbols[ind_insens])

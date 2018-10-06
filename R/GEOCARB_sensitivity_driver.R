@@ -14,12 +14,12 @@ rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 2000
-.Nboot <- 1000
+n_sample <- 1000
+.Nboot <- 200
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
-.second <- TRUE    # calculate second-order indices?
-l_parallel <- TRUE # use parallel evaluation of ensembles in Sobol' integration?
+.second <- FALSE    # calculate second-order indices?
+l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
 do_sample_tvq <- TRUE
 
 # latin hypercube precalibration
@@ -55,6 +55,33 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 
 source('GEOCARB-2014_getData.R')
 
+
+# possible filtering out of some data points with too-narrow uncertainties in
+# co2 (causing overconfidence in model simulations that match those data points
+# well)
+# set to +65%, - 30% uncertain range around the central estimate
+if(co2_uncertainty_cutoff > 0) {
+  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
+  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
+  ind_remove <- NULL
+  for (ii in ind_filter) {
+    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
+    range_updated  <- data_calib[ii,'co2']*0.95
+    if (range_updated > range_original) {
+      # update to the wider uncertain range if +65/-30% is wider
+      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
+      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
+    } else {
+      # otherwise, remove
+      ind_remove <- c(ind_remove, ii)
+    }
+  }
+  data_calib <- data_calib[-ind_filter,]    # removing all of the possibly troublesome points
+  ##data_calib <- data_calib[-ind_remove,]    # remove only those the revised range does not help
+}
+
+# redo with reduced data set
+
 # assumption of steady state in-between model time steps permits figuring out
 # which model time steps each data point should be compared against in advance.
 # doing this each calibration iteration would be outrageous!
@@ -67,6 +94,7 @@ ind_mod2obs <- rep(NA,nrow(data_calib))
 for (i in 1:length(ind_mod2obs)){
   ind_mod2obs[i] <- which(age_tmp==ttmp[i])
 }
+
 ##==============================================================================
 
 
@@ -158,7 +186,7 @@ colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
 ##==============================================================================
 
 ## Get a reference simulation for integrated sensitivity measure (if using L1, e.g.)
-model_ref <- model_forMCMC(par_calib=par_calib0,
+model_out <- model_forMCMC(par_calib=par_calib0,
                            par_fixed=par_fixed0,
                            parnames_calib=parnames_calib,
                            parnames_fixed=parnames_fixed,
@@ -174,7 +202,9 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
                            iteration_threshold=iteration_threshold,
                            do_sample_tvq=do_sample_tvq,
                            par_time_center=par_time_center,
-                           par_time_stdev=par_time_stdev)[,'co2']
+                           par_time_stdev=par_time_stdev)
+model_ref <- model_out[,'co2']
+model_age <- model_out[,'age']
 
 l_scaled <- TRUE
 export_names <- c('model_forMCMC', 'run_geocarbF', 'age', 'ageN',
