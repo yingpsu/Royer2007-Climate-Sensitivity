@@ -30,7 +30,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
                       ind_time_fixed, ind_expected_time, ind_expected_const,
                       iteration_threshold, input, model_ref=NULL, data_calib=NULL,
                       do_sample_tvq=FALSE,
-                      par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                      par_time_center=NULL, par_time_stdev=NULL,
                       parallel=FALSE, n_core=1, export_names=NULL,
                       n_boot=0, conf=0.9, second=FALSE){
 

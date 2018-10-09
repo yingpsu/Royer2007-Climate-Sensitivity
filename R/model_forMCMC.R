@@ -23,11 +23,12 @@
 ##  o2               O2 concentration, ppmv
 ##==============================================================================
 
-model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed,
+model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed, parnames_time,
                           age, ageN, ind_const_calib, ind_time_calib,
                           ind_const_fixed, ind_time_fixed,
                           ind_expected_time, ind_expected_const,
-                          iteration_threshold) {
+                          iteration_threshold,
+                          do_sample_tvq=FALSE, par_time_center=NULL, par_time_stdev=NULL) {
 
   # this takes in two parameter arrays: one that is all of the parameters
   # actually being calibrated, and the other that is the fixed (non-calib)

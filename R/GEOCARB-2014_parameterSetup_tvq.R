@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB-2014_parametersSetup_tvq.R
+## GEOCARB-2014_parameterSetup_tvq.R
 ##
 ## set up specific to sampling the time-varying parameters by CDF value
 ##
@@ -197,7 +197,7 @@ for (pp in 1:length(ind_expected_const)) {
   ind_expected_const[pp] <- match(const_names_expected[pp], const_names_in)
 }
 
-# how do we rearrange Matrix_56 to feed into run_geocarb.f90 as it expects?
+# how do we rearrange Matrix_12 to feed into run_geocarb.f90 as it expects?
 time_names_in <- c(unique(parnames_calib[ind_time_calib]), unique(parnames_fixed[ind_time_fixed]))
 ind_expected_time <- rep(NA, length(time_names_in))
 for (pp in 1:length(ind_expected_time)) {

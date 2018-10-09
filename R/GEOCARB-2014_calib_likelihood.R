@@ -33,8 +33,7 @@ log_prior <- function(
   # Check lower/upper bounds first
   if( all(par_calib <= bounds_calib[,'upper']) & all(par_calib >= bounds_calib[,'lower']) ){
 
-    # Gaussian process priors for the time-varying parameters
-    # Make simplifying assumption of independence between time slices
+    # Priors for the time-varying parameters
     lpri_time <- 0
     n_time_calib <- length(ind_time_calib)/ageN
     if (n_time_calib>0) {

@@ -69,6 +69,10 @@ for (i in 1:length(parnames_time)) {
   ind_time_err <- c(ind_time_err, match(paste('e',parnames_time[i],sep=''), colnames(time_arrays)))
 }
 
+par_time_center <- time_arrays[,ind_time_mean]
+par_time_stdev <- time_arrays[,ind_time_err]
+colnames(par_time_stdev) <- colnames(par_time_center)
+
 par_time0 <- time_arrays[,ind_time_mean]
 par_time_fixed0 <- data.frame(par_time0[,ind_time_fixed])
 colnames(par_time_fixed0) <- parnames_time[ind_time_fixed]

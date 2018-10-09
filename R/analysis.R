@@ -140,6 +140,26 @@ lpost_out <- sapply(X=1:n_ensemble,
 
 model_quantiles[,'maxpost'] <- model_out[,which.max(lpost_out)]
 
+# get a reference model, uncalibrated
+
+model_ref <- model_forMCMC(par_calib=par_calib0,
+                           par_fixed=par_fixed0,
+                           parnames_calib=parnames_calib,
+                           parnames_fixed=parnames_fixed,
+                           parnames_time=parnames_time,
+                           age=age,
+                           ageN=ageN,
+                           ind_const_calib=ind_const_calib,
+                           ind_time_calib=ind_time_calib,
+                           ind_const_fixed=ind_const_fixed,
+                           ind_time_fixed=ind_time_fixed,
+                           ind_expected_time=ind_expected_time,
+                           ind_expected_const=ind_expected_const,
+                           iteration_threshold=iteration_threshold,
+                           do_sample_tvq=DO_SAMPLE_TVQ,
+                           par_time_center=par_time_center,
+                           par_time_stdev=par_time_stdev)[,'co2']
+
 save.image(file='../output/analysis.RData')
 ##======================================
 
@@ -156,6 +176,9 @@ deltaT2X_density <- density(parameters[,ics], from=0, to=10)
 #plot(deltaT2X_density$x, deltaT2X_density$y, type='l')
 
 # distributions of deltaT2X from other studies?
+
+# Royer et al 2007:  1.5 and 6.2 deg C (5–95% range)
+
 
 # TODO
 # TODO
@@ -218,6 +241,10 @@ save.image(file='../output/analysis.RData')
 
 ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_26Sep2018nm.nc')
 parameters_nm <- t(ncvar_get(ncdata, 'geocarb_parameters'))
+nc_close(ncdata)
+
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all-const_08Oct2018sn.nc')
+parameters_ntv <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 
 # run the ensemble
