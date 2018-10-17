@@ -217,6 +217,7 @@ plotRadCon <- function(df                   # dataframe with S1 and ST indices
                        ,legThick=c(0.1,0.5) # legend thickensses
                        ,legPos=1.9         # legend relative position
                        ,cex = 1
+                       ,rt_names = 1        # rotate parameter names radially?
                        ,legFirLabs=NULL     # legend labels for first order
                        ,legSecLabs=NULL     # legend labels for second order
                        ,legTotLabs=NULL     # legend labels for total order
@@ -227,7 +228,7 @@ plotRadCon <- function(df                   # dataframe with S1 and ST indices
   shift = 1
 
   # finding number of points to plot
-  num_plot <- n_params#sum(df$sig)
+  num_plot <- nrow(df)
 
   # polar cooridantes angular-values of locations
   #angles <- radSc*pi*seq(0,num_plot-1)/num_plot
@@ -409,7 +410,7 @@ df$ang <- angles
              , col = df$gp_col[i]
              , adj = 0.5#0
              , font = 1
-             , srt = df$ang[i]*360/(2*pi) #- 90 #0
+             , srt = 0+rt_names*df$ang[i]*360/(2*pi) #- 90 #0
         )
       }
     } else {
@@ -420,7 +421,7 @@ df$ang <- angles
              , cex = cex
              , adj = 0.5#0
              , font = 1
-             , srt = df$ang[i]*360/(2*pi) + 180 #0
+             , srt = 0+rt_names*(df$ang[i]*360/(2*pi) + 180) #0
         )
       }
     }
@@ -435,7 +436,7 @@ df$ang <- angles
     counter <- counter + num_sig_gp[i]
 
     if((angle_gp*360/(2*pi)) >= 0 & (angle_gp*360/(2*pi)) <= 180){
-      text(gpNameMult*radSc*cos(angle_gp), gpNameMult*radSc*sin(angle_gp) + shift
+      text(gpNameMult*radSc*cos(angle_gp)+5/4, gpNameMult*radSc*sin(angle_gp) + shift-3/4
            , sig_gps[i]
            , col = df$gp_col[which(df$gp_name %in% sig_gps[i])]#[i]]
            , cex = 1.1*cex
@@ -444,7 +445,7 @@ df$ang <- angles
            , font = 2
       )
     } else {
-      text(gpNameMult*radSc*cos(angle_gp), gpNameMult*radSc*sin(angle_gp) + shift
+      text(gpNameMult*radSc*cos(angle_gp)-7/4, gpNameMult*radSc*sin(angle_gp) + shift+3/4
            , sig_gps[i]
            , col = df$gp_col[which(df$gp_name %in% sig_gps[i])]#[i]]
            , cex = 1.1*cex

@@ -40,25 +40,55 @@ dev.off()
 #model_quantiles[,'maxpost'] <- model_out[,which.max(lpost_out)]
 
 
-# TODO -- switch from plotting against hte obs directly to plotting against the fitted likelihood surface (above)
-# TODO -- switch from plotting against hte obs directly to plotting against the fitted likelihood surface (above)
-# TODO -- switch from plotting against hte obs directly to plotting against the fitted likelihood surface (above)
-
-
-pdf(paste(plot.dir,'model_ensemble_vs_obs.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.8,.75,.15,.15))
-plot(-time, model_quantiles[,'q50'], type='l', xlim=c(-450,0), ylim=c(0,6500), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n')
-polygon(-c(time,rev(time)), c(likelihood_quantiles[,1],rev(likelihood_quantiles[,9])), col='lightcyan1', border=NA)
-polygon(-c(time,rev(time)), c(likelihood_quantiles[,2],rev(likelihood_quantiles[,8])), col='lightcyan2', border=NA)
-polygon(-c(time,rev(time)), c(model_quantiles[,'q025'],rev(model_quantiles[,'q975'])), col='seagreen1', border=NA)
-polygon(-c(time,rev(time)), c(model_quantiles[,'q05'],rev(model_quantiles[,'q95'])), col='seagreen3', border=NA)
-lines(-time, likelihood_quantiles[,'50'], lwd=2, lty=2)
-lines(-time, model_quantiles[,'maxpost'], lwd=2)
+## Log scale (model and points, no likelihood surface)
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'q50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='seagreen1', border=NA)
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
+#lines(-time, log10(likelihood_quantiles[,'50']), lwd=2, lty=2)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
 #lines(-time, model_ref, lwd=2, lty=2)
-#points(-data_calib$age, data_calib$co2, pch='+', cex=0.65)
-mtext('Time [Myr ago]', side=1, line=2.4, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=2.4, cex=1)
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+legend(-450, log10(50), c('Data','Max posterior','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.9, bty='n')
+legend(-450, log10(50), c('Data','Max posterior','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.9, bty='n')
+dev.off()
+
+
+## Log scale (obs and likelihood surface, for SOM)
+likelihood_nonansense <- cbind(time[which(!is.na(likelihood_quantiles[,2]))],
+                               likelihood_quantiles[which(!is.na(likelihood_quantiles[,2])),2],
+                               likelihood_quantiles[which(!is.na(likelihood_quantiles[,2])),8],
+                               likelihood_quantiles[which(!is.na(likelihood_quantiles[,2])),'50'])
+likelihood_nonansense[which(likelihood_nonansense[,2] <= 0),2] = 0.0001
+
+pdf(paste(plot.dir,'likelihood_vs_obspts_logscale_SOM.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+#polygon(-c(time,rev(time)), log10(c(likelihood_quantiles[,1],rev(likelihood_quantiles[,9]))), col='lightcyan1', border=NA)
+polygon(-c(likelihood_nonansense[,1],rev(likelihood_nonansense[,1])), log10(c(likelihood_nonansense[,2],rev(likelihood_nonansense[,3]))), col='gray', border=NA)
+#polygon(-c(time,rev(time)), log10(c(likelihood_quantiles[,3],rev(likelihood_quantiles[,7]))), col='lightcyan3', border=NA)
+#polygon(-c(time,rev(time)), log10(c(likelihood_quantiles[,4],rev(likelihood_quantiles[,6]))), col='lightcyan4', border=NA)
+#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='seagreen1', border=NA)
+#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
+lines(-likelihood_nonansense[,1], log10(likelihood_nonansense[,4]), lwd=2, lty=1, col='black')
+#lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
+#lines(-time, model_ref, lwd=2, lty=2)
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+legend(-450, log10(50), c('Data','Likelihood median','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.9, bty='n')
+legend(-450, log10(50), c('Data','Likelihood median','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.9, bty='n')
 dev.off()
 
 
@@ -68,26 +98,64 @@ dev.off()
 
 #plot(deltaT2X_density$x, deltaT2X_density$y, type='l')
 
+# get priors too
+row_num <- match('deltaT2X',input$parameter)
+x_cs <- seq(from=0, to=10, by=0.1)
+f_cs <- dlnorm(x=x_cs, meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+row_num <- match('GLAC',input$parameter)
+x_gl <- seq(from=0, to=10, by=0.1)
+f_gl <- dnorm(x=x_gl, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+
 # Royer et al 2007:  1.5 and 6.2 deg C (5–95% range), 2.8 best fit
 x_royer2007 <- c(1.5, 2.8, 6.2)
+x_thisstudy <- quantile(parameters[,ics], c(.05,.5,.95))  # 3.221881 4.277480 5.618565
 x_ktc2017 <- c(3.7, 5.6, 7.5)
 
-offset <- 0.15
+offset <- 0.06
 
-pdf(paste(plot.dir,'deltaT2X.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.8,.45,.15,.15))
-plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(1,9), ylim=c(0,.65+offset),
-     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+pdf(paste(plot.dir,'deltaT2X.pdf',sep=''),width=4,height=3, colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
+plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.9,10.5), ylim=c(0,.7+offset),
+     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q025'],rev(model_quantiles[,'q975'])), col='aquamarine1', border=NA)
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q05'],rev(model_quantiles[,'q95'])), col='aquamarine3', border=NA)
-lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=2)
-mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.4, cex=1)
-mtext('Density', side=2, line=0.85, cex=1)
-axis(1, at=seq(0,10,0.5), labels=c('0','','1','','2','','3','','4','','5','','6','','7','','8','','9','','10'), cex.axis=1.1)
-y1 <- 0.12; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=16)
-y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=15)
-legend(6,0.8, c('R2007','KTC2017'), pch=c(16,15), cex=1, bty='n')
+#lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=3)
+lines(x_cs, f_cs + offset, lwd=2, lty=3)
+mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.2, cex=1)
+mtext('Density', side=2, line=0.3, cex=1)
+arrows(1, 0, 1, .7+offset, length=0.08, angle=30, code=2)
+axis(1, at=seq(0,10,0.5), labels=c('0','','1','','2','','3','','4','','5','','6','','7','','8','','9','','10'), cex.axis=1)
+y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, length=0.05, angle=90, code=3); points(x_thisstudy[2], y0, pch=16)
+y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
+#y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
+legend(4.81,0.8, c('5-95% range, this study','5-95% range, R2007','Posterior, this study','Prior, this study'), pch=c(16,15,NA,NA), lty=c(1,1,1,3), cex=.95, bty='n')
 dev.off()
+
+
+pdf(paste(plot.dir,'deltaT2X_SOM.pdf',sep=''),width=6,height=4, colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
+plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.8,20), ylim=c(0,.6+offset),
+     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
+lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=2)
+lines(c(10,20), c(offset,offset), lty=1, lwd=2)
+#lines(x_cs, f_cs + offset, lwd=2, lty=3)
+lines(deltaT2Xglac_density$x, offset+deltaT2Xglac_density$y, lwd=2, lty=3)
+mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.2, cex=1)
+mtext('Density', side=2, line=0.3, cex=1)
+arrows(1, 0, 1, .6+offset, length=0.08, angle=30, code=2)
+axis(1, at=seq(0,20,1), labels=rep('',21), col='gray')
+axis(1, at=seq(0,20,5), labels=c('0','5','10','15','20'), cex.axis=1)
+y1 <- 0.75*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=16)
+y2 <- 0.35*offset; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=15)
+legend(8,0.7, c('Posterior, this study','Posterior (normal assumption), this study','Posterior (glacial), this study','R2007','KTC2017'), pch=c(NA,NA,NA,16,15), lty=c(1,2,3,1,1), cex=.95, bty='n')
+dev.off()
+
+
+
+quantile(parameters[,ics], c(.05,.5,.95))
+length(which(parameters[,ics]>=6))/nrow(parameters)
+quantile(parameters[,iglac], c(.05,.5,.95))
+quantile(parameters[,iglac]*parameters[,ics], c(.05,.5,.95))
 
 
 ##==============================================================================

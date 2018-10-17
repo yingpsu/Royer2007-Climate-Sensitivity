@@ -173,6 +173,12 @@ save.image(file='../output/analysis.RData')
 ics <- match('deltaT2X', parnames)
 deltaT2X_density <- density(parameters[,ics], from=0, to=10)
 
+iglac <- match('GLAC', parnames)
+glac_density <- density(parameters[,iglac], from=1, to=5)
+
+deltaT2Xglac_density <- density(parameters[,ics]*parameters[,iglac], from=0, to=20)
+
+
 #plot(deltaT2X_density$x, deltaT2X_density$y, type='l')
 
 # distributions of deltaT2X from other studies?
