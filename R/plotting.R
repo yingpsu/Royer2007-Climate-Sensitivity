@@ -27,10 +27,6 @@ mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=2.4, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
 dev.off()
 
-# TODO -- need to sort out why the early data are not plotting full polygons
-# TODO -- need to sort out why the early data are not plotting full polygons
-# TODO -- need to sort out why the early data are not plotting full polygons
-
 
 ##==============================================================================
 # Figure 2. Posterior model ensemble (gray shaded region denotes 5-95% credible
@@ -107,7 +103,7 @@ x_gl <- seq(from=0, to=10, by=0.1)
 f_gl <- dnorm(x=x_gl, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
 
 # Royer et al 2007:  1.5 and 6.2 deg C (5–95% range), 2.8 best fit
-x_royer2007 <- c(1.5, 2.8, 6.2)
+x_royer2007 <- c(1.6, 2.8, 5.5)
 x_thisstudy <- quantile(parameters[,ics], c(.05,.5,.95))  # 3.221881 4.277480 5.618565
 x_ktc2017 <- c(3.7, 5.6, 7.5)
 
@@ -134,7 +130,7 @@ dev.off()
 
 pdf(paste(plot.dir,'deltaT2X_SOM.pdf',sep=''),width=6,height=4, colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
-plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.8,20), ylim=c(0,.6+offset),
+plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.8,20), ylim=c(0,.63+offset),
      xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
 lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=2)
 lines(c(10,20), c(offset,offset), lty=1, lwd=2)
@@ -153,6 +149,7 @@ dev.off()
 
 
 quantile(parameters[,ics], c(.05,.5,.95))
+quantile(parameters_nm[,ics], c(.05,.5,.95))
 length(which(parameters[,ics]>=6))/nrow(parameters)
 quantile(parameters[,iglac], c(.05,.5,.95))
 quantile(parameters[,iglac]*parameters[,ics], c(.05,.5,.95))
