@@ -61,6 +61,7 @@ if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-
 if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'}
 if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
 if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
+if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -94,7 +95,7 @@ likelihood_quantiles <- array(NA, c(n_time, 9))
 colnames(likelihood_quantiles) <- c('025','05','17','25','50','75','83','95','975')
 
 for (tt in 1:n_time) {
-    idx <- which(data_calib$age-time[tt] < 5 & data_calib$age-time[tt] >= -5)
+    idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
     if (length(idx) > 0) {
         # sample from the distributions fit to each of the data points
         samples <- NULL
@@ -109,7 +110,7 @@ for (tt in 1:n_time) {
             } else if (dist=='ln') {
                 new_samples <- rlnorm(meanlog=data_calib$meanlog_co2[ii], sdlog=data_calib$sdlog_co2[ii],
                                       n=n_sample_per_point)
-            } else if (dist=='sn') {
+            } else if (dist=='sn' | dist=='sn-100min') {
                 new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii],
                                    alpha=data_calib$alpha_co2[ii], n=n_sample_per_point)
             } else if (dist=='nm') {
@@ -117,6 +118,8 @@ for (tt in 1:n_time) {
             }
             samples <- c(samples, new_samples)
         }
+        idx_filter <- which(samples < lower_bound_co2)
+        if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
         # calculate quantiles
         likelihood_quantiles[tt,] <- quantile(samples, c(.025,.05,.17,.25,.5,.75,.83,.95,.975))
     }

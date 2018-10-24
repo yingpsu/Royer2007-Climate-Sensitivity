@@ -11,7 +11,7 @@ plot.dir <- '../figures/'
 load('../output/analysis.RData')
 
 ##==============================================================================
-# Figure 1. Observations and fitted likelihood surface.
+# Figure .. Observations and fitted likelihood surface.
 
 pdf(paste(plot.dir,'data_likelihood.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.8,.75,.15,.15))

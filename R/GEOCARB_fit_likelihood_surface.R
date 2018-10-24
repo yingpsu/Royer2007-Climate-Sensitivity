@@ -108,7 +108,7 @@ n_sample_per_point <- 10000
 likelihood_fit <- vector('list', n_time)
 
 for (tt in 1:n_time) {
-    idx <- which(data_calib$age-time[tt] < 5 & data_calib$age-time[tt] >= -5)
+    idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
     if (length(idx) > 0) {
         # sample from the distributions fit to each of the data points
         samples <- NULL
@@ -131,6 +131,8 @@ for (tt in 1:n_time) {
             }
             samples <- c(samples, new_samples)
         }
+        idx_filter <- which(samples < lower_bound_co2)
+        if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
         # fit KDE
         density_fit <- density(samples)
         # fit linear interpolation around KDE

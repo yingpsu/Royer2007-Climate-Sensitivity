@@ -166,12 +166,12 @@ log_like <- function(
     # assumption of steady state in-between model time steps
     # note that these are not necessarily sequential in time
     model_stdy <- model_out[ind_mod2obs]
-#    llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
-#                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
-#                         alpha=data_calib$alpha_co2[i], log=TRUE)) )
-    llike <- sum( sapply(1:length(model_stdy), function(i) dbeta(x=(model_stdy[i]-lower_bound_co2)/(upper_bound_co2-lower_bound_co2),
-                         shape1=data_calib$shape1_co2[i], shape2=data_calib$shape2_co2[i],
-                         log=TRUE)) )
+    llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
+                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
+                         alpha=data_calib$alpha_co2[i], log=TRUE)) )
+#    llike <- sum( sapply(1:length(model_stdy), function(i) dbeta(x=(model_stdy[i]-lower_bound_co2)/(upper_bound_co2-lower_bound_co2),
+#                         shape1=data_calib$shape1_co2[i], shape2=data_calib$shape2_co2[i],
+#                         log=TRUE)) )
 #    llike <- sum( sapply(1:length(model_stdy), function(i) dgamma(x=model_stdy[i],
 #                         shape=data_calib$shape_co2[i], scale=data_calib$scale_co2[i],
 #                         log=TRUE)) )
