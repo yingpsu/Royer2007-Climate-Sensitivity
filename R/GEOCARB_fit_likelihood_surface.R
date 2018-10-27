@@ -76,6 +76,7 @@ if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co
 if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
 if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
 if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
+if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -123,7 +124,7 @@ for (tt in 1:n_time) {
             } else if (dist=='ln') {
                 new_samples <- rlnorm(meanlog=data_calib$meanlog_co2[ii], sdlog=data_calib$sdlog_co2[ii],
                                       n=n_sample_per_point)
-            } else if (dist=='sn' | dist=='sn-100min') {
+            } else if (dist=='sn' | dist=='sn-100min' | dist=='sn-mmrem') {
                 new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii],
                                    alpha=data_calib$alpha_co2[ii], n=n_sample_per_point)
             } else if (dist=='nm') {

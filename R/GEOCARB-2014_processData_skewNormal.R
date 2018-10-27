@@ -101,14 +101,19 @@ dat.co2 <- cbind(dat,parameters.co2$xi, parameters.co2$omega, parameters.co2$alp
 colnames(dat.co2) <- c(colnames(dat),'xi_co2','omega_co2','alpha_co2')
 
 # clean out the rows that have co2 <= 0, or co2_low=co2_high=0. there are not useful.
-ind_co2 <- which(dat.co2$co2 <= 0)
+#ind_co2 <- which(dat.co2$co2 <= 0)   # for default experiments
+ind_co2 <- which(dat.co2$co2 <= 100) # for 100min experiment
 ind_co2_low <- which(dat.co2$co2_low==0)
 ind_co2_high <- which(dat.co2$co2_high==0)
 irem <- unique(c( intersect(ind_co2_low,ind_co2_high),ind_co2))
 dat.co2 <- dat.co2[-irem,]
+irem <- which(dat.co2$age < 180 & dat.co2$age > 100 & dat.co2$co2 < 310)
+#dat.co2 <- dat.co2[-irem,]          # for multimodal experiment (mmrem)
 
 today=Sys.Date(); today=format(today,format="%d%b%Y")
-filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_',today,'.csv',sep='')
+#filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_',today,'.csv',sep='')
+#filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_',today,'.csv',sep='')
+filename.out <- paste('../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_',today,'.csv',sep='')
 write.csv(dat.co2, file=filename.out)
 
 ##==============================================================================

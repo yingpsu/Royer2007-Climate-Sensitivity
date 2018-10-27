@@ -62,6 +62,7 @@ if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co
 if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
 if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
 if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
+if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),

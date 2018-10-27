@@ -6,6 +6,7 @@
 
 rm(list=ls())
 
+setwd('~/codes/GEOCARB/R')
 library(sn)
 library(ncdf4)
 
@@ -65,14 +66,22 @@ save.image(file='../output/analysis.RData')
 ##======================================
 # same, but with 100 ppmv min CO2 (lower data points filtered)
 
-likelihood_quantiles_nm <- likelihood_quantiles
+likelihood_quantiles_control <- likelihood_quantiles
 
 dist <- 'sn-100min'
 source('GEOCARB_fit_likelihood_surface.R')
 source('likelihood_surface_quantiles.R')
-
 likelihood_quantiles_100min <- likelihood_quantiles
-likelihood_quantiles <- likelihood_quantiles_nm
+
+dist <- 'sn-mmrem'
+source('GEOCARB_fit_likelihood_surface.R')
+source('likelihood_surface_quantiles.R')
+likelihood_quantiles_mmrem <- likelihood_quantiles
+
+# so the proper un-filtered data is on the analysis RData file
+likelihood_quantiles <- likelihood_quantiles_control
+dist <- 'sn'
+source('GEOCARB-2014_getData.R')
 
 save.image(file='../output/analysis.RData')
 ##======================================
@@ -84,7 +93,8 @@ save.image(file='../output/analysis.RData')
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
+#ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Oct2018sn.nc')
 parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 parnames <- ncvar_get(ncdata, 'parnames')
 nc_close(ncdata)
@@ -219,12 +229,8 @@ save.image(file='../output/analysis.RData')
 # gray bars represent second-order sensitivity indices for the interaction
 # between the parameter pair.
 
-# TODO
-# TODO
-# TODO
-# TODO
+# in plotting_sobol.R
 
-save.image(file='../output/analysis.RData')
 ##======================================
 
 
@@ -234,14 +240,9 @@ save.image(file='../output/analysis.RData')
 
 
 ##==============================================================================
-# Figure S1.  Histograms and parameter pairs plots for the calibrated parameters.
-# Use contours of probability density for the pairs plots.
+# Figure S1.  Likelihood slice from multimodal period.
 
-# example code
-n_pairs <- n_parameters*(n_parameters+1)*0.5
-kfits <- vector('list', )
-kfit <- kde2d(parameters[,1], parameters[,2])
-contour(kfit$x,kfit$y, kfit$z)
+#
 
 # TODO
 # TODO
@@ -268,7 +269,7 @@ ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all-const_08Oct201
 parameters_ntv <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_22Oct2018sn-100min.nc')
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_24Oct2018sn-100min.nc')
 parameters_100min <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 

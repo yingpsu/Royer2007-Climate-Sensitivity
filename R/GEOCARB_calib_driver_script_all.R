@@ -23,7 +23,8 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 #dist <- 'ln'  # log-normal
 #dist <- 'sn'  # skew-normal (use this to reproduce main results)
 #dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
-dist <- 'sn-100min'  # skew-normal (use this to reproduce supplementary experiment results)
+#dist <- 'sn-100min'  # skew-normal (use this to reproduce supplementary experiment results)
+dist <- 'sn-mmrem'  # skew-normal (use this to reproduce supplementary experiment results)
 appen2 <- dist
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
