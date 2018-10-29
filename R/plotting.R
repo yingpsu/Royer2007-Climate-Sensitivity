@@ -10,6 +10,8 @@ setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
 load('../output/analysis.RData')
 
+library(Hmisc)
+
 ##==============================================================================
 # Figure .. Observations and fitted likelihood surface.
 
@@ -25,8 +27,8 @@ points(-data_calib$age, data_calib$co2, pch='+', cex=0.65)
 mtext('Time [Myr ago]', side=1, line=2.4, cex=1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=2.4, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
-
 
 ##==============================================================================
 # Figure 2. Posterior model ensemble (gray shaded region denotes 5-95% credible
@@ -54,6 +56,7 @@ axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
 axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
 legend(-450, log10(50), c('Data','Max posterior','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.9, bty='n')
 legend(-450, log10(50), c('Data','Max posterior','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.9, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
 
@@ -104,6 +107,7 @@ f_gl <- dnorm(x=x_gl, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sig
 
 # Royer et al 2007:  1.5 and 6.2 deg C (5–95% range), 2.8 best fit
 x_royer2007 <- c(1.6, 2.8, 5.5)
+x_pr2011 <- pr2011_cdf(c(.05,.5,.95))
 x_thisstudy <- quantile(parameters[,ics], c(.05,.5,.95))  # 3.221881 4.277480 5.618565
 x_ktc2017 <- c(3.7, 5.6, 7.5)
 
@@ -116,15 +120,19 @@ plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q025'],rev(model_quantiles[,'q975'])), col='aquamarine1', border=NA)
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q05'],rev(model_quantiles[,'q95'])), col='aquamarine3', border=NA)
 #lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=3)
+lines(deltaT2X_density_pr2011$x, deltaT2X_density_pr2011$y + offset, lwd=2, lty=2)
 lines(x_cs, f_cs + offset, lwd=2, lty=3)
 mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.2, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
 arrows(1, 0, 1, .7+offset, length=0.08, angle=30, code=2)
-axis(1, at=seq(0,10,0.5), labels=c('0','','1','','2','','3','','4','','5','','6','','7','','8','','9','','10'), cex.axis=1)
+axis(1, at=seq(0,10), cex.axis=1)
+minor.tick(nx=4, ny=0, tick.ratio=0.5)
 y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, length=0.05, angle=90, code=3); points(x_thisstudy[2], y0, pch=16)
-y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
+#y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
+y1 <- 0.35*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, length=0.05, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
 #y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
-legend(4.81,0.8, c('5-95% range, this study','5-95% range, R2007','Posterior, this study','Prior, this study'), pch=c(16,15,NA,NA), lty=c(1,1,1,3), cex=.95, bty='n')
+legend(4.81,0.8, c('5-95% range, PR2011','5-95% range, this study','Posterior, PR2011','Posterior, this study','Prior, both studies'),
+       pch=c(15,16,NA,NA,NA), lty=c(1,1,2,1,3), cex=.95, bty='n')
 dev.off()
 
 
@@ -148,12 +156,13 @@ dev.off()
 
 
 
-quantile(parameters[,ics], c(.05,.5,.95))
-quantile(parameters_nm[,ics], c(.05,.5,.95))
-length(which(parameters[,ics]>=6))/nrow(parameters)
-quantile(parameters[,iglac], c(.05,.5,.95))
-quantile(parameters[,iglac]*parameters[,ics], c(.05,.5,.95))
-
+print(paste('deltaT2X 5-50-95% quantiles =',quantile(parameters[,ics], c(.05,.5,.95))))
+print(paste('... using normally distributed errors =',quantile(parameters_nm[,ics], c(.05,.5,.95))))
+print(paste('fraction of dT2X >= 6 is:',length(which(parameters[,ics]>=6))/nrow(parameters)))
+print(paste('GLAC 5-50-95% quantiles =',quantile(parameters[,iglac], c(.05,.5,.95))))
+print(paste('glacial dT2X 5-50-95% quantiles =',quantile(parameters[,iglac]*parameters[,ics], c(.05,.5,.95))))
+print(paste('PR2011 dT2X 5-50-95% quantiles =',pr2011_cdf(c(.05,.5,.95))))
+print(paste('PR2011 dT2X 16-50-84% quantiles =',pr2011_cdf(c(.16,.5,.84))))
 
 ##==============================================================================
 # Figure 4. Radial convergence diagrams for the sensitivity experiment. The

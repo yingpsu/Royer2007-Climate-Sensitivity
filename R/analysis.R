@@ -209,7 +209,14 @@ deltaT2Xglac_density <- density(parameters[,ics]*parameters[,iglac], from=0, to=
 # distributions of deltaT2X from other studies?
 
 # Royer et al 2007:  1.5 and 6.2 deg C (5–95% range)
+# Park and Royer 2011:
+pr2011_dat <- read.csv('../input_data/ParkRoyer2011_Fig3_85varred.csv')
+pr2011_cdf <- approxfun(pr2011_dat[,4], pr2011_dat[,1])
+pr2011_pdf <- approxfun(pr2011_dat[,1], pr2011_dat[,3])
 
+deltaT2X_density_pr2011 <- vector('list', 2); names(deltaT2X_density_pr2011) <- c('x','y')
+deltaT2X_density_pr2011$x <- deltaT2X_density$x
+deltaT2X_density_pr2011$y <- pr2011_pdf(deltaT2X_density_pr2011$x)
 
 # TODO
 # TODO

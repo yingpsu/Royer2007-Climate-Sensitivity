@@ -11,7 +11,7 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 6e6   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 8e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 10        # number of CPUs to use
 appen <- 'tvq_all'
 output_dir <- '../output/'
@@ -227,7 +227,9 @@ chain1 = amcmc_extend1$samples
 ##========================
 
 ## Gelman and Rubin diagnostics - determine and chop off for burn-in
-niter.test <- seq(from=round(0.1*niter_mcmc), to=niter_mcmc, by=round(0.05*niter_mcmc))
+initial <- 0.5*niter_mcmc
+increment <- round(0.05*niter_mcmc)
+niter.test <- seq(from=(round(0.5*niter_mcmc)+increment), to=niter_mcmc, by=increment)
 gr.test <- rep(0, length(niter.test))
 
 if(n_node000 == 1) {
@@ -243,11 +245,11 @@ if(n_node000 == 1) {
   for (i in 1:length(niter.test)) {
     for (m in 1:n_node000) {
       # convert each of the chains into mcmc object
-      eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc_par1[[m]]$samples[1:niter.test[i],])', sep='')))
+      eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc_par1[[m]]$samples[(initial+1):niter.test[i],])', sep='')))
     }
     eval(parse(text=paste('mcmc_chain_list = mcmc.list(list(', string.mcmc.list , '))', sep='')))
 
-    gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list)[2])
+    gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
   }
 } else {print('error - n_node000 < 1 makes no sense')}
 
