@@ -12,12 +12,8 @@
 
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_tvq_all.csv"
 
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_N47751-BS5k_10Oct2018.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_N47751-BS5k_10Oct2018.txt"
-
-#-rw-r--r--   1 tony  staff   7.8K Sep 28 08:38 geocarb_sobol-1-tot_sensNS_30kN-5kBS_28Sep2018.txt
-#-rw-r--r--   1 tony  staff   148K Sep 28 08:38 geocarb_sobol-2_sensNS_30kN-5kBS_28Sep2018.txt
-#-rw-r--r--   1 tony  staff    16M Sep 28 08:38 sobol_sensNS_30kN-5kBS_28Sep2018.rds
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_N2M-BS10k_15Nov2018.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_N2M-BS10k_15Nov2018.txt"
 
 n_params <- 68
 plotdir <- '../figures/'
@@ -80,7 +76,7 @@ sig.cutoff <- 0.05
 
 # S1 & ST: using the confidence intervals
 s1st1 <- stat_sig_s1st(s1st
-                      ,method="congtr"
+                      ,method="con"
                       ,greater=sig.cutoff
                       ,sigCri='either')
 
@@ -94,7 +90,7 @@ s1st1 <- stat_sig_s1st(s1st
 s2_sig1 <- stat_sig_s2(s2
                        ,s2_conf_low
                        ,s2_conf_high
-                       ,method='congtr'
+                       ,method='con'
                        ,greater=sig.cutoff
                        )
 
@@ -172,7 +168,7 @@ s2_sig1_sens <- s2_sig1_rearr[ind_keep,ind_keep]
 s1st1_sens$symbols <- new_name_symbols[ind_keep]
 
 
-plot.filename <- paste(plotdir,'sobol_spider_tvq_sensOnly',sep='')
+plot.filename <- paste(plotdir,'sobol_spider_tvq_sensOnly_new',sep='')
 
 plotRadCon(df=s1st1_sens
            ,s2=s2_sens
@@ -184,8 +180,8 @@ plotRadCon(df=s1st1_sens
            ,filename = plot.filename
            ,plotType = 'EPS'
            ,gpNameMult=100
-           ,varNameMult=1.34
-           ,RingThick=0.15
+           ,varNameMult=1.3
+           ,RingThick=0.14
            ,legLoc = "bottomcenter"
            ,cex = 1
            ,rt_names = 0
