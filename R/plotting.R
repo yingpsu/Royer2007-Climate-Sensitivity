@@ -264,30 +264,35 @@ for (i in (n_const_calib+1):length(parnames_calib)) {
   parameters_lhs[,i] <- qbeta(p=parameters_lhs0[,i], shape1=5, shape2=5)
 }
 
-model_out_priors <- sapply(1:n_sample, function(ss) {
-                    model_forMCMC(par_calib=par_calib[ss,],
-                                  par_fixed=par_fixed0,
-                                  parnames_calib=parnames_calib,
-                                  parnames_fixed=parnames_fixed,
-                                  parnames_time=parnames_time,
-                                  age=age,
-                                  ageN=ageN,
-                                  ind_const_calib=ind_const_calib,
-                                  ind_time_calib=ind_time_calib,
-                                  ind_const_fixed=ind_const_fixed,
-                                  ind_time_fixed=ind_time_fixed,
-                                  ind_expected_time=ind_expected_time,
-                                  ind_expected_const=ind_expected_const,
-                                  iteration_threshold=iteration_threshold,
-                                  do_sample_tvq=do_sample_tvq,
-                                  par_time_center=par_time_center,
-                                  par_time_stdev=par_time_stdev)[,'co2']})
+model_out_priors <- sapply(1:nrow(parameters_lhs), function(ss) {
+                    model_forMCMC(par_calib=parameters_lhs[ss,],
+                    par_fixed=par_fixed0,
+                    parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed,
+                    parnames_time=parnames_time,
+                    age=age,
+                    ageN=ageN,
+                    ind_const_calib=ind_const_calib,
+                    ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed,
+                    ind_time_fixed=ind_time_fixed,
+                    ind_expected_time=ind_expected_time,
+                    ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold,
+                    do_sample_tvq=DO_SAMPLE_TVQ,
+                    par_time_center=par_time_center,
+                    par_time_stdev=par_time_stdev)[,'co2']})
+fit3 <- density(model_out_priors[34,which(model_out_priors[34,] < 1e4)])
+mm_priors <- mm_example
+mm_priors$co2 <- fit3$x
+mm_priors$fit <- fit3$y
 
 
 plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=2, xlim=c(0,5000),
      xlab='CO2 (ppmv)', ylab='Probability density')
 lines(mm_example$co2, mm_example$fit, lwd=2)
-lines(mm_precal$co2, mm_precal$fit, lwd=3)
+lines(mm_precal$co2, mm_precal$fit, lwd=2, lty=3)
+lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=4)
 
 
 ##==============================================================================
