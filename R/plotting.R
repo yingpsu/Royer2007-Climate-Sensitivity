@@ -205,6 +205,90 @@ mtext('Density', side=2, line=0.3, cex=1)
 dev.off()
 
 
+# check model ensemble during this time slice
+fit <- density(model_out[34,])
+mm_modeled <- mm_example
+mm_modeled$fit <- fit$y
+mm_modeled$co2 <- fit$x
+plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=2, xlim=c(0,5000),
+     xlab='CO2 (ppmv)', ylab='Probability density')
+lines(mm_example$co2, mm_example$fit, lwd=2)
+
+
+# check precalibration ensemble during this time slice
+parameters_precal <- readRDS('../output/precal_parameters_N2M-BS10k_13Nov2018.rds')
+model_out_precal <- sapply(X=1:nrow(parameters_precal),
+              FUN=function(k){model_forMCMC(par_calib=parameters_precal[k,],
+                                            par_fixed=par_fixed0,
+                                            parnames_calib=parnames_calib,
+                                            parnames_fixed=parnames_fixed,
+                                            parnames_time=parnames_time,
+                                            age=age,
+                                            ageN=ageN,
+                                            ind_const_calib=ind_const_calib,
+                                            ind_time_calib=ind_time_calib,
+                                            ind_const_fixed=ind_const_fixed,
+                                            ind_time_fixed=ind_time_fixed,
+                                            ind_expected_time=ind_expected_time,
+                                            ind_expected_const=ind_expected_const,
+                                            iteration_threshold=iteration_threshold,
+                                            do_sample_tvq=DO_SAMPLE_TVQ,
+                                            par_time_center=par_time_center,
+                                            par_time_stdev=par_time_stdev)[,'co2']})
+fit2 <- density(model_out_precal[34,])
+mm_precal <- mm_example
+mm_precal$co2 <- fit2$x
+mm_precal$fit <- fit2$y
+
+
+# check parameters straight from the priors
+library(lhs)
+## draw parameters by Latin Hypercube (Sample)
+parameters_lhs0 <- randomLHS(100000, n_parameters)
+
+## scale up to the actual parameter distributions
+n_const_calib <- length(ind_const_calib)
+parameters_lhs <- parameters_lhs0  # initialize
+colnames(parameters_lhs) <- parnames_calib
+for (i in 1:n_const_calib) {
+  row_num <- match(parnames_calib[i],input$parameter)
+  if(input[row_num, 'distribution_type']=='gaussian') {
+    parameters_lhs[,i] <- qnorm(p=parameters_lhs0[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+  } else if(input[row_num, 'distribution_type']=='lognormal') {
+    parameters_lhs[,i] <- qlnorm(p=parameters_lhs0[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+  } else {
+    print('ERROR - unknown prior distribution type')
+  }
+}
+for (i in (n_const_calib+1):length(parnames_calib)) {
+  parameters_lhs[,i] <- qbeta(p=parameters_lhs0[,i], shape1=5, shape2=5)
+}
+
+model_out_priors <- sapply(1:n_sample, function(ss) {
+                    model_forMCMC(par_calib=par_calib[ss,],
+                                  par_fixed=par_fixed0,
+                                  parnames_calib=parnames_calib,
+                                  parnames_fixed=parnames_fixed,
+                                  parnames_time=parnames_time,
+                                  age=age,
+                                  ageN=ageN,
+                                  ind_const_calib=ind_const_calib,
+                                  ind_time_calib=ind_time_calib,
+                                  ind_const_fixed=ind_const_fixed,
+                                  ind_time_fixed=ind_time_fixed,
+                                  ind_expected_time=ind_expected_time,
+                                  ind_expected_const=ind_expected_const,
+                                  iteration_threshold=iteration_threshold,
+                                  do_sample_tvq=do_sample_tvq,
+                                  par_time_center=par_time_center,
+                                  par_time_stdev=par_time_stdev)[,'co2']})
+
+
+plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=2, xlim=c(0,5000),
+     xlab='CO2 (ppmv)', ylab='Probability density')
+lines(mm_example$co2, mm_example$fit, lwd=2)
+lines(mm_precal$co2, mm_precal$fit, lwd=3)
+
 
 ##==============================================================================
 # Figure S3. Posterior probability density for Earth system sensitivity
