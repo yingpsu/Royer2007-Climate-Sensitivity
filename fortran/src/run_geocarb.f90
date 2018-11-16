@@ -330,7 +330,6 @@ Rca = Rca_570
           fE = (GYM-LIFE)*((380.0-t)/30.0)+LIFE
 
           ! GEOG is the change in avg land temp due to geography only, obtained via GCM runs
-!!! TW - not sure what this line is for? cannot find a corresponding one in the R version
 !!!          GEOG(i) = temp(i)-12.4
           fBB = ((380.0-t)/30.0)*((1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*(2.0*RCO2/(1.0+RCO2))**FERT) + &
                 ((t-350.0)/30.0)*(1.0+ACTcarb*GCM*log(RCO2)-ACTcarb*Ws*(t/570.0)+ACTcarb*GEOG(i))*RCO2**exp_fnBb

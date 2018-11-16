@@ -206,6 +206,9 @@ print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 # save
 if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,appen2,'.RData', sep=''))}
 
+## Plot a little?
+#for (ss in 1:3) {for (mm in 1:4) {plot(amcmc_par[[ss]][[mm]]$samples[,10], type='l')}}
+
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
 if(FALSE){

@@ -243,8 +243,7 @@ mm_precal$fit <- fit2$y
 
 # check parameters straight from the priors
 library(lhs)
-## draw parameters by Latin Hypercube (Sample)
-parameters_lhs0 <- randomLHS(100000, n_parameters)
+parameters_lhs0 <- randomLHS(100000, 68)
 
 ## scale up to the actual parameter distributions
 n_const_calib <- length(ind_const_calib)
@@ -288,11 +287,56 @@ mm_priors$co2 <- fit3$x
 mm_priors$fit <- fit3$y
 
 
-plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=2, xlim=c(0,5000),
+# check parameters only GYM and deltaT2X varying - explain the multimodality?
+parameters_essgym <- parameters_lhs
+for (pp in 1:length(parnames_calib)) {
+  if (parnames_calib[pp]!='deltaT2X' & parnames_calib[pp]!='GYM') {
+    parameters_essgym[,pp] <- par_calib0[pp]
+  }
+}
+
+model_out_essgym <- sapply(1:nrow(parameters_essgym), function(ss) {
+                    model_forMCMC(par_calib=parameters_essgym[ss,],
+                    par_fixed=par_fixed0,
+                    parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed,
+                    parnames_time=parnames_time,
+                    age=age,
+                    ageN=ageN,
+                    ind_const_calib=ind_const_calib,
+                    ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed,
+                    ind_time_fixed=ind_time_fixed,
+                    ind_expected_time=ind_expected_time,
+                    ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold,
+                    do_sample_tvq=DO_SAMPLE_TVQ,
+                    par_time_center=par_time_center,
+                    par_time_stdev=par_time_stdev)[,'co2']})
+fit4 <- density(model_out_essgym[34,which(model_out_essgym[34,] < 1e4)])
+mm_essgym <- mm_example
+mm_essgym$co2 <- fit4$x
+mm_essgym$fit <- fit4$y
+
+
+
+# plot the distribution of modeled CO2 at 240 Myr under likelihood function,
+# priors, precalibration and MCMC
+plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,5000),
      xlab='CO2 (ppmv)', ylab='Probability density')
 lines(mm_example$co2, mm_example$fit, lwd=2)
-lines(mm_precal$co2, mm_precal$fit, lwd=2, lty=3)
-lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=4)
+lines(mm_precal$co2, mm_precal$fit, lwd=2, lty=4)
+lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=2)
+lines(mm_essgym$co2, mm_essgym$fit, lwd=2, lty=2, col='purple')
+legend(2500, 0.0019, c('Likelihood','Priors','Priors, ESS-GYM only','Precal','Posterior'),
+       lty=c(1,2,2,4,3), col=c('black','black','purple','black','black'), lwd=2)
+
+
+# plot the distribution of ESS under priors, precalibration and MCMC
+plot(dens_priors$x, dens_priors$y, xlim=c(1,7.5), type='l', lty=1, lwd=2, xlab='deltaT2X', ylab='Probability Density')
+lines(dens_post$x, dens_post$y, lty=3, lwd=2)
+lines(dens_precal$x, dens_precal$y, lty=2, lwd=2)
+legend(6, 0.5, c('Priors','Precal','Posterior'), lty=c(1,2,3))
 
 
 ##==============================================================================
