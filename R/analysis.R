@@ -81,7 +81,15 @@ likelihood_quantiles_mmrem <- likelihood_quantiles
 # so the proper un-filtered data is on the analysis RData file
 likelihood_quantiles <- likelihood_quantiles_control
 dist <- 'sn'
+if(dist=='ga') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'}
+if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'}
+if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'}
+if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
+if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
+if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
+if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
 source('GEOCARB-2014_getData.R')
+data_calib_ctrl <- data_calib
 
 save.image(file='../output/analysis.RData')
 ##======================================
@@ -93,7 +101,6 @@ save.image(file='../output/analysis.RData')
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
-#ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
 ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Oct2018sn.nc')
 parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 parnames <- ncvar_get(ncdata, 'parnames')
@@ -250,6 +257,14 @@ save.image(file='../output/analysis.RData')
 # Figure S1.  Likelihood slice from multimodal period.
 
 #
+mm_example <- vector('list', 3)
+names(mm_example) <- c('co2','fit','age')
+idx <- 34
+mm_example$age <- age[idx]
+mm_example$co2 <- seq(from=1,to=10000,by=10)
+mm_example$fit <- likelihood_fit[[idx]](mm_example$co2)
+
+#plot(mm_example$co2, mm_example$fit, xlab='CO2 (ppmv)', ylab='density')
 
 # TODO
 # TODO
@@ -278,6 +293,10 @@ nc_close(ncdata)
 
 ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_24Oct2018sn-100min.nc')
 parameters_100min <- t(ncvar_get(ncdata, 'geocarb_parameters'))
+nc_close(ncdata)
+
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_28Oct2018sn-mmrem.nc')
+parameters_mmrem <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 
 # run the ensemble
@@ -398,6 +417,65 @@ lpost_out_100min <- sapply(X=1:n_ensemble,
 
 model_quantiles_100min[,'maxpost'] <- model_out_100min[,which.max(lpost_out_100min)]
 
+# run the ensemble having filtered out the data points with at multi-mode
+model_out_mmrem <- sapply(X=1:n_ensemble,
+              FUN=function(k){model_forMCMC(par_calib=parameters_mmrem[k,],
+                                            par_fixed=par_fixed0,
+                                            parnames_calib=parnames_calib,
+                                            parnames_fixed=parnames_fixed,
+                                            parnames_time=parnames_time,
+                                            age=age,
+                                            ageN=ageN,
+                                            ind_const_calib=ind_const_calib,
+                                            ind_time_calib=ind_time_calib,
+                                            ind_const_fixed=ind_const_fixed,
+                                            ind_time_fixed=ind_time_fixed,
+                                            ind_expected_time=ind_expected_time,
+                                            ind_expected_const=ind_expected_const,
+                                            iteration_threshold=iteration_threshold,
+                                            do_sample_tvq=DO_SAMPLE_TVQ,
+                                            par_time_center=par_time_center,
+                                            par_time_stdev=par_time_stdev)[,'co2']})
+
+# get 5-95% range and median  are cols 1-3; max-post will be 4
+model_quantiles_mmrem <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
+colnames(model_quantiles_mmrem) <- colnames(model_quantiles)
+for (t in 1:n_time) {
+  model_quantiles_mmrem[t,1:length(quantiles_i_want)] <- quantile(model_out_mmrem[t,], quantiles_i_want)
+}
+
+# get posterior scores
+
+lpost_out_mmrem <- sapply(X=1:n_ensemble,
+              FUN=function(k){log_post(par_calib=parameters_mmrem[k,],
+                                      par_fixed=par_fixed0,
+                                      parnames_calib=parnames_calib,
+                                      parnames_fixed=parnames_fixed,
+                                      parnames_time=parnames_time,
+                                      age=age,
+                                      ageN=ageN,
+                                      ind_const_calib=ind_const_calib,
+                                      ind_time_calib=ind_time_calib,
+                                      ind_const_fixed=ind_const_fixed,
+                                      ind_time_fixed=ind_time_fixed,
+                                      input=input,
+                                      time_arrays=time_arrays,
+                                      bounds_calib=bounds_calib,
+                                      data_calib=data_calib,
+                                      ind_mod2obs=ind_mod2obs,
+                                      ind_expected_time=ind_expected_time,
+                                      ind_expected_const=ind_expected_const,
+                                      iteration_threshold=iteration_threshold,
+                                      n_shard=1,
+                                      loglikelihood_smoothed=loglikelihood_smoothed,
+                                      likelihood_fit=likelihood_fit,
+                                      idx_data=idx_data,
+                                      do_sample_tvq=DO_SAMPLE_TVQ,
+                                      par_time_center=par_time_center,
+                                      par_time_stdev=par_time_stdev)})
+
+model_quantiles_mmrem[,'maxpost'] <- model_out_mmrem[,which.max(lpost_out_mmrem)]
+
 save.image(file='../output/analysis.RData')
 ##======================================
 
@@ -410,6 +488,13 @@ save.image(file='../output/analysis.RData')
 
 deltaT2X_density_nm <- density(parameters_nm[,ics], from=0, to=10)
 deltaT2X_density_100min <- density(parameters_100min[,ics], from=0, to=10)
+deltaT2X_density_mmrem <- density(parameters_mmrem[,ics], from=0, to=10)
+
+ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
+parameters_old <- t(ncvar_get(ncdata, 'geocarb_parameters'))
+nc_close(ncdata)
+
+deltaT2X_density_old <- density(parameters_old[,ics], from=0, to=10)
 
 #plot(deltaT2X_density$x, deltaT2X_density$y, type='l', lwd=2); lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y, type='l', lty=2, lwd=2)
 

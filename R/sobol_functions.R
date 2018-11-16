@@ -119,15 +119,15 @@ stat_sig_s1st <- function(df
   # testing for statistical significance
   if(method == 'sig'){
     # testing for statistical significance using the confidence intervals
-    df$s1_sig[which(abs(df$S1) - df$S1_conf > 0)] <- 1
-    df$st_sig[which(abs(df$ST) - df$ST_conf > 0)] <- 1
+    df$s1_sig[which(df$S1 - df$S1_conf > 0)] <- 1
+    df$st_sig[which(df$ST - df$ST_conf > 0)] <- 1
   } else if(method == 'gtr'){
-    # finding indicies that are greater than the specified values
-    df$s1_sig[which(abs(df$S1) > greater)] <- 1
-    df$st_sig[which(abs(df$ST) > greater)] <- 1
+    # finding indices that are greater than the specified values
+    df$s1_sig[which(df$S1 > greater)] <- 1
+    df$st_sig[which(df$ST > greater)] <- 1
   } else if(method == 'con') {
-    df$s1_sig[which(df$S1_conf_low > 0)] <- 1
-    df$st_sig[which(df$ST_conf_low > 0)] <- 1
+    df$s1_sig[which(df$S1_conf_low > greater)] <- 1
+    df$st_sig[which(df$ST_conf_low > greater)] <- 1
   } else if(method == 'congtr'){
     df$s1_sig[which(df$S1_conf_low > 0 & df$S1 > greater)] <- 1
     df$st_sig[which(df$ST_conf_low > 0 & df$ST > greater)] <- 1
