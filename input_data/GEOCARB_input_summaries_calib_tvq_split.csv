@@ -1,0 +1,69 @@
+parameter,type,resample,distribution_type,mean,two_sigma,lower_limit,upper_limit,calib
+Sr,time array,TRUE,uniform,0.5,,0,1,1
+d13C,time array,TRUE,uniform,0.5,,0,1,1
+d34S,time array,TRUE,uniform,0.5,,0,1,1
+fR,time array,TRUE,uniform,0.5,,0,1,1
+fL,time array,TRUE,uniform,0.5,,0,1,1
+fA,time array,TRUE,uniform,0.5,,0,1,1
+fD,time array,TRUE,uniform,0.5,,0,1,1
+fAw_fA,time array,TRUE,uniform,0.5,,0,1,1
+RT,time array,TRUE,uniform,0.5,,0,1,1
+GEOG,time array,TRUE,uniform,0.5,,0,1,1
+fSR,time array,TRUE,uniform,0.5,,0,1,1
+fC,time array,TRUE,uniform,0.5,,0,1,1
+ACT,constant,TRUE,gaussian,0.09,0.045,0,inf,1
+ACTcarb,constant,TRUE,gaussian,0.087,0.0435,0,inf,1
+VNV,constant,TRUE,gaussian,5,2.5,0,inf,1
+NV,constant,TRUE,gaussian,0.0075,0.00375,0,inf,1
+exp_NV,constant,TRUE,gaussian,0.67,0.335,0,inf,1
+LIFE,constant,TRUE,gaussian,0.25,0.125,0,inf,1
+GYM,constant,TRUE,gaussian,0.875,0.415625,0,inf,1
+FERT,constant,TRUE,gaussian,0.4,0.2,0,1,1
+exp_fnBb,constant,TRUE,gaussian,0.5,0.125,0,inf,1
+deltaT2X,constant,TRUE,lognormal,3,2.5,1.5,inf,1
+GLAC,constant,TRUE,gaussian,2,1,1,inf,1
+J,constant,TRUE,gaussian,4,2,0,inf,1
+n,constant,TRUE,gaussian,1,0.5,0,inf,1
+Ws,constant,TRUE,gaussian,7.4,3.7,_inf,inf,1
+exp_fD,constant,TRUE,gaussian,0.65,0.325,0,inf,1
+Fwpa_0,constant,TRUE,gaussian,0.25,0.125,0,inf,1
+Fwsa_0,constant,TRUE,gaussian,0.5,0.25,0,inf,1
+Fwga_0,constant,TRUE,gaussian,0.5,0.25,0,inf,1
+Fwca_0,constant,TRUE,gaussian,2,1,0,inf,1
+Fmg_0,constant,TRUE,gaussian,1.25,0.625,0,inf,1
+Fmc_0,constant,TRUE,gaussian,6.67,1.50075,0,inf,1
+Fmp_0,constant,TRUE,gaussian,0.25,0.125,0,inf,1
+Fms_0,constant,TRUE,gaussian,0.5,0.25,0,inf,1
+Fwsi_0,constant,TRUE,gaussian,6.67,0.83375,0,inf,1
+Xvolc_0,constant,TRUE,gaussian,0.35,0.07875,0,1,1
+CAPd13C_0,constant,TRUE,gaussian,27,1.89,0,inf,1
+CAPd34S_0,constant,TRUE,gaussian,35,4.7,0,inf,1
+oxygen_570,constant,TRUE,gaussian,25,12.5,7.5,143,1
+Gy_570,constant,TRUE,gaussian,250,62.5,0,inf,1
+Cy_570,constant,TRUE,gaussian,1000,475,0,inf,1
+Ca_570,constant,TRUE,gaussian,4000,1300,0,inf,1
+Ssy_570,constant,TRUE,gaussian,150,56.25,0,inf,1
+Spy_570,constant,TRUE,gaussian,20,10,0,inf,1
+dlsy_570,constant,TRUE,gaussian,35,4.7,_inf,inf,1
+dlcy_570,constant,TRUE,gaussian,3,2.1,_inf,inf,1
+dlpy_570,constant,TRUE,gaussian,-10,4.7,_inf,inf,1
+dlpa_570,constant,TRUE,gaussian,-10,4.7,_inf,inf,1
+dlgy_570,constant,TRUE,gaussian,-23.5,2.1,_inf,inf,1
+dlga_570,constant,TRUE,gaussian,-23.5,2.1,_inf,inf,1
+Rcy_570,constant,TRUE,gaussian,0.7095,0.0021,_inf,inf,1
+Rca_570,constant,TRUE,gaussian,0.709,0.0021,_inf,inf,1
+Rv_570,constant,TRUE,gaussian,0.704,0.001365,_inf,inf,1
+Rg_570,constant,TRUE,gaussian,0.722,0.0021,_inf,inf,1
+Fob,constant,TRUE,gaussian,4,2,0,inf,1
+COC,constant,TRUE,gaussian,2,1,0,inf,1
+Ga,constant,TRUE,gaussian,1000,75,0,inf,1
+Ssa,constant,TRUE,gaussian,150,75,0,inf,1
+Spa,constant,TRUE,gaussian,280,140,0,inf,1
+ST,constant,TRUE,gaussian,600,300,0,inf,1
+dlst,constant,TRUE,gaussian,4,3.055,_inf,inf,1
+CT,constant,TRUE,gaussian,6252,468.9,0,inf,1
+dlct,constant,TRUE,gaussian,-3.5,0.252,_inf,inf,1
+kwpy,constant,TRUE,gaussian,0.01,0.005,0,inf,1
+kwsy,constant,TRUE,gaussian,0.01,0.005,0,inf,1
+kwgy,constant,TRUE,gaussian,0.018,0.009,0,inf,1
+kwcy,constant,TRUE,gaussian,0.018,0.009,0,inf,1

@@ -4,6 +4,7 @@
 
 setwd('~/codes/GEOCARB/output')
 load('GEOCARB_MCMC_tvq_split_16Nov2018sn-split.RData')
+library(Hmisc)
 
 # histograms figure
 par(mfrow=c(5,4), mai=c(.3,.35,.1,.01))
@@ -51,11 +52,18 @@ for (ss in 1:n_shard) {
 fits <- vector('list',n_shard)
 tslice <- 34
 for (ss in 1:n_shard) {
-  fits[ss] <- density(model_out[[ss]][tslice,])
+  fits[[ss]] <- density(model_out[[ss]][tslice,])
 }
 
 
 # consensus MCMC ensemble parameters
+
+
+# CHECK THESE CALCULATIONS
+# -- probably not working quite right because the
+#    distribution for deltaT2X shifts farther to the left than any one of the
+#    constituent distributions
+# CHECK THESE CALCULATIONS
 
 
 
@@ -66,23 +74,100 @@ for (ss in 1:n_shard) {
 }
 
 # calculate the factor in big parentheses
-summ <- NULL
-for (ss in 1:n_shard) {
-  summ <- sum + weights[[ss]]
+summ <- weights[[1]]
+for (ss in 2:n_shard) {
+  summ <- summ + weights[[ss]]
 }
 winv <- solve(summ)
 
 # combine at each iteration according to the weighting above
-parametersC <- array(0, dim=dim(parameters[[1]]))
-summ <- NULL
-for (ss in 1:n_shard) {
-  summ <- summ + weights[[ss]] %*% parameters[[ss]]
+summ <- weights[[1]] %*% t(parameters[[1]])
+for (ss in 2:n_shard) {
+  summ <- summ + weights[[ss]] %*% t(parameters[[ss]])
 }
 
-for (t in 1:nrow(parameters[[1]])) {
-    ##parametersC[t,] <- winv %*% (weights1 %*% samples1[t,] + weights2 %*% samples2[t,])
-    parametersC[t,] <- winv %*% (summ)
+parametersC <- array(0, dim=dim(parameters[[1]]))
+parametersC <- t(winv %*% (summ))
+#for (t in 1:nrow(parameters[[1]])) {
+#    parametersC[t,] <- winv %*% (weights1 %*% samples1[t,] + weights2 %*% samples2[t,])
+#}
+
+# run posterior model ensemble using consensus samples
+model_con <- sapply(1:nrow(parametersC), function(ii) {
+        model_forMCMC(par_calib=parametersC[ii,],
+                      par_fixed=par_fixed0,
+                      parnames_calib=parnames_calib,
+                      parnames_fixed=parnames_fixed,
+                      parnames_time=parnames_time,
+                      age=age,
+                      ageN=ageN,
+                      ind_const_calib=ind_const_calib,
+                      ind_time_calib=ind_time_calib,
+                      ind_const_fixed=ind_const_fixed,
+                      ind_time_fixed=ind_time_fixed,
+                      ind_expected_time=ind_expected_time,
+                      ind_expected_const=ind_expected_const,
+                      iteration_threshold=iteration_threshold,
+                      do_sample_tvq=DO_SAMPLE_TVQ,
+                      par_time_center=par_time_center,
+                      par_time_stdev=par_time_stdev)[,'co2']})
+
+fitsC <- density(model_con[tslice,])
+
+
+# get quantiles
+model_quantiles <- mat.or.vec(nr=n_time, nc=3)
+colnames(model_quantiles) <- c('q05','q50','q95')
+for (t in 1:n_time) {
+  model_quantiles[t,1:3] <- quantile(model_con[t,], c(.05,.50,.95))
 }
+
+
+# plot of 240 Myr time slice from each shard, and consensus
+
+par(mfrow=c(2,1), mai=c(.9,.9,.1,.1))
+plot(fits[[1]]$x, fits[[1]]$y, type='l', lty=2, lwd=2,
+     xlab='CO2 (ppmv)', ylab='Probability density', xlim=c(0,5000), ylim=c(0,0.0085))
+lines(fits[[2]]$x, fits[[2]]$y, lty=2, lwd=2)
+lines(fits[[3]]$x, fits[[3]]$y, lty=2, lwd=2)
+lines(mm_example$co2, mm_example$fit, lty=1, lwd=2)
+legend(1000,0.008, c('3 separate MCMC chains','Full likelihood surface'), lty=c(2,1), lwd=2, bty='n')
+
+
+# plot of distributions of ESS from each shard, and consesnsus
+
+fitp <- vector('list',n_shard)
+for (ss in 1:n_shard) {fitp[[ss]] <- density(parameters[[ss]][,10])}
+fitp_con <- density(parametersC[,10])
+
+plot(fitp[[1]]$x, fitp[[1]]$y, type='l', lty=2, lwd=2,
+     xlab='deltaT2X (deg C)', ylab='Probability density', xlim=c(1,10))
+lines(fitp[[2]]$x, fitp[[2]]$y, lty=2, lwd=2)
+lines(fitp[[3]]$x, fitp[[3]]$y, lty=2, lwd=2)
+#lines(mm_example$co2, mm_example$fit, lty=1, lwd=2)
+legend(1000,0.008, c('3 separate MCMC chains','Full likelihood surface'), lty=c(2,1), lwd=2, bty='n')
+
+
+
+# plot of hindcast CO2
+pdf(paste('../figures/model_ensemble_vs_obspts_logscale_consensus.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'q50']), type='l', xlim=c(-450,0), ylim=c(2,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
+lines(-time, log10(model_quantiles[,'q50']), lwd=2)
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+legend(-450, log10(50), c('Data','Median','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.9, bty='n')
+legend(-450, log10(50), c('Data','Median','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.9, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
+
 
 #===============================================================================
 # End

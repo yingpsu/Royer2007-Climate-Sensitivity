@@ -77,6 +77,7 @@ if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co
 if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
 if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
 if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
+if(dist=='nm-unifUnc')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2-unifUnc_29Nov2018.csv'}
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -127,7 +128,7 @@ for (tt in 1:n_time) {
             } else if (dist=='sn' | dist=='sn-100min' | dist=='sn-mmrem') {
                 new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii],
                                    alpha=data_calib$alpha_co2[ii], n=n_sample_per_point)
-            } else if (dist=='nm') {
+            } else if (dist=='nm' | dist=='nm-unifUnc') {
                 new_samples <- rnorm(mean=data_calib$mu_co2[ii], sd=data_calib$sigma_co2[ii], n=n_sample_per_point)
             }
             samples <- c(samples, new_samples)
@@ -146,8 +147,9 @@ if(FALSE) {
 co2 <- seq(from=1,to=10000,by=10)
 
 # a representative cross-sectional plot
-f_fit <- likelihood_fit[[20]](co2)
-plot(co2,f_fit, xlab='CO2 (ppmv)', ylab='density')
+t <- 34
+f_fit <- likelihood_fit[[t]](co2)
+plot(co2,f_fit, xlab='CO2 (ppmv)', ylab='density', type='l', xlim=c(0,6000))
 }
 ##==============================================================================
 
