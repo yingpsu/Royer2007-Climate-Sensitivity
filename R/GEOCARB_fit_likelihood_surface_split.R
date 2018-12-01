@@ -104,7 +104,7 @@ data_calib <- data_calib_all[unlist(ind_assim),]
 ## Split points for CO2 data
 ##==========================
 
-co2_split <- rbind(c(0,500), c(500,1000), c(1000,10000))
+co2_split <- rbind(c(0,500), c(500,1600), c(1600,10000))
 n_shard <- nrow(co2_split)
 
 ##==============================================================================
@@ -152,7 +152,7 @@ for (ss in 1:n_shard) {
             idx_filter <- which(samples < lower_bound_co2)
             if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
             # fit KDE
-            density_fit <- density(samples)
+            density_fit <- density(samples, from=lower_bound_co2, to=upper_bound_co2)
             # fit linear interpolation around KDE
             likelihood_fit[[ss]][[tt]] <- approxfun(density_fit)
         }

@@ -136,7 +136,7 @@ for (tt in 1:n_time) {
         idx_filter <- which(samples < lower_bound_co2)
         if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
         # fit KDE
-        density_fit <- density(samples)
+        density_fit <- density(samples, from=lower_bound_co2, to=upper_bound_co2)
         # fit linear interpolation around KDE
         likelihood_fit[[tt]] <- approxfun(density_fit)
     }
