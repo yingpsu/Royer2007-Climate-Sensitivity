@@ -3,7 +3,8 @@
 #===============================================================================
 
 setwd('~/codes/GEOCARB/output')
-load('GEOCARB_MCMC_unifUnc_28Nov2018nm-unifUnc.RData')
+#load('GEOCARB_MCMC_unifUnc_28Nov2018nm-unifUnc.RData')
+load('~/codes/GEOCARB/output/GEOCARB_MCMC_tvq_all_01Dec2018sn.RData')
 library(Hmisc)
 
 # histograms figure
@@ -248,16 +249,18 @@ dev.off()
 # check what the set of simulations that hit the upper mode looks like, and
 # what the set that hits the lower mode looks like
 
-model_ensemble <- model_precal
+model_ensemble <- model_con
 
-idx_lo <- which(model_ensemble[34,] <= 1610)
-idx_hi <- which(model_ensemble[34,] > 1610)
+idx_lo <- which(model_ensemble[34,] <= 1600)
+idx_hi <- which(model_ensemble[34,] > 1600)
 
 model_quantiles_hi <- model_quantiles_lo <- mat.or.vec(nr=n_time, nc=3)
 colnames(model_quantiles_hi) <- colnames(model_quantiles_lo) <- c('q05','q50','q95')
 for (t in 1:n_time) {
-  model_quantiles_hi[t,1:3] <- quantile(model_ensemble[t,idx_hi], c(.05,.50,.95))
-  model_quantiles_lo[t,1:3] <- quantile(model_ensemble[t,idx_lo], c(.05,.50,.95))
+    idx <- which(is.finite(model_ensemble[t,idx_hi]))
+    model_quantiles_hi[t,1:3] <- quantile(model_ensemble[t,idx_hi[idx]], c(.05,.50,.95), na.rm=TRUE)
+    idx <- which(is.finite(model_ensemble[t,idx_lo]))
+    model_quantiles_lo[t,1:3] <- quantile(model_ensemble[t,idx_lo[idx]], c(.05,.50,.95), na.rm=TRUE)
 }
 
 pdf(paste('../figures/model_ensemble_vs_obspts_hilo.pdf',sep=''),width=4,height=6,colormodel='cmyk')
@@ -266,8 +269,8 @@ par(mfrow=c(2,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(model_quantiles_hi[,'q50']), type='l', xlim=c(-450,0), ylim=c(0.6,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
 polygon(-c(time,rev(time)), log10(c(model_quantiles_hi[,'q05'],rev(model_quantiles_hi[,'q95']))), col=rgb(1,0,0,.3), border=NA)
 lines(-time, log10(model_quantiles_hi[,'q50']), lwd=2, col=rgb(1,0,0))
-polygon(-c(time,rev(time)), log10(c(model_quantiles_lo[,'q05'],rev(model_quantiles_lo[,'q95']))), col=rgb(0,1,0,.3), border=NA)
-lines(-time, log10(model_quantiles_lo[,'q50']), lwd=2, col=rgb(0,1,0))
+polygon(-c(time,rev(time)), log10(c(model_quantiles_lo[,'q05'],rev(model_quantiles_lo[,'q95']))), col=rgb(0,0,1,.3), border=NA)
+lines(-time, log10(model_quantiles_lo[,'q50']), lwd=2, col=rgb(0,0,1))
 points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
 mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
@@ -281,6 +284,16 @@ minor.tick(nx=5, ny=0, tick.ratio=0.5)
 
 dev.off()
 
+#######
+
+pdf(paste('../figures/frequency_pts_hilo.pdf',sep=''),width=3,height=7,colormodel='cmyk')
+
+par(mfrow=c(4,1))
+for (t in c(240,230,220,210)) {
+idx <- which(data_calib$age <= t & data_calib$age > (t-10))
+hist(data_calib$co2[idx], main=paste(t,'Myr'), xlab='CO2', xlim=c(0,4000))
+}
+dev.off()
 
 #===============================================================================
 
@@ -327,8 +340,8 @@ llike_con <- sapply(1:nrow(parametersC), function(ss) {
                         par_time_center=par_time_center,
                         par_time_stdev=par_time_stdev)})
 
-idx_hic <- (which(model_con[34,] > 1610))
-idx_loc <- (which(model_con[34,] <= 1610))
+idx_hic <- (which(model_con[34,] > 1600))
+idx_loc <- (which(model_con[34,] <= 1600))
 
 like_hi <- density(llike_con[idx_hic])
 like_lo <- density(llike_con[idx_loc])

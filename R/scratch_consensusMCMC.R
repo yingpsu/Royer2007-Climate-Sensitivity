@@ -4,7 +4,7 @@
 
 setwd('~/codes/GEOCARB/output')
 #load('GEOCARB_MCMC_tvq_split_16Nov2018sn-split.RData')
-load('GEOCARB_MCMC_tvq_split_30Nov2018sn-split.RData')
+load('GEOCARB_MCMC_tvq_split_01Dec2018sn-split.RData')
 library(Hmisc)
 
 # histograms figure
@@ -120,7 +120,8 @@ fitsC <- density(model_con[tslice,])
 model_quantilesC <- mat.or.vec(nr=n_time, nc=3)
 colnames(model_quantilesC) <- c('q05','q50','q95')
 for (t in 1:n_time) {
-  model_quantilesC[t,1:3] <- quantile(model_con[t,], c(.05,.50,.95))
+  idx <- which(!is.infinite(model_con[t,]))
+  model_quantilesC[t,1:3] <- quantile(model_con[t,idx], c(.05,.50,.95), na.rm=TRUE)
 }
 
 
