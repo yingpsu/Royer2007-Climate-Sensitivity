@@ -13,7 +13,7 @@ setwd('~/codes/GEOCARB/R')
 
 niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
-appen <- 'tvq_all'
+appen <- 'unc'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 
@@ -45,6 +45,7 @@ filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appe
 library(adaptMCMC)
 library(ncdf4)
 library(sn)
+library(invgamma)
 
 ##==============================================================================
 ## Model parameters and setup
@@ -57,8 +58,14 @@ if(DO_SAMPLE_TVQ) {
   source('GEOCARB-2014_parameterSetup.R')
   source('model_forMCMC.R')
 }
-source('run_geocarbF.R')
+
+#source('run_geocarbF.R')
+source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical parameter
 ##==============================================================================
+
+
+# quick fix to initialize variance
+par_calib0[match('var',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
 
 
 ##==============================================================================
@@ -108,7 +115,7 @@ rm(list=c('bound_lower','bound_upper','bounds'))
 ##====================
 
 # need the likelihood function and prior distributions
-source('GEOCARB-2014_calib_likelihood.R')
+source('GEOCARB-2014_calib_likelihood_unc.R')
 
 # set up and run the actual calibration
 # interpolate between lots of parameters and one parameter.

@@ -114,6 +114,9 @@ for (p in 1:length(parnames_tmp)) {
       step_mcmc[p] <- log(0.5*input[row_num,"two_sigma"])
     } else if(input[row_num, 'distribution_type']=='gaussian') {
       step_mcmc[p] <- 0.5*input[row_num,"two_sigma"]
+    } else if(input[row_num, 'distribution_type']=='invgamma') {
+      step_mcmc[p] <- (qinvgamma(0.75, shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"]) -
+                       qinvgamma(0.25, shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"]))/5
     } else {print('ERROR - unknown distribution type (fitting step sizes, constant parameters)')}
   } else {print('ERROR - unknown calibration parameter type (fitting step sizes)')}
 }
@@ -174,7 +177,8 @@ const_names_expected <- c('ACT',     # 1
                           'kwpy',     #(53)
                           'kwsy',     #(54)
                           'kwgy',     #(55)
-                          'kwcy')     #(56)
+                          'kwcy',     #(56)
+                          'var')      # added by Tony
 
 time_names_expected <- c('Sr',     #(:,1)
                          'd13C',     #(:,2)
@@ -193,7 +197,7 @@ time_names_expected <- c('Sr',     #(:,1)
 const_names_in <- c( parnames_calib[ind_const_calib],
                      parnames_fixed[ind_const_fixed] )
 ind_expected_const <- rep(NA, length(const_names_in))
-for (pp in 1:length(ind_expected_const)) {
+for (pp in 1:length(const_names_in)) {
   ind_expected_const[pp] <- match(const_names_expected[pp], const_names_in)
 }
 
