@@ -168,6 +168,25 @@ n_data_fit <- length(idx_data)
 ##==============================================================================
 ## Function to evaluate the log-likelihood
 ##==============================================================================
+loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data, var=NULL) {
+  dx <- 10
+  co2 <- seq(from=-10000,to=15000,by=dx) # excessive width to make sure nothing is clipped
+  llike <- 0
+  for (ii in idx_data) {
+    f_like <- likelihood_fit[[ii]](co2); f_like[is.na(f_like)] <- 0
+    f_unc <- dnorm(co2, mean=0, sd=sqrt(var))
+    f_conv <- convolve(f_like*dx, f_unc*dx)
+    # re-order to center the convolution
+    i0 <- which(co2==0)
+    f_conv <- c(f_conv[(length(f_conv)-i0):length(f_conv)], f_conv[1:(length(f_conv)-i0-1)])
+    llike <- llike + log(approx(co2,f_conv,xout=model_out[ii,'co2'])$y)
+    if (is.na(llike) | is.infinite(llike)) {return(-Inf)}
+  }
+  return(llike)
+}
+
+if(FALSE){
+##OLD
 loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data) {
   llike <- 0
   for (ii in idx_data) {
@@ -176,8 +195,8 @@ loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data) {
   }
   return(llike)
 }
+}
 ##==============================================================================
-
 
 
 ##==============================================================================

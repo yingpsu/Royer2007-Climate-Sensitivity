@@ -162,7 +162,7 @@ log_like <- function(
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else if(!is.null(loglikelihood_smoothed)){
-    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
+    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('var',parnames_calib)])
   } else {
     # compare against data
     # assumption of steady state in-between model time steps

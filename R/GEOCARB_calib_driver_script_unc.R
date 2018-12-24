@@ -199,7 +199,7 @@ if(DO_SAMPLE_TVQ) {
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
+                    iteration_threshold=iteration_threshold
                     loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
     tend <- proc.time()
   }
@@ -213,8 +213,8 @@ if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',t
 ## Extend and run more MCMC samples?
 if(FALSE){
 niter_extend <- 1e4
-tbeg=proc.time()
-amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
+tbeg <- proc.time()
+amcmc_extend1 <- MCMC.add.samples(amcmc_out1, niter_extend,
                                 par_fixed=par_fixed0, parnames_calib=parnames_calib,
                                 parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
                                 ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
@@ -223,10 +223,10 @@ amcmc_extend1 = MCMC.add.samples(amcmc_out1, niter_extend,
                                 data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                                 ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                                 iteration_threshold=iteration_threshold,
-                                loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
                                 do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
-tend=proc.time()
-chain1 = amcmc_extend1$samples
+tend <- proc.time()
+chain1 <- amcmc_extend1$samples
+amcmc_out1 <- amcmc_extend1
 }
 ##==============================================================================
 
