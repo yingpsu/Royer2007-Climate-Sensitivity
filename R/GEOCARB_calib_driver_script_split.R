@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB-2014_calib_driver.R
+## GEOCARB-2014_calib_driver_split.R
 ##
 ## Read CO2 proxy data. Set which data sets you intend to calibrate using.
 ## Version for running as script on HPC.
@@ -11,8 +11,8 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e6   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 10        # number of CPUs to use
+niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1        # number of CPUs to use
 appen <- 'tvq_split'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -38,7 +38,8 @@ DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- TRUE
 
-filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
+#filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
 
 library(adaptMCMC)
 library(ncdf4)

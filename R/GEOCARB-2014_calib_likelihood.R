@@ -68,6 +68,8 @@ log_prior <- function(
           lpri_new <- dnorm(x=par_calib[ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]), log=TRUE)
         } else if(input[row_num, 'distribution_type']=='lognormal') {
           lpri_new <- dlnorm(x=par_calib[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]), log=TRUE)
+        } else if(input[row_num, 'distribution_type']=='invgamma') {
+          lpri_new <- dinvgamma(x=par_calib[ind_const_calib[i]], shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"], log=TRUE)
         } else {
           print('ERROR - unknown prior distribution type')
         }
@@ -160,7 +162,8 @@ log_like <- function(
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else if(!is.null(loglikelihood_smoothed)){
-    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
+    #llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
+    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('var',parnames_calib)])
   } else {
     # compare against data
     # assumption of steady state in-between model time steps
