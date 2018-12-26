@@ -56,7 +56,8 @@ if(DO_SAMPLE_TVQ) {
   source('GEOCARB-2014_parameterSetup.R')
   source('model_forMCMC.R')
 }
-source('run_geocarbF.R')
+#source('run_geocarbF.R')
+source('run_geocarbF_unc.R')
 ##==============================================================================
 
 
