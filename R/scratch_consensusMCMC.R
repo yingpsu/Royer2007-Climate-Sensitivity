@@ -136,7 +136,7 @@ lines(mm_example$co2, mm_example$fit, lty=1, lwd=2)
 legend(1000,0.008, c('3 separate MCMC chains','Full likelihood surface'), lty=c(2,1), lwd=2, bty='n')
 
 
-# plot of distributions of ESS from each shard, and consesnsus
+# plot of distributions of ESS from each shard, and consensus
 
 fitp <- vector('list',n_shard)
 for (ss in 1:n_shard) {fitp[[ss]] <- density(parameters[[ss]][,10])}

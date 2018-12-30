@@ -29,7 +29,11 @@ input <- read.csv(filename.calibinput)
 #fluxes ("F" prefix) are in units of 10^18 mol Myrs-1
 #rates ("k" prefix) are in units of Myrs-1
 #stable isotopic compositions ("d" prefix) are in per mil units
-time_arrays <- read.csv("../input_data/GEOCARB_input_arrays.csv")
+if(USE_LENTON_FSR) {
+  time_arrays <- read.csv("../input_data/GEOCARB_input_arrays_Lenton.csv")
+} else {
+  time_arrays <- read.csv("../input_data/GEOCARB_input_arrays.csv")
+}
 ageN <- length(time_arrays$age) #number of time-steps
 age <- matrix (time_arrays$age, nrow=ageN, ncol=1); colnames(age) <- "age (Myrs ago)"
 

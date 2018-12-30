@@ -39,6 +39,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- TRUE
+LENTON_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
 

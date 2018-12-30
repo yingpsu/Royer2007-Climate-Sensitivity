@@ -11,7 +11,7 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 2e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
 appen <- 'tvq_split'
 output_dir <- '../output/'
@@ -37,6 +37,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- TRUE
+USE_LENTON_FSR <- TRUE
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
 #filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
@@ -44,6 +45,7 @@ filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
 library(adaptMCMC)
 library(ncdf4)
 library(sn)
+library(invgamma)
 
 ##==============================================================================
 ## Model parameters and setup
@@ -59,6 +61,10 @@ if(DO_SAMPLE_TVQ) {
 #source('run_geocarbF.R')
 source('run_geocarbF_unc.R')
 ##==============================================================================
+
+
+# quick fix to initialize variance
+par_calib0[match('var',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
 
 
 ##==============================================================================
