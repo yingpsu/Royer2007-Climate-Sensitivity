@@ -11,7 +11,7 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 2e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
@@ -39,7 +39,8 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- TRUE
-LENTON_FSR <- TRUE
+USE_LENTON_FSR <- FALSE
+USE_ROYER_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
 

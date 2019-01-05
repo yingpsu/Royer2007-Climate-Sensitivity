@@ -25,7 +25,7 @@ dist <- 'sn'  # skew-normal (use this to reproduce main results)
 #dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-100min'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-mmrem'  # skew-normal (use this to reproduce supplementary experiment results)
-appen2 <- paste(dist,'-split',sep='')
+appen2 <- paste(dist,'-split-deg',sep='')
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
