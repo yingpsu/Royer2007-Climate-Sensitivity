@@ -11,8 +11,8 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 2e6   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1        # number of CPUs to use
+niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 3        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -155,8 +155,8 @@ if(DO_SAMPLE_TVQ) {
   } else if(n_node000 > 1) {
     tbeg <- proc.time()
     amcmc_par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-          					dyn.libs=c('../fortran/run_geocarb.so'),
-                    packages=c('sn'),
+          					dyn.libs=c('../fortran/run_geocarb_unc.so'),
+                    packages=c('sn','invgamma'),
           					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
           					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
@@ -190,8 +190,8 @@ if(DO_SAMPLE_TVQ) {
   } else if(n_node000 > 1) {
     tbeg <- proc.time()
     amcmc_par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
-          					dyn.libs=c('../fortran/run_geocarb.so'),
-                    packages=c('sn'),
+          					dyn.libs=c('../fortran/run_geocarb_unc.so'),
+                    packages=c('sn','invgamma'),
           					adapt=TRUE, list=TRUE, acc.rate=accept_mcmc, scale=step_mcmc,
           					gamma=gamma_mcmc, n.start=max(5000,round(0.05*niter_mcmc)),
                     par_fixed=par_fixed0, parnames_calib=parnames_calib,
@@ -214,7 +214,7 @@ if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',t
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
 if(FALSE){
-niter_extend <- 1e4
+niter_extend <- 4e6
 tbeg <- proc.time()
 amcmc_extend1 <- MCMC.add.samples(amcmc_out1, niter_extend,
                                 par_fixed=par_fixed0, parnames_calib=parnames_calib,
