@@ -67,7 +67,8 @@ source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical 
 
 
 # quick fix to initialize variance
-par_calib0[match('var',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
+par_calib0[match('var',parnames_calib)] <- 450^2
+#par_calib0[match('var',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
 
 
 ##==============================================================================

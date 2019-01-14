@@ -121,8 +121,9 @@ for (p in 1:length(parnames_tmp)) {
     } else if(input[row_num, 'distribution_type']=='gaussian') {
       step_mcmc[p] <- 0.5*input[row_num,"two_sigma"]
     } else if(input[row_num, 'distribution_type']=='invgamma') {
-      step_mcmc[p] <- (qinvgamma(0.75, shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"]) -
-                       qinvgamma(0.25, shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"]))/5
+      step_mcmc[p] <- 45^2   # the step size below proved to be way too large
+#      step_mcmc[p] <- (qinvgamma(0.75, shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"]) -
+#                       qinvgamma(0.25, shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"]))/5
     } else {print('ERROR - unknown distribution type (fitting step sizes, constant parameters)')}
   } else {print('ERROR - unknown calibration parameter type (fitting step sizes)')}
 }

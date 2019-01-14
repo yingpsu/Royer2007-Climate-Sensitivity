@@ -70,6 +70,10 @@ log_prior <- function(
           lpri_new <- dlnorm(x=par_calib[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]), log=TRUE)
         } else if(input[row_num, 'distribution_type']=='invgamma') {
           lpri_new <- dinvgamma(x=par_calib[ind_const_calib[i]], shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"], log=TRUE)
+          # impose a truncation for variance parameter
+          if((par_calib[ind_const_calib[i]] > 500) | (par_calib[ind_const_calib[i]] < 400)) {
+            lpri_new <- -Inf
+          }
         } else {
           print('ERROR - unknown prior distribution type')
         }
