@@ -71,7 +71,7 @@ log_prior <- function(
         } else if(input[row_num, 'distribution_type']=='invgamma') {
           lpri_new <- dinvgamma(x=par_calib[ind_const_calib[i]], shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"], log=TRUE)
           # impose a truncation for variance parameter
-          if((par_calib[ind_const_calib[i]] > 500) | (par_calib[ind_const_calib[i]] < 400)) {
+          if((par_calib[ind_const_calib[i]] > 500^2) | (par_calib[ind_const_calib[i]] < 400^2)) {
             lpri_new <- -Inf
           }
         } else {
