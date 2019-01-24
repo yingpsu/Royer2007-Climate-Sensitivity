@@ -185,7 +185,7 @@ const_names_expected <- c('ACT',     # 1
                           'kwsy',     #(54)
                           'kwgy',     #(55)
                           'kwcy',     #(56)
-                          'var')      # added by Tony
+                          'stdev')    # added by Tony
 
 time_names_expected <- c('Sr',     #(:,1)
                          'd13C',     #(:,2)

@@ -11,8 +11,8 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 3        # number of CPUs to use
+niter_mcmc000 <- 5e3   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -66,9 +66,9 @@ source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical 
 ##==============================================================================
 
 
-# quick fix to initialize variance
-par_calib0[match('var',parnames_calib)] <- 450^2
-#par_calib0[match('var',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
+# quick fix to initialize standard deviation
+par_calib0[match('stdev',parnames_calib)] <- 450
+#par_calib0[match('stdev',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
 
 
 ##==============================================================================
@@ -215,7 +215,7 @@ if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',t
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
 if(FALSE){
-niter_extend <- 4e6
+niter_extend <- 5e6
 tbeg <- proc.time()
 amcmc_extend1 <- MCMC.add.samples(amcmc_out1, niter_extend,
                                 par_fixed=par_fixed0, parnames_calib=parnames_calib,

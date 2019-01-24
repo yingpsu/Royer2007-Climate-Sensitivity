@@ -166,7 +166,7 @@ log_like <- function(
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else if(!is.null(loglikelihood_smoothed)){
-    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('var',parnames_calib)])
+    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('stdev',parnames_calib)])
   } else {
     # compare against data
     # assumption of steady state in-between model time steps
@@ -176,7 +176,7 @@ log_like <- function(
 #                         xi=data_calib$xi_co2[i], omega=data_calib$omega_co2[i],
 #                         alpha=data_calib$alpha_co2[i], log=TRUE)) )
     llike <- sum( sapply(1:length(model_stdy), function(i) dsn(x=model_stdy[i],
-                         xi=data_calib$xi_co2[i], omega=sqrt(data_calib$omega_co2[i]^2 + par_calib[match('var',parnames_calib)]),
+                         xi=data_calib$xi_co2[i], omega=sqrt(data_calib$omega_co2[i]^2 + par_calib[match('stdev',parnames_calib)]),
                          alpha=data_calib$alpha_co2[i], log=TRUE)) )
 #    llike <- sum( sapply(1:length(model_stdy), function(i) dbeta(x=(model_stdy[i]-lower_bound_co2)/(upper_bound_co2-lower_bound_co2),
 #                         shape1=data_calib$shape1_co2[i], shape2=data_calib$shape2_co2[i],
