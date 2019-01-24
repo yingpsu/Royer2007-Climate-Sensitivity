@@ -11,8 +11,8 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 5e3   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1        # number of CPUs to use
+niter_mcmc000 <- 5e5   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 4        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -202,7 +202,7 @@ if(DO_SAMPLE_TVQ) {
                     input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold
+                    iteration_threshold=iteration_threshold,
                     loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
     tend <- proc.time()
   }
