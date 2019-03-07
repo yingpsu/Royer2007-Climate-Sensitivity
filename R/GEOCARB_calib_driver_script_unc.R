@@ -11,7 +11,7 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e5   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 5e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
@@ -222,7 +222,8 @@ if(DO_SAMPLE_TVQ) {
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 # save
-if(DO_WRITE_RDATA) {save.image(file=paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,appen2,'.RData', sep=''))}
+filename.out <- paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,appen2,'.RData', sep='')
+if(DO_WRITE_RDATA) {save.image(file=filename.out)}
 
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?

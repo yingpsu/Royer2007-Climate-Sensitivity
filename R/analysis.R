@@ -20,6 +20,8 @@ library(ncdf4)
 
 dist <- 'sn'
 DO_SAMPLE_TVQ <- TRUE
+USE_LENTON_FSR <- FALSE
+USE_ROYER_FSR <- TRUE
 
 data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("alkenones" , TRUE),
@@ -27,13 +29,14 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("boron"     , TRUE),
                         c("liverworts", TRUE) )
 
-filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all.csv'
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
 
 source('GEOCARB-2014_parameterSetup_tvq.R')
 source('model_forMCMC_tvq.R')
-source('run_geocarbF.R')
+#source('run_geocarbF.R')
+source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical parameter
 source('GEOCARB_fit_likelihood_surface.R')
-source('likelihood_surface_quantiles.R')
+#source('likelihood_surface_quantiles.R')
 
 # Get model parameter prior distribution bounds
 names <- as.character(input$parameter)
@@ -64,11 +67,11 @@ save.image(file='../output/analysis.RData')
 ##======================================
 
 ##======================================
+if(FALSE) {
 # same, but with 100 ppmv min CO2 (lower data points filtered)
 
 likelihood_quantiles_control <- likelihood_quantiles
 
-dist <- 'sn-100min'
 source('GEOCARB_fit_likelihood_surface.R')
 source('likelihood_surface_quantiles.R')
 likelihood_quantiles_100min <- likelihood_quantiles
@@ -92,6 +95,7 @@ source('GEOCARB-2014_getData.R')
 data_calib_ctrl <- data_calib
 
 save.image(file='../output/analysis.RData')
+}
 ##======================================
 
 
@@ -101,7 +105,7 @@ save.image(file='../output/analysis.RData')
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Oct2018sn.nc')
+ncdata <- nc_open('../output/geocarb_calibratedParameters_unc_26Feb2019sn.nc')
 parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 parnames <- ncvar_get(ncdata, 'parnames')
 nc_close(ncdata)
@@ -109,7 +113,7 @@ n_ensemble <- nrow(parameters)
 n_parameter <- ncol(parameters)
 
 # need likelihood/posterior functions, to get max. posterior score simulation
-source('GEOCARB-2014_calib_likelihood.R')
+source('GEOCARB-2014_calib_likelihood_unc.R')
 
 # run the ensemble
 model_out <- sapply(X=1:n_ensemble,
