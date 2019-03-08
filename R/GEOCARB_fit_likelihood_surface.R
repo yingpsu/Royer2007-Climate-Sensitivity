@@ -180,7 +180,7 @@ loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data, stdev=
     i0 <- which(co2==0)
     f_conv <- c(f_conv[(length(f_conv)-i0):length(f_conv)], f_conv[1:(length(f_conv)-i0-1)])
     if(is.null(ncol(modeled_co2))) { #print('1D')
-      llike <- llike + log(approx(co2,f_conv,xout=modeled_co2)$y)
+      llike <- llike + log(approx(co2,f_conv,xout=modeled_co2[ii])$y)
     } else { #print("2D")
       llike <- llike + log(approx(co2,f_conv,xout=modeled_co2[ii,'co2'])$y)
     }

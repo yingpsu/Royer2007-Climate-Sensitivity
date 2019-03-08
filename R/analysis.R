@@ -291,17 +291,11 @@ ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_26Sep2018nm.nc
 parameters_nm <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all-const_08Oct2018sn.nc')
-parameters_ntv <- t(ncvar_get(ncdata, 'geocarb_parameters'))
+# re-read - make sure they're the good ones!
+ncdata <- nc_open('../output/geocarb_calibratedParameters_unc_26Feb2019sn.nc')
+parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_24Oct2018sn-100min.nc')
-parameters_100min <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-nc_close(ncdata)
-
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_28Oct2018sn-mmrem.nc')
-parameters_mmrem <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-nc_close(ncdata)
 
 # run the ensemble
 model_out_nm <- sapply(X=1:n_ensemble,
@@ -362,123 +356,6 @@ lpost_out_nm <- sapply(X=1:n_ensemble,
 
 model_quantiles_nm[,'maxpost'] <- model_out_nm[,which.max(lpost_out_nm)]
 
-# run the ensemble having filtered out the data points with CO2 < 100 ppmv first
-model_out_100min <- sapply(X=1:n_ensemble,
-              FUN=function(k){model_forMCMC(par_calib=parameters_100min[k,],
-                                            par_fixed=par_fixed0,
-                                            parnames_calib=parnames_calib,
-                                            parnames_fixed=parnames_fixed,
-                                            parnames_time=parnames_time,
-                                            age=age,
-                                            ageN=ageN,
-                                            ind_const_calib=ind_const_calib,
-                                            ind_time_calib=ind_time_calib,
-                                            ind_const_fixed=ind_const_fixed,
-                                            ind_time_fixed=ind_time_fixed,
-                                            ind_expected_time=ind_expected_time,
-                                            ind_expected_const=ind_expected_const,
-                                            iteration_threshold=iteration_threshold,
-                                            do_sample_tvq=DO_SAMPLE_TVQ,
-                                            par_time_center=par_time_center,
-                                            par_time_stdev=par_time_stdev)[,'co2']})
-
-# get 5-95% range and median  are cols 1-3; max-post will be 4
-model_quantiles_100min <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
-colnames(model_quantiles_100min) <- colnames(model_quantiles)
-for (t in 1:n_time) {
-  model_quantiles_100min[t,1:length(quantiles_i_want)] <- quantile(model_out_100min[t,], quantiles_i_want)
-}
-
-# get posterior scores
-
-lpost_out_100min <- sapply(X=1:n_ensemble,
-              FUN=function(k){log_post(par_calib=parameters_100min[k,],
-                                      par_fixed=par_fixed0,
-                                      parnames_calib=parnames_calib,
-                                      parnames_fixed=parnames_fixed,
-                                      parnames_time=parnames_time,
-                                      age=age,
-                                      ageN=ageN,
-                                      ind_const_calib=ind_const_calib,
-                                      ind_time_calib=ind_time_calib,
-                                      ind_const_fixed=ind_const_fixed,
-                                      ind_time_fixed=ind_time_fixed,
-                                      input=input,
-                                      time_arrays=time_arrays,
-                                      bounds_calib=bounds_calib,
-                                      data_calib=data_calib,
-                                      ind_mod2obs=ind_mod2obs,
-                                      ind_expected_time=ind_expected_time,
-                                      ind_expected_const=ind_expected_const,
-                                      iteration_threshold=iteration_threshold,
-                                      n_shard=1,
-                                      loglikelihood_smoothed=loglikelihood_smoothed,
-                                      likelihood_fit=likelihood_fit,
-                                      idx_data=idx_data,
-                                      do_sample_tvq=DO_SAMPLE_TVQ,
-                                      par_time_center=par_time_center,
-                                      par_time_stdev=par_time_stdev)})
-
-model_quantiles_100min[,'maxpost'] <- model_out_100min[,which.max(lpost_out_100min)]
-
-# run the ensemble having filtered out the data points with at multi-mode
-model_out_mmrem <- sapply(X=1:n_ensemble,
-              FUN=function(k){model_forMCMC(par_calib=parameters_mmrem[k,],
-                                            par_fixed=par_fixed0,
-                                            parnames_calib=parnames_calib,
-                                            parnames_fixed=parnames_fixed,
-                                            parnames_time=parnames_time,
-                                            age=age,
-                                            ageN=ageN,
-                                            ind_const_calib=ind_const_calib,
-                                            ind_time_calib=ind_time_calib,
-                                            ind_const_fixed=ind_const_fixed,
-                                            ind_time_fixed=ind_time_fixed,
-                                            ind_expected_time=ind_expected_time,
-                                            ind_expected_const=ind_expected_const,
-                                            iteration_threshold=iteration_threshold,
-                                            do_sample_tvq=DO_SAMPLE_TVQ,
-                                            par_time_center=par_time_center,
-                                            par_time_stdev=par_time_stdev)[,'co2']})
-
-# get 5-95% range and median  are cols 1-3; max-post will be 4
-model_quantiles_mmrem <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
-colnames(model_quantiles_mmrem) <- colnames(model_quantiles)
-for (t in 1:n_time) {
-  model_quantiles_mmrem[t,1:length(quantiles_i_want)] <- quantile(model_out_mmrem[t,], quantiles_i_want)
-}
-
-# get posterior scores
-
-lpost_out_mmrem <- sapply(X=1:n_ensemble,
-              FUN=function(k){log_post(par_calib=parameters_mmrem[k,],
-                                      par_fixed=par_fixed0,
-                                      parnames_calib=parnames_calib,
-                                      parnames_fixed=parnames_fixed,
-                                      parnames_time=parnames_time,
-                                      age=age,
-                                      ageN=ageN,
-                                      ind_const_calib=ind_const_calib,
-                                      ind_time_calib=ind_time_calib,
-                                      ind_const_fixed=ind_const_fixed,
-                                      ind_time_fixed=ind_time_fixed,
-                                      input=input,
-                                      time_arrays=time_arrays,
-                                      bounds_calib=bounds_calib,
-                                      data_calib=data_calib,
-                                      ind_mod2obs=ind_mod2obs,
-                                      ind_expected_time=ind_expected_time,
-                                      ind_expected_const=ind_expected_const,
-                                      iteration_threshold=iteration_threshold,
-                                      n_shard=1,
-                                      loglikelihood_smoothed=loglikelihood_smoothed,
-                                      likelihood_fit=likelihood_fit,
-                                      idx_data=idx_data,
-                                      do_sample_tvq=DO_SAMPLE_TVQ,
-                                      par_time_center=par_time_center,
-                                      par_time_stdev=par_time_stdev)})
-
-model_quantiles_mmrem[,'maxpost'] <- model_out_mmrem[,which.max(lpost_out_mmrem)]
 
 save.image(file='../output/analysis.RData')
 ##======================================
@@ -491,8 +368,6 @@ save.image(file='../output/analysis.RData')
 # (Gaussian) error structure for the proxy data as opposed to skew-normal.
 
 deltaT2X_density_nm <- density(parameters_nm[,ics], from=0, to=10)
-deltaT2X_density_100min <- density(parameters_100min[,ics], from=0, to=10)
-deltaT2X_density_mmrem <- density(parameters_mmrem[,ics], from=0, to=10)
 
 ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
 parameters_old <- t(ncvar_get(ncdata, 'geocarb_parameters'))

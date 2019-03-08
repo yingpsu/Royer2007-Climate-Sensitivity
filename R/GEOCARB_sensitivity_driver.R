@@ -22,13 +22,15 @@ appen <- 'TEST'
 l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
 do_sample_tvq <- TRUE
 do_precal <- TRUE
+USE_LENTON_FSR <- FALSE
+USE_ROYER_FSR <- TRUE
 
 # latin hypercube precalibration
 sens='NS' # valid values:  L1, L2, NS, pres
 
 # calibration parameters and input data
 filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
-filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all.csv'
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
 #filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all-const.csv'
 #filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all-const.csv'
 filename.calibout <- '../output/geocarb_calibratedParameters_tvq_all-const_08Oct2018sn.nc'
@@ -157,7 +159,8 @@ rm(list=c('bound_lower','bound_upper','bounds'))
 ##=======
 
 # need the physical model
-source('run_geocarbF.R')
+#source('run_geocarbF.R')
+source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical parameter
 
 # needed packages
 #install.packages('sensitivity')
@@ -239,7 +242,7 @@ model_out <- sapply(1:n_sample, function(ss) {
 
 ibad <- NULL
 for (ss in 1:n_sample) {
-  if( any(model_out[,ss] < 100) |
+  if( any(model_out[,ss] < 0) |
       any(model_out[,ss] > 1e4) |
       model_out[58,ss] < 280 | model_out[58,ss] > 400) {
     ibad <- c(ibad,ss)
