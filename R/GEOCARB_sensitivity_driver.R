@@ -14,9 +14,9 @@ rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 100000
-.Nboot <- 1000
-appen <- 'TEST'
+n_sample <- 6000000
+.Nboot <- 10000
+appen <- 'priors'
 .confidence <- 0.9 # for bootstrap CI
 .second <- FALSE    # calculate second-order indices?
 l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
@@ -33,7 +33,7 @@ filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
 #filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all-const.csv'
 #filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all-const.csv'
-filename.calibout <- '../output/geocarb_calibratedParameters_tvq_all-const_08Oct2018sn.nc'
+filename.calibout <- '../output/geocarb_calibratedParameters_unc_26Feb2019sn.nc'
 
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
