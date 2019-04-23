@@ -8,12 +8,11 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 library(sn)
-library(ncdf4)
 
 # Get whatever we need in order to plot various things.
 # Then, save all on one RData file to be read by plotting routine.
 
-
+load('../output/processing_14Apr2019sn.RData')
 
 ##==============================================================================
 # Figure 1. Observations and fitted likelihood surface.
@@ -64,40 +63,7 @@ for (i in 1:length(parnames_calib)) {
 rm(list=c('bound_lower','bound_upper','bounds'))
 
 save.image(file='../output/analysis.RData')
-##======================================
-
-##======================================
-if(FALSE) {
-# same, but with 100 ppmv min CO2 (lower data points filtered)
-
-likelihood_quantiles_control <- likelihood_quantiles
-
-source('GEOCARB_fit_likelihood_surface.R')
-source('likelihood_surface_quantiles.R')
-likelihood_quantiles_100min <- likelihood_quantiles
-
-dist <- 'sn-mmrem'
-source('GEOCARB_fit_likelihood_surface.R')
-source('likelihood_surface_quantiles.R')
-likelihood_quantiles_mmrem <- likelihood_quantiles
-
-# so the proper un-filtered data is on the analysis RData file
-likelihood_quantiles <- likelihood_quantiles_control
-dist <- 'sn'
-if(dist=='ga') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'}
-if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'}
-if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'}
-if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
-if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
-if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
-if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
-source('GEOCARB-2014_getData.R')
-data_calib_ctrl <- data_calib
-
-save.image(file='../output/analysis.RData')
-}
-##======================================
-
+##==============================================================================
 
 
 ##==============================================================================
@@ -105,10 +71,9 @@ save.image(file='../output/analysis.RData')
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_unc_26Feb2019sn.nc')
-parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-parnames <- ncvar_get(ncdata, 'parnames')
-nc_close(ncdata)
+parameters <- parameters_posterior
+parnames <- colnames(parameters_posterior)
+rm(list=c('parameters_posterior'))
 n_ensemble <- nrow(parameters)
 n_parameter <- ncol(parameters)
 
@@ -136,11 +101,19 @@ model_out <- sapply(X=1:n_ensemble,
                                             par_time_stdev=par_time_stdev)[,'co2']})
 n_time <- nrow(model_out)
 
+# add the noise from the stdev parameter
+model_out_noisy <- model_out
+for (k in 1:n_ensemble) {
+  model_out_noisy[,k] <- model_out_noisy[,k] + rnorm(n=n_time, mean=0, sd=parameters[k,57])
+}
+# DONT want to use the above -- the other parameters are chosen in light of the uncertainty parameter
+
 # get 5-95% range and median  are cols 1-3; max-post will be 4
-quantiles_i_want <- c(.025,.05,.5,.95,.975)
+quantiles_i_want <- c(0,0.005,.025,.05,.5,.95,.975,0.995,1)
 model_quantiles <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
-colnames(model_quantiles) <- c('q025','q05','q50','q95','q975','maxpost')
+colnames(model_quantiles) <- c('q000','q005','q025','q05','q50','q95','q975','q995','q100','maxpost')
 for (t in 1:n_time) {
+    #model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out_noisy[t,], quantiles_i_want)
     model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out[t,], quantiles_i_want)
 }
 
