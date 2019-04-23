@@ -7,12 +7,14 @@
 ## Questions? Tony Wong (twong@psu.edu)
 ##==============================================================================
 
+print(paste("START AT",Sys.time()))
+
 rm(list=ls())
 
-setwd('~/codes/GEOCARB/R')
+setwd('~/work/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e7   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 6        # number of CPUs to use
+niter_mcmc000 <- 5e6   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 4        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -38,17 +40,16 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
-DO_WRITE_NETCDF <- TRUE
+DO_WRITE_NETCDF <- FALSE
 DO_COVAR_INIT <- TRUE
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.covarinit <- "../output/covar_init_unc-sd10_18Feb2019.rds"
-filename.paraminit <- "../output/param_init_unc-sd10_18Feb2019.rds"
+filename.covarinit <- "../output/covar_init_unc-sd10_14Apr2019.rds"
+filename.paraminit <- "../output/param_init_unc-sd10_14Apr2019.rds"
 
 library(adaptMCMC)
-library(ncdf4)
 library(sn)
 library(invgamma)
 
@@ -225,6 +226,14 @@ print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 filename.out <- paste(output_dir,'GEOCARB_MCMC_',appen,'_',today,appen2,'.RData', sep='')
 if(DO_WRITE_RDATA) {save.image(file=filename.out)}
 
+## write an RData file with the parameter results
+filename.mcmc = paste(output_dir,'geocarb_mcmcoutput_',appen,'_',today,appen2,'.RData',sep="")
+if(n_node000 == 1) {
+  save(amcmc_out1, file=filename.mcmc)
+} else {
+  save(amcmc_par1, file=filename.mcmc)
+}
+
 ## Extend an MCMC chain?
 ## Extend and run more MCMC samples?
 if(FALSE){
@@ -397,6 +406,8 @@ if(n_node000==1) {
 ## to get back into the shape BRICK expects, just transpose it
 if(DO_WRITE_NETCDF) {
 
+library(ncdf4)
+
 lmax=0
 for (i in 1:length(parnames_calib)){lmax=max(lmax,nchar(parnames_calib[i]))}
 
@@ -415,7 +426,16 @@ ncvar_put(outnc, parnames.var, parnames_calib)
 ncvar_put(outnc, covjump.var, covjump.posterior)
 nc_close(outnc)
 
+} else {
+
+## write an RData file with the parameter results
+filename.parameters = paste(output_dir,'geocarb_calibratedParameters_',appen,'_',today,appen2,'.RData',sep="")
+save(parameters.posterior, parnames_calib, covjump.posterior, file=filename.parameters)
+
 }
+
+print(paste("END AT",Sys.time()))
+
 ##==============================================================================
 
 

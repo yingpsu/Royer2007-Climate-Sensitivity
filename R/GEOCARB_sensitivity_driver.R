@@ -43,7 +43,7 @@ if(Sys.info()['user']=='tony') {
 } else {
   # assume on Napa cluster
   machine <- 'remote'
-  setwd('/home/scrim/axw322/codes/GEOCARB/R')
+  setwd('~/work/codes/GEOCARB/R')
   .Ncore <- 15  # use multiple cores to process large data?
 }
 

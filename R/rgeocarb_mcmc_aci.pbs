@@ -1,0 +1,10 @@
+#!/bin/bash
+#PBS -A kzk10_a_g_sc_default
+#PBS -l walltime=125:00:00
+#PBS -l nodes=1:ppn=4
+#PBS -l pmem=50gb
+#PBS -j oe
+#PBS -m abe
+#PBS -M anthony.e.wong@colorado.edu
+
+R --vanilla < /storage/home/a/axw322/work/codes/GEOCARB/R/GEOCARB_calib_driver_script_unc.R > /storage/home/a/axw322/work/codes/GEOCARB/R/rgeocarb_mcmc_unc.log
