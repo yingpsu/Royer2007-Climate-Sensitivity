@@ -13,7 +13,7 @@ rm(list=ls())
 
 setwd('~/work/codes/GEOCARB/R')
 
-niter_mcmc000 <- 2e5   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 1e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
@@ -41,7 +41,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
-DO_COVAR_INIT <- FALSE # dont do since we initialize using previous calibrations
+DO_PARAM_INIT <- FALSE # do initialization of parameters & covariance matrix from previous calibration?
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
@@ -77,7 +77,7 @@ source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical 
 par_calib0[match('stdev',parnames_calib)] <- 450
 #par_calib0[match('stdev',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
 
-if(DO_COVAR_INIT) {
+if(DO_PARAM_INIT) {
   step_mcmc <- readRDS(filename.covarinit)
   par_calib0 <- readRDS(filename.paraminit) # this will overwrite what is above
 }
