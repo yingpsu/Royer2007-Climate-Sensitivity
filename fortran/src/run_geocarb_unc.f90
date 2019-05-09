@@ -556,8 +556,8 @@ Rca = Rca_570
         ! estimated CO2 at present-day to be between 200-300 ppm; if not, the
         ! whole time-series is considered a failed run
         if (((t==0.0) .AND. (ISNAN(oxygen+RCO2) .OR. (100.0*(oxygen/(oxygen+143.0)) .lt. 19.0) .OR. &
-             (100.0*(oxygen/(oxygen+143.0)) .gt. 23.0) .OR. (RCO2 .lt. 0.8) .OR. (RCO2 .gt. 1.2))) ) then!.OR. &
-              !failed_run) then
+             (100.0*(oxygen/(oxygen+143.0)) .gt. 23.0) .OR. (RCO2 .lt. 0.8) .OR. (RCO2 .gt. 1.2))) .OR. &
+              failed_run) then
           CO2_out(i) = 1.0/0.0
           O2_out(i) = 1.0/0.0
         end if
