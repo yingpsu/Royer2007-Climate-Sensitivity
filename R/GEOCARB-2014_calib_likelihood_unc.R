@@ -123,7 +123,9 @@ log_like <- function(
 
   llike <- 0
 
-  upper_bound_co2 <- 10000
+  # upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
+  # lower bound relaxed in light of additional proxy data
+  upper_bound_co2 <- 50000
   lower_bound_co2 <- 0
 
   # run the model
