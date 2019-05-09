@@ -1,7 +1,7 @@
 ##==============================================================================
-## burnin_thinning.R
+## burnin_thinning_normal.R
 ##
-## For control experiment (main text)
+## For normal distribution supplementary experiment
 ##
 ## Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
@@ -10,7 +10,7 @@ library('coda')
 
 setwd('~/codes/GEOCARB/R')
 
-load('../output/geocarb_mcmcoutput_unc_14Apr2019sn.RData')
+load('../output/geocarb_mcmcoutput_unc_24Apr2019nm.RData')
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
@@ -50,8 +50,8 @@ if(n_node000 == 1) {
 } else {print('error - n_node000 < 1 makes no sense')}
 
 # Convergence check:
-#> gr.test
-#[1] 1.004766
+> gr.test
+[1] 1.001467
 
 # hack off first 1e6 iterations for burn in
 ifirst <- NA
@@ -74,14 +74,16 @@ if(n_node000 > 1) {
   chains_burned <- amcmc_out1$samples[(ifirst+1):niter_mcmc,]
 }
 
-save.image(file='processing.RData')
+save.image(file='processing_normal.RData')
 
 ##==============================================================================
 ## Thinning
 ##=========
 
-lmax <- 1000
-cmax <- 0.05
+## NOTE:  ACF could not go below 0.05 for the normal experiment.
+
+lmax <- 3000
+cmax <- 0.06
 maxlag <- 0
 
 for (m in 1:4) {
@@ -95,7 +97,7 @@ for (m in 1:4) {
     }
 }
 
-save.image(file='processing.RData')
+save.image(file='processing_normal.RData')
 
 chains_burned_thinned <- chains_burned # initialize
 if(n_node000 > 1) {
@@ -115,8 +117,8 @@ if (n_node000 > 1) {
   parameters_posterior <- chains_burned_thinned
 }
 
-save(parameters_posterior, file='processed_mcmc_results.RData')
-save.image(file='processing.RData')
+save(parameters_posterior, file='processed_mcmc_results_normal.RData')
+save.image(file='processing_normal.RData')
 
 ##==============================================================================
 ## End

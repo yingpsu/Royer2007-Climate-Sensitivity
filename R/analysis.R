@@ -264,10 +264,9 @@ ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_26Sep2018nm.nc
 parameters_nm <- t(ncvar_get(ncdata, 'geocarb_parameters'))
 nc_close(ncdata)
 
-# re-read - make sure they're the good ones!
-ncdata <- nc_open('../output/geocarb_calibratedParameters_unc_26Feb2019sn.nc')
-parameters <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-nc_close(ncdata)
+# plug in the normal experiment results here:
+#load('../output/processing_24Apr2019nm.RData')
+#load('../output/processing_14Apr2019sn.RData')
 
 
 # run the ensemble
