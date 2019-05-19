@@ -66,9 +66,8 @@ if(DO_SAMPLE_TVQ) {
 
 # later, we will sample from these and at each time step, fit a KDE to the
 # distribution of all of the samples within each time step
-
-upper_bound_co2 <- 10000
-lower_bound_co2 <- 0
+upper_bound_co2 <- .upper_bound_co2
+lower_bound_co2 <- .lower_bound_co2
 
 if(dist=='ga') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'}
 if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'}

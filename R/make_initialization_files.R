@@ -7,9 +7,12 @@
 # Tony Wong (anthony.e.wong@colorado.edu)
 #===============================================================================
 
-setwd('./codes/GEOCARB/R')
+setwd('~/codes/GEOCARB/R')
 
-load('../output/geocarb_mcmcoutput_unc_09May2019sn.RData') # based on standard parameters
+#load('../output/geocarb_mcmcoutput_unc_09May2019sn.RData') # based on standard parameters, from 1e6 run
+load('../output/geocarb_mcmcoutput_unc_10May2019sn.RData') # based on previous
+... # from end of previous run (5e6)
+
 cov.jump <- amcmc_out1$cov.jump
 p0 <- amcmc_out1$samples[nrow(amcmc_out1$samples),]
 

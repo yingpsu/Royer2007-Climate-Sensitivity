@@ -118,15 +118,12 @@ log_like <- function(
   idx_data=NULL,
   do_sample_tvq=FALSE,
   par_time_center=NULL,
-  par_time_stdev=NULL
+  par_time_stdev=NULL,
+  upper_bound_co2=50000,
+  lower_bound_co2=0
 ){
 
   llike <- 0
-
-  # upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
-  # lower bound relaxed in light of additional proxy data
-  upper_bound_co2 <- 50000
-  lower_bound_co2 <- 0
 
   # run the model
   if (do_sample_tvq) {
@@ -246,7 +243,9 @@ log_post <- function(
   idx_data=NULL,
   do_sample_tvq=FALSE,
   par_time_center=NULL,
-  par_time_stdev=NULL
+  par_time_stdev=NULL,
+  upper_bound_co2=50000,
+  lower_bound_co2=0
 ){
 
   lpri <- 0
@@ -294,7 +293,9 @@ log_post <- function(
                       idx_data=idx_data,
                       do_sample_tvq=do_sample_tvq,
                       par_time_center=par_time_center,
-                      par_time_stdev=par_time_stdev)
+                      par_time_stdev=par_time_stdev,
+                      upper_bound_co2=upper_bound_co2,
+                      lower_bound_co2=lower_bound_co2)
   }
 
   # combine

@@ -13,7 +13,7 @@ rm(list=ls())
 
 setwd('~/work/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e6   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 5e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
@@ -31,6 +31,11 @@ dist <- 'sn'  # skew-normal (use this to reproduce main results)
 
 appen2 <- dist
 
+# upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
+# lower bound relaxed in light of additional proxy data
+.upper_bound_co2 <- 50000
+.lower_bound_co2 <- 0
+
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("alkenones" , TRUE),
@@ -41,13 +46,13 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
-DO_PARAM_INIT <- FALSE # do initialization of parameters & covariance matrix from previous calibration?
+DO_PARAM_INIT <- TRUE # do initialization of parameters & covariance matrix from previous calibration?
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.covarinit <- "../output/covar_init_unc-sd10_14Apr2019.rds"
-filename.paraminit <- "../output/param_init_unc-sd10_14Apr2019.rds"
+filename.covarinit <- "../output/covar_init_unc-sd10_16May2019.rds"
+filename.paraminit <- "../output/param_init_unc-sd10_16May2019.rds"
 
 library(adaptMCMC)
 library(sn)
@@ -79,7 +84,7 @@ par_calib0[match('stdev',parnames_calib)] <- 450
 
 if(DO_PARAM_INIT) {
   step_mcmc <- readRDS(filename.covarinit)
-  par_calib0 <- readRDS(filename.paraminit) # this will overwrite what is above
+  par_calib0 <- readRDS(filename.paraminit) # this will overwrite setting stdev above
 }
 ##==============================================================================
 
@@ -163,7 +168,8 @@ if(DO_SAMPLE_TVQ) {
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                     iteration_threshold=iteration_threshold,
                     loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
+                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                    upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
     tend <- proc.time()
     chain1 = amcmc_out1$samples
   } else if(n_node000 > 1) {
@@ -182,7 +188,8 @@ if(DO_SAMPLE_TVQ) {
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                     iteration_threshold=iteration_threshold,
                     loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
+                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                    upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
     tend <- proc.time()
   }
 } else {
@@ -198,7 +205,8 @@ if(DO_SAMPLE_TVQ) {
                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                     iteration_threshold=iteration_threshold,
-                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
+                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
+                    upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
     tend <- proc.time()
     chain1 = amcmc_out1$samples
   } else if(n_node000 > 1) {
@@ -216,7 +224,8 @@ if(DO_SAMPLE_TVQ) {
                     data_calib=data_calib, ind_mod2obs=ind_mod2obs,
                     ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                     iteration_threshold=iteration_threshold,
-                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data)
+                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
+                    upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
     tend <- proc.time()
   }
 }
