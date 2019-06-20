@@ -8,7 +8,7 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
-load('../output/analysis.RData')
+load('../output/analysis_20June2019.RData')
 
 library(Hmisc)
 
@@ -39,7 +39,7 @@ dev.off()
 
 
 ## Log scale (model and points, no likelihood surface)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_new.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(model_quantiles[,'q50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
 #polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q000'],rev(model_quantiles[,'q100']))), col='gray', border=NA)
@@ -82,37 +82,6 @@ axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','10
 legend(-400, log10(8000), c('95% credible range','Max posterior','Data'), pch=c(15,NA,4), col=c('gray','black','black'), cex=.8, bty='n')
 legend(-400, log10(8000), c('95% credible range','Max posterior','Data'), pch=c(NA,'-',NA), col=c('gray','black','black'), cex=.8, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
-dev.off()
-
-
-## Log scale (obs and likelihood surface, for SOM)
-likelihood_nonansense <- cbind(time[which(!is.na(likelihood_quantiles[,2]))],
-                               likelihood_quantiles[which(!is.na(likelihood_quantiles[,2])),2],
-                               likelihood_quantiles[which(!is.na(likelihood_quantiles[,2])),8],
-                               likelihood_quantiles[which(!is.na(likelihood_quantiles[,2])),'50'])
-likelihood_nonansense[which(likelihood_nonansense[,2] <= 0),2] = 0.0001
-
-pdf(paste(plot.dir,'likelihood_vs_obspts_logscale_SOM.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-#polygon(-c(time,rev(time)), log10(c(likelihood_quantiles[,1],rev(likelihood_quantiles[,9]))), col='lightcyan1', border=NA)
-polygon(-c(likelihood_nonansense[,1],rev(likelihood_nonansense[,1])), log10(c(likelihood_nonansense[,2],rev(likelihood_nonansense[,3]))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(likelihood_quantiles[,3],rev(likelihood_quantiles[,7]))), col='lightcyan3', border=NA)
-#polygon(-c(time,rev(time)), log10(c(likelihood_quantiles[,4],rev(likelihood_quantiles[,6]))), col='lightcyan4', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='seagreen1', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
-lines(-likelihood_nonansense[,1], log10(likelihood_nonansense[,4]), lwd=2, lty=1, col='black')
-#lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-#lines(-time, model_ref, lwd=2, lty=2)
-points(-data_calib_ctrl$age, log10(data_calib_ctrl$co2), pch='x', cex=0.65)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
-legend(-450, log10(50), c('Data','Likelihood median','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.9, bty='n')
-legend(-450, log10(50), c('Data','Likelihood median','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.9, bty='n')
 dev.off()
 
 

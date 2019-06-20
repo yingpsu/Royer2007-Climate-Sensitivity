@@ -10,7 +10,11 @@ library('coda')
 
 setwd('~/codes/GEOCARB/R')
 
-load('../output/geocarb_mcmcoutput_unc_14Apr2019sn.RData')
+today <- Sys.Date(); today <- format(today,format="%d%b%Y")
+filename_parameters <- paste('processed_mcmc_results_',today,'.RData', sep="")
+filename_processing <- paste('processing_',today,'.RData', sep="")
+
+load('../output/geocarb_mcmcoutput_unc_16Jun2019sn.RData')
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
@@ -25,7 +29,8 @@ source('GEOCARB-2014_parameterSetup_tvq.R')
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
-niter.test <- c(1e6)
+#niter.test <- c(1e6)
+niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 
 if(n_node000 == 1) {
@@ -74,28 +79,30 @@ if(n_node000 > 1) {
   chains_burned <- amcmc_out1$samples[(ifirst+1):niter_mcmc,]
 }
 
-save.image(file='processing.RData')
-
 ##==============================================================================
 ## Thinning
 ##=========
 
-lmax <- 1000
+lmax <- 3000
 cmax <- 0.05
 maxlag <- 0
 
-for (m in 1:4) {
+for (m in 1:n_node000) {
     for (p in 1:n_parameters) {
         acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-        new <- acf_tmp$lag[which(acf_tmp$acf < cmax)[1]]
+        idx_low <- which(acf_tmp$acf < cmax)
+        while (length(idx_low)==0) {
+          lmax <- lmax + 200
+          acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
+          idx_low <- which(acf_tmp$acf < cmax)
+        }
+        new <- acf_tmp$lag[idx_low[1]]
         if (maxlag < new) {
             print(paste(m,p,"Updating maxlag to",new))
             maxlag <- new
         }
     }
 }
-
-save.image(file='processing.RData')
 
 chains_burned_thinned <- chains_burned # initialize
 if(n_node000 > 1) {
@@ -115,8 +122,8 @@ if (n_node000 > 1) {
   parameters_posterior <- chains_burned_thinned
 }
 
-save(parameters_posterior, file='processed_mcmc_results.RData')
-save.image(file='processing.RData')
+save(parameters_posterior, file=filename_parameters)
+save.image(file=filename_processing)
 
 ##==============================================================================
 ## End

@@ -9,9 +9,14 @@
 
 setwd('~/codes/GEOCARB/R')
 
-#load('../output/geocarb_mcmcoutput_unc_09May2019sn.RData') # based on standard parameters, from 1e6 run
-load('../output/geocarb_mcmcoutput_unc_10May2019sn.RData') # based on previous
-... # from end of previous run (5e6)
+#load('../output/geocarb_mcmcoutput_unc_28May2019sn.RData') # based on standard parameters, from 3e6 run
+#load('../output/geocarb_mcmcoutput_unc_30May2019sn.RData') # based on previous run, another 3e6
+#load('../output/geocarb_mcmcoutput_unc_02Jun2019sn.RData') # based on previous run, another 3e6
+#load('../output/geocarb_mcmcoutput_unc_04Jun2019sn.RData') # based on previous run, another 3e6
+load('../output/geocarb_mcmcoutput_unc_12Jun2019sn.RData') # based on previous run, another 3e6
+
+
+#... # from end of previous run (5e6)
 
 cov.jump <- amcmc_out1$cov.jump
 p0 <- amcmc_out1$samples[nrow(amcmc_out1$samples),]

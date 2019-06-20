@@ -8,11 +8,13 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 library(sn)
+today <- Sys.Date(); today <- format(today,format="%d%b%Y")
+filename_analysis <- paste('analysis_',today,'.RData', sep="")
 
 # Get whatever we need in order to plot various things.
 # Then, save all on one RData file to be read by plotting routine.
 
-load('../output/processing_14Apr2019sn.RData')
+load('processed_mcmc_results_20Jun2019.RData')
 
 ##==============================================================================
 # Figure 1. Observations and fitted likelihood surface.
@@ -62,7 +64,6 @@ for (i in 1:length(parnames_calib)) {
 
 rm(list=c('bound_lower','bound_upper','bounds'))
 
-save.image(file='../output/analysis.RData')
 ##==============================================================================
 
 
@@ -72,7 +73,7 @@ save.image(file='../output/analysis.RData')
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
 parameters <- parameters_posterior
-parnames <- colnames(parameters_posterior)
+parnames <- parnames_calib
 rm(list=c('parameters_posterior'))
 n_ensemble <- nrow(parameters)
 n_parameter <- ncol(parameters)
@@ -100,13 +101,6 @@ model_out <- sapply(X=1:n_ensemble,
                                             par_time_center=par_time_center,
                                             par_time_stdev=par_time_stdev)[,'co2']})
 n_time <- nrow(model_out)
-
-# add the noise from the stdev parameter
-model_out_noisy <- model_out
-for (k in 1:n_ensemble) {
-  model_out_noisy[,k] <- model_out_noisy[,k] + rnorm(n=n_time, mean=0, sd=parameters[k,57])
-}
-# DONT want to use the above -- the other parameters are chosen in light of the uncertainty parameter
 
 # get 5-95% range and median  are cols 1-3; max-post will be 4
 quantiles_i_want <- c(0,0.005,.025,.05,.5,.95,.975,0.995,1)
@@ -169,7 +163,6 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
                            par_time_center=par_time_center,
                            par_time_stdev=par_time_stdev)[,'co2']
 
-save.image(file='../output/analysis.RData')
 ##======================================
 
 
@@ -202,12 +195,6 @@ deltaT2X_density_pr2011 <- vector('list', 2); names(deltaT2X_density_pr2011) <- 
 deltaT2X_density_pr2011$x <- deltaT2X_density$x
 deltaT2X_density_pr2011$y <- pr2011_pdf(deltaT2X_density_pr2011$x)
 
-# TODO
-# TODO
-# TODO
-# TODO
-
-save.image(file='../output/analysis.RData')
 ##======================================
 
 
@@ -248,7 +235,7 @@ mm_example$fit <- likelihood_fit[[idx]](mm_example$co2)
 # TODO
 # TODO
 
-save.image(file='../output/analysis.RData')
+save.image(file=filename_analysis)
 ##======================================
 
 
