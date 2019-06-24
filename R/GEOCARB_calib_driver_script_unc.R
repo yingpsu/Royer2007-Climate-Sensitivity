@@ -51,8 +51,8 @@ USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.covarinit <- "../output/covar_init_unc-sd10_16May2019.rds"
-filename.paraminit <- "../output/param_init_unc-sd10_16May2019.rds"
+filename.covarinit <- "../output/covar_init_unc-sd10_16Jun2019.rds"
+filename.paraminit <- "../output/param_init_unc-sd10_16Jun2019.rds"
 
 library(adaptMCMC)
 library(sn)

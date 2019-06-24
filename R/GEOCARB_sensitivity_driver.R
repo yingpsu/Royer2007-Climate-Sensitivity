@@ -14,14 +14,19 @@ rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 6000000
-.Nboot <- 10000
-appen <- 'priors'
+n_sample <- 5000
+.Nboot <- 1000
+appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
 .second <- FALSE    # calculate second-order indices?
-l_parallel <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
-do_sample_tvq <- TRUE
-do_precal <- TRUE
+
+DO_PARALLEL <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
+DO_PRECAL <- FALSE # TRUE  --> draw LHS and precalibrate;
+                   # FALSE --> use MCMC posteriors to sample desired sample sizes
+SAMPLE_PRIORS <- FALSE
+SAMPLE_POSTERIORS <- TRUE
+if(SAMPLE_PRIORS + SAMPLE_POSTERIORS != 1) {print("ERROR: what do you want to sample, priors or posteriors?")}
+DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
@@ -31,9 +36,12 @@ sens='NS' # valid values:  L1, L2, NS, pres
 # calibration parameters and input data
 filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
-#filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_tvq_all-const.csv'
-#filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all-const.csv'
-filename.calibout <- '../output/geocarb_calibratedParameters_unc_26Feb2019sn.nc'
+filename.calibout <- '../output/processed_mcmc_results_20Jun2019.RData'
+
+# upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
+# lower bound relaxed in light of additional proxy data
+.upper_bound_co2 <- 50000
+.lower_bound_co2 <- 0
 
 if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
@@ -60,6 +68,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 
 source('GEOCARB-2014_getData.R')
 
+if(FALSE) {
 co2_uncertainty_cutoff <- 20
 
 # possible filtering out of some data points with too-narrow uncertainties in
@@ -100,6 +109,7 @@ ind_mod2obs <- rep(NA,nrow(data_calib))
 for (i in 1:length(ind_mod2obs)){
   ind_mod2obs[i] <- which(age_tmp==ttmp[i])
 }
+}
 
 ##==============================================================================
 
@@ -109,7 +119,7 @@ for (i in 1:length(ind_mod2obs)){
 ##===========================
 
 # Read parameter information, set up the calibration parameters
-if(do_sample_tvq) {
+if(DO_SAMPLE_TVQ) {
   source('GEOCARB-2014_parameterSetup_tvq.R')
   source('model_forMCMC_tvq.R')
 } else {
@@ -182,87 +192,114 @@ library(lhs)
 ##==============================================================================
 
 ## Read calibration results file, separate into two parameter data frames
-ncdata <- nc_open(filename.calibout)
-parameters_mcmc <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-nc_close(ncdata)
+load(filename.calibout)
+parameters_mcmc <- parameters_posterior
+rm(list="parameters_posterior")
 n_ensemble <- nrow(parameters_mcmc)
+n_parameters <- ncol(parameters_mcmc)
+huge <- 1.5*max(parameters_mcmc)
+if(min(parameters_mcmc) < 0) {tiny <- 1.5*min(parameters_mcmc)}
+if(min(parameters_mcmc) > 0) {tiny <- 0.5*min(parameters_mcmc)}
 
+## Fit KDEs to sample from
+fits_mcmc <- vector("list", ncol(parameters_mcmc))
+limits <- mat.or.vec(n_parameters, 2)
+colnames(limits) <- c("lower","upper")
+for (pp in 1:n_parameters) {
+  if (is.na(as.numeric(paste(input$lower_limit[pp])))) {
+    limits[pp,1] <- tiny
+  } else {
+    limits[pp,1] <- as.numeric(paste(input$lower_limit[pp]))
+  }
+  if (is.infinite(as.numeric(paste(input$upper_limit[pp]))) | is.na(as.numeric(paste(input$upper_limit[pp])))) {
+    limits[pp,2] <- huge
+  } else {
+    limits[pp,2] <- as.numeric(paste(input$upper_limit[pp]))
+  }
+}
 
-if(do_precal) {
-
-
-################
-### LHS?
-
+for (ii in 1:ncol(parameters_mcmc)) {
+  # fit empirical CDF
+  params_sort <- sort(parameters_mcmc[,ii])
+  cdf_probs <- seq(from=1, to=n_ensemble)/(n_ensemble+1)
+  fits_mcmc[[ii]] <- approxfun(x=cdf_probs, params_sort, rule=2)
+  # plug U[0,1] random draws into fits_mcmc to draw samples
+}
 
 n_sample <- 2*n_sample
-n_parameters <- length(parnames_calib)
-
-## draw parameters by Latin Hypercube (Sample)
-parameters_lhs <- randomLHS(n_sample, n_parameters)
 
 ## scale up to the actual parameter distributions
-n_const_calib <- length(ind_const_calib)
+
+## draw parameters by Latin Hypercube (Sample)
+set.seed(2019)
+parameters_lhs <- randomLHS(n_sample, n_parameters)
 par_calib <- parameters_lhs  # initialize
-colnames(par_calib) <- parnames_calib
-for (i in 1:n_const_calib) {
-  row_num <- match(parnames_calib[i],input$parameter)
-  if(input[row_num, 'distribution_type']=='gaussian') {
-    par_calib[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-  } else if(input[row_num, 'distribution_type']=='lognormal') {
-    par_calib[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-  } else {
-    print('ERROR - unknown prior distribution type')
+
+if (SAMPLE_PRIORS) {
+  n_const_calib <- length(ind_const_calib)
+  par_calib <- parameters_lhs  # initialize
+  colnames(par_calib) <- parnames_calib
+  for (i in 1:n_const_calib) {
+    row_num <- match(parnames_calib[i],input$parameter)
+    if(input[row_num, 'distribution_type']=='gaussian') {
+      par_calib[,i] <- qnorm(p=parameters_lhs[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+    } else if(input[row_num, 'distribution_type']=='lognormal') {
+      par_calib[,i] <- qlnorm(p=parameters_lhs[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+    } else {
+      print('ERROR - unknown prior distribution type')
+    }
   }
-}
-for (i in (n_const_calib+1):length(parnames_calib)) {
-  par_calib[,i] <- qbeta(p=parameters_lhs[,i], shape1=5, shape2=5)
-}
-
-tbeg <- proc.time()
-
-model_out <- sapply(1:n_sample, function(ss) {
-                    model_forMCMC(par_calib=par_calib[ss,],
-                                  par_fixed=par_fixed0,
-                                  parnames_calib=parnames_calib,
-                                  parnames_fixed=parnames_fixed,
-                                  parnames_time=parnames_time,
-                                  age=age,
-                                  ageN=ageN,
-                                  ind_const_calib=ind_const_calib,
-                                  ind_time_calib=ind_time_calib,
-                                  ind_const_fixed=ind_const_fixed,
-                                  ind_time_fixed=ind_time_fixed,
-                                  ind_expected_time=ind_expected_time,
-                                  ind_expected_const=ind_expected_const,
-                                  iteration_threshold=iteration_threshold,
-                                  do_sample_tvq=do_sample_tvq,
-                                  par_time_center=par_time_center,
-                                  par_time_stdev=par_time_stdev)[,'co2']})
-
-ibad <- NULL
-for (ss in 1:n_sample) {
-  if( any(model_out[,ss] < 0) |
-      any(model_out[,ss] > 1e4) |
-      model_out[58,ss] < 280 | model_out[58,ss] > 400) {
-    ibad <- c(ibad,ss)
+  for (i in (n_const_calib+1):length(parnames_calib)) {
+    par_calib[,i] <- qbeta(p=parameters_lhs[,i], shape1=5, shape2=5)
+  }
+} else if (SAMPLE_POSTERIORS) {
+  for (i in 1:n_parameters) {
+    par_calib[,i] <- fits_mcmc[[i]](parameters_lhs[,i])
   }
 }
 
-parameters_good <- par_calib[-ibad,]
+
+if(DO_PRECAL) {
+  tbeg <- proc.time()
+  model_out <- sapply(1:n_sample, function(ss) {
+                      model_forMCMC(par_calib=par_calib[ss,],
+                                    par_fixed=par_fixed0,
+                                    parnames_calib=parnames_calib,
+                                    parnames_fixed=parnames_fixed,
+                                    parnames_time=parnames_time,
+                                    age=age,
+                                    ageN=ageN,
+                                    ind_const_calib=ind_const_calib,
+                                    ind_time_calib=ind_time_calib,
+                                    ind_const_fixed=ind_const_fixed,
+                                    ind_time_fixed=ind_time_fixed,
+                                    ind_expected_time=ind_expected_time,
+                                    ind_expected_const=ind_expected_const,
+                                    iteration_threshold=iteration_threshold,
+                                    do_sample_tvq=DO_SAMPLE_TVQ,
+                                    par_time_center=par_time_center,
+                                    par_time_stdev=par_time_stdev)[,'co2']})
+  ibad <- NULL
+  for (ss in 1:n_sample) {
+    if( any(model_out[,ss] < .lower_bound_co2) |
+        any(model_out[,ss] > .upper_bound_co2) |
+        model_out[58,ss] < 280 | model_out[58,ss] > 400) {
+      ibad <- c(ibad,ss)
+    }
+  }
+  parameters_good <- par_calib[-ibad,]
+  tend <- proc.time()
+  # report success rate
+  print(paste('precalibration took ',(tend[3]-tbeg[3])/60,' minutes', sep=''))
+  print(paste('with success rate of ',nrow(parameters_good),'/',n_sample, sep=''))
+  # save precalibration ensemble
+  today=Sys.Date(); today=format(today,format="%d%b%Y")
+  saveRDS(parameters_good, paste('../output/precal_parameters_',today,'.rds', sep=''))
+} else {
+  parameters_good <- par_calib
+}
+
 colnames(parameters_good) <- parnames_calib
-
-tend <- proc.time()
-
-# report success rate
-print(paste('precalibration took ',(tend[3]-tbeg[3])/60,' minutes', sep=''))
-print(paste('with success rate of ',nrow(parameters_good),'/',n_sample, sep=''))
-
-# save precalibration ensemble
-today=Sys.Date(); today=format(today,format="%d%b%Y")
-saveRDS(parameters_good, paste('../output/precal_parameters_',today,'.rds', sep=''))
-
-
 indAvailable <- 1:nrow(parameters_good)
 indA <- sample(indAvailable, size=floor(length(indAvailable)/2), replace=FALSE)
 indAvailable <- indAvailable[-indA]
@@ -270,27 +307,6 @@ indB <- sample(indAvailable, size=length(indA), replace=FALSE)
 parameters_sampleA <- parameters_good[indA,]
 parameters_sampleB <- parameters_good[indB,]
 colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
-
-################
-
-
-} else {
-
-
-## Sample parameters (need 2 data frames of size n_sample each)
-if(n_ensemble < 2*n_sample) {print('ERROR - not enough simulations for 2 samples of requested size')}
-indAvailable <- 1:n_ensemble
-indA <- sample(indAvailable, size=n_sample, replace=FALSE)
-indAvailable <- indAvailable[-indA]
-indB <- sample(indAvailable, size=n_sample, replace=FALSE)
-parameters_sampleA <- parameters_mcmc[indA,]
-parameters_sampleB <- parameters_mcmc[indB,]
-colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
-##if (ncol(parameters_mcmc)==68) {colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_calib
-##} else if(ncol(parameters_mcmc)==56) {colnames(parameters_sampleA) <- colnames(parameters_sampleB) <- parnames_const}
-
-
-}
 
 
 ##==============================================================================
@@ -310,7 +326,7 @@ model_out <- model_forMCMC(par_calib=par_calib0,
                            ind_expected_time=ind_expected_time,
                            ind_expected_const=ind_expected_const,
                            iteration_threshold=iteration_threshold,
-                           do_sample_tvq=do_sample_tvq,
+                           do_sample_tvq=DO_SAMPLE_TVQ,
                            par_time_center=par_time_center,
                            par_time_stdev=par_time_stdev)
 model_ref <- model_out[,'co2']
@@ -323,7 +339,7 @@ export_names <- c('model_forMCMC', 'run_geocarbF', 'age', 'ageN',
                   'ind_time_fixed', 'input', 'ind_expected_time',
                   'ind_expected_const', 'iteration_threshold', 'l_scaled', 'sens',
                   'model_ref', 'data_calib', 'ind_mod2obs',
-                  'do_sample_tvq', 'par_time_center', 'par_time_stdev')
+                  'DO_SAMPLE_TVQ', 'par_time_center', 'par_time_stdev')
 
 n_boot <- .Nboot
 conf <- .confidence
@@ -333,7 +349,7 @@ Ncore <- .Ncore
 
 source('sobolTony.R')
 
-if (!l_parallel) {
+if (!DO_PARALLEL) {
   t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
                      parnames_fixed=parnames_fixed, parnames_time=parnames_time,
@@ -343,8 +359,8 @@ if (!l_parallel) {
                      input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
-                     do_sample_tvq=do_sample_tvq, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
-                     n_boot=n_boot, conf=conf, second=.second))
+                     do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center,
+                     par_time_stdev=par_time_stdev, n_boot=n_boot, conf=conf, second=.second))
 } else {
   t.out <- system.time(s.out <- sobolTony(parameters_sampleA, parameters_sampleB, sens,
                      par_fixed=par_fixed0, parnames_calib=parnames_calib,
@@ -355,9 +371,9 @@ if (!l_parallel) {
                      input=input, ind_expected_time=ind_expected_time,
                      ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
-                     do_sample_tvq=do_sample_tvq, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
-                     parallel=TRUE, n_core=Ncore, export_names=export_names,
-                     n_boot=n_boot, conf=conf, second=.second))
+                     do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center,
+                     par_time_stdev=par_time_stdev, parallel=TRUE, n_core=Ncore,
+                     export_names=export_names, n_boot=n_boot, conf=conf, second=.second))
 }
 
 print(paste('Sobol simulations took ',t.out[3],' seconds', sep=''))
@@ -391,8 +407,8 @@ write.table(output.1st.tot , file=file.sobolout1, append=TRUE , sep = " ",
             quote=FALSE    , row.names = FALSE , col.names=FALSE)
 
 if (.second) {
-  headers.2nd     <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
-                              'S2_conf_high'), nrow=1)
+  headers.2nd <- matrix(c('Parameter_1', 'Parameter_2', 'S2', 'S2_conf_low',
+                          'S2_conf_high'), nrow=1)
 
   output.2nd <- data.frame(cbind( s.out$S2.names,s.out$S2 ))
   write.table(headers.2nd    , file=file.sobolout2, append=FALSE , sep = " ",

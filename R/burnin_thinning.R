@@ -11,8 +11,8 @@ library('coda')
 setwd('~/codes/GEOCARB/R')
 
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-filename_parameters <- paste('processed_mcmc_results_',today,'.RData', sep="")
-filename_processing <- paste('processing_',today,'.RData', sep="")
+filename_parameters <- paste('../output/processed_mcmc_results_',today,'.RData', sep="")
+filename_processing <- paste('../output/processing_',today,'.RData', sep="")
 
 load('../output/geocarb_mcmcoutput_unc_16Jun2019sn.RData')
 
