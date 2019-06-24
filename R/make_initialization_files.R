@@ -13,7 +13,8 @@ setwd('~/codes/GEOCARB/R')
 #load('../output/geocarb_mcmcoutput_unc_30May2019sn.RData') # based on previous run, another 3e6
 #load('../output/geocarb_mcmcoutput_unc_02Jun2019sn.RData') # based on previous run, another 3e6
 #load('../output/geocarb_mcmcoutput_unc_04Jun2019sn.RData') # based on previous run, another 3e6
-load('../output/geocarb_mcmcoutput_unc_12Jun2019sn.RData') # based on previous run, another 3e6
+#load('../output/geocarb_mcmcoutput_unc_12Jun2019sn.RData') # based on previous run, another 3e6
+load('../output/geocarb_mcmcoutput_unc_20Jun2019nm.RData') # based on previous run, another 3e6 using normal likelihood
 
 
 #... # from end of previous run (5e6)

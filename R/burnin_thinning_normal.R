@@ -3,6 +3,10 @@
 ##
 ## For normal distribution supplementary experiment
 ##
+## TODO - UPDATE TO MATCH NEW FILE-WRITING FROM CONTROL EXPERIMENT
+## TODO - UPDATE TO MATCH NEW FILE-WRITING FROM CONTROL EXPERIMENT
+## TODO - UPDATE TO MATCH NEW FILE-WRITING FROM CONTROL EXPERIMENT
+##
 ## Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
