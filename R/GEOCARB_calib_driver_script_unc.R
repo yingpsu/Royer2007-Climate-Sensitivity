@@ -14,7 +14,7 @@ rm(list=ls())
 setwd('~/work/codes/GEOCARB/R')
 
 niter_mcmc000 <- 5e6   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 1        # number of CPUs to use
+n_node000 <- 6        # number of CPUs to use
 appen <- 'unc'
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -23,8 +23,8 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 #dist <- 'ga'  # gamma
 #dist <- 'be'  # beta
 #dist <- 'ln'  # log-normal
-dist <- 'sn'  # skew-normal (use this to reproduce main results)
-#dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
+#dist <- 'sn'  # skew-normal (use this to reproduce main results)
+dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-100min'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-mmrem'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'nm-unifUnc' # normal (but with all data points assigned the same uncertainty)
@@ -51,8 +51,8 @@ USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
-filename.covarinit <- "../output/covar_init_unc-sd10_16May2019.rds"
-filename.paraminit <- "../output/param_init_unc-sd10_16May2019.rds"
+filename.covarinit <- "../output/covar_init_unc-sd10_22Jun2019.rds"
+filename.paraminit <- "../output/param_init_unc-sd10_22Jun2019.rds"
 
 library(adaptMCMC)
 library(sn)
