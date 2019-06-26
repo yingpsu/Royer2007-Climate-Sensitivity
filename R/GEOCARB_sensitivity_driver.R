@@ -14,14 +14,14 @@ rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 5000
+n_sample <- 1000000 # note this will be doubled if using LHS precalibration
 .Nboot <- 1000
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
 .second <- FALSE    # calculate second-order indices?
 
 DO_PARALLEL <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
-DO_PRECAL <- FALSE # TRUE  --> draw LHS and precalibrate;
+DO_PRECAL <- TRUE # TRUE  --> draw LHS and precalibrate;
                    # FALSE --> use MCMC posteriors to sample desired sample sizes
 SAMPLE_PRIORS <- FALSE
 SAMPLE_POSTERIORS <- TRUE
@@ -67,50 +67,6 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 ##=====
 
 source('GEOCARB-2014_getData.R')
-
-if(FALSE) {
-co2_uncertainty_cutoff <- 20
-
-# possible filtering out of some data points with too-narrow uncertainties in
-# co2 (causing overconfidence in model simulations that match those data points
-# well)
-# set to +65%, - 30% uncertain range around the central estimate
-if(co2_uncertainty_cutoff > 0) {
-  co2_halfwidth <- 0.5*(data_calib$co2_high - data_calib$co2_low)
-  ind_filter <- which(co2_halfwidth < co2_uncertainty_cutoff)
-  ind_remove <- NULL
-  for (ii in ind_filter) {
-    range_original <- data_calib[ii,'co2_high']-data_calib[ii,'co2_low']
-    range_updated  <- data_calib[ii,'co2']*0.95
-    if (range_updated > range_original) {
-      # update to the wider uncertain range if +65/-30% is wider
-      data_calib[ii,'co2_high'] <- data_calib[ii,'co2']*1.65
-      data_calib[ii,'co2_low']  <- data_calib[ii,'co2']*0.70
-    } else {
-      # otherwise, remove
-      ind_remove <- c(ind_remove, ii)
-    }
-  }
-  data_calib <- data_calib[-ind_filter,]    # removing all of the possibly troublesome points
-  ##data_calib <- data_calib[-ind_remove,]    # remove only those the revised range does not help
-}
-
-# redo with reduced data set
-
-# assumption of steady state in-between model time steps permits figuring out
-# which model time steps each data point should be compared against in advance.
-# doing this each calibration iteration would be outrageous!
-# This assumes the model time step is 10 million years, seq(570,0,by=-10). The
-# model will choke later (in calibration) if this is not consistent with what is
-# set within the actual GEOCARB physical model.
-age_tmp <- seq(570,0,by=-10)
-ttmp <- 10*ceiling(data_calib$age/10)
-ind_mod2obs <- rep(NA,nrow(data_calib))
-for (i in 1:length(ind_mod2obs)){
-  ind_mod2obs[i] <- which(age_tmp==ttmp[i])
-}
-}
-
 ##==============================================================================
 
 
@@ -177,12 +133,10 @@ source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical 
 #install.packages('sn')
 #install.packages('foreach')
 #install.packages('doParallel')
-#install.packages('ncdf4')
 library(sensitivity)
 library(sn)
 library(foreach)
 library(doParallel)
-library(ncdf4)
 library(lhs)
 
 ##==============================================================================
@@ -299,6 +253,7 @@ if(DO_PRECAL) {
   parameters_good <- par_calib
 }
 
+set.seed(9102)
 colnames(parameters_good) <- parnames_calib
 indAvailable <- 1:nrow(parameters_good)
 indA <- sample(indAvailable, size=floor(length(indAvailable)/2), replace=FALSE)

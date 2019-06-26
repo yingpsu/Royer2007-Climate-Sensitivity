@@ -9,15 +9,25 @@ rm(list=ls())
 setwd('~/codes/GEOCARB/R')
 library(sn)
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-filename_analysis <- paste('analysis_',today,'.RData', sep="")
+filename_analysis <- paste('../output/analysis_',today,'.RData', sep="")
 
 # Get whatever we need in order to plot various things.
 # Then, save all on one RData file to be read by plotting routine.
+.upper_bound_co2 <- 50000
+.lower_bound_co2 <- 0
 
-load('processed_mcmc_results_20Jun2019.RData')
+# normal distribution results
+load('../output/processed_mcmc_results_normal_26Jun2019.RData')
+parameters_nm <- parameters_posterior
+# control results
+load('../output/processed_mcmc_results_20Jun2019.RData')
+parameters <- parameters_posterior
+rm(list=c('parameters_posterior'))
+n_ensemble <- nrow(parameters)
+n_parameter <- ncol(parameters)
 
 ##==============================================================================
-# Figure 1. Observations and fitted likelihood surface.
+# Figure 5 (Methods). Observations and fitted likelihood surface.
 
 dist <- 'sn'
 DO_SAMPLE_TVQ <- TRUE
@@ -37,7 +47,8 @@ source('model_forMCMC_tvq.R')
 #source('run_geocarbF.R')
 source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical parameter
 source('GEOCARB_fit_likelihood_surface.R')
-#source('likelihood_surface_quantiles.R')
+source('likelihood_surface_quantiles.R')
+parnames <- parnames_calib
 
 # Get model parameter prior distribution bounds
 names <- as.character(input$parameter)
@@ -72,12 +83,6 @@ rm(list=c('bound_lower','bound_upper','bounds'))
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
-parameters <- parameters_posterior
-parnames <- parnames_calib
-rm(list=c('parameters_posterior'))
-n_ensemble <- nrow(parameters)
-n_parameter <- ncol(parameters)
-
 # need likelihood/posterior functions, to get max. posterior score simulation
 source('GEOCARB-2014_calib_likelihood_unc.R')
 
@@ -107,7 +112,6 @@ quantiles_i_want <- c(0,0.005,.025,.05,.5,.95,.975,0.995,1)
 model_quantiles <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
 colnames(model_quantiles) <- c('q000','q005','q025','q05','q50','q95','q975','q995','q100','maxpost')
 for (t in 1:n_time) {
-    #model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out_noisy[t,], quantiles_i_want)
     model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out[t,], quantiles_i_want)
 }
 
@@ -213,48 +217,225 @@ deltaT2X_density_pr2011$y <- pr2011_pdf(deltaT2X_density_pr2011$x)
 
 
 
+##==============================================================================
+## Needed numbers
+
+print("Median, 5-95%, 2.5-97.5% CIs:")
+print("==== deltaT2X ====")
+print(quantile(parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print("==== GLAC ====")
+print(quantile(parameters[,which(parnames=="GLAC")], c(.5,.05,.95, .025,.975)))
+print("==== GLAC*deltaT2X ====")
+print(quantile(parameters[,which(parnames=="GLAC")]*parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print("")
+
+Pr_CS_above_6 <- length(which(parameters[,which(parnames=="deltaT2X")] > 6)) / nrow(parameters)
+print(paste("Pr(deltaT2X > 6 degC) = ",Pr_CS_above_6, sep=""))
+print("")
+
+Pr_CS_below_2.5 <- length(which(parameters[,which(parnames=="deltaT2X")] < 2.5)) / nrow(parameters)
+print(paste("Pr(deltaT2X < 2.5 degC) = ",Pr_CS_below_2.5, sep=""))
+
+print("")
+
+print("And for the normal experiment...")
+print("Median, 5-95%, 2.5-97.5% CIs:")
+print("==== deltaT2X ====")
+print(quantile(parameters_nm[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print("==== GLAC ====")
+print(quantile(parameters_nm[,which(parnames=="GLAC")], c(.5,.05,.95, .025,.975)))
+print("==== GLAC*deltaT2X ====")
+print(quantile(parameters_nm[,which(parnames=="GLAC")]*parameters_nm[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print("")
+
+##==============================================================================
+
+
+
 # Supplementary Figures
 
 
 
 ##==============================================================================
-# Figure S1.  Likelihood slice from multimodal period.
+# Figure S2.  Likelihood slice from multimodal period.
 
-#
-mm_example <- vector('list', 3)
-names(mm_example) <- c('co2','fit','age')
-idx <- 34
-mm_example$age <- age[idx]
-mm_example$co2 <- seq(from=1,to=10000,by=10)
-mm_example$fit <- likelihood_fit[[idx]](mm_example$co2)
+mm_example240 <- vector('list', 3)
+names(mm_example240) <- c('co2','fit','age')
+idx <- which(age==240)
+mm_example240$age <- age[idx]
+mm_example240$co2 <- seq(from=1,to=10000,by=1)
+idx <- which(mm_example240$age-data_calib$age < 10 & mm_example240$age-data_calib$age >= 0)
+samples <- NULL
+for (ii in idx) {
+  new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii], alpha=data_calib$alpha_co2[ii], n=10*n_sample_per_point)
+  samples <- c(samples, new_samples)
+}
+idx_filter <- which(samples < lower_bound_co2)
+if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
+# fit KDE
+density_fit <- density(samples, from=lower_bound_co2, to=10000)
+# fit linear interpolation around KDE
+mm_example240$fit <- approxfun(density_fit)(mm_example240$co2)
 
-#plot(mm_example$co2, mm_example$fit, xlab='CO2 (ppmv)', ylab='density')
 
-# TODO
-# TODO
-# TODO
-# TODO
+mm_example140 <- vector('list', 3)
+names(mm_example140) <- c('co2','fit','age')
+idx <- which(age==140)
+mm_example140$age <- age[idx]
+mm_example140$co2 <- seq(from=1,to=10000,by=1)
+idx <- which(mm_example140$age-data_calib$age < 10 & mm_example140$age-data_calib$age >= 0)
+samples <- NULL
+for (ii in idx) {
+  new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii], alpha=data_calib$alpha_co2[ii], n=10*n_sample_per_point)
+  samples <- c(samples, new_samples)
+}
+idx_filter <- which(samples < lower_bound_co2)
+if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
+# fit KDE
+density_fit <- density(samples, from=lower_bound_co2, to=10000)
+# fit linear interpolation around KDE
+mm_example140$fit <- approxfun(density_fit)(mm_example140$co2)
 
-save.image(file=filename_analysis)
+
+#plot(mm_example240$co2, mm_example240$fit, type='l', xlab='CO2 (ppmv)', ylab='density')
+
+
+## More investigation of multi-modality
+
+# check model ensemble during the 240 Mya time slice
+fit <- density(model_out[34,])
+mm_modeled <- mm_example240
+mm_modeled$fit <- fit$y
+mm_modeled$co2 <- fit$x
+
+
+# check precalibration ensemble during this time slice
+parameters_precal <- readRDS('../output/precal_parameters_25Jun2019.rds')
+model_out_precal <- sapply(X=1:nrow(parameters_precal),
+              FUN=function(k){model_forMCMC(par_calib=parameters_precal[k,],
+                                            par_fixed=par_fixed0,
+                                            parnames_calib=parnames_calib,
+                                            parnames_fixed=parnames_fixed,
+                                            parnames_time=parnames_time,
+                                            age=age,
+                                            ageN=ageN,
+                                            ind_const_calib=ind_const_calib,
+                                            ind_time_calib=ind_time_calib,
+                                            ind_const_fixed=ind_const_fixed,
+                                            ind_time_fixed=ind_time_fixed,
+                                            ind_expected_time=ind_expected_time,
+                                            ind_expected_const=ind_expected_const,
+                                            iteration_threshold=iteration_threshold,
+                                            do_sample_tvq=DO_SAMPLE_TVQ,
+                                            par_time_center=par_time_center,
+                                            par_time_stdev=par_time_stdev)[,'co2']})
+fit2 <- density(model_out_precal[34,])
+mm_precal <- mm_example240
+mm_precal$co2 <- fit2$x
+mm_precal$fit <- fit2$y
+
+
+# check parameters straight from the priors
+library(lhs)
+parameters_lhs0 <- randomLHS(100000, 69)
+
+## scale up to the actual parameter distributions
+n_const_calib <- length(ind_const_calib)
+parameters_lhs <- parameters_lhs0  # initialize
+colnames(parameters_lhs) <- parnames_calib
+for (i in 1:n_const_calib) {
+  row_num <- match(parnames_calib[i],input$parameter)
+  if(input[row_num, 'distribution_type']=='gaussian') {
+    parameters_lhs[,i] <- qnorm(p=parameters_lhs0[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
+  } else if(input[row_num, 'distribution_type']=='lognormal') {
+    parameters_lhs[,i] <- qlnorm(p=parameters_lhs0[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
+  } else {
+    print('ERROR - unknown prior distribution type')
+  }
+}
+for (i in (n_const_calib+1):length(parnames_calib)) {
+  parameters_lhs[,i] <- qbeta(p=parameters_lhs0[,i], shape1=5, shape2=5)
+}
+
+model_out_priors <- sapply(1:nrow(parameters_lhs), function(ss) {
+                    model_forMCMC(par_calib=parameters_lhs[ss,],
+                    par_fixed=par_fixed0,
+                    parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed,
+                    parnames_time=parnames_time,
+                    age=age,
+                    ageN=ageN,
+                    ind_const_calib=ind_const_calib,
+                    ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed,
+                    ind_time_fixed=ind_time_fixed,
+                    ind_expected_time=ind_expected_time,
+                    ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold,
+                    do_sample_tvq=DO_SAMPLE_TVQ,
+                    par_time_center=par_time_center,
+                    par_time_stdev=par_time_stdev)[,'co2']})
+fit3 <- density(model_out_priors[34,which(model_out_priors[34,] < 1e4)])
+mm_priors <- mm_example240
+mm_priors$co2 <- fit3$x
+mm_priors$fit <- fit3$y
+
+
+# check parameters only GYM and deltaT2X varying - explain the multimodality?
+parameters_essgym <- parameters_lhs
+for (pp in 1:length(parnames_calib)) {
+  if (parnames_calib[pp]!='deltaT2X' & parnames_calib[pp]!='GYM') {
+    parameters_essgym[,pp] <- par_calib0[pp]
+  }
+}
+
+model_out_essgym <- sapply(1:nrow(parameters_essgym), function(ss) {
+                    model_forMCMC(par_calib=parameters_essgym[ss,],
+                    par_fixed=par_fixed0,
+                    parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed,
+                    parnames_time=parnames_time,
+                    age=age,
+                    ageN=ageN,
+                    ind_const_calib=ind_const_calib,
+                    ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed,
+                    ind_time_fixed=ind_time_fixed,
+                    ind_expected_time=ind_expected_time,
+                    ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold,
+                    do_sample_tvq=DO_SAMPLE_TVQ,
+                    par_time_center=par_time_center,
+                    par_time_stdev=par_time_stdev)[,'co2']})
+fit4 <- density(model_out_essgym[34,which(model_out_essgym[34,] < 1e4)])
+mm_essgym <- mm_example240
+mm_essgym$co2 <- fit4$x
+mm_essgym$fit <- fit4$y
+
+
+# comparison
+pdf(paste('../figures/multimodality_SOM.pdf',sep=''),width=4,height=3, colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.8,.8,.2,.2))
+plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,7000), ylim=c(0,0.0007),
+     xlab='CO2 (ppmv)', ylab='Probability density')
+lines(mm_example240$co2, mm_example240$fit, lwd=2)
+lines(mm_precal$co2, mm_precal$fit, lwd=2, lty=4)
+lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=2)
+lines(mm_essgym$co2, mm_essgym$fit, lwd=2, lty=2, col='purple')
+legend(2200, 0.00075, c('Likelihood','Priors','Priors, ESS-GYM','Precal','Posterior'),
+       lty=c(1,2,2,4,3), col=c('black','black','purple','black','black'), lwd=2, bty='n')
+dev.off()
+
 ##======================================
 
 
 
 ##==============================================================================
-# Figure S2.  Posterior model ensemble (gray shaded region denotes 5-95%
+# Figure S3?.  Posterior model ensemble (gray shaded region denotes 5-95%
 # credible range), maximum posterior score simulation (solid bold line) and
 # uncalibrated model simulation (dashed line), with proxy data points
 # superimposed (+ markers), assuming a symmetric (Gaussian) error structure for
 # the proxy data as opposed to skew-normal (main text).
-
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_26Sep2018nm.nc')
-parameters_nm <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-nc_close(ncdata)
-
-# plug in the normal experiment results here:
-#load('../output/processing_24Apr2019nm.RData')
-#load('../output/processing_14Apr2019sn.RData')
-
 
 # run the ensemble
 model_out_nm <- sapply(X=1:n_ensemble,
@@ -315,8 +496,7 @@ lpost_out_nm <- sapply(X=1:n_ensemble,
 
 model_quantiles_nm[,'maxpost'] <- model_out_nm[,which.max(lpost_out_nm)]
 
-
-save.image(file='../output/analysis.RData')
+save.image(file=filename_analysis)
 ##======================================
 
 
@@ -328,15 +508,9 @@ save.image(file='../output/analysis.RData')
 
 deltaT2X_density_nm <- density(parameters_nm[,ics], from=0, to=10)
 
-ncdata <- nc_open('../output/geocarb_calibratedParameters_tvq_all_25Sep2018sn.nc')
-parameters_old <- t(ncvar_get(ncdata, 'geocarb_parameters'))
-nc_close(ncdata)
-
-deltaT2X_density_old <- density(parameters_old[,ics], from=0, to=10)
-
 #plot(deltaT2X_density$x, deltaT2X_density$y, type='l', lwd=2); lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y, type='l', lty=2, lwd=2)
 
-save.image(file='../output/analysis.RData')
+save.image(file=filename_analysis)
 ##======================================
 
 

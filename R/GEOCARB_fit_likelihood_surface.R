@@ -108,6 +108,7 @@ dtime <- median(diff(time))
 n_sample_per_point <- 10000
 likelihood_fit <- vector('list', n_time)
 
+set.seed(2019)
 for (tt in 1:n_time) {
     idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
     if (length(idx) > 0) {

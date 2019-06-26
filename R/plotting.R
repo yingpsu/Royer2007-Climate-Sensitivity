@@ -8,25 +8,30 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
-load('../output/analysis_20June2019.RData')
+load('../output/analysis_26Jun2019.RData')
 
 library(Hmisc)
 
 ##==============================================================================
-# Figure .. Observations and fitted likelihood surface.
+# Figure 5 (Methods). Observations and fitted likelihood surface.
 
 pdf(paste(plot.dir,'data_likelihood.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.8,.75,.15,.15))
-plot(-time, likelihood_quantiles[,'50'], type='l', xlim=c(-450,0), ylim=c(0,6500), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n')
-polygon(-c(time,rev(time)), c(likelihood_quantiles[,1],rev(likelihood_quantiles[,9])), col='lightcyan1', border=NA)
-polygon(-c(time,rev(time)), c(likelihood_quantiles[,2],rev(likelihood_quantiles[,8])), col='lightcyan2', border=NA)
-polygon(-c(time,rev(time)), c(likelihood_quantiles[,3],rev(likelihood_quantiles[,7])), col='lightcyan3', border=NA)
-polygon(-c(time,rev(time)), c(likelihood_quantiles[,4],rev(likelihood_quantiles[,6])), col='lightcyan4', border=NA)
-lines(-time, likelihood_quantiles[,'50'], lwd=2)
-points(-data_calib_ctrl$age, data_calib_ctrl$co2, pch='+', cex=0.65)
-mtext('Time [Myr ago]', side=1, line=2.4, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=2.4, cex=1)
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray', border=NA)
+#lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'50']), lwd=2, lty=1)
+lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'Max']), lwd=2, lty=1)
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.8, bty='n')
+legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.8, bty='n')
+#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(4,NA,NA,15), col=c('black','black','black','gray'), cex=.8, bty='n')
+#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(NA,'...','-',NA), col=c('black','black','black','gray'), cex=.8, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
@@ -36,6 +41,7 @@ dev.off()
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
 #model_quantiles[,'maxpost'] <- model_out[,which.max(lpost_out)]
+idx_gastaldo <- which(data_calib_all$reference=="Gastaldo et al., 2014")
 
 
 ## Log scale (model and points, no likelihood surface)
@@ -113,49 +119,56 @@ offset <- 0.06
 
 pdf(paste(plot.dir,'deltaT2X_new.pdf',sep=''),width=4,height=3, colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
-plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.9,10.5), ylim=c(0,.7+offset),
-     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
+plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=1.7, xlim=c(0.9,10.5), ylim=c(0,.7+offset),
+     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE, col="steelblue")
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q025'],rev(model_quantiles[,'q975'])), col='aquamarine1', border=NA)
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q05'],rev(model_quantiles[,'q95'])), col='aquamarine3', border=NA)
 #lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=3)
-lines(deltaT2X_density_pr2011$x, deltaT2X_density_pr2011$y + offset, lwd=2, lty=2)
-lines(x_cs, f_cs + offset, lwd=2, lty=3)
-mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.2, cex=1)
+lines(deltaT2X_density_pr2011$x, deltaT2X_density_pr2011$y + offset, lwd=1.7, lty=2)
+lines(x_cs, f_cs + offset, lwd=1.7, lty=3)
+mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.15, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
 arrows(1, 0, 1, .7+offset, length=0.08, angle=30, code=2)
 axis(1, at=seq(0,10), cex.axis=1)
 minor.tick(nx=4, ny=0, tick.ratio=0.5)
-y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, length=0.05, angle=90, code=3); points(x_thisstudy[2], y0, pch=16)
+y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, lwd=1.7, length=0.05, angle=90, code=3, col="steelblue"); points(x_thisstudy[2], y0, pch=16, col="steelblue")
 #y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
 y1 <- 0.35*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, length=0.05, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
 #y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
-legend(4.81,0.8, c('5-95% range, PR2011','5-95% range, this study','Posterior, PR2011','Posterior, this study','Prior, both studies'),
-       pch=c(15,16,NA,NA,NA), lty=c(1,1,2,1,3), cex=.95, bty='n')
+legend(4.88,0.8, c('5-95% range, PR2011','5-95% range, this study','Posterior, PR2011','Posterior, this study','Prior, both studies'),
+       pch=c(15,16,NA,NA,NA), lty=c(1,1,2,1,3), col=c("black","steelblue","black","steelblue","black"), cex=.89, bty='n')
 dev.off()
 
+
+##==============================================================================
+# Figure S3. Posterior probability density for Earth system sensitivity
+# parameter (deltaT2X), relative to previous studies), assuming a symmetric
+# (Gaussian) error structure for the proxy data as opposed to skew-normal.
 
 offset <- 0.08
 
 pdf(paste(plot.dir,'deltaT2X_SOM.pdf',sep=''),width=6,height=4, colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
-plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=2, xlim=c(0.8,20), ylim=c(0,.63+offset),
-     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
-lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=2)
-#lines(deltaT2X_density_pr2011$x, deltaT2X_density_pr2011$y + offset, lwd=2, lty=2)
-lines(c(10,20), c(offset,offset), lty=1, lwd=2)
-#lines(x_cs, f_cs + offset, lwd=2, lty=3)
-lines(deltaT2Xglac_density$x, offset+deltaT2Xglac_density$y, lwd=2, lty=3)
+plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=1.7, xlim=c(0.8,20), ylim=c(0,.63+offset),
+     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE, col='steelblue')
+lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=1.7, lty=2, col='seagreen3')
+#lines(deltaT2X_density_pr2011$x, deltaT2X_density_pr2011$y + offset, lwd=1.7, lty=2)
+lines(c(10,20), c(offset,offset), lty=1, lwd=1.7)
+#lines(x_cs, f_cs + offset, lwd=1.7, lty=3)
+lines(deltaT2Xglac_density$x, offset+deltaT2Xglac_density$y, lwd=1.7, lty=4, col='salmon3')
 mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.2, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
 arrows(1, 0, 1, .6+offset, length=0.08, angle=30, code=2)
 axis(1, at=seq(0,20,1), labels=rep('',21), col='gray')
 axis(1, at=seq(0,20,5), labels=c('0','5','10','15','20'), cex.axis=1)
-y0 <- 0.16*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, length=0.05, angle=90, code=3); points(x_thisstudy[2], y0, pch=16)
-y1 <- 0.39*offset; arrows(x_norm[1], y1, x_norm[3], y1, length=0.05, angle=90, code=3); points(x_norm[2], y1, pch=2)
-y3 <- 0.85*offset; arrows(x_glac[1], y3, x_glac[3], y3, length=0.05, angle=90, code=3); points(x_glac[2], y3, pch=1)
-y2 <- 0.62*offset; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
-legend(7,0.7, c('5-95% range, KTC2017','5-95% range, this study','5-95% range (normal assumption), this study','5-95% range (glacial), this study',
-                'Posterior, this study','Posterior (normal assumption), this study','Posterior (glacial), this study'), pch=c(17,16,2,1,NA,NA,NA), lty=c(1,1,1,1,2,3), cex=.95, bty='n')
+y0 <- 0.16*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, length=0.05, angle=90, code=3, lwd=1.5, col='steelblue'); points(x_thisstudy[2], y0, pch=16, col='steelblue')
+y1 <- 0.39*offset; arrows(x_norm[1], y1, x_norm[3], y1, length=0.05, angle=90, code=3, lwd=1.5, lty=2, col='seagreen3'); points(x_norm[2], y1, pch=2, col='seagreen3')
+y3 <- 0.85*offset; arrows(x_glac[1], y3, x_glac[3], y3, length=0.05, angle=90, code=3, lwd=1.5, lty=4, col='salmon3'); points(x_glac[2], y3, pch=1, col='salmon3')
+y2 <- 0.62*offset; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, lwd=1.5, code=3); points(x_ktc2017[2], y2, pch=17)
+legend(7,0.7, c('5-95% range, KTC2017','5-95% range, this study','5-95% range (normal assumption), this study',
+                '5-95% range (glacial), this study', 'Posterior, this study','Posterior (normal assumption), this study',
+                'Posterior (glacial), this study'), pch=c(17,16,2,1,NA,NA,NA), lty=c(1,1,2,3,1,2,4), cex=.95, bty='n', lwd=1.5,
+                col=c('black','steelblue','seagreen3','salmon3','steelblue','seagreen3','salmon3'))
 dev.off()
 
 
@@ -178,139 +191,35 @@ print(paste('PR2011 dT2X 16-50-84% quantiles =',pr2011_cdf(c(.16,.5,.84))))
 # gray bars represent second-order sensitivity indices for the interaction
 # between the parameter pair.
 
-# TODO!!
-
+# run plotting_sobol.R
+source('plotting_sobol.R')
 
 
 ##==============================================================================
 # Figure S2.  Evidence of multi-modality, and dispersion of probability for
 # higher CO2 data points
 
-pdf(paste(plot.dir,'likelihoodslice_SOM.pdf',sep=''),width=4,height=3, colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.7,.3,.1,.25))
-plot(mm_example$co2, mm_example$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,6.5e-4),
+pdf(paste(plot.dir,'likelihoodslice_SOM.pdf',sep=''),width=4,height=6, colormodel='cmyk')
+par(mfrow=c(2,1), mai=c(.7,.3,.1,.25))
+# 240 Myr
+plot(mm_example240$co2, mm_example240$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,8e-4),
      xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
-text(3000, 5.5e-4, paste('Likelihood surface slice\n at age =',mm_example$age,'Mya'))
+text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example240$age,'Mya'))
 axis(1, at=seq(0,5000,200), labels=rep('',length(seq(0,5000,200))), col='gray')
 axis(1, at=seq(0,5000,1000), labels=c('0','1000','2000','3000','4000','5000'), cex.axis=1)
-arrows(0, 0, 0, 6.3e-4, length=0.08, angle=30, code=2)
+arrows(0, 0, 0, 7.7e-4, length=0.08, angle=30, code=2)
+mtext(expression(CO[2]~(ppmv)), side=1, line=2.4, cex=1)
+mtext('Density', side=2, line=0.3, cex=1)
+# 140 Myr
+plot(mm_example140$co2, mm_example140$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,8e-4),
+     xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
+text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example140$age,'Mya'))
+axis(1, at=seq(0,5000,200), labels=rep('',length(seq(0,5000,200))), col='gray')
+axis(1, at=seq(0,5000,1000), labels=c('0','1000','2000','3000','4000','5000'), cex.axis=1)
+arrows(0, 0, 0, 7.7e-4, length=0.08, angle=30, code=2)
 mtext(expression(CO[2]~(ppmv)), side=1, line=2.4, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
 dev.off()
-
-
-# check model ensemble during this time slice
-fit <- density(model_out[34,])
-mm_modeled <- mm_example
-mm_modeled$fit <- fit$y
-mm_modeled$co2 <- fit$x
-plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=2, xlim=c(0,5000),
-     xlab='CO2 (ppmv)', ylab='Probability density')
-lines(mm_example$co2, mm_example$fit, lwd=2)
-
-
-# check precalibration ensemble during this time slice
-parameters_precal <- readRDS('../output/precal_parameters_N2M-BS10k_13Nov2018.rds')
-model_out_precal <- sapply(X=1:nrow(parameters_precal),
-              FUN=function(k){model_forMCMC(par_calib=parameters_precal[k,],
-                                            par_fixed=par_fixed0,
-                                            parnames_calib=parnames_calib,
-                                            parnames_fixed=parnames_fixed,
-                                            parnames_time=parnames_time,
-                                            age=age,
-                                            ageN=ageN,
-                                            ind_const_calib=ind_const_calib,
-                                            ind_time_calib=ind_time_calib,
-                                            ind_const_fixed=ind_const_fixed,
-                                            ind_time_fixed=ind_time_fixed,
-                                            ind_expected_time=ind_expected_time,
-                                            ind_expected_const=ind_expected_const,
-                                            iteration_threshold=iteration_threshold,
-                                            do_sample_tvq=DO_SAMPLE_TVQ,
-                                            par_time_center=par_time_center,
-                                            par_time_stdev=par_time_stdev)[,'co2']})
-fit2 <- density(model_out_precal[34,])
-mm_precal <- mm_example
-mm_precal$co2 <- fit2$x
-mm_precal$fit <- fit2$y
-
-
-# check parameters straight from the priors
-library(lhs)
-parameters_lhs0 <- randomLHS(100000, 68)
-
-## scale up to the actual parameter distributions
-n_const_calib <- length(ind_const_calib)
-parameters_lhs <- parameters_lhs0  # initialize
-colnames(parameters_lhs) <- parnames_calib
-for (i in 1:n_const_calib) {
-  row_num <- match(parnames_calib[i],input$parameter)
-  if(input[row_num, 'distribution_type']=='gaussian') {
-    parameters_lhs[,i] <- qnorm(p=parameters_lhs0[,ind_const_calib[i]], mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sigma"]))
-  } else if(input[row_num, 'distribution_type']=='lognormal') {
-    parameters_lhs[,i] <- qlnorm(p=parameters_lhs0[,ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]))
-  } else {
-    print('ERROR - unknown prior distribution type')
-  }
-}
-for (i in (n_const_calib+1):length(parnames_calib)) {
-  parameters_lhs[,i] <- qbeta(p=parameters_lhs0[,i], shape1=5, shape2=5)
-}
-
-model_out_priors <- sapply(1:nrow(parameters_lhs), function(ss) {
-                    model_forMCMC(par_calib=parameters_lhs[ss,],
-                    par_fixed=par_fixed0,
-                    parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed,
-                    parnames_time=parnames_time,
-                    age=age,
-                    ageN=ageN,
-                    ind_const_calib=ind_const_calib,
-                    ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed,
-                    ind_time_fixed=ind_time_fixed,
-                    ind_expected_time=ind_expected_time,
-                    ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
-                    do_sample_tvq=DO_SAMPLE_TVQ,
-                    par_time_center=par_time_center,
-                    par_time_stdev=par_time_stdev)[,'co2']})
-fit3 <- density(model_out_priors[34,which(model_out_priors[34,] < 1e4)])
-mm_priors <- mm_example
-mm_priors$co2 <- fit3$x
-mm_priors$fit <- fit3$y
-
-
-# check parameters only GYM and deltaT2X varying - explain the multimodality?
-parameters_essgym <- parameters_lhs
-for (pp in 1:length(parnames_calib)) {
-  if (parnames_calib[pp]!='deltaT2X' & parnames_calib[pp]!='GYM') {
-    parameters_essgym[,pp] <- par_calib0[pp]
-  }
-}
-
-model_out_essgym <- sapply(1:nrow(parameters_essgym), function(ss) {
-                    model_forMCMC(par_calib=parameters_essgym[ss,],
-                    par_fixed=par_fixed0,
-                    parnames_calib=parnames_calib,
-                    parnames_fixed=parnames_fixed,
-                    parnames_time=parnames_time,
-                    age=age,
-                    ageN=ageN,
-                    ind_const_calib=ind_const_calib,
-                    ind_time_calib=ind_time_calib,
-                    ind_const_fixed=ind_const_fixed,
-                    ind_time_fixed=ind_time_fixed,
-                    ind_expected_time=ind_expected_time,
-                    ind_expected_const=ind_expected_const,
-                    iteration_threshold=iteration_threshold,
-                    do_sample_tvq=DO_SAMPLE_TVQ,
-                    par_time_center=par_time_center,
-                    par_time_stdev=par_time_stdev)[,'co2']})
-fit4 <- density(model_out_essgym[34,which(model_out_essgym[34,] < 1e4)])
-mm_essgym <- mm_example
-mm_essgym$co2 <- fit4$x
-mm_essgym$fit <- fit4$y
 
 
 
@@ -318,30 +227,12 @@ mm_essgym$fit <- fit4$y
 # priors, precalibration and MCMC
 plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,5000),
      xlab='CO2 (ppmv)', ylab='Probability density')
-lines(mm_example$co2, mm_example$fit, lwd=2)
+lines(mm_example240$co2, mm_example240$fit, lwd=2)
 lines(mm_precal$co2, mm_precal$fit, lwd=2, lty=4)
 lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=2)
 lines(mm_essgym$co2, mm_essgym$fit, lwd=2, lty=2, col='purple')
 legend(2500, 0.0019, c('Likelihood','Priors','Priors, ESS-GYM only','Precal','Posterior'),
        lty=c(1,2,2,4,3), col=c('black','black','purple','black','black'), lwd=2)
-
-
-# plot the distribution of ESS under priors, precalibration and MCMC
-plot(dens_priors$x, dens_priors$y, xlim=c(1,7.5), type='l', lty=1, lwd=2, xlab='deltaT2X', ylab='Probability Density')
-lines(dens_post$x, dens_post$y, lty=3, lwd=2)
-lines(dens_precal$x, dens_precal$y, lty=2, lwd=2)
-legend(6, 0.5, c('Priors','Precal','Posterior'), lty=c(1,2,3))
-
-
-##==============================================================================
-# Figure S3. Posterior probability density for Earth system sensitivity
-# parameter (deltaT2X), relative to previous studies), assuming a symmetric
-# (Gaussian) error structure for the proxy data as opposed to skew-normal.
-
-deltaT2X_density_nm <- density(parameters_nm[,ics], from=0, to=10)
-
-#plot(deltaT2X_density$x, deltaT2X_density$y, type='l', lwd=2); lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y, type='l', lty=2, lwd=2)
-
 
 
 ##==============================================================================

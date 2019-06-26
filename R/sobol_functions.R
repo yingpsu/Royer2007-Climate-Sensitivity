@@ -119,8 +119,8 @@ stat_sig_s1st <- function(df
   # testing for statistical significance
   if(method == 'sig'){
     # testing for statistical significance using the confidence intervals
-    df$s1_sig[which(df$S1 - df$S1_conf > 0)] <- 1
-    df$st_sig[which(df$ST - df$ST_conf > 0)] <- 1
+    df$s1_sig[which(df$S1 - df$S1_conf_low > 0)] <- 1
+    df$st_sig[which(df$ST - df$ST_conf_low > 0)] <- 1
   } else if(method == 'gtr'){
     # finding indices that are greater than the specified values
     df$s1_sig[which(df$S1 > greater)] <- 1
@@ -354,10 +354,10 @@ plotRadCon <- function(df                   # dataframe with S1 and ST indices
 
           # making polygons
           polygon(polyx,polyy
-                  ,density=300
+                  ,density=200
                   #,border=NA
                   ,border='black'
-                  ,lwd=.3
+                  ,lwd=.02
                   ,col=line_col)
         }
       }
@@ -570,7 +570,7 @@ if(plotS2){
             density=200
             #,border=NA
             ,border='black'
-            ,lwd=.3
+            ,lwd=.02
             ,col=line_col)
 
     text((xloc[i]*0.65) + 6, yloc[i]

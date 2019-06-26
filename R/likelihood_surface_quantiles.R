@@ -53,8 +53,8 @@ if(DO_SAMPLE_TVQ) {
 # later, we will sample from these and at each time step, fit a KDE to the
 # distribution of all of the samples within each time step
 
-upper_bound_co2 <- 10000
-lower_bound_co2 <- 0
+upper_bound_co2 <- .upper_bound_co2
+lower_bound_co2 <- .lower_bound_co2
 
 if(dist=='ga') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'}
 if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'}
@@ -92,9 +92,11 @@ time <- model_out[,1]
 n_time <- length(time)
 dtime <- median(diff(time))
 n_sample_per_point <- 10000
-likelihood_quantiles <- array(NA, c(n_time, 9))
-colnames(likelihood_quantiles) <- c('025','05','17','25','50','75','83','95','975')
+likelihood_quantiles <- array(NA, c(n_time, 10))
+colnames(likelihood_quantiles) <- c('025','05','17','25','50','75','83','95','975','Max')
+x_co2 <- seq(from=0, to=10000, by=1)
 
+set.seed(2019)
 for (tt in 1:n_time) {
     idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
     if (length(idx) > 0) {
@@ -111,10 +113,10 @@ for (tt in 1:n_time) {
             } else if (dist=='ln') {
                 new_samples <- rlnorm(meanlog=data_calib$meanlog_co2[ii], sdlog=data_calib$sdlog_co2[ii],
                                       n=n_sample_per_point)
-            } else if (dist=='sn' | dist=='sn-100min') {
+            } else if (dist=='sn' | dist=='sn-100min' | dist=='sn-mmrem') {
                 new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii],
                                    alpha=data_calib$alpha_co2[ii], n=n_sample_per_point)
-            } else if (dist=='nm') {
+            } else if (dist=='nm' | dist=='nm-unifUnc') {
                 new_samples <- rnorm(mean=data_calib$mu_co2[ii], sd=data_calib$sigma_co2[ii], n=n_sample_per_point)
             }
             samples <- c(samples, new_samples)
@@ -122,9 +124,16 @@ for (tt in 1:n_time) {
         idx_filter <- which(samples < lower_bound_co2)
         if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
         # calculate quantiles
-        likelihood_quantiles[tt,] <- quantile(samples, c(.025,.05,.17,.25,.5,.75,.83,.95,.975))
+        likelihood_quantiles[tt,1:9] <- quantile(samples, c(.025,.05,.17,.25,.5,.75,.83,.95,.975))
+        # max likelihood
+        lhood <- likelihood_fit[[tt]](x_co2)
+        likelihood_quantiles[tt,10] <- x_co2[which.max(lhood)]
     }
 }
+
+idx_likelihood_ages <- which(!is.na(likelihood_quantiles[,1]))
+likelihood_ages <- time[idx_likelihood_ages]
+
 ##==============================================================================
 
 

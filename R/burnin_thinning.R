@@ -29,7 +29,6 @@ source('GEOCARB-2014_parameterSetup_tvq.R')
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
-#niter.test <- c(1e6)
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 
@@ -58,7 +57,7 @@ if(n_node000 == 1) {
 #> gr.test
 #[1] 1.004766
 
-# hack off first 1e6 iterations for burn in
+# hack off first ? iterations for burn in
 ifirst <- NA
 if(n_node000==1) {
   ifirst <- round(0.5*niter_mcmc)
