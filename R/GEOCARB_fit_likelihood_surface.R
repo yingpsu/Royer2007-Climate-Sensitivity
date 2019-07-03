@@ -169,24 +169,29 @@ n_data_fit <- length(idx_data)
 ## Function to evaluate the log-likelihood
 ##==============================================================================
 loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data, stdev=NULL) {
-  dx <- 10
-  co2 <- seq(from=-10000,to=15000,by=dx) # excessive width to make sure nothing is clipped
   llike <- 0
-  for (ii in idx_data) {
-    f_like <- likelihood_fit[[ii]](co2); f_like[is.na(f_like)] <- 0
-    f_unc <- dnorm(co2, mean=0, sd=stdev)
-    f_conv <- convolve(f_like*dx, f_unc*dx)
-    # re-order to center the convolution
-    i0 <- which(co2==0)
-    f_conv <- c(f_conv[(length(f_conv)-i0):length(f_conv)], f_conv[1:(length(f_conv)-i0-1)])
-    if(is.null(ncol(modeled_co2))) { #print('1D')
-      llike <- llike + log(approx(co2,f_conv,xout=modeled_co2[ii])$y)
-    } else { #print("2D")
-      llike <- llike + log(approx(co2,f_conv,xout=modeled_co2[ii,'co2'])$y)
+  if(!is.null(stdev)) {
+    dx <- 10
+    co2 <- seq(from=-10000,to=15000,by=dx) # excessive width to make sure nothing is clipped
+    for (ii in idx_data) {
+      f_like <- likelihood_fit[[ii]](co2); f_like[is.na(f_like)] <- 0
+      f_unc <- dnorm(co2, mean=0, sd=stdev)
+      f_conv <- convolve(f_like*dx, f_unc*dx)
+      # re-order to center the convolution
+      i0 <- which(co2==0)
+      f_conv <- c(f_conv[(length(f_conv)-i0):length(f_conv)], f_conv[1:(length(f_conv)-i0-1)])
+      if(is.null(ncol(modeled_co2))) { #print('1D')
+        llike <- llike + log(approx(co2,f_conv,xout=modeled_co2[ii])$y)
+      } else { #print("2D")
+        llike <- llike + log(approx(co2,f_conv,xout=modeled_co2[ii,'co2'])$y)
+      }
+      if (is.na(llike) | is.infinite(llike)) {return(-Inf)}
     }
-
-
-    if (is.na(llike) | is.infinite(llike)) {return(-Inf)}
+  } else {
+    for (ii in idx_data) {
+      llike <- llike + log(likelihood_fit[[ii]](modeled_co2[ii]))
+      if (is.na(llike) | is.infinite(llike)) {return(-Inf)}
+    }
   }
   return(llike)
 }

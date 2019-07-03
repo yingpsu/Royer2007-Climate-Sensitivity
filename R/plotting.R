@@ -9,6 +9,7 @@ rm(list=ls())
 setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
 load('../output/analysis_26Jun2019.RData')
+load('../output/analysis_PR2011_03Jul2019.RData')  # supplemental experiment with Park and Royer 2011 parameters
 
 library(Hmisc)
 
@@ -19,9 +20,30 @@ pdf(paste(plot.dir,'data_likelihood.pdf',sep=''),width=4,height=3,colormodel='cm
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
 polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray', border=NA)
-#lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'50']), lwd=2, lty=1)
+#lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, lty=2, col="steelblue")
 lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'Max']), lwd=2, lty=1)
 points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.8, bty='n')
+legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.8, bty='n')
+#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(4,NA,NA,15), col=c('black','black','black','gray'), cex=.8, bty='n')
+#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(NA,'...','-',NA), col=c('black','black','black','gray'), cex=.8, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
+# version with the maximum posterior score model simulation superimposed too
+pdf(paste(plot.dir,'data_likelihood_withModel.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray', border=NA)
+lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'Max']), lwd=2, lty=1)
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, lty=5, col="salmon3")
 mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
@@ -45,50 +67,99 @@ idx_gastaldo <- which(data_calib_all$reference=="Gastaldo et al., 2014")
 
 
 ## Log scale (model and points, no likelihood surface)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'q50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q000'],rev(model_quantiles[,'q100']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q005'],rev(model_quantiles[,'q995']))), col='gray', border=NA)
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
 polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
-#lines(-time, log10(likelihood_quantiles[,'50']), lwd=2, lty=2)
 lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-#lines(-time, model_ref, lwd=2, lty=2)
-points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
+for (ii in 1:nrow(data_calib)) {
+    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+}
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
 mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
-legend(-457, log10(52), c('Data','Max posterior','95% credible range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.9, bty='n')
-legend(-457, log10(52), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.9, bty='n')
-minor.tick(nx=5, ny=0, tick.ratio=0.5)
-dev.off()
-
-## Version trimmed at a 100 ppmv co2 min
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_trimmed.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'q50']), type='l', xlim=c(-450,0), ylim=c(2,log10(6900)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q000'],rev(model_quantiles[,'q100']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q005'],rev(model_quantiles[,'q995']))), col='gray', border=NA)
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
-#lines(-time, log10(likelihood_quantiles[,'50']), lwd=2, lty=2)
-lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-#lines(-time, model_ref, lwd=2, lty=2)
-points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=.9)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=.9)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
 ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
 axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
 axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-400, log10(8000), c('95% credible range','Max posterior','Data'), pch=c(15,NA,4), col=c('gray','black','black'), cex=.8, bty='n')
-legend(-400, log10(8000), c('95% credible range','Max posterior','Data'), pch=c(NA,'-',NA), col=c('gray','black','black'), cex=.8, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
+
+
+## Log scale (model and points, with CO2 error bars, no likelihood surface)
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
+points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
+for (ii in 1:nrow(data_calib)) {
+    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+}
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
+
+## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
+points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
+for (ii in 1:nrow(data_calib)) {
+    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+}
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
+
+##==============================================================================
+## SOM figure with our ensemble and that of the supplmeental PR2011 experiment
+## (only ACT, FERT, GYM, LIFE, deltaT2X and GLAC  parameters calibrated)
+
+## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_PR2011.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', col='white')
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.7,.7,.7,.6), border=NA)
+polygon(-c(time,rev(time)), log10(c(model_quantiles_pr2011[,'q025'],rev(model_quantiles_pr2011[,'q975']))), col=rgb(.94, .6,.6,.6), border=NA)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
+legend(-457, log10(35), c('95% credible range, all 69 parameters','95% credible range, only 6 PR2011 parameters'), pch=c(15,15), col=c('gray','coral'), cex=.75, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+##==============================================================================
+
 
 
 ##==============================================================================
@@ -117,7 +188,7 @@ x_ktc2017 <- c(3.7, 5.6, 7.5)
 
 offset <- 0.06
 
-pdf(paste(plot.dir,'deltaT2X_new.pdf',sep=''),width=4,height=3, colormodel='cmyk')
+pdf(paste(plot.dir,'deltaT2X.pdf',sep=''),width=4,height=3, colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
 plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=1.7, xlim=c(0.9,10.5), ylim=c(0,.7+offset),
      xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE, col="steelblue")
@@ -125,7 +196,7 @@ plot(deltaT2X_density$x, deltaT2X_density$y + offset, type='l', lwd=1.7, xlim=c(
 #polygon(-c(time,rev(time)), c(model_quantiles[,'q05'],rev(model_quantiles[,'q95'])), col='aquamarine3', border=NA)
 #lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y + offset, lwd=2, lty=3)
 lines(deltaT2X_density_pr2011$x, deltaT2X_density_pr2011$y + offset, lwd=1.7, lty=2)
-lines(x_cs, f_cs + offset, lwd=1.7, lty=3)
+lines(x_cs, f_cs + offset, lwd=1.7, lty=3, col="steelblue")
 mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.15, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
 arrows(1, 0, 1, .7+offset, length=0.08, angle=30, code=2)
@@ -135,8 +206,8 @@ y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, lwd=1.7, length
 #y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
 y1 <- 0.35*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, length=0.05, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
 #y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
-legend(4.88,0.8, c('5-95% range, PR2011','5-95% range, this study','Posterior, PR2011','Posterior, this study','Prior, both studies'),
-       pch=c(15,16,NA,NA,NA), lty=c(1,1,2,1,3), col=c("black","steelblue","black","steelblue","black"), cex=.89, bty='n')
+legend(4.88,0.8, c('5-95% range, PR2011','PR2011','5-95% range, this study','Posterior, this study','Prior, this study'),
+       pch=c(15,NA,16,NA,NA), lty=c(1,2,1,1,3), col=c("black","black","steelblue","steelblue","steelblue"), cex=.89, bty='n', lwd=1.7)
 dev.off()
 
 
@@ -204,21 +275,23 @@ par(mfrow=c(2,1), mai=c(.7,.3,.1,.25))
 # 240 Myr
 plot(mm_example240$co2, mm_example240$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,8e-4),
      xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
-text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example240$age,'Mya'))
+text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example240$age,'Myr'))
 axis(1, at=seq(0,5000,200), labels=rep('',length(seq(0,5000,200))), col='gray')
 axis(1, at=seq(0,5000,1000), labels=c('0','1000','2000','3000','4000','5000'), cex.axis=1)
 arrows(0, 0, 0, 7.7e-4, length=0.08, angle=30, code=2)
 mtext(expression(CO[2]~(ppmv)), side=1, line=2.4, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
+mtext("a.", side=3, line=-0.7, cex=1, adj=-0.06, font=2)
 # 140 Myr
 plot(mm_example140$co2, mm_example140$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,8e-4),
      xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
-text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example140$age,'Mya'))
+text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example140$age,'Myr'))
 axis(1, at=seq(0,5000,200), labels=rep('',length(seq(0,5000,200))), col='gray')
 axis(1, at=seq(0,5000,1000), labels=c('0','1000','2000','3000','4000','5000'), cex.axis=1)
 arrows(0, 0, 0, 7.7e-4, length=0.08, angle=30, code=2)
 mtext(expression(CO[2]~(ppmv)), side=1, line=2.4, cex=1)
 mtext('Density', side=2, line=0.3, cex=1)
+mtext("b.", side=3, line=-0.7, cex=1, adj=-0.06, font=2)
 dev.off()
 
 

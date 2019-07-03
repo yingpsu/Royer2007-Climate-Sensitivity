@@ -3,7 +3,7 @@
 ##
 ## Priors, likelihood function, posterior distribution
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
 
@@ -165,7 +165,11 @@ log_like <- function(
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else if(!is.null(loglikelihood_smoothed)){
-    llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('stdev',parnames_calib)])
+    if(!is.na(match('stdev',parnames_calib))) {
+      llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('stdev',parnames_calib)])
+    } else {
+      llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
+    }
   } else {
     # compare against data
     # assumption of steady state in-between model time steps

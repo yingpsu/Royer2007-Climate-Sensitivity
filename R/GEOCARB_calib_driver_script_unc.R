@@ -15,7 +15,7 @@ setwd('~/work/codes/GEOCARB/R')
 
 niter_mcmc000 <- 5e6   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 6        # number of CPUs to use
-appen <- 'unc'
+appen <- 'unc' # 'unc' for main results; 'PR2011' for supplemental experiment
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 
@@ -79,8 +79,10 @@ source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical 
 ## Initialization of  parameters and transition matrix
 ##====================================================
 # quick fix to initialize standard deviation
-par_calib0[match('stdev',parnames_calib)] <- 450
-#par_calib0[match('stdev',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
+if(!is.na(match('stdev',parnames_calib))) {
+  par_calib0[match('stdev',parnames_calib)] <- 450
+  #par_calib0[match('stdev',parnames_calib)] <- rinvgamma(shape=input[input$parameter=='var', 'mean'], rate=input[input$parameter=='var', 'two_sigma'], n=1)
+}
 
 if(DO_PARAM_INIT) {
   step_mcmc <- readRDS(filename.covarinit)

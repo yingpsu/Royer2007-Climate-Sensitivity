@@ -199,6 +199,9 @@ deltaT2X_density_pr2011 <- vector('list', 2); names(deltaT2X_density_pr2011) <- 
 deltaT2X_density_pr2011$x <- deltaT2X_density$x
 deltaT2X_density_pr2011$y <- pr2011_pdf(deltaT2X_density_pr2011$x)
 
+# Park and Royer 2011 have about 16% probability above deltaT2X = 6 deg C
+print(pr2011_cdf(0.8443))
+
 ##======================================
 
 

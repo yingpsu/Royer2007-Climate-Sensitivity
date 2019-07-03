@@ -354,7 +354,7 @@ plotRadCon <- function(df                   # dataframe with S1 and ST indices
 
           # making polygons
           polygon(polyx,polyy
-                  ,density=200
+                  ,density=400
                   #,border=NA
                   ,border='black'
                   ,lwd=.02
@@ -567,7 +567,7 @@ if(plotS2){
     line_y[4] <- yloc[i] - line_hw[i]
 
     polygon(line_x, line_y,
-            density=200
+            density=400
             #,border=NA
             ,border='black'
             ,lwd=.02

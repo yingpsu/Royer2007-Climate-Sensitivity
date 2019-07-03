@@ -6,8 +6,8 @@
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+# assumed to be a continuation of the plotting.R routine
 #rm(list=ls())
-
 #setwd('~/codes/GEOCARB/R')
 
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
@@ -267,6 +267,24 @@ print(paste('Total first- and second-order variance contribution from plant-assi
 # second-order sensitivity indices that are significant
 print(paste('2nd order sensitivity index between deltaT2X and GYM =',s2_sens['GYM','deltaT2X']))
 print(paste('2nd order sensitivity index between GYM and ACT =',s2_sens['ACT','GYM']))
+
+# all sensitive parameters
+parnames_to_add <- parnames_calib[ind_sensit]
+mindex <- min(match(parnames_to_add, parnames_calib))
+s2_allsens <- s2_total[parnames_to_add,]
+variance_from_allsens <- 0
+for (name in parnames_to_add) {
+  variance_from_allsens <- variance_from_allsens + s1st1[match(name,s1st1$Parameter),'S1']
+  # need to add the rest of this parameter's row
+  ind_add <- which(s2_allsens[name,]>0)
+  if(length(ind_add)>0) {variance_from_allsens <- variance_from_allsens + sum(s2_allsens[name,ind_add], na.rm=TRUE)}
+  # and need to add this parameter's column **up through the first one in the group**
+  ind_add <- which(s2_allsens[1:mindex,name]>0)
+  if(length(ind_add)>0) {variance_from_allsens <- variance_from_allsens + sum(s2_allsens[ind_add,name], na.rm=TRUE)}
+}
+print(paste('Total first- and second-order variance contribution from all sensitive parameters (and their interactions with all other parameters) =',variance_from_allsens))
+
+
 
 ##==============================================================================
 ## Radial convergence plot with all parameters
