@@ -191,7 +191,7 @@ sobol_model_par <- function(parameters, sens,
                            .export=export_names,
                            .inorder=FALSE) %dopar% {
 
-      dyn.load("../fortran/run_geocarb.so")
+      dyn.load("../fortran/run_geocarb_unc.so")
 
       model_out <- model_forMCMC(par_calib=parameters[i,],
                                  par_fixed=par_fixed,

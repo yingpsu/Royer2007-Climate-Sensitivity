@@ -14,17 +14,17 @@ rm(list=ls())
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 5000
+n_sample <- 1000000
 .Nboot <- 1000
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
-.second <- FALSE    # calculate second-order indices?
+.second <- TRUE    # calculate second-order indices?
 
-DO_PARALLEL <- FALSE # use parallel evaluation of ensembles in Sobol' integration?
-DO_PRECAL <- FALSE # TRUE  --> draw LHS and precalibrate;
+DO_PARALLEL <- TRUE # use parallel evaluation of ensembles in Sobol' integration?
+DO_PRECAL <- TRUE # TRUE  --> draw LHS and precalibrate;
                    # FALSE --> use MCMC posteriors to sample desired sample sizes
-SAMPLE_PRIORS <- FALSE
-SAMPLE_POSTERIORS <- TRUE
+SAMPLE_PRIORS <- TRUE
+SAMPLE_POSTERIORS <- FALSE
 if(SAMPLE_PRIORS + SAMPLE_POSTERIORS != 1) {print("ERROR: what do you want to sample, priors or posteriors?")}
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 USE_LENTON_FSR <- FALSE
@@ -52,7 +52,7 @@ if(Sys.info()['user']=='tony') {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('~/work/codes/GEOCARB/R')
-  .Ncore <- 15  # use multiple cores to process large data?
+  .Ncore <- 6  # use multiple cores to process large data?
 }
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
@@ -177,12 +177,10 @@ source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical 
 #install.packages('sn')
 #install.packages('foreach')
 #install.packages('doParallel')
-#install.packages('ncdf4')
 library(sensitivity)
 library(sn)
 library(foreach)
 library(doParallel)
-library(ncdf4)
 library(lhs)
 
 ##==============================================================================
