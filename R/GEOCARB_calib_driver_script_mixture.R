@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB-2014_calib_driver_unc.R
+## GEOCARB-2014_calib_driver_mixture.R
 ##
 ## Read CO2 proxy data. Set which data sets you intend to calibrate using.
 ## Version for running as script on HPC.
@@ -13,9 +13,9 @@ rm(list=ls())
 
 setwd('~/work/codes/GEOCARB/R')
 
-niter_mcmc000 <- 5e6   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 6        # number of CPUs to use
-appen <- 'unc' # 'unc' for main results; 'PR2011' for supplemental experiment
+niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+n_node000 <- 1        # number of CPUs to use
+appen <- 'mix' # 'unc' for main results; 'PR2011' for supplemental experiment
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 
@@ -24,7 +24,8 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 #dist <- 'be'  # beta
 #dist <- 'ln'  # log-normal
 #dist <- 'sn'  # skew-normal (use this to reproduce main results)
-dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
+#dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
+dist <- 'sn-mix'  # skew-normal mixture model
 #dist <- 'sn-100min'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-mmrem'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'nm-unifUnc' # normal (but with all data points assigned the same uncertainty)
@@ -46,7 +47,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
-DO_PARAM_INIT <- TRUE # do initialization of parameters & covariance matrix from previous calibration?
+DO_PARAM_INIT <- FALSE # do initialization of parameters & covariance matrix from previous calibration?
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 
@@ -95,7 +96,7 @@ if(DO_PARAM_INIT) {
 ## Data
 ##=====
 
-source('GEOCARB_fit_likelihood_surface.R')
+source('GEOCARB_fit_likelihood_surface_mixture.R')
 ##==============================================================================
 
 

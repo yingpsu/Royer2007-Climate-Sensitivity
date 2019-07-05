@@ -1,15 +1,8 @@
 ##==============================================================================
-## GEOCARB_fit_likelihood_surface.R
+## GEOCARB_fit_likelihood_surface_unimodal.R
 ##
-## Read previously fit skew-normal distributions for each data point, and sample
-## from all of them. Then, fit KDEs to each time step's data points, and build a
-## linear interpolation for each of these (faster execution within MCMC).
+## Fits a single Gaussian distribution to all of the data for each time slice.
 ##
-## Requires:
-##   dist                  one of: 'ga' (gamma), 'be' (beta), 'ln' (log-normal)
-##                         or 'sn' (skew-normal), describing the distributions
-##                         that were fit to each data point and its uncertain
-##                         range in the processing step.
 ## Yields:
 ##   loglikelihood_smoothed(modeled_co2, likelihood_fit, idx_data) (function)
 ##   likelihood_fit        (list of functions for KDE fits for each time step)
@@ -60,23 +53,16 @@ if(DO_SAMPLE_TVQ) {
 
 
 ##==============================================================================
-## Get calibration data and fitted
-## distributions to *each data point*
-##===================================
+## Get calibration data
+## - will be ignoring the fitted distributions
+##============================================
 
 # later, we will sample from these and at each time step, fit a KDE to the
 # distribution of all of the samples within each time step
 upper_bound_co2 <- .upper_bound_co2
 lower_bound_co2 <- .lower_bound_co2
 
-if(dist=='ga') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'}
-if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'}
-if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'}
-if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
-if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
-if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
-if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
-if(dist=='nm-unifUnc')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2-unifUnc_29Nov2018.csv'}
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
 
 # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
@@ -99,46 +85,40 @@ data_calib <- data_calib_all[unlist(ind_assim),]
 
 
 ##==============================================================================
-## Sample and fit KDEs to each time step
-##======================================
+## Fit normals for each time slice as done in Park and Royer (2011):
+##   --> (pCO2)avg,k = exp[sum(log(pCO2_i)/sig2_i)/sum(1/sig2_i)]
+##   --> sig_i = log((pCO2)upper,i/(pCO2)i)
+##   --> sig2avg,k = sum( (log(pCO2_i/(pCO2)avg,k))^2 )/(K-1)
+##       note that sig_avg,k is the uncertainty in log(pCO2)
+##   --> K = # data point in time slice k
+##   --> if K=1, then (pCO2)avg,k = pCO2_i and sig2avg,k = sig2_i
+##================================================================
 
 time <- model_out[,1]
 n_time <- length(time)
 dtime <- median(diff(time))
-n_sample_per_point <- 10000
 likelihood_fit <- vector('list', n_time)
 
-set.seed(2019)
 for (tt in 1:n_time) {
     idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
     if (length(idx) > 0) {
-        # sample from the distributions fit to each of the data points
-        samples <- NULL
+        sigmas <- NULL
+        means <- data_calib$co2[idx]
         for (ii in idx) {
-            if (dist=='ga') {
-                new_samples <- rgamma(shape=data_calib$shape_co2[ii], scale=data_calib$scale_co2[ii],
-                                      n=n_sample_per_point)
-            } else if (dist=='be') {
-                new_samples <- rbeta(shape1=data_calib$shape1_co2[ii], shape2=data_calib$shape2_co2[ii],
-                                     n=n_sample_per_point)
-                new_samples <- lower_bound_co2+(upper_bound_co2-lower_bound_co2)*new_samples
-            } else if (dist=='ln') {
-                new_samples <- rlnorm(meanlog=data_calib$meanlog_co2[ii], sdlog=data_calib$sdlog_co2[ii],
-                                      n=n_sample_per_point)
-            } else if (dist=='sn' | dist=='sn-100min' | dist=='sn-mmrem') {
-                new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii],
-                                   alpha=data_calib$alpha_co2[ii], n=n_sample_per_point)
-            } else if (dist=='nm' | dist=='nm-unifUnc') {
-                new_samples <- rnorm(mean=data_calib$mu_co2[ii], sd=data_calib$sigma_co2[ii], n=n_sample_per_point)
-            }
-            samples <- c(samples, new_samples)
+            newsigma <- log(data_calib$co2_high[ii]/data_calib$co2[ii])
+            sigmas <- c(sigmas, newsigma)
         }
-        idx_filter <- which(samples < lower_bound_co2)
-        if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
-        # fit KDE
-        density_fit <- density(samples, from=lower_bound_co2, to=upper_bound_co2)
+        center <- exp( sum(log(means)/(sigmas^2)) / sum(1/(sigmas^2)) )
+        if (length(idx) > 1) {
+            stdev <- sqrt( sum( log(means/center)^2 )/(length(idx)-1) )
+        }
+        # fit Gaussian with given mean=center, sd=stdev
+        # hack-ish, but works well with how the mixture likelihood is computed
+        co2 <- seq(from=lower_bound_co2, to=upper_bound_co2, by=1)
+        samples <- dnorm(log(co2), mean=log(center), sd=stdev)
+        samples <- exp(samples) # since log(pCO2) assumed to be ~ normal
         # fit linear interpolation around KDE
-        likelihood_fit[[tt]] <- approxfun(density_fit)
+        likelihood_fit[[tt]] <- approxfun(co2, samples)
     }
 }
 

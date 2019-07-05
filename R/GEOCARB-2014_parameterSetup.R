@@ -202,7 +202,8 @@ const_names_expected <- c('ACT',     # 1
                           'kwpy',     #(53)
                           'kwsy',     #(54)
                           'kwgy',     #(55)
-                          'kwcy')     #(56)
+                          'kwcy',     #(56)
+                          'stdev')    #(57)
 
 time_names_expected <- c('Sr',     #(:,1)
                          'd13C',     #(:,2)

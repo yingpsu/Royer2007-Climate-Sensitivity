@@ -6,17 +6,19 @@
 ## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
+# assumed to be a continuation of the plotting.R routine
 #rm(list=ls())
-
 #setwd('~/codes/GEOCARB/R')
 
-filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_tvq_all.csv"
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
 
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_N2M-BS10k_15Nov2018.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_N2M-BS10k_15Nov2018.txt"
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_precal_25Jun2019.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_precal_25Jun2019.txt"
 
-n_params <- 68
+n_params <- 69
 plotdir <- '../figures/'
+
+sig.cutoff <- 0.01
 
 ##==============================================================================
 
@@ -40,8 +42,6 @@ s1st <- read.csv(Sobol_file_1,
                   as.is=c(TRUE,rep(FALSE,5)))
 
 parnames.sobol <- s1st[,1]
-
-
 
 # Import second-order indices
 s2_table <- read.csv(Sobol_file_2,
@@ -72,11 +72,9 @@ colnames(s2_conf_high) <- rownames(s2_conf_high) <- parnames.sobol
 ##==============================================================================
 # Determine which indices are statistically significant
 
-sig.cutoff <- 0.05
-
 # S1 & ST: using the confidence intervals
 s1st1 <- stat_sig_s1st(s1st
-                      ,method="con"
+                      ,method="congtr"
                       ,greater=sig.cutoff
                       ,sigCri='either')
 
@@ -90,6 +88,13 @@ s1st1 <- stat_sig_s1st(s1st
 s2_sig1 <- stat_sig_s2(s2
                        ,s2_conf_low
                        ,s2_conf_high
+                       ,method='congtr'
+                       ,greater=sig.cutoff
+                       )
+# only confidence lower bound above 0
+s2_sig0 <- stat_sig_s2(s2
+                       ,s2_conf_low
+                       ,s2_conf_high
                        ,method='con'
                        ,greater=sig.cutoff
                        )
@@ -98,7 +103,7 @@ s2_sig1 <- stat_sig_s2(s2
 #s2_sig1 <- stat_sig_s2(s2
 #                       ,s2_conf
 #                       ,greater=0.02
-#                       ,method='gtr')
+#                       ,method='congtr')
 
 ##==============================================================================
 ## Get sensitive parameter names
@@ -113,10 +118,11 @@ name_list1 <- list('Sensitive' = parnames.sobol[ind_sensit]
                )
 
 # add Parameter symbols to plot
+# TW added hack to space GLAC and deltaT2X apart with spaces...
 
 name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^'NV'),
-                  'LIFE', 'GYM', 'FERT', expression('e'^'fnBb'),
-                  expression(Delta*'T(2x)'), 'GLAC', 'J', 'n', 'Ws', expression('e'^'fD'), expression('Fwpa'['0']),
+                  'LIFE', 'GYM', '   FERT', expression('e'^'fnBb'),
+                  expression(Delta*'T(2x)'), '  GLAC', 'J', 'n', 'Ws', expression('e'^'fD'), expression('Fwpa'['0']),
                   expression('Fwsa'['0']), expression('Fwga'['0']), expression('Fwca'['0']),
                   expression('Fmg'['0']), expression('Fmc'['0']), expression('Fmp'['0']),
                   expression('Fms'['0']), expression('Fwsi'['0']), expression('Xvolc'['0']),
@@ -127,7 +133,7 @@ name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^
                   expression('dlgy'['570']), expression('dlga'['570']), expression('Rcy'['570']),
                   expression('Rca'['570']), expression('Rv'['570']), expression('Rg'['570']),
                   'Fob', 'COC', 'Ga', 'Ssa', 'Spa', 'ST', 'dlst', 'CT', 'dlct',
-                  'kwpy', 'kwsy', 'kwgy', 'kwcy',
+                  'kwpy', 'kwsy', 'kwgy', 'kwcy',expression(sigma),
                   "Sr", "d13C", "d34S", "fR", "fL", "fA", "fD", "fAw_fA", "RT", "GEOG", "fSR", "fC"
 )
 
@@ -167,8 +173,23 @@ s2_sens <- s2_rearr[ind_keep,ind_keep]
 s2_sig1_sens <- s2_sig1_rearr[ind_keep,ind_keep]
 s1st1_sens$symbols <- new_name_symbols[ind_keep]
 
+## Rearrange again to move the clusters of connected parameters together
+## (done by hand here after examining the initial radial convergence plot)
+old_symbols <- s1st1_sens$symbols
+swap <- function(indices, idx1, idx2) {
+  idx_new <- indices; idx_new[idx1] <- idx2; idx_new[idx2] <- idx1; return(idx_new)
+}
+ind_rearr <- ind_keep
+ind_rearr <- swap(ind_rearr, 10,12)
+ind_rearr <- swap(ind_rearr, 7, 8)
+ind_rearr <- swap(ind_rearr, 3, 4)
+ind_rearr <- swap(ind_rearr, 9, 11)
+s1st1_sens <- s1st1_sens[ind_rearr,]
+s2_sens <- s2_sens[ind_rearr, ind_rearr]
+s2_sig1_sens <- s2_sig1_sens[ind_rearr, ind_rearr]
+s1st1_sens$symbols <- old_symbols[ind_rearr]
 
-plot.filename <- paste(plotdir,'sobol_spider_tvq_sensOnly_new',sep='')
+plot.filename <- paste(plotdir,'sobol_spider',sep='')
 
 plotRadCon(df=s1st1_sens
            ,s2=s2_sens
@@ -180,16 +201,16 @@ plotRadCon(df=s1st1_sens
            ,filename = plot.filename
            ,plotType = 'EPS'
            ,gpNameMult=100
-           ,varNameMult=1.3
+           ,varNameMult=1.4
            ,RingThick=0.14
            ,legLoc = "bottomcenter"
-           ,cex = 1
+           ,cex = .85
            ,rt_names = 0
-           ,s1_col = 'coral'
-           ,st_col = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
-           ,line_col = 'slategray2'
+           ,s1_col = 'tan'
+           ,st_col = 'steelblue'
+           ,line_col ='salmon'
            ,STthick = 0.5
-           ,legFirLabs=c(.05,.15), legTotLabs=c(.05,.75), legSecLabs=c(.02,.10)
+           ,legFirLabs=c(.02,.10), legTotLabs=c(.05,.50), legSecLabs=c(.01,.05)
 )
 
 
@@ -205,7 +226,8 @@ plotRadCon(df=s1st1_sens
 #model are still indeed valid.
 
 
-s2_time <- as.matrix(s2[,parnames_time])
+s2_total <- s2*s2_sig0
+s2_time <- as.matrix(s2_total[,parnames_time])
 # the s2 one will work because the time parameters are all at the end
 variance_from_time <- sum(s1st1$S1[s1st1$Parameter %in% parnames_time]) +
                       sum(s2_time[which(s2_time>0)])
@@ -214,7 +236,7 @@ print(paste('Total first- and second-order variance contribution from time array
 
 # Chemical weathering
 parnames_to_add <- c('ACT','ACTcarb','VNV', 'NV', 'exp_NV')
-s2_chem <- s2[parnames_to_add,]
+s2_chem <- s2_total[parnames_to_add,]
 variance_from_chemicalweathering <- 0
 for (name in parnames_to_add) {
     variance_from_chemicalweathering <- variance_from_chemicalweathering + s1st1[match(name,s1st1$Parameter),'S1']
@@ -228,7 +250,7 @@ print(paste('Total first- and second-order variance contribution from chemical w
 # Plant-assisted weathering
 parnames_to_add <- c('LIFE','GYM','FERT', 'exp_fnBb')
 mindex <- min(match(parnames_to_add, parnames_calib))
-s2_plant <- s2[parnames_to_add,]
+s2_plant <- s2_total[parnames_to_add,]
 variance_from_plantweathering <- 0
 for (name in parnames_to_add) {
   variance_from_plantweathering <- variance_from_plantweathering + s1st1[match(name,s1st1$Parameter),'S1']
@@ -246,10 +268,30 @@ print(paste('Total first- and second-order variance contribution from plant-assi
 print(paste('2nd order sensitivity index between deltaT2X and GYM =',s2_sens['GYM','deltaT2X']))
 print(paste('2nd order sensitivity index between GYM and ACT =',s2_sens['ACT','GYM']))
 
-##==============================================================================
-## Radial convergence plot
+# all sensitive parameters
+parnames_to_add <- parnames_calib[ind_sensit]
+mindex <- min(match(parnames_to_add, parnames_calib))
+s2_allsens <- s2_total[parnames_to_add,]
+variance_from_allsens <- 0
+for (name in parnames_to_add) {
+  variance_from_allsens <- variance_from_allsens + s1st1[match(name,s1st1$Parameter),'S1']
+  # need to add the rest of this parameter's row
+  ind_add <- which(s2_allsens[name,]>0)
+  if(length(ind_add)>0) {variance_from_allsens <- variance_from_allsens + sum(s2_allsens[name,ind_add], na.rm=TRUE)}
+  # and need to add this parameter's column **up through the first one in the group**
+  ind_add <- which(s2_allsens[1:mindex,name]>0)
+  if(length(ind_add)>0) {variance_from_allsens <- variance_from_allsens + sum(s2_allsens[ind_add,name], na.rm=TRUE)}
+}
+print(paste('Total first- and second-order variance contribution from all sensitive parameters (and their interactions with all other parameters) =',variance_from_allsens))
 
-plot.filename <- paste(plotdir,'sobol_spider_tvq',sep='')
+
+
+##==============================================================================
+## Radial convergence plot with all parameters
+
+if(FALSE) {
+
+plot.filename <- paste(plotdir,'sobol_spider_all',sep='')
 
 plotRadCon(df=s1st1_rearr
            ,s2=s2_rearr
@@ -271,6 +313,9 @@ plotRadCon(df=s1st1_rearr
            ,STthick = 0.5
            ,legFirLabs=c(.05,.25), legTotLabs=c(.05,.75), legSecLabs=c(.02,.07)
 )
+
+}
+
 ##==============================================================================
 
 

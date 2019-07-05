@@ -10,18 +10,28 @@
 
 setwd('/home/scrim/axw322/codes/GEOCARB/R')
 
-s.out <- readRDS('../output/sobol_alpha0_NS-n40K-bs10K_25Jun2018.rds')
+s.out <- readRDS('../output/sobol_sensNS_precal_24Jun2019.rds')
 
 # how many times to do this experiment, and then average/median the results?
-n_iter <- 100
-n_sample <- 20000
+n_iter <- 10
+n_sample <- 1000
+DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
+USE_LENTON_FSR <- FALSE
+USE_ROYER_FSR <- TRUE
 
 # get the default parameter values
-filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib.csv'
-source('GEOCARB-2014_parameterSetup.R')
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
+source('GEOCARB-2014_parameterSetup_tvq.R')
 
 # get the data
-co2_uncertainty_cutoff <- 20
+filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
+#co2_uncertainty_cutoff <- 20
+# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
+data_to_assim <- cbind( c("paleosols" , TRUE),
+                        c("alkenones" , TRUE),
+                        c("stomata"   , TRUE),
+                        c("boron"     , TRUE),
+                        c("liverworts", TRUE) )
 source('GEOCARB-2014_getData.R')
 
 # get the precalibrated parameter samples
@@ -33,23 +43,27 @@ source('GEOCARB-2014_getData.R')
 #parameters_precal <- parameters_precal[-(n_precal+1),]
 
 # need the physical model
-source('model_forMCMC.R')
+source('model_forMCMC_tvq.R')
 source('run_geocarbF.R')
 
 # get the reference simulation, if you use L1 or L2 norm as sensitivity measure
 model_ref <- model_forMCMC(par_calib=par_calib0,
-              par_fixed=par_fixed0,
-              parnames_calib=parnames_calib,
-              parnames_fixed=parnames_fixed,
-              age=age,
-              ageN=ageN,
-              ind_const_calib=ind_const_calib,
-              ind_time_calib=ind_time_calib,
-              ind_const_fixed=ind_const_fixed,
-              ind_time_fixed=ind_time_fixed,
-              ind_expected_time=ind_expected_time,
-              ind_expected_const=ind_expected_const,
-              iteration_threshold=iteration_threshold)[,'co2']
+                           par_fixed=par_fixed0,
+                           parnames_calib=parnames_calib,
+                           parnames_fixed=parnames_fixed,
+                           parnames_time=parnames_time,
+                           age=age,
+                           ageN=ageN,
+                           ind_const_calib=ind_const_calib,
+                           ind_time_calib=ind_time_calib,
+                           ind_const_fixed=ind_const_fixed,
+                           ind_time_fixed=ind_time_fixed,
+                           ind_expected_time=ind_expected_time,
+                           ind_expected_const=ind_expected_const,
+                           iteration_threshold=iteration_threshold,
+                           do_sample_tvq=DO_SAMPLE_TVQ,
+                           par_time_center=par_time_center,
+                           par_time_stdev=par_time_stdev)[,"co2"]
 
 T_test <- seq(from=2, to=55, by=1)
 #T_test <- c(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55)
@@ -76,6 +90,7 @@ for (iter in 1:n_iter) {
                       par_fixed=par_fixed0,
                       parnames_calib=parnames_calib,
                       parnames_fixed=parnames_fixed,
+                      parnames_time=parnames_time,
                       age=age,
                       ageN=ageN,
                       ind_const_calib=ind_const_calib,
@@ -84,7 +99,11 @@ for (iter in 1:n_iter) {
                       ind_time_fixed=ind_time_fixed,
                       ind_expected_time=ind_expected_time,
                       ind_expected_const=ind_expected_const,
-                      iteration_threshold=iteration_threshold)[,'co2']})
+                      iteration_threshold=iteration_threshold,
+                      do_sample_tvq=DO_SAMPLE_TVQ,
+                      par_time_center=par_time_center,
+                      par_time_stdev=par_time_stdev)[,'co2']})
+
   #model_present1 <- apply(X=abs(model1-model_ref), MARGIN=2, FUN=sum)
   #sens1_default <- model_present1 - mean(model_present1[is.finite(model_present1)])
   # Nash-Sutcliffe efficiency
@@ -122,6 +141,7 @@ for (iter in 1:n_iter) {
                         par_fixed=par_fixed0,
                         parnames_calib=parnames_calib,
                         parnames_fixed=parnames_fixed,
+                        parnames_time=parnames_time,
                         age=age,
                         ageN=ageN,
                         ind_const_calib=ind_const_calib,
@@ -130,7 +150,10 @@ for (iter in 1:n_iter) {
                         ind_time_fixed=ind_time_fixed,
                         ind_expected_time=ind_expected_time,
                         ind_expected_const=ind_expected_const,
-                        iteration_threshold=iteration_threshold)[,'co2']})
+                        iteration_threshold=iteration_threshold,
+                        do_sample_tvq=DO_SAMPLE_TVQ,
+                        par_time_center=par_time_center,
+                        par_time_stdev=par_time_stdev)[,'co2']})
     #model_present2 <- apply(X=abs(model2-model_ref), MARGIN=2, FUN=sum)
     #sens2[[tt]] <- model_present2 - mean(model_present2[is.finite(model_present2)])
     # Nash-Sutcliffe efficiency
@@ -151,6 +174,7 @@ for (iter in 1:n_iter) {
                         par_fixed=par_fixed0,
                         parnames_calib=parnames_calib,
                         parnames_fixed=parnames_fixed,
+                        parnames_time=parnames_time,
                         age=age,
                         ageN=ageN,
                         ind_const_calib=ind_const_calib,
@@ -159,7 +183,10 @@ for (iter in 1:n_iter) {
                         ind_time_fixed=ind_time_fixed,
                         ind_expected_time=ind_expected_time,
                         ind_expected_const=ind_expected_const,
-                        iteration_threshold=iteration_threshold)[,'co2']})
+                        iteration_threshold=iteration_threshold,
+                        do_sample_tvq=DO_SAMPLE_TVQ,
+                        par_time_center=par_time_center,
+                        par_time_stdev=par_time_stdev)[,'co2']})
     #model_present3 <- apply(X=abs(model3-model_ref), MARGIN=2, FUN=sum)
     #sens3[[tt]] <- model_present3 - mean(model_present3[is.finite(model_present3)])
     # Nash-Sutcliffe efficiency
@@ -199,4 +226,3 @@ print(paste(n_iter,' iterations took ',(tend-tbeg)[3]/60,' minutes total', sep='
 ##=============================================================================
 ## End
 ##=============================================================================
-##

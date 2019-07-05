@@ -14,7 +14,11 @@ library('coda')
 
 setwd('~/codes/GEOCARB/R')
 
-load('../output/geocarb_mcmcoutput_unc_24Apr2019nm.RData')
+today <- Sys.Date(); today <- format(today,format="%d%b%Y")
+filename_parameters <- paste('../output/processed_mcmc_results_normal_',today,'.RData', sep="")
+filename_processing <- paste('../output/processing_normal_',today,'.RData', sep="")
+
+load('../output/geocarb_mcmcoutput_unc_22Jun2019nm.RData')
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
@@ -29,7 +33,7 @@ source('GEOCARB-2014_parameterSetup_tvq.R')
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
-niter.test <- c(1e6)
+niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 
 if(n_node000 == 1) {
@@ -54,10 +58,10 @@ if(n_node000 == 1) {
 } else {print('error - n_node000 < 1 makes no sense')}
 
 # Convergence check:
-> gr.test
-[1] 1.001467
+#> print(gr.test)
+#[1] 1.001434
 
-# hack off first 1e6 iterations for burn in
+# hack off first ? iterations for burn in
 ifirst <- NA
 if(n_node000==1) {
   ifirst <- round(0.5*niter_mcmc)
@@ -78,30 +82,30 @@ if(n_node000 > 1) {
   chains_burned <- amcmc_out1$samples[(ifirst+1):niter_mcmc,]
 }
 
-save.image(file='processing_normal.RData')
-
 ##==============================================================================
 ## Thinning
 ##=========
 
-## NOTE:  ACF could not go below 0.05 for the normal experiment.
-
 lmax <- 3000
-cmax <- 0.06
+cmax <- 0.05
 maxlag <- 0
 
-for (m in 1:4) {
+for (m in 1:n_node000) {
     for (p in 1:n_parameters) {
         acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-        new <- acf_tmp$lag[which(acf_tmp$acf < cmax)[1]]
+        idx_low <- which(acf_tmp$acf < cmax)
+        while (length(idx_low)==0) {
+          lmax <- lmax + 200
+          acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
+          idx_low <- which(acf_tmp$acf < cmax)
+        }
+        new <- acf_tmp$lag[idx_low[1]]
         if (maxlag < new) {
             print(paste(m,p,"Updating maxlag to",new))
             maxlag <- new
         }
     }
 }
-
-save.image(file='processing_normal.RData')
 
 chains_burned_thinned <- chains_burned # initialize
 if(n_node000 > 1) {
@@ -121,8 +125,8 @@ if (n_node000 > 1) {
   parameters_posterior <- chains_burned_thinned
 }
 
-save(parameters_posterior, file='processed_mcmc_results_normal.RData')
-save.image(file='processing_normal.RData')
+save(parameters_posterior, file=filename_parameters)
+save.image(file=filename_processing)
 
 ##==============================================================================
 ## End
