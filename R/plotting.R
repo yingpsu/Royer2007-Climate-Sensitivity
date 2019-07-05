@@ -10,6 +10,7 @@ setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
 load('../output/analysis_26Jun2019.RData')
 load('../output/analysis_PR2011_03Jul2019.RData')  # supplemental experiment with Park and Royer 2011 parameters
+load('../output/analysis_PR2011_03Jul2019unimodal.RData')  # supplemental experiment with Park and Royer 2011 parameters
 
 library(Hmisc)
 
@@ -143,6 +144,7 @@ dev.off()
 ## SOM figure with our ensemble and that of the supplmeental PR2011 experiment
 ## (only ACT, FERT, GYM, LIFE, deltaT2X and GLAC  parameters calibrated)
 
+
 ## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
 pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_PR2011.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
@@ -158,6 +160,33 @@ axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','10
 legend(-457, log10(35), c('95% credible range, all 69 parameters','95% credible range, only 6 PR2011 parameters'), pch=c(15,15), col=c('gray','coral'), cex=.75, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
+
+
+## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
+## for experiment with the unimodal likelihood surface, fitted as in
+## Park and Royer 2011
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_PR2011unimodal.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(9000)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', col='white')
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.7,.7,.7,.7), border=NA)
+polygon(-c(time,rev(time)), log10(c(model_quantiles_pr2011uni[,'q025'],rev(model_quantiles_pr2011uni[,'q975']))), col=rgb(.94, .6,.6,.7), border=NA)
+points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
+#for (ii in 1:nrow(data_calib)) {
+#    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+#    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+#}
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
+legend(-447, log10(32), c('95% credible range, all 69 parameters','95% credible range, PR2011 parameter',' and likelihood function'), pch=c(15,15,NA), col=c('gray','coral',NA), cex=.65, bg="white", box.col="white", box.lwd=0)
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
+
+
 ##==============================================================================
 
 

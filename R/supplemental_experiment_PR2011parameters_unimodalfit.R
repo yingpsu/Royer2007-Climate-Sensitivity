@@ -1,17 +1,21 @@
 ##==============================================================================
-## supplemental_experiment_PR2011.R
+## supplemental_experiment_PR2011_unimodalfit.R
 ##
 ## Run a supplemental calibration experiment where only the 6 parameters
 ## from Park and Royer (2011) are varied: ACT, GYM, FERT, LIFE, deltaT2X, GLAC.
+##
+## Also, fitting only a single Gaussian (truncated in likelihood function)
+## distribution for each time slice in processing step. To assess the impacts
+## of our improved error model.
 ##
 ## The processing and model ensemble simulations are all done in this script
 ## too because it's a small experiment and can be run on a modern laptop.
 ##
 ## Yields output:
-##   geocarb_mcmcoutput_PR2011_[DATESTAMP]sn.RData (only the MCMC output)
-##   GEOCARB_MCMC_PR2011_[DATESTAMP]sn.RData (full workspace from MCMC)
-##   geocarb_calibratedParameters_PR2011_[DATESTAMP]sn.RData (just the parameters after post-processing)
-##   analysis_PR2011_[DATESTAMP].RData (output + analysis)
+##   geocarb_mcmcoutput_PR2011_[DATESTAMP]unimodal.RData (only the MCMC output)
+##   GEOCARB_MCMC_PR2011_[DATESTAMP]unimodal.RData (full workspace from MCMC)
+##   geocarb_calibratedParameters_PR2011_[DATESTAMP]unimodal.RData (just the parameters after post-processing)
+##   analysis_PR2011_[DATESTAMP]unimodal.RData (output + analysis)
 ##
 ## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
@@ -23,7 +27,7 @@ rm(list=ls())
 setwd('~/codes/GEOCARB/R') # set up for Tony's machine; yours is probably different... :)
 
 niter_mcmc000 <- 2e5   # number of MCMC iterations per node (Markov chain length)
-n_node000 <- 4        # number of CPUs to use
+n_node000 <- 1        # number of CPUs to use
 appen <- 'PR2011' # 'unc' for main results; 'PR2011' for supplemental experiment
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
@@ -32,12 +36,12 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 #dist <- 'ga'  # gamma
 #dist <- 'be'  # beta
 #dist <- 'ln'  # log-normal
-dist <- 'sn'  # skew-normal (use this to reproduce main results)
+#dist <- 'sn'  # skew-normal (use this to reproduce main results)
 #dist <- 'nm'  # normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-100min'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'sn-mmrem'  # skew-normal (use this to reproduce supplementary experiment results)
 #dist <- 'nm-unifUnc' # normal (but with all data points assigned the same uncertainty)
-
+dist <- 'uni' # unimodal experiment
 appen2 <- dist
 
 # upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
@@ -104,7 +108,7 @@ if(DO_PARAM_INIT) {
 ## Data
 ##=====
 
-source('GEOCARB_fit_likelihood_surface.R')
+source('GEOCARB_fit_likelihood_surface_unimodal.R')
 ##==============================================================================
 
 
@@ -407,13 +411,13 @@ lpost_out <- sapply(X=1:nrow(parameters.posterior),
 
 model_quantiles[,'maxpost'] <- model_pr2011[,which.max(lpost_out)]
 
-parnames_pr2011 <- parnames_calib
-parameters_posterior_pr2011 <- parameters.posterior
-model_quantiles_pr2011 <- model_quantiles
+parnames_pr2011uni <- parnames_calib
+parameters_posterior_pr2011uni <- parameters.posterior
+model_quantiles_pr2011uni <- model_quantiles
 
 ## save everything you might need in a special file
-filename.analysis = paste(output_dir,'analysis_',appen,'_',today,'.RData',sep="")
-save(parameters_posterior_pr2011, parnames_pr2011, model_quantiles_pr2011, file=filename.analysis)
+filename.analysis = paste(output_dir,'analysis_',appen,'_',today,'unimodal.RData',sep="")
+save(parameters_posterior_pr2011uni, parnames_pr2011uni, model_quantiles_pr2011uni, file=filename.analysis)
 
 ## and save *everything* in the analysis file
 if(DO_WRITE_RDATA) {save.image(file=filename.out)}
