@@ -35,7 +35,7 @@ model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed, 
   # parameters. here, we paste the two of them together for input to the model.
 
   N_const_total <- length(c(ind_const_calib, ind_const_fixed))
-  N_time_total <- length(c(ind_time_calib, ind_time_fixed))/ageN
+  N_time_total <- length(c(ind_time_calib, ind_time_fixed))#/ageN
 
   # set up the time-constant parameter matrices
   # first length(ind_const_calib) values are the calibration parameters

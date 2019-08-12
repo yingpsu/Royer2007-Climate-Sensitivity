@@ -1,10 +1,10 @@
 ##==============================================================================
-## GEOCARB-2014_calib_driver_mixture.R
+## GEOCARB-2014_calib_driver_unimodal.R
 ##
 ## Read CO2 proxy data. Set which data sets you intend to calibrate using.
 ## Version for running as script on HPC.
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (anthony.e.wong@colorado.edu)
 ##==============================================================================
 
 print(paste("START AT",Sys.time()))
@@ -15,7 +15,7 @@ setwd('~/work/codes/GEOCARB/R')
 
 niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
-appen <- 'unc' # 'mix' for main results; 'PR2011' for supplemental experiment; 'sens' for only calibrating sensitive parameters (after plotting_sobol.R)
+appen <- 'PR2011' # 'PR2011' uses likelihood function of Park and Royer 2011
 output_dir <- '../output/'
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 

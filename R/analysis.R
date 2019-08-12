@@ -107,11 +107,19 @@ model_out <- sapply(X=1:n_ensemble,
                                             par_time_stdev=par_time_stdev)[,'co2']})
 n_time <- nrow(model_out)
 
+# adding in white noise from stdev parameter
+model_out_noisy <- model_out
+for (k in 1:n_ensemble) {
+    white_noise <- rnorm(n=n_time, mean=0, sd=parameters_sample[k,match("stdev", parnames_calib)])
+    model_out_noisy[,k] <- model_out[,k] + white_noise
+}
+
 # get 5-95% range and median  are cols 1-3; max-post will be 4
 quantiles_i_want <- c(0,0.005,.025,.05,.5,.95,.975,0.995,1)
 model_quantiles <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
 colnames(model_quantiles) <- c('q000','q005','q025','q05','q50','q95','q975','q995','q100','maxpost')
 for (t in 1:n_time) {
+    #model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out_noisy[t,], quantiles_i_want)
     model_quantiles[t,1:length(quantiles_i_want)] <- quantile(model_out[t,], quantiles_i_want)
 }
 

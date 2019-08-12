@@ -42,7 +42,7 @@ niter.test <- c(0)
 gr.test <- rep(0, length(niter.test))
 
 n_sample <- nrow(parameters)
-last_bit <- 3e6
+last_bit <- 2e6
 n_half <- 0.5*last_bit
 
 #chain1 <- parameters[1:n_half,]
@@ -76,19 +76,25 @@ chains_burned[[2]] <- chain2
 ## Thinning
 ##=========
 
-lmax <- 3000
+lmax <- 200
 cmax <- 0.05
 maxlag <- 0
 
 for (m in 1:2) {
-  for (p in 1:n_parameters) {
-    acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-    new <- acf_tmp$lag[which(acf_tmp$acf < cmax)[1]]
-    if (maxlag < new) {
-      print(paste(m,p,"Updating maxlag to",new))
-      maxlag <- new
+    for (p in 1:n_parameters) {
+        acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
+        idx_low <- which(acf_tmp$acf < cmax)
+        while (length(idx_low)==0) {
+          lmax <- lmax + 100
+          acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
+          idx_low <- which(acf_tmp$acf < cmax)
+        }
+        new <- acf_tmp$lag[idx_low[1]]
+        if (maxlag < new) {
+            print(paste(m,p,"Updating maxlag to",new))
+            maxlag <- new
+        }
     }
-  }
 }
 
 chains_burned_thinned <- chains_burned # initialize
@@ -174,6 +180,15 @@ n_time <- nrow(model_out)
 n_ensemble <- nrow(parameters_posterior)
 n_parameter <- ncol(parameters_posterior)
 
+# adding in white noise from stdev parameter
+if(!is.na(match("stdev", parnames_calib))) {
+model_out_noisy <- model_out
+for (k in 1:n_ensemble) {
+    white_noise <- rnorm(n=n_time, mean=0, sd=parameters_posterior[k,match("stdev", parnames_calib)])
+    model_out_noisy[,k] <- model_out[,k] + white_noise
+}
+}
+
 quantiles_i_want <- c(0,0.005,.025,.05,.5,.95,.975,0.995,1)
 model_quantiles <- mat.or.vec(nr=n_time, nc=(length(quantiles_i_want)+1))
 colnames(model_quantiles) <- c('q000','q005','q025','q05','q50','q95','q975','q995','q100','maxpost')
@@ -200,24 +215,27 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
                            par_time_center=par_time_center,
                            par_time_stdev=par_time_stdev)[,'co2']
 
+idx_gastaldo <- which(data_calib_all$reference=="Gastaldo et al., 2014")
+
 #par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'q50']), type='l', xlim=c(-450,0), ylim=c(2,log10(6900)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q000'],rev(model_quantiles[,'q100']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q005'],rev(model_quantiles[,'q995']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-#polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q05'],rev(model_quantiles[,'q95']))), col='gray', border=NA)
-#lines(-time, log10(likelihood_quantiles[,'50']), lwd=2, lty=2)
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
 lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-#lines(-time, model_ref, lwd=2, lty=2)
-points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=.9)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=.9)
+points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
+for (ii in 1:nrow(data_calib)) {
+    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+}
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
+points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
 ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
 axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
 axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-400, log10(8000), c('95% credible range','Max posterior','Data'), pch=c(15,NA,4), col=c('gray','black','black'), cex=.8, bty='n')
-legend(-400, log10(8000), c('95% credible range','Max posterior','Data'), pch=c(NA,'-',NA), col=c('gray','black','black'), cex=.8, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 
 ##==============================================================================

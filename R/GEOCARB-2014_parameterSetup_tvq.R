@@ -87,11 +87,13 @@ par_const0 <- input$mean[ind_const]
 par_const_fixed0 <- input$mean[ind_const_fixed]
 par_const_calib0 <- input$mean[ind_const_calib]
 par_time0 <- input$mean[ind_time]
-par_calib0 <- c(par_const_calib0, as.numeric(par_time0))
-par_fixed0 <- c(par_const_fixed0)
+par_time_fixed0 <- input$mean[ind_time_fixed]
+par_time_calib0 <- input$mean[ind_time_calib]
+par_calib0 <- c(par_const_calib0, par_time_calib0)
+par_fixed0 <- c(par_const_fixed0, par_time_fixed0)
 
-parnames_calib <- c( as.character(input$parameter[ind_const_calib]) , parnames_time)
-parnames_fixed <- c( as.character(input$parameter[ind_const_fixed]))
+parnames_calib <- c( as.character(input$parameter[ind_const_calib]) , as.character(input$parameter[ind_time_calib]))
+parnames_fixed <- c( as.character(input$parameter[ind_const_fixed]) , as.character(input$parameter[ind_time_fixed]))
 
 # change the indices fed into the calibration to reflect which values within
 # par_calib and par_fixed are constant parameters and which are time-varying
@@ -129,7 +131,7 @@ for (p in 1:length(parnames_tmp)) {
 }
 
 # what are the orders that run_geocarb.f90 expects?
-const_names_expected <- c('ACT',     # 1
+const_names_expected <- c('ACT',
                           'ACTcarb',
                           'VNV',
                           'NV',
@@ -214,6 +216,12 @@ ind_expected_time <- rep(NA, length(time_names_in))
 for (pp in 1:length(ind_expected_time)) {
   ind_expected_time[pp] <- match(time_names_expected[pp], time_names_in)
 }
+
+# this is actually all we need, because setting the Matrix_12 time-varyign
+# arrays equal to the distribution means initially sets the columns up in a way
+# where `ind_time_rearr` below will rearrange them into `time_names_expected`
+ind_time_rearr <- c(1,2,3,4,5,6,8,7,10,9,11,12)
+ind_expected_time <- ind_time_rearr
 
 ##==============================================================================
 ## End
