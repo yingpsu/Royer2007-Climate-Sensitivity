@@ -102,23 +102,20 @@ likelihood_fit <- vector('list', n_time)
 for (tt in 1:n_time) {
     idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
     if (length(idx) > 0) {
-        sigmas <- NULL
+        sigmas <- log(data_calib$co2_high[idx]/data_calib$co2[idx])
         means <- data_calib$co2[idx]
-        for (ii in idx) {
-            newsigma <- log(data_calib$co2_high[ii]/data_calib$co2[ii])
-            sigmas <- c(sigmas, newsigma)
-        }
         center <- exp( sum(log(means)/(sigmas^2)) / sum(1/(sigmas^2)) )
         if (length(idx) > 1) {
             stdev <- sqrt( sum( log(means/center)^2 )/(length(idx)-1) )
         }
         # fit Gaussian with given mean=center, sd=stdev
         # hack-ish, but works well with how the mixture likelihood is computed
-        co2 <- seq(from=lower_bound_co2, to=upper_bound_co2, by=1)
-        samples <- dnorm(log(co2), mean=log(center), sd=stdev)
-        samples <- exp(samples) # since log(pCO2) assumed to be ~ normal
+        x_co2 <- seq(from=lower_bound_co2, to=upper_bound_co2, by=1)
+        ##Old and wrong:
+        ##samples <- dnorm(log(co2), mean=log(center), sd=stdev)
+        ##samples <- exp(samples) # since log(pCO2) assumed to be ~ normal
         # fit linear interpolation around KDE
-        likelihood_fit[[tt]] <- approxfun(co2, samples)
+        likelihood_fit[[tt]] <- approxfun(x_co2, dlnorm(x_co2, meanlog=log(center), sdlog=stdev))
     }
 }
 

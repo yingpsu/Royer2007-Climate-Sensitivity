@@ -285,6 +285,27 @@ for (name in parnames_to_add) {
 print(paste('Total first- and second-order variance contribution from all sensitive parameters (and their interactions with all other parameters) =',variance_from_allsens))
 
 
+##==============================================================================
+## Create a calibration parameter input file to calibrate only the parameters
+## found to be sensitive
+
+# read the original input_summaries_calib CSV file
+orig_calib <- "../input_data/GEOCARB_input_summaries_calib_mix.csv"
+sens_calib <- "../input_data/GEOCARB_input_summaries_calib_sens.csv"
+rv <- file.copy(orig_calib, sens_calib, overwrite=TRUE)
+input <- read.csv(sens_calib)
+
+# set everything in the calib column to 0 (don't calibrate),
+# and set the sensitive parameters to 1
+for (row in 1:nrow(input)) {
+  par <- input$parameter[row]
+  row_sig <- match(par, s1st1$Parameter)
+  input$calib[row] <- s1st1$sig[row_sig]
+}
+
+# save as a new CSV
+write.csv(input, file=sens_calib)
+
 
 ##==============================================================================
 ## Radial convergence plot with all parameters

@@ -40,7 +40,7 @@ model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed, 
   # parameters. here, we paste the two of them together for input to the model.
 
   N_const_total <- length(c(ind_const_calib, ind_const_fixed))
-  N_time_total <- length(c(ind_time_calib, ind_time_fixed))/ageN
+  N_time_total <- length(c(ind_time_calib, ind_time_fixed))#/ageN
 
   # set up the time-constant parameter matrices
   # first length(ind_const_calib) values are the calibration parameters
@@ -53,15 +53,14 @@ model_forMCMC <- function(par_calib, par_fixed, parnames_calib, parnames_fixed, 
   # set up the time-varying parameter matrices
   # rows = time, col = different time series
 
-
   # HERE is where mapping from CDF probabilities to quantiles should occur
 
-  # initailize
+  # initailize -- this puts it in the proper order already
   Matrix_12_unordered <- as.matrix(par_time_center)
 
   # sampling
   if(do_sample_tvq) {
-    for (ts in parnames_time) {
+    for (ts in intersect(parnames_time, parnames_calib)) {
       cdf_val <- par_calib[match(ts, parnames_calib)]
       Matrix_12_unordered[,ts] <- qnorm(p=cdf_val, mean=par_time_center[[ts]], sd=par_time_stdev[[ts]])
     }

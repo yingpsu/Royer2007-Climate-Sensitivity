@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB_fit_likelihood_surface_unimodal.R
+## GEOCARB_fit_likelihood_surface_mixture.R
 ##
 ## Fits a single Gaussian distribution to all of the data for each time slice.
 ##
@@ -136,9 +136,9 @@ center <- exp( sum(log(means)/(sigmas^2)) / sum(1/(sigmas^2)) )
 #sigmas <- widths
 #sigmas <- log(data_calib$omega_co2[idx])#/data_calib$xi_co2[idx])
 
-wgts <- rep(1/length(idx), length(idx))
-#wgts <- (1/(sigmas^2))/sum(1/(sigmas^2))
-#wgts <- log(data_calib$co2[idx]/center)
+wgts <- rep(1/length(idx), length(idx)) # equal weights
+#wgts <- (1/(sigmas^2))/sum(1/(sigmas^2)) # weights ~ 1/variance
+#wgts <- log(data_calib$co2[idx]/center) # similar
 
 f_co2 <- vector('list', length(idx))
 for (ii in 1:length(idx)) {

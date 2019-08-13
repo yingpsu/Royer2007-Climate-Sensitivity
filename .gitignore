@@ -1,3 +1,4 @@
+scratch.R
 *.pbs.o*
 *.ipynb_checkpoints*
 precal_sens_a0-largest.R
