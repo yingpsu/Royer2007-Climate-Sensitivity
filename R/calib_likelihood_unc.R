@@ -1,9 +1,10 @@
 ##==============================================================================
-## GEOCARB-2014_calib_likelihood.R
+## calib_likelihood_unc.R
 ##
-## Priors, likelihood function, posterior distribution
+## Priors, likelihood function, posterior distribution. This version includes
+## the stdev statistical uncertainty parameter.
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 
@@ -25,7 +26,7 @@ log_prior <- function(
   input,
   time_arrays,
   bounds_calib,
-  do_sample_tvq=FALSE
+  do_sample_tvq=TRUE
 ){
 
   lpri <- 0
@@ -116,7 +117,7 @@ log_like <- function(
   loglikelihood_smoothed=NULL,
   likelihood_fit=NULL,
   idx_data=NULL,
-  do_sample_tvq=FALSE,
+  do_sample_tvq=TRUE,
   par_time_center=NULL,
   par_time_stdev=NULL,
   upper_bound_co2=50000,
@@ -245,7 +246,7 @@ log_post <- function(
   loglikelihood_smoothed=NULL,
   likelihood_fit=NULL,
   idx_data=NULL,
-  do_sample_tvq=FALSE,
+  do_sample_tvq=TRUE,
   par_time_center=NULL,
   par_time_stdev=NULL,
   upper_bound_co2=50000,

@@ -20,7 +20,7 @@
 ##
 ## Created originally 7 August 2017 by Tony Wong.
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 # load fortran subroutine (# to check if library is loaded is.loaded("run_geocarb") )

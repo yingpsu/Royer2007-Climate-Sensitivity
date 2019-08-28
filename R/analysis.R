@@ -1,7 +1,7 @@
 ##==============================================================================
 ## analysis.R
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 rm(list=ls())
@@ -20,7 +20,7 @@ filename_analysis <- paste('../output/analysis_',today,'.RData', sep="")
 load('../output/processed_mcmc_results_normal_26Jun2019.RData')
 parameters_nm <- parameters_posterior
 # control results
-load('../output/processed_mcmc_results_20Jun2019.RData')
+load('../output/processed_mcmc_results_15Aug2019.RData')
 parameters <- parameters_posterior
 rm(list=c('parameters_posterior'))
 n_ensemble <- nrow(parameters)
@@ -42,11 +42,11 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
 
-source('GEOCARB-2014_parameterSetup_tvq.R')
+source('parameterSetup_tvq.R')
 source('model_forMCMC_tvq.R')
 #source('run_geocarbF.R')
-source('run_geocarbF_unc.R') # version with extra `var` uncertainty statistical parameter
-source('GEOCARB_fit_likelihood_surface.R')
+source('run_geocarbF_unc.R') # version with extra `stdev` uncertainty statistical parameter
+source('fit_likelihood_surface_mixture.R')
 source('likelihood_surface_quantiles.R')
 parnames <- parnames_calib
 
@@ -84,7 +84,7 @@ rm(list=c('bound_lower','bound_upper','bounds'))
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
 # need likelihood/posterior functions, to get max. posterior score simulation
-source('GEOCARB-2014_calib_likelihood_unc.R')
+source('calib_likelihood_unc.R')
 
 # run the ensemble
 model_out <- sapply(X=1:n_ensemble,
@@ -110,7 +110,7 @@ n_time <- nrow(model_out)
 # adding in white noise from stdev parameter
 model_out_noisy <- model_out
 for (k in 1:n_ensemble) {
-    white_noise <- rnorm(n=n_time, mean=0, sd=parameters_sample[k,match("stdev", parnames_calib)])
+    white_noise <- rnorm(n=n_time, mean=0, sd=parameters[k,match("stdev", parnames_calib)])
     model_out_noisy[,k] <- model_out[,k] + white_noise
 }
 
@@ -177,6 +177,17 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
 
 ##======================================
 
+## read results from Royer et al 2014 (DOI: , AJS), to compare the width of the
+## CO2 hindcast quantiles
+
+library(gdata)
+
+dat <- read.xls("../input_data/GEOCARB_output--both error envelopes_TW.xlsx", sheet="GEOCARB_output_INNER_BANDS")
+model_quantiles_royer <- cbind(dat[,"X0.025"], dat[,"CO2"], dat[,"X0.975"])
+colnames(model_quantiles_royer) <- c('q025','co2','q975')
+
+##==============================================================================
+
 
 
 ##==============================================================================
@@ -231,13 +242,13 @@ print(pr2011_cdf(0.8443))
 ##==============================================================================
 ## Needed numbers
 
-print("Median, 5-95%, 2.5-97.5% CIs:")
+print("Median, 5-95%, 2.5-97.5%, 16-84% CIs:")
 print("==== deltaT2X ====")
-print(quantile(parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print(quantile(parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975, .16,.84)))
 print("==== GLAC ====")
 print(quantile(parameters[,which(parnames=="GLAC")], c(.5,.05,.95, .025,.975)))
 print("==== GLAC*deltaT2X ====")
-print(quantile(parameters[,which(parnames=="GLAC")]*parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print(quantile(parameters[,which(parnames=="GLAC")]*parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975, .16,.84)))
 print("")
 
 Pr_CS_above_6 <- length(which(parameters[,which(parnames=="deltaT2X")] > 6)) / nrow(parameters)
@@ -275,18 +286,7 @@ names(mm_example240) <- c('co2','fit','age')
 idx <- which(age==240)
 mm_example240$age <- age[idx]
 mm_example240$co2 <- seq(from=1,to=10000,by=1)
-idx <- which(mm_example240$age-data_calib$age < 10 & mm_example240$age-data_calib$age >= 0)
-samples <- NULL
-for (ii in idx) {
-  new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii], alpha=data_calib$alpha_co2[ii], n=10*n_sample_per_point)
-  samples <- c(samples, new_samples)
-}
-idx_filter <- which(samples < lower_bound_co2)
-if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
-# fit KDE
-density_fit <- density(samples, from=lower_bound_co2, to=10000)
-# fit linear interpolation around KDE
-mm_example240$fit <- approxfun(density_fit)(mm_example240$co2)
+mm_example240$fit <- likelihood_fit[[idx]](mm_example240$co2)
 
 
 mm_example140 <- vector('list', 3)
@@ -294,18 +294,7 @@ names(mm_example140) <- c('co2','fit','age')
 idx <- which(age==140)
 mm_example140$age <- age[idx]
 mm_example140$co2 <- seq(from=1,to=10000,by=1)
-idx <- which(mm_example140$age-data_calib$age < 10 & mm_example140$age-data_calib$age >= 0)
-samples <- NULL
-for (ii in idx) {
-  new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii], alpha=data_calib$alpha_co2[ii], n=10*n_sample_per_point)
-  samples <- c(samples, new_samples)
-}
-idx_filter <- which(samples < lower_bound_co2)
-if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
-# fit KDE
-density_fit <- density(samples, from=lower_bound_co2, to=10000)
-# fit linear interpolation around KDE
-mm_example140$fit <- approxfun(density_fit)(mm_example140$co2)
+mm_example140$fit <- likelihood_fit[[idx]](mm_example140$co2)
 
 
 #plot(mm_example240$co2, mm_example240$fit, type='l', xlab='CO2 (ppmv)', ylab='density')
@@ -427,14 +416,14 @@ mm_essgym$fit <- fit4$y
 # comparison
 pdf(paste('../figures/multimodality_SOM.pdf',sep=''),width=4,height=3, colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.8,.8,.2,.2))
-plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,7000), ylim=c(0,0.0007),
+plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,7000), ylim=c(0,0.0009),
      xlab='CO2 (ppmv)', ylab='Probability density')
 lines(mm_example240$co2, mm_example240$fit, lwd=2)
 lines(mm_precal$co2, mm_precal$fit, lwd=2, lty=4)
 lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=2)
-lines(mm_essgym$co2, mm_essgym$fit, lwd=2, lty=2, col='purple')
-legend(2200, 0.00075, c('Likelihood','Priors','Priors, ESS-GYM','Precal','Posterior'),
-       lty=c(1,2,2,4,3), col=c('black','black','purple','black','black'), lwd=2, bty='n')
+#lines(mm_essgym$co2, mm_essgym$fit, lwd=2, lty=2, col='purple')
+legend(3500, 0.0009, c('Likelihood','Priors','Precal','Posterior'),
+       lty=c(1,2,4,3), col=c('black','black','black','black'), lwd=2, bty='n')
 dev.off()
 
 ##======================================
@@ -449,7 +438,7 @@ dev.off()
 # the proxy data as opposed to skew-normal (main text).
 
 # run the ensemble
-model_out_nm <- sapply(X=1:n_ensemble,
+model_out_nm <- sapply(X=1:nrow(parameters_nm),
               FUN=function(k){model_forMCMC(par_calib=parameters_nm[k,],
                                             par_fixed=par_fixed0,
                                             parnames_calib=parnames_calib,
@@ -477,7 +466,7 @@ for (t in 1:n_time) {
 
 # get posterior scores
 
-lpost_out_nm <- sapply(X=1:n_ensemble,
+lpost_out_nm <- sapply(X=1:nrow(parameters_nm),
               FUN=function(k){log_post(par_calib=parameters_nm[k,],
                                       par_fixed=par_fixed0,
                                       parnames_calib=parnames_calib,

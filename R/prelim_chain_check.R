@@ -1,7 +1,11 @@
 ##==============================================================================
 ## prelim_chain_check.R
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Script to check preliminary chains for convergence diagnostics and model
+## ensembles. It is *NOT* configured at the moment for any particular set of
+## simulations, and only provided here as scratch code to build off of.
+##
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 setwd('~/codes/GEOCARB/R')
@@ -22,7 +26,7 @@ parameters <- rbind(parameters, amcmc_out1$samples)
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
-source('GEOCARB-2014_parameterSetup_tvq.R')
+source('parameterSetup_tvq.R')
 
 ##==============================================================================
 ## Start off by just straight-up chopping off the first 1e7

@@ -1,20 +1,18 @@
 ##==============================================================================
-## GEOCARB-2014_getData.R
+## getData_PR2011.R
 ##
-## Read CO2 proxy data, including skew-normal fits for age/amount.
+## Read CO2 proxy data, including skew-normal/normal fits for CO2 uncertainty
+## distributions (previously fit using processData_[something].R).
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Assumes that `filename.data` will have been set in the calling routine, and
+## customized to read the Park and Royer 2011 data set.
+##
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 data_calib_all <- read.csv(filename.data, fill=TRUE, header=TRUE)
 
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
-}
-
+ind_assim <- 1:nrow(data_calib_all)
 data_calib <- data_calib_all[unlist(ind_assim),]
 
 # assumption of steady state in-between model time steps permits figuring out

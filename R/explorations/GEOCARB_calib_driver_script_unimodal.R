@@ -13,7 +13,7 @@ rm(list=ls())
 
 setwd('~/work/codes/GEOCARB/R')
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
+niter_mcmc000 <- 1e5   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
 appen <- 'PR2011' # 'PR2011' uses likelihood function of Park and Royer 2011
 output_dir <- '../output/'

@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB_fit_likelihood_surface_unimodal.R
+## fit_likelihood_surface_unimodal.R
 ##
 ## Fits a single Gaussian distribution to all of the data for each time slice.
 ##
@@ -8,7 +8,7 @@
 ##   likelihood_fit        (list of functions for KDE fits for each time step)
 ##   idx_data              (model CO2 indices where there are data to compare)
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 ##==============================================================================

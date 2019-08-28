@@ -1,86 +1,9 @@
 ##==============================================================================
 ## likelihood_surface_quantiles.R
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
-##==============================================================================
-
-##==============================================================================
-## Get a standard model simulation
-##================================
-
-if(DO_SAMPLE_TVQ) {
-  model_out <- model_forMCMC(par_calib=par_calib0,
-                             par_fixed=par_fixed0,
-                             parnames_calib=parnames_calib,
-                             parnames_fixed=parnames_fixed,
-                             parnames_time=parnames_time,
-                             age=age,
-                             ageN=ageN,
-                             ind_const_calib=ind_const_calib,
-                             ind_time_calib=ind_time_calib,
-                             ind_const_fixed=ind_const_fixed,
-                             ind_time_fixed=ind_time_fixed,
-                             ind_expected_time=ind_expected_time,
-                             ind_expected_const=ind_expected_const,
-                             iteration_threshold=iteration_threshold,
-                             do_sample_tvq=DO_SAMPLE_TVQ,
-                             par_time_center=par_time_center,
-                             par_time_stdev=par_time_stdev)
-} else {
-  model_out <- model_forMCMC(par_calib=par_calib0,
-                             par_fixed=par_fixed0,
-                             parnames_calib=parnames_calib,
-                             parnames_fixed=parnames_fixed,
-                             parnames_time=parnames_time,
-                             age=age,
-                             ageN=ageN,
-                             ind_const_calib=ind_const_calib,
-                             ind_time_calib=ind_time_calib,
-                             ind_const_fixed=ind_const_fixed,
-                             ind_time_fixed=ind_time_fixed,
-                             ind_expected_time=ind_expected_time,
-                             ind_expected_const=ind_expected_const,
-                             iteration_threshold=iteration_threshold)
-}
-##==============================================================================
-
-
-##==============================================================================
-## Get calibration data and fitted
-## distributions to *each data point*
-##===================================
-
-# later, we will sample from these and at each time step, fit a KDE to the
-# distribution of all of the samples within each time step
-
-upper_bound_co2 <- .upper_bound_co2
-lower_bound_co2 <- .lower_bound_co2
-
-if(dist=='ga') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_GAMMA-co2_31Jul2018.csv'}
-if(dist=='be') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_BETA-co2_13Sep2018.csv'}
-if(dist=='ln') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_LN-co2_31Jul2018.csv'}
-if(dist=='sn') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'}
-if(dist=='nm') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'}
-if(dist=='sn-100min') {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_100min_22Oct2018.csv'}
-if(dist=='sn-mmrem')  {filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_mmrem_27Oct2018.csv'}
-
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
-
-source('GEOCARB-2014_getData.R')
-
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
-}
-
-data_calib <- data_calib_all[unlist(ind_assim),]
+## Assuming fit_likelihood_surface has been run previously
+##
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 
@@ -88,47 +11,23 @@ data_calib <- data_calib_all[unlist(ind_assim),]
 ## Sample and fit KDEs to each time step
 ##======================================
 
-time <- model_out[,1]
-n_time <- length(time)
-dtime <- median(diff(time))
-n_sample_per_point <- 10000
+library(Bolstad)
+
 likelihood_quantiles <- array(NA, c(n_time, 10))
 colnames(likelihood_quantiles) <- c('025','05','17','25','50','75','83','95','975','Max')
+quantiles_to_compute <- c(.025,.05,.17,.25,.5,.75,.83,.95,.975)
 x_co2 <- seq(from=0, to=10000, by=1)
 
-set.seed(2019)
 for (tt in 1:n_time) {
-    idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
-    if (length(idx) > 0) {
-        # sample from the distributions fit to each of the data points
-        samples <- NULL
-        for (ii in idx) {
-            if (dist=='ga') {
-                new_samples <- rgamma(shape=data_calib$shape_co2[ii], scale=data_calib$scale_co2[ii],
-                                      n=n_sample_per_point)
-            } else if (dist=='be') {
-                new_samples <- rbeta(shape1=data_calib$shape1_co2[ii], shape2=data_calib$shape2_co2[ii],
-                                     n=n_sample_per_point)
-                new_samples <- lower_bound_co2+(upper_bound_co2-lower_bound_co2)*new_samples
-            } else if (dist=='ln') {
-                new_samples <- rlnorm(meanlog=data_calib$meanlog_co2[ii], sdlog=data_calib$sdlog_co2[ii],
-                                      n=n_sample_per_point)
-            } else if (dist=='sn' | dist=='sn-100min' | dist=='sn-mmrem') {
-                new_samples <- rsn(xi=data_calib$xi_co2[ii], omega=data_calib$omega_co2[ii],
-                                   alpha=data_calib$alpha_co2[ii], n=n_sample_per_point)
-            } else if (dist=='nm' | dist=='nm-unifUnc') {
-                new_samples <- rnorm(mean=data_calib$mu_co2[ii], sd=data_calib$sigma_co2[ii], n=n_sample_per_point)
-            }
-            samples <- c(samples, new_samples)
-        }
-        idx_filter <- which(samples < lower_bound_co2)
-        if(length(idx_filter) > 0) {samples <- samples[-idx_filter]}
-        # calculate quantiles
-        likelihood_quantiles[tt,1:9] <- quantile(samples, c(.025,.05,.17,.25,.5,.75,.83,.95,.975))
-        # max likelihood
-        lhood <- likelihood_fit[[tt]](x_co2)
-        likelihood_quantiles[tt,10] <- x_co2[which.max(lhood)]
+  if (!is.null(likelihood_fit[[tt]])) {
+    tmp <- sintegral(x_co2, likelihood_fit[[tt]])
+    for (qq in 1:length(quantiles_to_compute)) {
+      likelihood_quantiles[tt,qq] <- tmp$cdf$x[which.min(abs(tmp$cdf$y-quantiles_to_compute[qq]))]
     }
+    # max likelihood
+    lhood <- likelihood_fit[[tt]](x_co2)
+    likelihood_quantiles[tt,10] <- x_co2[which.max(lhood)]
+  }
 }
 
 idx_likelihood_ages <- which(!is.na(likelihood_quantiles[,1]))

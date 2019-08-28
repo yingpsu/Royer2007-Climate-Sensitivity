@@ -1,16 +1,16 @@
 ##==============================================================================
 ## plotting.R
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
-load('../output/analysis_26Jun2019.RData')
-load('../output/analysis_PR2011_03Jul2019.RData')  # supplemental experiment with Park and Royer 2011 parameters
-load('../output/analysis_PR2011_03Jul2019unimodal.RData')  # supplemental experiment with Park and Royer 2011 parameters
+load('../output/analysis_20Aug2019.RData')
+#load('../output/analysis_PR2011_03Jul2019.RData')  # supplemental experiment with Park and Royer 2011 parameters
+#load('../output/analysis_PR2011_03Jul2019unimodal.RData')  # supplemental experiment with Park and Royer 2011 parameters
 
 library(Hmisc)
 
@@ -20,9 +20,11 @@ library(Hmisc)
 pdf(paste(plot.dir,'data_likelihood.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray', border=NA)
-#lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, lty=2, col="steelblue")
-lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'Max']), lwd=2, lty=1)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'025'],rev(likelihood_quantiles[idx_likelihood_ages,'975']))), col='gray85', border=NA)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray70', border=NA)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'17'],rev(likelihood_quantiles[idx_likelihood_ages,'83']))), col='gray55', border=NA)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'25'],rev(likelihood_quantiles[idx_likelihood_ages,'75']))), col='gray40', border=NA)
+lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'50']), lwd=2, lty=1)
 points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
 mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
@@ -30,10 +32,8 @@ axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
 ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
 axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
 axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
-legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.8, bty='n')
-legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.8, bty='n')
-#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(4,NA,NA,15), col=c('black','black','black','gray'), cex=.8, bty='n')
-#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(NA,'...','-',NA), col=c('black','black','black','gray'), cex=.8, bty='n')
+legend(-452, log10(40), c('Data','Likelihood median','95% range','90% range','66% range','50% range'), pch=c(4,NA,15,15,15,15), col=c('black','black','gray85','gray70','gray55','gray40'), cex=.8, bty='n')
+legend(-452, log10(40), c('Data','Likelihood median','95% range','90% range','66% range','50% range'), pch=c(NA,'-',NA,NA,NA,NA), col=c('black','black','gray85','gray70','gray55','gray40'), cex=.8, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
@@ -41,22 +41,24 @@ dev.off()
 pdf(paste(plot.dir,'data_likelihood_withModel.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray', border=NA)
-lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'Max']), lwd=2, lty=1)
-points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'025'],rev(likelihood_quantiles[idx_likelihood_ages,'975']))), col='gray85', border=NA)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray70', border=NA)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'17'],rev(likelihood_quantiles[idx_likelihood_ages,'83']))), col='gray55', border=NA)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'25'],rev(likelihood_quantiles[idx_likelihood_ages,'75']))), col='gray40', border=NA)
+lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'50']), lwd=2, lty=1)
 lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, lty=5, col="salmon3")
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
 mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
 ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
 axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
 axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
-legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.8, bty='n')
-legend(-452, log10(40), c('Data','Likelihood maximum','5-95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.8, bty='n')
-#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(4,NA,NA,15), col=c('black','black','black','gray'), cex=.8, bty='n')
-#legend(-457, log10(52), c('Data','Likelihood maximum','Likelihood median','5-95% range'), pch=c(NA,'...','-',NA), col=c('black','black','black','gray'), cex=.8, bty='n')
+legend(-452, log10(40), c('Data','Likelihood median','95% range','90% range','66% range','50% range'), pch=c(4,NA,15,15,15,15), col=c('black','black','gray85','gray70','gray55','gray40'), cex=.8, bty='n')
+legend(-452, log10(40), c('Data','Likelihood median','95% range','90% range','66% range','50% range'), pch=c(NA,'-',NA,NA,NA,NA), col=c('black','black','gray85','gray70','gray55','gray40'), cex=.8, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
+
 
 ##==============================================================================
 # Figure 2. Posterior model ensemble (gray shaded region denotes 5-95% credible
@@ -138,6 +140,42 @@ legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(4,
 legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
+
+
+##==============================================================================
+## SOM Figure -- our projections vs Royer et al 2014
+
+
+## TODO!!!
+## TODO!!!  update the legend to include both time series
+## TODO!!!
+
+
+pdf(paste(plot.dir,'model_ensemble_vs_royer_logscale.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+points(-data_calib$age, log10(data_calib$co2), pch=4, cex=0.4, lwd=.4)
+for (ii in 1:nrow(data_calib)) {
+    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+}
+polygon(-c(time,rev(time)), log10(c(model_quantiles_royer[,'q025'],rev(model_quantiles_royer[,'q975']))), col=rgb(.6,.2,.6,.5), border=NA)
+lines(-time, log10(model_quantiles_royer[,'co2']), lwd=2, lty=5, col=rgb(.6,.2,.6))
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.2,.6,.6,.5), border=NA)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, col=rgb(.2,.6,.6))
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
+legend(-457, log10(35), c('Data','Max posterior','95% credible range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
+##==============================================================================
+
 
 
 ##==============================================================================

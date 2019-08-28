@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB-2014_processData_normal.R
+## processData_normal.R
 ##
 ## Read CO2 proxy data, with age/amount uncertainties.
 ##
@@ -10,10 +10,12 @@
 ## Write out a file with the normal distribution parameters on it, to use
 ## in the calibration.
 ##
-## Questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
-# col 1 is age (million years ago), col 2 is CO2 (units?), col 3 is lower error
+rm(list=ls())
+
+# col 1 is age (million years ago), col 2 is CO2 (ppmv), col 3 is lower error
 # bound, col 4 is upper error bound
 dat <- read.csv('../input_data/CO2_Proxy_Foster2017_calib.csv', fill=TRUE, header=TRUE)
 

@@ -9,17 +9,15 @@
 ##
 ## Contains:
 ##  sobolTony -- serial version, calculates indices according to Sobol' 1991
-##               verified calculation in `TEST_sobol.R` get results within <1%
-##               of the `sensitivity` package results
+##               verified calculation in test function (linear model) get
+##               results within <1% of the `sensitivity` package results
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 
 source("sobol_model.R")
 
-#install.packages('foreach')
-#install.packages('doParallel')
 library(foreach)
 library(doParallel)
 

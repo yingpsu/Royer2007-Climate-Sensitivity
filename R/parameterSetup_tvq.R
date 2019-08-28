@@ -1,12 +1,11 @@
 ##==============================================================================
-## GEOCARB-2014_parameterSetup_tvq.R
+## parameterSetup_tvq.R
 ##
 ## set up specific to sampling the time-varying parameters by CDF value
 ##
 ## Requires: filename.calibinput
 ##
-##
-## questions? Tony Wong (twong@psu.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 
@@ -23,7 +22,6 @@ iteration_threshold <- 10 #maximum number of times the convergence equation for
 # reading in the two input files
 
 # input constant parameters and time-varying parameters (comes from calib driver)
-#input <- read.csv("../input_data/GEOCARB_input_summaries_calib.csv")
 input <- read.csv(filename.calibinput)
 
 # time-varying parameters
@@ -187,7 +185,7 @@ const_names_expected <- c('ACT',
                           'kwsy',     #(54)
                           'kwgy',     #(55)
                           'kwcy',     #(56)
-                          'stdev')    # added by Tony
+                          'stdev')    # added by TW
 
 time_names_expected <- c('Sr',     #(:,1)
                          'd13C',     #(:,2)

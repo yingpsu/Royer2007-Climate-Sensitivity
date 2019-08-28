@@ -1,5 +1,5 @@
 ##==============================================================================
-## GEOCARB_fit_likelihood_surface_mixture.R
+## fit_likelihood_surface_mixture.R
 ##
 ## Fits a single Gaussian distribution to all of the data for each time slice.
 ##
@@ -8,47 +8,30 @@
 ##   likelihood_fit        (list of functions for KDE fits for each time step)
 ##   idx_data              (model CO2 indices where there are data to compare)
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 ##==============================================================================
 ## Get a standard model simulation
 ##================================
 
-if(DO_SAMPLE_TVQ) {
-  model_out <- model_forMCMC(par_calib=par_calib0,
-                             par_fixed=par_fixed0,
-                             parnames_calib=parnames_calib,
-                             parnames_fixed=parnames_fixed,
-                             parnames_time=parnames_time,
-                             age=age,
-                             ageN=ageN,
-                             ind_const_calib=ind_const_calib,
-                             ind_time_calib=ind_time_calib,
-                             ind_const_fixed=ind_const_fixed,
-                             ind_time_fixed=ind_time_fixed,
-                             ind_expected_time=ind_expected_time,
-                             ind_expected_const=ind_expected_const,
-                             iteration_threshold=iteration_threshold,
-                             do_sample_tvq=DO_SAMPLE_TVQ,
-                             par_time_center=par_time_center,
-                             par_time_stdev=par_time_stdev)
-} else {
-  model_out <- model_forMCMC(par_calib=par_calib0,
-                             par_fixed=par_fixed0,
-                             parnames_calib=parnames_calib,
-                             parnames_fixed=parnames_fixed,
-                             parnames_time=parnames_time,
-                             age=age,
-                             ageN=ageN,
-                             ind_const_calib=ind_const_calib,
-                             ind_time_calib=ind_time_calib,
-                             ind_const_fixed=ind_const_fixed,
-                             ind_time_fixed=ind_time_fixed,
-                             ind_expected_time=ind_expected_time,
-                             ind_expected_const=ind_expected_const,
-                             iteration_threshold=iteration_threshold)
-}
+model_out <- model_forMCMC(par_calib=par_calib0,
+                           par_fixed=par_fixed0,
+                           parnames_calib=parnames_calib,
+                           parnames_fixed=parnames_fixed,
+                           parnames_time=parnames_time,
+                           age=age,
+                           ageN=ageN,
+                           ind_const_calib=ind_const_calib,
+                           ind_time_calib=ind_time_calib,
+                           ind_const_fixed=ind_const_fixed,
+                           ind_time_fixed=ind_time_fixed,
+                           ind_expected_time=ind_expected_time,
+                           ind_expected_const=ind_expected_const,
+                           iteration_threshold=iteration_threshold,
+                           do_sample_tvq=TRUE,
+                           par_time_center=par_time_center,
+                           par_time_stdev=par_time_stdev)
 ##==============================================================================
 
 
@@ -62,25 +45,35 @@ if(DO_SAMPLE_TVQ) {
 upper_bound_co2 <- .upper_bound_co2
 lower_bound_co2 <- .lower_bound_co2
 
-filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
+if (USE_PR2011_DATA) {
+    filename.data <- "../input_data/CO2_Proxy_PR2011_calib_SN-co2_28Aug2019.csv"
+    source('getData_PR2011.R')
+} else {
+  if (dist=='sn' | dist=='sn-mix') {
+    filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
+  } else if (dist=='nm' | dist=='nm-mix') {
+    filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_NM-co2_25Sep2018.csv'
+  }
 
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
+  # Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
+  data_to_assim <- cbind( c("paleosols" , TRUE),
+                          c("alkenones" , TRUE),
+                          c("stomata"   , TRUE),
+                          c("boron"     , TRUE),
+                          c("liverworts", TRUE) )
 
-source('GEOCARB-2014_getData.R')
+  source('getData.R')
 
-ind_data    <- which(data_to_assim[2,]==TRUE)
-n_data_sets <- length(ind_data)
-ind_assim   <- vector("list",n_data_sets)
-for (i in 1:n_data_sets) {
-  ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
+  ind_data    <- which(data_to_assim[2,]==TRUE)
+  n_data_sets <- length(ind_data)
+  ind_assim   <- vector("list",n_data_sets)
+  for (i in 1:n_data_sets) {
+    ind_assim[[i]] <- which(as.character(data_calib_all$proxy_type) == data_to_assim[1,ind_data[i]])
+  }
+
+  data_calib <- data_calib_all[unlist(ind_assim),]
 }
 
-data_calib <- data_calib_all[unlist(ind_assim),]
 ##==============================================================================
 
 
@@ -113,7 +106,11 @@ for (tt in 1:n_time) {
         f_co2 <- vector('list', length(idx))
         for (ii in 1:length(idx)) {
             #f_co2[[ii]] <- dlnorm(x_co2, meanlog=log(data_calib$co2[idx[ii]]), sdlog=sigmas[ii]) # log-normals from Park and Royer (2011)
-            f_co2[[ii]] <- dsn(x_co2,xi=data_calib$xi_co2[idx[ii]], omega=data_calib$omega_co2[idx[ii]], alpha=data_calib$alpha_co2[idx[ii]])
+            if (dist=='sn' | dist=='sn-mix') {
+              f_co2[[ii]] <- dsn(x_co2,xi=data_calib$xi_co2[idx[ii]], omega=data_calib$omega_co2[idx[ii]], alpha=data_calib$alpha_co2[idx[ii]])
+            } else if (dist=='nm' | dist=='nm-mix') {
+              f_co2[[ii]] <- dnorm(x_co2, mean=data_calib$mu_co2[idx[ii]], sd=data_calib$sigma_co2[idx[ii]])
+            }
         }
         f_co2_mix <- wgts[1]*f_co2[[1]]
         if (length(idx) > 1) {
@@ -126,7 +123,7 @@ for (tt in 1:n_time) {
 }
 
 if (FALSE) {
-
+# preliminary exploration of multi-modal behavior
 tt <- 34
 idx <- which(time[tt]-data_calib$age < 10 & time[tt]-data_calib$age >= 0)
 widths <- log(data_calib$co2_high[idx]/data_calib$co2_low[idx])
@@ -152,9 +149,6 @@ plot(x_co2, f_co2[[1]], type='l', xlim=c(0,7000), ylim=c(0,.002))
 for (ii in 1:length(idx)) {lines(x_co2, f_co2[[ii]], type='l')}
 lines(x_co2, f_co2_mix, col="coral", lwd=2)
 
-}
-
-if(FALSE) {
 # check out a cross-sectional slice
 co2 <- seq(from=1,to=10000,by=10)
 
@@ -206,18 +200,6 @@ loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data, stdev=
     }
   }
   return(llike)
-}
-
-if(FALSE){
-##OLD
-loglikelihood_smoothed <- function(modeled_co2, likelihood_fit, idx_data) {
-  llike <- 0
-  for (ii in idx_data) {
-    llike <- llike + log(likelihood_fit[[ii]](modeled_co2[ii]))
-    if (is.na(llike) | is.infinite(llike)) {return(-Inf)}
-  }
-  return(llike)
-}
 }
 ##==============================================================================
 

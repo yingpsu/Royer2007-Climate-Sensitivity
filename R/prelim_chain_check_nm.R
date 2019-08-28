@@ -25,7 +25,7 @@ parameters <- rbind(parameters, amcmc_out1$samples)
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
-source('GEOCARB-2014_parameterSetup_tvq.R')
+source('parameterSetup_tvq.R')
 
 ##==============================================================================
 ## Start off by just straight-up chopping off the first 1e7

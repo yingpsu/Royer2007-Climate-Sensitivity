@@ -1,9 +1,13 @@
 ##==============================================================================
 ## burnin_thinning.R
 ##
-## For control experiment (main text)
+## For control experiment (main text), computes the Gelman and Rubin (1992)
+## potential scale reduction factor to diagnose Markov chain convergence, chops
+## off for burn-in from the set of parallel chains, computes the autocorrelation
+## function (ACF) for each parameter of each chain and determines the lag for
+## thinning necessary to maintain an autocorrelation maximum of 0.05.
 ##
-## Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 library('coda')
@@ -14,13 +18,13 @@ today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 filename_parameters <- paste('../output/processed_mcmc_results_',today,'.RData', sep="")
 filename_processing <- paste('../output/processing_',today,'.RData', sep="")
 
-load('../output/geocarb_mcmcoutput_unc_16Jun2019sn.RData')
+load('../output/geocarb_mcmcoutput_mix_12Aug2019sn-mix.RData')
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
-filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
-source('GEOCARB-2014_parameterSetup_tvq.R')
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_mix.csv"
+source('parameterSetup_tvq.R')
 
 ##==============================================================================
 ## Burn in
@@ -55,7 +59,7 @@ if(n_node000 == 1) {
 
 # Convergence check:
 #> gr.test
-#[1] 1.004766
+#[1] 1.017315
 
 # hack off first ? iterations for burn in
 ifirst <- NA
