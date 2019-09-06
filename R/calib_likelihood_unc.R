@@ -70,11 +70,7 @@ log_prior <- function(
         } else if(input[row_num, 'distribution_type']=='lognormal') {
           lpri_new <- dlnorm(x=par_calib[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]), log=TRUE)
         } else if(input[row_num, 'distribution_type']=='invgamma') {
-          lpri_new <- dinvgamma(x=par_calib[ind_const_calib[i]], shape=input[row_num,"mean"], rate=input[row_num,"two_sigma"], log=TRUE)
-          # impose a truncation for variance parameter
-          if((par_calib[ind_const_calib[i]] > 500^2) | (par_calib[ind_const_calib[i]] < 400^2)) {
-            lpri_new <- -Inf
-          }
+          lpri_new <- dinvgamma(x=par_calib[ind_const_calib[i]], shape=input[row_num,"mean"], scale=input[row_num,"two_sigma"], log=TRUE)
         } else {
           print('ERROR - unknown prior distribution type')
         }
@@ -159,15 +155,18 @@ log_like <- function(
                                ind_time_fixed=ind_time_fixed,
                                ind_expected_time=ind_expected_time,
                                ind_expected_const=ind_expected_const,
-                               iteration_threshold=iteration_threshold)[,'co2']
+                               iteration_threshold=iteration_threshold,
+                               do_sample_tvq=do_sample_tvq,
+                               par_time_center=par_time_center)[,'co2']
   }
 
   # use the same checks as the precalibration to get rid of unphysical simulations
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else if(!is.null(loglikelihood_smoothed)){
-    if(!is.na(match('stdev',parnames_calib))) {
-      llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('stdev',parnames_calib)])
+    #if(!is.na(match('stdev',parnames_calib))) {
+    if(!is.na(match('var',parnames_calib))) {
+      llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, sqrt(par_calib[match('var',parnames_calib)]))
     } else {
       llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
     }

@@ -67,4 +67,4 @@ kwpy,constant,TRUE,gaussian,0.01,0.005,0,inf,0
 kwsy,constant,TRUE,gaussian,0.01,0.005,0,inf,0
 kwgy,constant,TRUE,gaussian,0.018,0.009,0,inf,0
 kwcy,constant,TRUE,gaussian,0.018,0.009,0,inf,0
-stdev,constant,TRUE,lognormal,450,2.044488,0,inf,0
+stdev,constant,TRUE,lognormal,450,2.044488,0,inf,1

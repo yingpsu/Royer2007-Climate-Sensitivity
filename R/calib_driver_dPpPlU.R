@@ -1,5 +1,5 @@
 ##==============================================================================
-## calib_driver_sn-mixture.R
+## calib_driver_dPpPlU.R
 ##
 ## Read CO2 proxy data, with fitted parameters for skew-normal kernels for each
 ## data point. Set which data sets you intend to calibrate using.
@@ -21,37 +21,28 @@ rm(list=ls())
 
 setwd('~/work/codes/GEOCARB/R')
 
+param_choice <- 'PR2011_var'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
+data_choice <- 'PR2011'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
+lhood_choice <- 'unimodal'  # Mixture model ("mixture") or unimodal ("unimodal")?
+dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
+
+
 niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
-appen <- 'mix'
-output_dir <- '../output/'
-today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 
-# Distribution fit to each data point in the processing step
-#dist <- 'nm-mix'  # normal (use this to reproduce supplementary experiment results)
-dist <- 'sn-mix'  # skew-normal mixture model
-appen2 <- dist
-
-# upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
-# lower bound relaxed in light of additional proxy data
-.upper_bound_co2 <- 50000
-.lower_bound_co2 <- 0
-
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
+# If using the Foster et al 2017 data set, which proxy sets to assimilate?
+#   (set what you want to "TRUE", others to "FALSE")
 data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("alkenones" , TRUE),
                         c("stomata"   , TRUE),
                         c("boron"     , TRUE),
                         c("liverworts", TRUE) )
 
-DO_WRITE_RDATA  <- TRUE
-DO_WRITE_NETCDF <- FALSE
-DO_PARAM_INIT <- TRUE # do initialization of parameters & covariance matrix from previous calibration?
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
-USE_PR2011_DATA <- TRUE
+USE_ROYER_FSR <- FALSE
 
-filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
+# do initialization of parameters & covariance matrix from previous calibration?
+DO_PARAM_INIT <- TRUE   # if true, set the two file names below
 filename.covarinit <- "../output/covar_init_sn-mix_12Aug2019.rds"
 filename.paraminit <- "../output/param_init_sn-mix_12Aug2019.rds"
 
@@ -63,6 +54,32 @@ library(invgamma)
 ## Model parameters and setup
 ##===========================
 
+# for naming output files later
+today <- Sys.Date(); today <- format(today,format="%d%b%Y")
+
+# upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
+# lower bound relaxed in light of additional proxy data
+.upper_bound_co2 <- 50000
+.lower_bound_co2 <- 0
+
+# sampling the time-varying arrays
+if (substr(param_choice,1,6)=="PR2011") {
+  DO_SAMPLE_TVQ <- FALSE
+} else {
+  DO_SAMPLE_TVQ <- TRUE
+}
+
+# If initializing the parameters and transition matrix, first set up parameters
+# as though all were being calibrated, for getting the component names to
+# initialize parameters if calibrating using the reduced PR2011 set.
+if (DO_PARAM_INIT) {
+  filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all_var.csv'
+  source('parameterSetup_tvq.R')
+  parnames_calib_all <- parnames_calib
+}
+
+# Now, set up the parameters as desired. Possibly the same.
+filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',param_choice,'.csv', sep='')
 source('parameterSetup_tvq.R')
 source('model_forMCMC_tvq.R')
 
@@ -76,12 +93,25 @@ source('run_geocarbF_unc.R') # version with extra `stdev` uncertainty statistica
 ##====================================================
 # quick fix to initialize standard deviation
 if(!is.na(match('stdev',parnames_calib))) {
-  par_calib0[match('stdev',parnames_calib)] <- 450
+  par_calib0[match('stdev',parnames_calib)] <- 150
+} else if(!is.na(match('var',parnames_calib))) {
+  par_calib0[match('var',parnames_calib)] <- 150^2
 }
 
+
 if(DO_PARAM_INIT) {
-  step_mcmc <- readRDS(filename.covarinit)
-  par_calib0 <- readRDS(filename.paraminit) # this will overwrite setting stdev above
+  step_mcmc_all <- readRDS(filename.covarinit)
+  par_calib0_all <- readRDS(filename.paraminit) # this will overwrite setting stdev above
+  # if not using all 69 parameters
+  if (substr(param_choice,1,6)=="PR2011") {
+    idx_match <- match(parnames_calib, parnames_calib_all)
+    par_calib0 <- par_calib0_all[idx_match]
+    step_mcmc <- step_mcmc_all[idx_match, idx_match]
+  } else {
+    par_calib0 <- par_calib0_all
+    step_mcmc <- step_mcmc_all
+  }
+  par_calib0[match('var',parnames_calib)] <- 150^2
 }
 ##==============================================================================
 
@@ -90,7 +120,7 @@ if(DO_PARAM_INIT) {
 ## Data
 ##=====
 
-source('fit_likelihood_surface_mixture.R')
+source('fit_likelihood_surface.R')
 ##==============================================================================
 
 
@@ -152,23 +182,25 @@ stopadapt_mcmc <- round(niter_mcmc*1.0)# stop adapting after ?? iterations? (nit
 ## Actually run the calibration
 
 if(n_node000==1) {
+  print(paste("data =",data_choice," | params =",param_choice," | lhood =",lhood_choice))
   tbeg <- proc.time()
   amcmc_out1 <- MCMC(log_post, n=niter_mcmc, init=par_calib0, adapt=TRUE, acc.rate=accept_mcmc,
-                  scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
-                  par_fixed=par_fixed0, parnames_calib=parnames_calib,
-                  parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
-                  ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
-                  ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
-                  input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
-                  data_calib=data_calib, ind_mod2obs=ind_mod2obs,
-                  ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
-                  iteration_threshold=iteration_threshold,
-                  loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                  do_sample_tvq=TRUE, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
-                  upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
+                    scale=step_mcmc, gamma=gamma_mcmc, list=TRUE, n.start=max(5000,round(0.05*niter_mcmc)),
+                    par_fixed=par_fixed0, parnames_calib=parnames_calib,
+                    parnames_fixed=parnames_fixed, parnames_time=parnames_time, age=age, ageN=ageN,
+                    ind_const_calib=ind_const_calib, ind_time_calib=ind_time_calib,
+                    ind_const_fixed=ind_const_fixed, ind_time_fixed=ind_time_fixed,
+                    input=input, time_arrays=time_arrays, bounds_calib=bounds_calib,
+                    data_calib=data_calib, ind_mod2obs=ind_mod2obs,
+                    ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
+                    iteration_threshold=iteration_threshold,
+                    loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
+                    do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                    upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
   tend <- proc.time()
   chain1 = amcmc_out1$samples
 } else if(n_node000 > 1) {
+  print(paste("data =",data_choice," | params =",param_choice," | lhood =",lhood_choice))
   tbeg <- proc.time()
   amcmc_par1 <- MCMC.parallel(log_post, n=niter_mcmc, init=par_calib0, n.chain=n_node000, n.cpu=n_node000,
         					dyn.libs=c('../fortran/run_geocarb_unc.so'),
@@ -184,14 +216,14 @@ if(n_node000==1) {
                   ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                   iteration_threshold=iteration_threshold,
                   loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                  do_sample_tvq=TRUE, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                  do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
                   upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
   tend <- proc.time()
 }
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 ## write an RData file with the parameter results
-filename.mcmc = paste(output_dir,'geocarb_mcmcoutput_',appen,'_',today,appen2,'.RData',sep="")
+filename.mcmc = paste('../output/geocarb_mcmcoutput_',appen,'_',today,appen2,'.RData',sep="")
 if(n_node000 == 1) {
   save(amcmc_out1, file=filename.mcmc)
 } else {

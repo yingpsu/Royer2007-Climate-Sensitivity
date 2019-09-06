@@ -1,16 +1,16 @@
 parameter,type,resample,distribution_type,mean,two_sigma,lower_limit,upper_limit,calib
-Sr,time array,TRUE,uniform,0.5,,0,1,1
-d13C,time array,TRUE,uniform,0.5,,0,1,1
-d34S,time array,TRUE,uniform,0.5,,0,1,1
-fR,time array,TRUE,uniform,0.5,,0,1,1
-fL,time array,TRUE,uniform,0.5,,0,1,1
-fA,time array,TRUE,uniform,0.5,,0,1,1
-fD,time array,TRUE,uniform,0.5,,0,1,1
-fAw_fA,time array,TRUE,uniform,0.5,,0,1,1
-RT,time array,TRUE,uniform,0.5,,0,1,1
-GEOG,time array,TRUE,uniform,0.5,,0,1,1
-fSR,time array,TRUE,uniform,0.5,,0,1,1
-fC,time array,TRUE,uniform,0.5,,0,1,1
+Sr,time array,TRUE,gaussian,,,_inf,inf,1
+d13C,time array,TRUE,gaussian,,,_inf,inf,1
+d34S,time array,TRUE,gaussian,,,_inf,inf,1
+fR,time array,TRUE,gaussian,,,0,inf,1
+fL,time array,TRUE,gaussian,,,0,inf,1
+fA,time array,TRUE,gaussian,,,0,inf,1
+fD,time array,TRUE,gaussian,,,0,inf,1
+fAw_fA,time array,TRUE,gaussian,,,0,1,1
+RT,time array,TRUE,gaussian,,,0,inf,1
+GEOG,time array,TRUE,gaussian,,,_inf,inf,1
+fSR,time array,TRUE,gaussian,,,0,inf,1
+fC,time array,TRUE,gaussian,,,0,inf,1
 ACT,constant,TRUE,gaussian,0.09,0.045,0,inf,1
 ACTcarb,constant,TRUE,gaussian,0.087,0.0435,0,inf,1
 VNV,constant,TRUE,gaussian,5,2.5,0,inf,1
@@ -67,4 +67,3 @@ kwpy,constant,TRUE,gaussian,0.01,0.005,0,inf,1
 kwsy,constant,TRUE,gaussian,0.01,0.005,0,inf,1
 kwgy,constant,TRUE,gaussian,0.018,0.009,0,inf,1
 kwcy,constant,TRUE,gaussian,0.018,0.009,0,inf,1
-stdev,constant,TRUE,lognormal,450,2.044488,0,inf,0
