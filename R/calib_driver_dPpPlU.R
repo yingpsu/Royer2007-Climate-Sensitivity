@@ -1,6 +1,10 @@
 ##==============================================================================
 ## calib_driver_dPpPlU.R
 ##
+## dP (Park and Royer 2011 data)
+## pPV (parameters from Park and Royer 2011, and additional Variance term)
+## lU (unimodal (Park and Royer 2011) likelihood slices
+##
 ## Read CO2 proxy data, with fitted parameters for skew-normal kernels for each
 ## data point. Set which data sets you intend to calibrate using.
 ## Version for running as script on HPC.
@@ -26,6 +30,8 @@ data_choice <- 'PR2011'    # Which data set?  PR2011 = Park and Royer (2011), or
 lhood_choice <- 'unimodal'  # Mixture model ("mixture") or unimodal ("unimodal")?
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
+today <- Sys.Date(); today <- format(today,format="%d%b%Y")
+filename.mcmc = paste('../output/geocarb_mcmcoutput_dPpPVlU_',today,'.RData',sep="")
 
 niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use
@@ -53,9 +59,6 @@ library(invgamma)
 ##==============================================================================
 ## Model parameters and setup
 ##===========================
-
-# for naming output files later
-today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 
 # upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
 # lower bound relaxed in light of additional proxy data
@@ -223,7 +226,6 @@ if(n_node000==1) {
 print(paste('Took ',(tend-tbeg)[3]/60,' minutes', sep=''))
 
 ## write an RData file with the parameter results
-filename.mcmc = paste('../output/geocarb_mcmcoutput_',appen,'_',today,appen2,'.RData',sep="")
 if(n_node000 == 1) {
   save(amcmc_out1, file=filename.mcmc)
 } else {
