@@ -11,17 +11,17 @@ RT,time array,TRUE,uniform,0.5,,0,1,0
 GEOG,time array,TRUE,uniform,0.5,,0,1,0
 fSR,time array,TRUE,uniform,0.5,,0,1,0
 fC,time array,TRUE,uniform,0.5,,0,1,0
-ACT,constant,TRUE,gaussian,0.09,0.045,0,inf,1
+ACT,constant,TRUE,gaussian,0.09,0.045,0,inf,0
 ACTcarb,constant,TRUE,gaussian,0.087,0.0435,0,inf,0
 VNV,constant,TRUE,gaussian,5,2.5,0,inf,0
 NV,constant,TRUE,gaussian,0.0075,0.00375,0,inf,0
 exp_NV,constant,TRUE,gaussian,0.67,0.335,0,inf,0
-LIFE,constant,TRUE,gaussian,0.25,0.125,0,inf,1
-GYM,constant,TRUE,gaussian,0.875,0.415625,0,inf,1
-FERT,constant,TRUE,gaussian,0.4,0.2,0,1,1
+LIFE,constant,TRUE,gaussian,0.25,0.125,0,inf,0
+GYM,constant,TRUE,gaussian,0.875,0.415625,0,inf,0
+FERT,constant,TRUE,gaussian,0.4,0.2,0,1,0
 exp_fnBb,constant,TRUE,gaussian,0.5,0.125,0,inf,0
-deltaT2X,constant,TRUE,lognormal,3,2.5,1.5,inf,1
-GLAC,constant,TRUE,gaussian,2,1,1,inf,1
+deltaT2X,constant,TRUE,lognormal,3,2.5,1.5,inf,0
+GLAC,constant,TRUE,gaussian,2,1,1,inf,0
 J,constant,TRUE,gaussian,4,2,0,inf,0
 n,constant,TRUE,gaussian,1,0.5,0,inf,0
 Ws,constant,TRUE,gaussian,7.4,3.7,_inf,inf,0
@@ -67,4 +67,4 @@ kwpy,constant,TRUE,gaussian,0.01,0.005,0,inf,0
 kwsy,constant,TRUE,gaussian,0.01,0.005,0,inf,0
 kwgy,constant,TRUE,gaussian,0.018,0.009,0,inf,0
 kwcy,constant,TRUE,gaussian,0.018,0.009,0,inf,0
-var,constant,TRUE,invgamma,2.1,0.000022,0,inf,1
+stdev,constant,TRUE,lognormal,119,7.338593,0,inf,1

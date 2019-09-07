@@ -164,9 +164,10 @@ log_like <- function(
   if(any(is.infinite(model_out)) | any(model_out < lower_bound_co2) | any(model_out > upper_bound_co2)) {
     llike <- -Inf
   } else if(!is.null(loglikelihood_smoothed)){
-    #if(!is.na(match('stdev',parnames_calib))) {
-    if(!is.na(match('var',parnames_calib))) {
-      llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, sqrt(par_calib[match('var',parnames_calib)]))
+    if(!is.na(match('stdev',parnames_calib))) {
+    #if(!is.na(match('var',parnames_calib))) {
+      #llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, sqrt(par_calib[match('var',parnames_calib)]))
+      llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data, par_calib[match('stdev',parnames_calib)])
     } else {
       llike <- loglikelihood_smoothed(model_out, likelihood_fit, idx_data)
     }

@@ -27,7 +27,7 @@ hist(log10(dists))
 
 
 if(FALSE) {
-# putting prior on variance, has units of (ppmv CO2)^2
+# putting inverse gamma prior on variance, has units of (ppmv CO2)^2
 # --> aim to center at median(dists^2) = 14055 ppmv^2
 
 # some options:
@@ -49,6 +49,14 @@ alph <- 2.1
 beta <- 1/.000022
 ftmp <- dinvgamma(x_co2^2, shape=alph, scale=1/beta); plot(x_co2, ftmp, col='red', type='l', xlim=c(0,3000))
 x_co2[which.max(ftmp)]
+
+# putting log-normal prior on stdev, has units of (ppmv CO2)
+# --> aim to center at median(dists) = 119 ppmv and mean(dists) around 275 ppmv
+
+logmean <- log(119) # know median = exp(logmean) for log-normal
+logsd <- 1.3
+ftmp <- dlnorm(x_co2, meanlog=logmean, sdlog=logsd); plot(x_co2, ftmp, col='red', type='l', xlim=c(0,3000))
+print(exp(logmean+logsd*logsd/2))
 
 }
 
