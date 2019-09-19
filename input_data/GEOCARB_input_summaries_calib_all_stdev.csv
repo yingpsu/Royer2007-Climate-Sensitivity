@@ -67,4 +67,4 @@ kwpy,constant,TRUE,gaussian,0.01,0.005,0,inf,1
 kwsy,constant,TRUE,gaussian,0.01,0.005,0,inf,1
 kwgy,constant,TRUE,gaussian,0.018,0.009,0,inf,1
 kwcy,constant,TRUE,gaussian,0.018,0.009,0,inf,1
-var,constant,TRUE,invgamma,2.1,0.000022,0,inf,1
+stdev,constant,TRUE,lognormal,119,2.984,0,inf,1
