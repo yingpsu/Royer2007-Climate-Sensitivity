@@ -17,63 +17,24 @@ filename_analysis <- paste('../output/analysis_',today,'.RData', sep="")
 .lower_bound_co2 <- 0
 
 # normal distribution results
-load('../output/processed_mcmc_results_normal_26Jun2019.RData')
+load('../output/processed_mcmc_results_normal_24Sep2019.RData')
 parameters_nm <- parameters_posterior
 # control results
-load('../output/processed_mcmc_results_15Aug2019.RData')
+load('../output/processed_mcmc_results_24Sep2019.RData')
 parameters <- parameters_posterior
 rm(list=c('parameters_posterior'))
 n_ensemble <- nrow(parameters)
 n_parameter <- ncol(parameters)
 
 ##==============================================================================
-# Figure 5 (Methods). Observations and fitted likelihood surface.
 
-dist <- 'sn'
-DO_SAMPLE_TVQ <- TRUE
-USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
+data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
+lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
+fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
+dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
-
-filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
-
-source('parameterSetup_tvq.R')
-source('model_forMCMC_tvq.R')
-#source('run_geocarbF.R')
-source('run_geocarbF_unc.R') # version with extra `stdev` uncertainty statistical parameter
-source('fit_likelihood_surface_mixture.R')
-source('likelihood_surface_quantiles.R')
-parnames <- parnames_calib
-
-# Get model parameter prior distribution bounds
-names <- as.character(input$parameter)
-bound_lower <- rep(NA, length(names))
-bound_upper <- rep(NA, length(names))
-
-ind_neg_inf <- which(input[,'lower_limit']=='_inf')
-bound_lower[ind_neg_inf] <- -Inf
-bound_lower[setdiff(1:length(names), ind_neg_inf)] <- as.numeric(as.character(input$lower_limit[setdiff(1:length(names), ind_neg_inf)]))
-bound_upper <- input$upper_limit
-
-bounds <- cbind(bound_lower, bound_upper)
-rownames(bounds) <- as.character(input$parameter)
-
-# only actually need the calibration parameters' bounds, so reformat the bounds
-# array to match the vector of calibration parameters
-bounds_calib <- mat.or.vec(nr=length(parnames_calib), nc=2)
-colnames(bounds_calib) <- c('lower','upper')
-rownames(bounds_calib) <- parnames_calib
-for (i in 1:length(parnames_calib)) {
-  bounds_calib[i,'lower'] <- bounds[parnames_calib[i],'bound_lower']
-  bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
-}
-
-rm(list=c('bound_lower','bound_upper','bounds'))
+source("model_setup.R")
 
 ##==============================================================================
 
@@ -106,13 +67,6 @@ model_out <- sapply(X=1:n_ensemble,
                                             par_time_center=par_time_center,
                                             par_time_stdev=par_time_stdev)[,'co2']})
 n_time <- nrow(model_out)
-
-# adding in white noise from stdev parameter
-model_out_noisy <- model_out
-for (k in 1:n_ensemble) {
-    white_noise <- rnorm(n=n_time, mean=0, sd=parameters[k,match("stdev", parnames_calib)])
-    model_out_noisy[,k] <- model_out[,k] + white_noise
-}
 
 # get 5-95% range and median  are cols 1-3; max-post will be 4
 quantiles_i_want <- c(0,0.005,.025,.05,.5,.95,.975,0.995,1)
@@ -177,8 +131,8 @@ model_ref <- model_forMCMC(par_calib=par_calib0,
 
 ##======================================
 
-## read results from Royer et al 2014 (DOI: , AJS), to compare the width of the
-## CO2 hindcast quantiles
+## read results from Royer et al 2014 (DOI: 10.2475/09.2014.01, AJS), to compare
+## the width of the CO2 hindcast quantiles
 
 library(gdata)
 
@@ -195,10 +149,10 @@ colnames(model_quantiles_royer) <- c('q025','co2','q975')
 # (deltaT2X), relative to previous studies.
 
 # above, have parameters[,ics]
-ics <- match('deltaT2X', parnames)
+ics <- match('deltaT2X', parnames_calib)
 deltaT2X_density <- density(parameters[,ics], from=0, to=10)
 
-iglac <- match('GLAC', parnames)
+iglac <- match('GLAC', parnames_calib)
 glac_density <- density(parameters[,iglac], from=1, to=5)
 
 deltaT2Xglac_density <- density(parameters[,ics]*parameters[,iglac], from=0, to=20)
@@ -244,18 +198,18 @@ print(pr2011_cdf(0.8443))
 
 print("Median, 5-95%, 2.5-97.5%, 16-84% CIs:")
 print("==== deltaT2X ====")
-print(quantile(parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975, .16,.84)))
+print(quantile(parameters[,which(parnames_calib=="deltaT2X")], c(.5,.05,.95, .025,.975, .16,.84)))
 print("==== GLAC ====")
-print(quantile(parameters[,which(parnames=="GLAC")], c(.5,.05,.95, .025,.975)))
+print(quantile(parameters[,which(parnames_calib=="GLAC")], c(.5,.05,.95, .025,.975)))
 print("==== GLAC*deltaT2X ====")
-print(quantile(parameters[,which(parnames=="GLAC")]*parameters[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975, .16,.84)))
+print(quantile(parameters[,which(parnames_calib=="GLAC")]*parameters[,which(parnames_calib=="deltaT2X")], c(.5,.05,.95, .025,.975, .16,.84)))
 print("")
 
-Pr_CS_above_6 <- length(which(parameters[,which(parnames=="deltaT2X")] > 6)) / nrow(parameters)
+Pr_CS_above_6 <- length(which(parameters[,which(parnames_calib=="deltaT2X")] > 6)) / nrow(parameters)
 print(paste("Pr(deltaT2X > 6 degC) = ",Pr_CS_above_6, sep=""))
 print("")
 
-Pr_CS_below_2.5 <- length(which(parameters[,which(parnames=="deltaT2X")] < 2.5)) / nrow(parameters)
+Pr_CS_below_2.5 <- length(which(parameters[,which(parnames_calib=="deltaT2X")] < 2.5)) / nrow(parameters)
 print(paste("Pr(deltaT2X < 2.5 degC) = ",Pr_CS_below_2.5, sep=""))
 
 print("")
@@ -263,11 +217,11 @@ print("")
 print("And for the normal experiment...")
 print("Median, 5-95%, 2.5-97.5% CIs:")
 print("==== deltaT2X ====")
-print(quantile(parameters_nm[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print(quantile(parameters_nm[,which(parnames_calib=="deltaT2X")], c(.5,.05,.95, .025,.975)))
 print("==== GLAC ====")
-print(quantile(parameters_nm[,which(parnames=="GLAC")], c(.5,.05,.95, .025,.975)))
+print(quantile(parameters_nm[,which(parnames_calib=="GLAC")], c(.5,.05,.95, .025,.975)))
 print("==== GLAC*deltaT2X ====")
-print(quantile(parameters_nm[,which(parnames=="GLAC")]*parameters_nm[,which(parnames=="deltaT2X")], c(.5,.05,.95, .025,.975)))
+print(quantile(parameters_nm[,which(parnames_calib=="GLAC")]*parameters_nm[,which(parnames_calib=="deltaT2X")], c(.5,.05,.95, .025,.975)))
 print("")
 
 ##==============================================================================
@@ -496,7 +450,6 @@ lpost_out_nm <- sapply(X=1:nrow(parameters_nm),
 
 model_quantiles_nm[,'maxpost'] <- model_out_nm[,which.max(lpost_out_nm)]
 
-save.image(file=filename_analysis)
 ##======================================
 
 

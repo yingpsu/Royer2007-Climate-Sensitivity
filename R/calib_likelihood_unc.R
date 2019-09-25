@@ -71,6 +71,8 @@ log_prior <- function(
           lpri_new <- dlnorm(x=par_calib[ind_const_calib[i]], meanlog=log(input[row_num,"mean"]), sdlog=log(0.5*input[row_num,"two_sigma"]), log=TRUE)
         } else if(input[row_num, 'distribution_type']=='invgamma') {
           lpri_new <- dinvgamma(x=par_calib[ind_const_calib[i]], shape=input[row_num,"mean"], scale=input[row_num,"two_sigma"], log=TRUE)
+        } else if(input[row_num, 'distribution_type']=='uniform') {
+          lpri_new <- dunif(x=par_calib[ind_const_calib[i]], min=input[row_num,"mean"], max=input[row_num,"two_sigma"], log=TRUE)
         } else {
           print('ERROR - unknown prior distribution type')
         }

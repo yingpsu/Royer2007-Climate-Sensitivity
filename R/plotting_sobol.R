@@ -31,7 +31,6 @@ library(plotrix)      # used when plotting circles
 
 ## Functions in other files
 source('sobol_functions.R')
-source('colorblindPalette.R')
 
 ## Import data from sensitivity analysis
 # First- and total-order indices

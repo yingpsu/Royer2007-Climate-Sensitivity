@@ -68,6 +68,13 @@ sobol_model <- function(parameters, sens,
       sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
       sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
       model_sens <- 1 - sse/sst
+    } else if (sens=='NSL') {
+      # Nash-Sutcliffe efficiency, on a logarithmic scale
+      model_stdy <- model_out[ind_mod2obs]
+      icomp <- which(is.finite(model_stdy) & !is.na(model_stdy) & all(model_stdy > 0))  # only compare valid values
+      sse <- sum( (log(model_stdy[icomp]) - log(data_calib$co2[icomp]))^2 )
+      sst <- sum( (log(data_calib$co2[icomp]) - mean(log(data_calib$co2[icomp])))^2 )
+      model_sens <- 1 - sse/sst
     }
   } else {
     # run the model ensemble under the sample `parameters`
@@ -115,6 +122,16 @@ sobol_model <- function(parameters, sens,
         icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
         sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
         sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
+        model_sens[ss] <- 1 - sse/sst
+      }
+    } else if (sens=='NSL') {
+      # Nash-Sutcliffe efficiency, on a logarithmic scale
+      model_sens <- rep(NA, n_simulations)
+      for (ss in 1:n_simulations) {
+        model_stdy <- model_out[ind_mod2obs, ss]
+        icomp <- which(is.finite(model_stdy) & !is.na(model_stdy) & all(model_stdy > 0))  # only compare valid values
+        sse <- sum( (log(model_stdy[icomp]) - log(data_calib$co2[icomp]))^2 )
+        sst <- sum( (log(data_calib$co2[icomp]) - mean(log(data_calib$co2[icomp])))^2 )
         model_sens[ss] <- 1 - sse/sst
       }
     }
@@ -177,6 +194,13 @@ sobol_model_par <- function(parameters, sens,
       sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
       sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
       model_sens <- 1 - sse/sst
+    } else if (sens=='NSL') {
+      # Nash-Sutcliffe efficiency, on a logarithmic scale
+      model_stdy <- model_out[ind_mod2obs]
+      icomp <- which(is.finite(model_stdy) & !is.na(model_stdy) & all(model_stdy > 0))  # only compare valid values
+      sse <- sum( (log(model_stdy[icomp]) - log(data_calib$co2[icomp]))^2 )
+      sst <- sum( (log(data_calib$co2[icomp]) - mean(log(data_calib$co2[icomp])))^2 )
+      model_sens <- 1 - sse/sst
     }
 
   } else {
@@ -230,6 +254,13 @@ sobol_model_par <- function(parameters, sens,
         icomp <- which(is.finite(model_stdy) & !is.na(model_stdy))  # only compare valid values
         sse <- sum( (model_stdy[icomp] - data_calib$co2[icomp])^2 )
         sst <- sum( (data_calib$co2[icomp] - mean(data_calib$co2[icomp]))^2 )
+        model_sens <- 1 - sse/sst
+      } else if (sens=='NSL') {
+        # Nash-Sutcliffe efficiency, on a logarithmic scale
+        model_stdy <- model_out[ind_mod2obs]
+        icomp <- which(is.finite(model_stdy) & !is.na(model_stdy) & all(model_stdy > 0))  # only compare valid values
+        sse <- sum( (log(model_stdy[icomp]) - log(data_calib$co2[icomp]))^2 )
+        sst <- sum( (log(data_calib$co2[icomp]) - mean(log(data_calib$co2[icomp])))^2 )
         model_sens <- 1 - sse/sst
       }
 

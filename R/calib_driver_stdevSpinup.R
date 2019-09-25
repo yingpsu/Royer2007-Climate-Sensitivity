@@ -22,7 +22,7 @@ lhood_choice <- 'unimodal'  # Mixture model ("mixture") or unimodal ("unimodal")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
-filename.mcmc = paste('../output/geocarb_mcmcoutput_stdevSpinup_',today,'.RData',sep="")
+filename.mcmc = paste('../output/geocarb_mcmcoutput_stdevSpinup_PR2011_',today,'.RData',sep="")
 
 niter_mcmc000 <- 5000   # number of MCMC iterations per node (Markov chain length)
 n_node000 <- 1        # number of CPUs to use

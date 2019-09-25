@@ -16,14 +16,16 @@ setwd('~/codes/GEOCARB/R')
 
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 filename_parameters <- paste('../output/processed_mcmc_results_',today,'.RData', sep="")
-filename_processing <- paste('../output/processing_',today,'.RData', sep="")
 
-load('../output/geocarb_mcmcoutput_mix_12Aug2019sn-mix.RData')
+# load up the control experiment results
+appen <- "dFpAUsRlMsn"
+datestamp <- "19Sep2019"
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
-filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_mix.csv"
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_all_stdev.csv"
 source('parameterSetup_tvq.R')
 
 ##==============================================================================
@@ -59,7 +61,7 @@ if(n_node000 == 1) {
 
 # Convergence check:
 #> gr.test
-#[1] 1.017315
+#[1] 1.005469
 
 # hack off first ? iterations for burn in
 ifirst <- NA
@@ -86,34 +88,16 @@ if(n_node000 > 1) {
 ## Thinning
 ##=========
 
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-
-for (m in 1:n_node000) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
 
 chains_burned_thinned <- chains_burned # initialize
 if(n_node000 > 1) {
   for (m in 1:n_node000) {
-    chains_burned_thinned[[m]] <- chains_burned[[m]][seq(from=1, to=nrow(chains_burned[[m]]), by=maxlag),]
+    chains_burned_thinned[[m]] <- chains_burned[[m]][seq(from=1, to=nrow(chains_burned[[m]]), by=maxlags[m]),]
   }
 } else {
-  chains_burned_thinned <- chains_burned[seq(from=1, to=nrow(chains_burned), by=maxlag),]
+  chains_burned_thinned <- chains_burned[seq(from=1, to=nrow(chains_burned), by=maxlags),]
 }
 
 if (n_node000 > 1) {
@@ -126,7 +110,6 @@ if (n_node000 > 1) {
 }
 
 save(parameters_posterior, file=filename_parameters)
-save.image(file=filename_processing)
 
 ##==============================================================================
 ## End

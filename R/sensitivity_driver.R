@@ -12,25 +12,37 @@
 ## Clear workspace
 rm(list=ls())
 
+# needed packages
+library(sensitivity)
+library(sn)
+library(foreach)
+library(doParallel)
+library(lhs)
+
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 1000000 # note this will be doubled if using LHS precalibration
+n_sample <- 100000 # note this will be doubled if using LHS precalibration
 .Nboot <- 1000
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
-.second <- TRUE    # calculate second-order indices?
+.second <- FALSE    # calculate second-order indices?
 
-DO_PARALLEL <- TRUE # use parallel evaluation of ensembles in Sobol' integration?
-DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
-USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+n_node <- 1 # use parallel evaluation of ensembles in Sobol' integration?
+
+param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
+data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
+lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
+fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
+dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
+
+source("model_setup.R")
 
 # latin hypercube precalibration
-sens='NS' # valid values:  L1, L2, NS, pres
+sens='NS' # valid values:  L1, L2, NS, NSL, pres
 
 # calibration parameters and input data
 filename.data <- '../input_data/CO2_Proxy_Foster2017_calib_SN-co2_25Sep2018.csv'
-filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'
+filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all_stdev.csv'
 
 # upper bound from Royer et al 2014 (should be yielding a failed run anyhow)
 # lower bound relaxed in light of additional proxy data
@@ -41,89 +53,16 @@ if(Sys.info()['user']=='tony') {
   # Tony's local machine (if you aren't me, you almost certainly need to change this...)
   machine <- 'local'
   setwd('/Users/tony/codes/GEOCARB/R')
-  .Ncore <- 2
 } else {
   # assume on Napa cluster
   machine <- 'remote'
   setwd('~/work/codes/GEOCARB/R')
-  .Ncore <- 6  # use multiple cores to process large data?
 }
 
-# Which proxy sets to assimilate? (set what you want to "TRUE", others to "FALSE")
-data_to_assim <- cbind( c("paleosols" , TRUE),
-                        c("alkenones" , TRUE),
-                        c("stomata"   , TRUE),
-                        c("boron"     , TRUE),
-                        c("liverworts", TRUE) )
-
-##==============================================================================
-## Data
-##=====
-
-source('GEOCARB-2014_getData.R')
-##==============================================================================
-
-
-##==============================================================================
-## Model parameters and setup
-##===========================
-
-# Read parameter information, set up the calibration parameters
-source('parameterSetup_tvq.R')
-source('model_forMCMC_tvq.R')
-n_parameters <- length(parnames_calib)
-##==============================================================================
-
-
-##==============================================================================
-## Calibration parameter prior distributions
-##==========================================
-
-# Get model parameter prior distribution bounds
-names <- as.character(input$parameter)
-bound_lower <- rep(NA, length(names))
-bound_upper <- rep(NA, length(names))
-
-ind_neg_inf <- which(input[,'lower_limit']=='_inf')
-bound_lower[ind_neg_inf] <- -Inf
-bound_lower[setdiff(1:length(names), ind_neg_inf)] <- as.numeric(as.character(input$lower_limit[setdiff(1:length(names), ind_neg_inf)]))
-bound_upper <- input$upper_limit
-
-bounds <- cbind(bound_lower, bound_upper)
-rownames(bounds) <- as.character(input$parameter)
-
-# only actually need the calibration parameters' bounds, so reformat the bounds
-# array to match the vector of calibration parameters
-bounds_calib <- mat.or.vec(nr=length(parnames_calib), nc=2)
-colnames(bounds_calib) <- c('lower','upper')
-rownames(bounds_calib) <- parnames_calib
-for (i in 1:length(parnames_calib)) {
-  bounds_calib[i,'lower'] <- bounds[parnames_calib[i],'bound_lower']
-  bounds_calib[i,'upper'] <- bounds[parnames_calib[i],'bound_upper']
-}
-
-rm(list=c('bound_lower','bound_upper','bounds'))
+source("model_setup.R")
 
 # Other characteristics are in 'input' and 'time_arrays', which are fed into
 # the sensitivity analysis call below.
-##==============================================================================
-
-
-##==============================================================================
-## Set up
-##=======
-
-# need the physical model
-#source('run_geocarbF.R')n   # version without the extra uncertainty parameter
-source('run_geocarbF_unc.R') # version with extra `stdev` uncertainty statistical parameter
-
-# needed packages
-library(sensitivity)
-library(sn)
-library(foreach)
-library(doParallel)
-library(lhs)
-
 ##==============================================================================
 
 
@@ -133,6 +72,7 @@ library(lhs)
 ##=======================
 
 ## double the sample size, to generate two independent arrays (Sobol, 2001)
+n_parameters <- length(parnames_calib)
 n_sample <- 2*n_sample
 
 ## scale up to the actual parameter distributions
@@ -251,7 +191,7 @@ export_names <- c('model_forMCMC', 'run_geocarbF', 'age', 'ageN',
 
 n_boot <- .Nboot
 conf <- .confidence
-Ncore <- .Ncore
+if (n_node > 1) {DO_PARALLEL <- TRUE} else {DO_PARALLEL <- FALSE}
 
 ## Actually run the Sobol'
 
@@ -280,7 +220,7 @@ if (!DO_PARALLEL) {
                      ind_expected_const=ind_expected_const, model_ref=model_ref,
                      iteration_threshold=iteration_threshold, data_calib=data_calib,
                      do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center,
-                     par_time_stdev=par_time_stdev, parallel=TRUE, n_core=Ncore,
+                     par_time_stdev=par_time_stdev, parallel=TRUE, n_core=n_node,
                      export_names=export_names, n_boot=n_boot, conf=conf, second=.second))
 }
 
