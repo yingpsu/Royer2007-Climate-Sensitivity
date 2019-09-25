@@ -8,57 +8,18 @@ library('Hmisc')
 
 chains <- NULL
 
-## dPpPUsOlUsn
-load('../output/geocarb_mcmcoutput_dPpPUsOlUsn_10Sep2019.RData')
-niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
-n_parameters <- ncol(amcmc_par1[[1]]$samples)
-n_node000 <- length(amcmc_par1)
-niter.test <- 0
-gr.test <- rep(0, length(niter.test))
-string.mcmc.list <- 'mcmc1'
-for (m in 2:n_node000) {
-    string.mcmc.list <- paste(string.mcmc.list, ', mcmc', m, sep='')
-}
-for (i in 1:length(niter.test)) {
-    for (m in 1:n_node000) {
-        # convert each of the chains into mcmc object
-        eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc_par1[[m]]$samples[(niter.test[i]+1):niter_mcmc,])', sep='')))
-    }
-    eval(parse(text=paste('mcmc_chain_list = mcmc.list(list(', string.mcmc.list , '))', sep='')))
 
-    gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
-}
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+## [1]
+##        dPpPUsOlUsn
 appen <- "dPpPUsOlUsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-## dPpPUsLlUsn
-load('../output/geocarb_mcmcoutput_dPpPUsLlUsn_11Sep2019.RData')
+datestamp <- "10Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -74,38 +35,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [2]
+##        dPpPUsLlUsn
 appen <- "dPpPUsLlUsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-
-## dPpPUsRlUsn
-load('../output/geocarb_mcmcoutput_dPpPUsRlUsn_10Sep2019.RData')
+datestamp <- "11Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -121,38 +72,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [3]
+##        dPpPUsRlUsn
 appen <- "dPpPUsRlUsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-
-## dPpPUsRlMsn
-load('../output/geocarb_mcmcoutput_dPpPUsRlMsn_10Sep2019.RData')
+datestamp <- "10Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -168,38 +109,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [4]
+##        dPpPUsRlMsn
 appen <- "dPpPUsRlMsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-
-## dFpPUsRlMsn
-load('../output/geocarb_mcmcoutput_dFpPUsRlMsn_10Sep2019.RData')
+datestamp <- "10Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -215,38 +146,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [5]
+##        dFpPUsRlMsn
 appen <- "dFpPUsRlMsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-
-## dFpPUsRlUsn
-load('../output/geocarb_mcmcoutput_dFpPUsRlUsn_15Sep2019.RData')
+datestamp <- "10Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -262,45 +183,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [6]
+##        dFpPUsRlUsn
 appen <- "dFpPUsRlUsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-
-## dPpAUsRlMsn
-load('../output/geocarb_mcmcoutput_dPpAUsRlMsn_13Sep2019.RData')
-# chains 2 and 4, 5 are getting stuck in local maxima -- get rid of them
-# (alternatively, could just continue the chains for long enough and still use
-# them (they start mixing after brief stuck periods), but for time's sake, just
-# dropping them)
-amcmc_par1[[5]] <- NULL
-amcmc_par1[[4]] <- NULL
-amcmc_par1[[2]] <- NULL
+datestamp <- "15Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -316,38 +220,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [7]
+##        dPpAUsRlMsn
 appen <- "dPpAUsRlMsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
-
-
-## dFpAUsRlUsn
-load('../output/geocarb_mcmcoutput_dFpAUsRlUsn_18Sep2019.RData')
+datestamp <- "13Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -363,53 +257,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[(niter.test[i]+1):niter_mcmc,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[(niter.test[i]+1):niter_mcmc,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*(niter_mcmc-niter.test[1])/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [8]
+##        dFpAUsRlUsn
 appen <- "dFpAUsRlUsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=niter.test[1], to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=niter.test[1], to=niter_mcmc, by=maxlag),])}
-
-
-# subchain testing
-
-length_subchains <- 5e5
-subchains_per_chain <- floor(niter_mcmc/length_subchains)
-subchains <- vector('list', n_node000*subchains_per_chain)
-
-
-
-
-
-## dFpAUsRlMsn
-load('../output/geocarb_mcmcoutput_dFpAUsRlMsn_11Sep2019.RData')
-# chains 1 getting stuck, mixing poorly in local maxima -- get rid of them
-# (alternatively, could just continue the chains for long enough and still use
-# them (they start mixing after brief stuck periods), but for time's sake, just
-# dropping them)
-amcmc_par1[[1]] <- NULL
+datestamp <- "18Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -425,38 +294,28 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:1) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[(niter.test[i]+1):niter_mcmc,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[(niter.test[i]+1):niter_mcmc,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*(niter_mcmc-niter.test[1])/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [9]
+##        dFpAUsRlMsn
 appen <- "dFpAUsRlMsn"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=niter.test[1], to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=niter.test[1], to=niter_mcmc, by=maxlag),])}
-
-
-## dFpAUsRlMnm
-load('../output/geocarb_mcmcoutput_dFpAUsRlMnm_18Sep2019.RData')
+datestamp <- "19Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
 n_parameters <- ncol(amcmc_par1[[1]]$samples)
 n_node000 <- length(amcmc_par1)
+
+# burn-in
 niter.test <- 0
 gr.test <- rep(0, length(niter.test))
 string.mcmc.list <- 'mcmc1'
@@ -472,31 +331,52 @@ for (i in 1:length(niter.test)) {
 
     gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
 }
-print(gr.test)
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-for (m in 1:n_node000) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(amcmc_par1[[m]]$samples[,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
-print(maxlag)
-if(gr.test < 1.1) {print(paste("CONVERGED. Have about ",n_node000*niter_mcmc/maxlag," samples"))} else {print("NOT CONVERGED.")}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
+
+
+## [10]
+##        dFpAUsRlMnm
 appen <- "dFpAUsRlMnm"
-chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),]
-for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlag),])}
+datestamp <- "18Sep2019"
+##
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
+niter_mcmc <- nrow(amcmc_par1[[1]]$samples)
+n_parameters <- ncol(amcmc_par1[[1]]$samples)
+n_node000 <- length(amcmc_par1)
+
+# burn-in
+niter.test <- 0
+gr.test <- rep(0, length(niter.test))
+string.mcmc.list <- 'mcmc1'
+for (m in 2:n_node000) {
+    string.mcmc.list <- paste(string.mcmc.list, ', mcmc', m, sep='')
+}
+for (i in 1:length(niter.test)) {
+    for (m in 1:n_node000) {
+        # convert each of the chains into mcmc object
+        eval(parse(text=paste('mcmc',m,' <- as.mcmc(amcmc_par1[[m]]$samples[(niter.test[i]+1):niter_mcmc,])', sep='')))
+    }
+    eval(parse(text=paste('mcmc_chain_list = mcmc.list(list(', string.mcmc.list , '))', sep='')))
+
+    gr.test[i] <- as.numeric(gelman.diag(mcmc_chain_list, autoburnin=FALSE)[2])
+}
+
+# thinning
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
+
+# process, and report out
+chains[[appen]] <- amcmc_par1[[1]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[1]),]
+for (m in 2:n_node000) {chains[[appen]] <- rbind(chains[[appen]], amcmc_par1[[m]]$samples[seq(from=1, to=niter_mcmc, by=maxlags[m]),])}
+if(gr.test < 1.1) {print(paste("CONVERGED. Have ",nrow(chains[[appen]])," samples"))} else {print("NOT CONVERGED.")}
 
 
 # saving for now to work on something else
@@ -660,36 +540,52 @@ dev.off()
 
 library(manipulate)
 
-par(mfrow=c(2,1))
+par(mfrow=c(2,1), mai=c(.8,.8,.1,.1))
 manipulate(
-    {if ((substr(exp1, 2,2)=="F") | (substr(exp2, 2,2)=="F")) {data_calib <- data_calib_f2017} else {data_calib <- data_calib_pr2011}
-    plot(-time, log10(model_experiment_quantiles[[exp1]][,'0.5']), type='l', xlim=c(-450,0), ylim=c(2,log10(6000)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-    points(-data_calib$age, log10(data_calib$co2), pch=4, cex=0.4, lwd=.4)
-    for (ii in 1:nrow(data_calib)) {
-        arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-        if(nrow(data_calib)==nrow(data_calib_f2017)) {arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)}
-    }
-    polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[exp2]][,'0.025'],rev(model_experiment_quantiles[[exp2]][,'0.975']))), col=rgb(.7,.2,.4,.5), border=NA)
-    lines(-time, log10(model_experiment_quantiles[[exp2]][,'0.5']), lwd=1.5, lty=5, col=rgb(.6,.2,.6))
-    polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[exp1]][,'0.025'],rev(model_experiment_quantiles[[exp1]][,'0.975']))), col=rgb(.2,.6,.6,.5), border=NA)
-    lines(-time, log10(model_experiment_quantiles[[exp1]][,'0.5']), lwd=1.5, col=rgb(.2,.6,.75))
-    mtext(ee, side=3, cex=0.8)
-    axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
-    mtext('Time [Myr ago]', side=1, line=2.1, cex=0.8)
-    ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+    {
+        runname <- ""
+        if (dataset=="dF") {data_calib <- data_calib_f2017} else if (dataset=="dP") {data_calib <- data_calib_pr2011}
+        runname <- paste(runname, dataset, sep="")
+        runname <- paste(runname, parameters, sep="")
+        runname <- paste(runname, seafloor_spreading, sep="")
+        runname <- paste(runname, likelihood, sep="")
+        runname <- paste(runname, kernels, sep="")
+        exp1 <- "pr2011"
+        exp2 <- runname; print(runname)
+        if ((substr(exp1, 2,2)=="F") | (substr(exp2, 2,2)=="F")) {data_calib <- data_calib_f2017} else {data_calib <- data_calib_pr2011}
+        plot(-time, log10(model_experiment_quantiles[[exp1]][,'0.5']), type='l', xlim=c(-450,0), ylim=c(2,log10(6000)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+        points(-data_calib$age, log10(data_calib$co2), pch=4, cex=0.4, lwd=.4)
+        for (ii in 1:nrow(data_calib)) {
+            arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+            if(nrow(data_calib)==nrow(data_calib_f2017)) {arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)}
+        }
+        polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[exp2]][,'0.025'],rev(model_experiment_quantiles[[exp2]][,'0.975']))), col=rgb(.7,.2,.4,.5), border=NA)
+        lines(-time, log10(model_experiment_quantiles[[exp2]][,'0.5']), lwd=1.5, lty=5, col=rgb(.6,.2,.6))
+        polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[exp1]][,'0.025'],rev(model_experiment_quantiles[[exp1]][,'0.975']))), col=rgb(.2,.6,.6,.5), border=NA)
+        lines(-time, log10(model_experiment_quantiles[[exp1]][,'0.5']), lwd=1.5, col=rgb(.2,.6,.75))
+        mtext(ee, side=3, cex=0.8)
+        axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+        mtext('Time [Myr ago]', side=1, line=2.1, cex=0.8)
+        ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
 
-    axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
-    axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
-    mtext(expression('CO'[2]*' [ppmv]'), side=2, line=3, cex=0.8)
+        axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+        axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+        mtext(expression('CO'[2]*' [ppmv]'), side=2, line=3, cex=0.8)
 
 
-    legend(-390, log10(6600), c(paste('95% range',exp2), paste('95% range',exp1)), pch=c(15,15), col=c(rgb(.7,.2,.4,.5), rgb(.2,.6,.6,.5)), cex=.8, bty='n')
-    legend(-180, log10(6600), c('',''), pch=c(NA,4), col=c('black','black'), cex=.8, bty='n')
-    legend(-180, log10(6600), c('Median','Data'), pch=c('-',NA), col=c('black','black'), cex=.8, bty='n')
+        legend(-390, log10(6600), c(paste('95% range',exp2), paste('95% range',exp1)), pch=c(15,15), col=c(rgb(.7,.2,.4,.5), rgb(.2,.6,.6,.5)), cex=.8, bty='n')
+        legend(-180, log10(6600), c('',''), pch=c(NA,4), col=c('black','black'), cex=.8, bty='n')
+        legend(-180, log10(6600), c('Median','Data'), pch=c('-',NA), col=c('black','black'), cex=.8, bty='n')
 
-    minor.tick(nx=5, ny=0, tick.ratio=0.5)},
-    exp1 = picker("dPpPUsOlUsn", "dPpPUsLlUsn", "dPpPUsRlUsn", "dPpPUsRlMsn", "dFpPUsRlMsn", "dFpPUsRlUsn", "dPpAUsRlMsn", "dFpAUsRlMsn", "dFpAUsRlMnm", "pr2011"),
-    exp2 = picker("dPpPUsOlUsn", "dPpPUsLlUsn", "dPpPUsRlUsn", "dPpPUsRlMsn", "dFpPUsRlMsn", "dFpPUsRlUsn", "dPpAUsRlMsn", "dFpAUsRlMsn", "dFpAUsRlMnm", "pr2011"))
+        minor.tick(nx=5, ny=0, tick.ratio=0.5)},
+    dataset = picker("Park and Royer [2011]" = "dP", "Foster et al [2017]" = "dF"),
+    parameters = picker("Park and Royer [2011]" = "pPU", "All" = "pAU"),
+    seafloor_spreading = picker("Original" = "sO", "Lenton et al [2018]" = "sL", "Domeier and Torsvik [2019]" = "sR"),
+    likelihood = picker("Unimodal" = "lU", "Mixture" = "lM"),
+    kernels = picker("Skew-normal" = "sn", "Normal" = "nm"))
+
+    #exp1 = picker("dPpPUsOlUsn", "dPpPUsLlUsn", "dPpPUsRlUsn", "dPpPUsRlMsn", "dFpPUsRlMsn", "dFpPUsRlUsn", "dPpAUsRlMsn", "dFpAUsRlMsn", "dFpAUsRlMnm", "pr2011"),
+    #exp2 = picker("dPpPUsOlUsn", "dPpPUsLlUsn", "dPpPUsRlUsn", "dPpPUsRlMsn", "dFpPUsRlMsn", "dFpPUsRlUsn", "dPpAUsRlMsn", "dFpAUsRlMsn", "dFpAUsRlMnm", "pr2011"))
 
 
 

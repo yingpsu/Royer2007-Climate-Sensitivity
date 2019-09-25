@@ -26,10 +26,10 @@ setwd('~/work/codes/GEOCARB/R')
 ##==============================================================================
 ##==============================================================================
 
-param_choice <- 'PR2011_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
-data_choice <- 'PR2011'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
-lhood_choice <- 'unimodal'  # Mixture model ("mixture") or unimodal ("unimodal")?
-fSR_choice <- 'PR2011'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
+param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
+data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
+lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
+fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
 niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
@@ -106,7 +106,7 @@ if (substr(param_choice,1,6)=="PR2011") {
 # as though all were being calibrated, for getting the component names to
 # initialize parameters if calibrating using the reduced PR2011 set.
 if (DO_PARAM_INIT) {
-  filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all_var.csv'
+  filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_all_stdev.csv'
   source('parameterSetup_tvq.R')
   parnames_calib_all <- parnames_calib
 }
@@ -277,7 +277,8 @@ amcmc_extend1 <- MCMC.add.samples(amcmc_out1, niter_extend,
                                 ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                                 iteration_threshold=iteration_threshold,
                                 loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                                do_sample_tvq=TRUE, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
+                                do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
+                                upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
 tend <- proc.time()
 chain1 <- amcmc_extend1$samples
 amcmc_out1 <- amcmc_extend1

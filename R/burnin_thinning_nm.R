@@ -1,13 +1,13 @@
 ##==============================================================================
-## burnin_thinning_normal.R
+## burnin_thinning_nm.R
 ##
-## For normal distribution supplementary experiment
+## For the normal kernel suppl. experiment, computes the Gelman and Rubin (1992)
+## potential scale reduction factor to diagnose Markov chain convergence, chops
+## off for burn-in from the set of parallel chains, computes the autocorrelation
+## function (ACF) for each parameter of each chain and determines the lag for
+## thinning necessary to maintain an autocorrelation maximum of 0.05.
 ##
-## TODO - UPDATE TO MATCH NEW FILE-WRITING FROM CONTROL EXPERIMENT
-## TODO - UPDATE TO MATCH NEW FILE-WRITING FROM CONTROL EXPERIMENT
-## TODO - UPDATE TO MATCH NEW FILE-WRITING FROM CONTROL EXPERIMENT
-##
-## Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 library('coda')
@@ -16,15 +16,17 @@ setwd('~/codes/GEOCARB/R')
 
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 filename_parameters <- paste('../output/processed_mcmc_results_normal_',today,'.RData', sep="")
-filename_processing <- paste('../output/processing_normal_',today,'.RData', sep="")
 
-load('../output/geocarb_mcmcoutput_unc_22Jun2019nm.RData')
+# load up the control experiment results
+appen <- "dFpAUsRlMnm"
+datestamp <- "18Sep2019"
+load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep=''))
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
 USE_ROYER_FSR <- TRUE
-filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
-source('GEOCARB-2014_parameterSetup_tvq.R')
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_all_stdev.csv"
+source('parameterSetup_tvq.R')
 
 ##==============================================================================
 ## Burn in
@@ -58,8 +60,8 @@ if(n_node000 == 1) {
 } else {print('error - n_node000 < 1 makes no sense')}
 
 # Convergence check:
-#> print(gr.test)
-#[1] 1.001434
+#> gr.test
+#[1] 1.003042
 
 # hack off first ? iterations for burn in
 ifirst <- NA
@@ -86,34 +88,16 @@ if(n_node000 > 1) {
 ## Thinning
 ##=========
 
-lmax <- 3000
-cmax <- 0.05
-maxlag <- 0
-
-for (m in 1:n_node000) {
-    for (p in 1:n_parameters) {
-        acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-        idx_low <- which(acf_tmp$acf < cmax)
-        while (length(idx_low)==0) {
-          lmax <- lmax + 200
-          acf_tmp <- acf(chains_burned[[m]][,p], lag.max=lmax, plot=FALSE)
-          idx_low <- which(acf_tmp$acf < cmax)
-        }
-        new <- acf_tmp$lag[idx_low[1]]
-        if (maxlag < new) {
-            print(paste(m,p,"Updating maxlag to",new))
-            maxlag <- new
-        }
-    }
-}
+source("compute_maxlag.R")
+maxlags <- compute_maxlag(chains_burned)
 
 chains_burned_thinned <- chains_burned # initialize
 if(n_node000 > 1) {
   for (m in 1:n_node000) {
-    chains_burned_thinned[[m]] <- chains_burned[[m]][seq(from=1, to=nrow(chains_burned[[m]]), by=maxlag),]
+    chains_burned_thinned[[m]] <- chains_burned[[m]][seq(from=1, to=nrow(chains_burned[[m]]), by=maxlags[m]),]
   }
 } else {
-  chains_burned_thinned <- chains_burned[seq(from=1, to=nrow(chains_burned), by=maxlag),]
+  chains_burned_thinned <- chains_burned[seq(from=1, to=nrow(chains_burned), by=maxlags),]
 }
 
 if (n_node000 > 1) {
@@ -126,7 +110,6 @@ if (n_node000 > 1) {
 }
 
 save(parameters_posterior, file=filename_parameters)
-save.image(file=filename_processing)
 
 ##==============================================================================
 ## End
