@@ -59,6 +59,26 @@ legend(-452, log10(40), c('Data','Likelihood median','95% range','90% range','66
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
+# only the 5-95% range
+pdf(paste(plot.dir,'data_likelihood_withModel_5-95.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
+plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-430,0), ylim=c(0.7,log10(7200)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+grid()
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'05'],rev(likelihood_quantiles[idx_likelihood_ages,'95']))), col='gray70', border=NA)
+lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'50']), lwd=2, lty=1)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, lty=5, col="salmon3")
+points(-data_calib$age, log10(data_calib$co2), pch='x', cex=0.65)
+mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+legend(-428, log10(60), c('Data','Likelihood median','95% range','Model (MLE)'), pch=c(4,NA,15,NA), lty=c(NA,1,NA,2), lwd=c(NA,1.5,NA,1.5), col=c('black','black','gray85','salmon3'), cex=.8, bty='n')
+legend(-428, log10(60), c('Data','Likelihood median','95% range','Model (MLE)'), pch=c(NA,NA,NA,NA), lty=c(NA,1,NA,5), lwd=c(NA,1.5,NA,1.5), col=c('black','black','gray85','salmon3'), cex=.8, bty='n')
+minor.tick(nx=5, ny=0, tick.ratio=0.5)
+dev.off()
+
 
 ##==============================================================================
 # Figure 2. Posterior model ensemble (gray shaded region denotes 5-95% credible
@@ -143,7 +163,10 @@ dev.off()
 
 
 ## Log scale (model and points, with CO2 and age error bars, no likelihood surface, but with PR2011 too)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+
+TODO -- add in model_quantiles_royer
+
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars+Royer14.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
 polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
@@ -165,6 +188,8 @@ legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(4,NA,15), c
 legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
+
+
 
 
 pdf(paste(plot.dir,'model_ensemble_vs_royer_logscale.pdf',sep=''),width=4,height=3,colormodel='cmyk')
@@ -211,14 +236,14 @@ f_gl <- dnorm(x=x_gl, mean=input[row_num,"mean"], sd=(0.5*input[row_num,"two_sig
 # Royer et al 2007:  1.5 and 6.2 deg C (5–95% range), 2.8 best fit
 x_royer2007 <- c(1.6, 2.8, 5.5)
 # Park and Royer 2011 from CSV/Excel table
-x_pr2011 <- pr2011_cdf(c(.05,.5,.95))
+x_pr2011 <- pr2011_icdf(c(.05,.5,.95))
 iglac <- match('GLAC',parnames_calib)
 x_thisstudy <- quantile(parameters[,ics], c(.05,.5,.95))  # 3.148759 4.203719 5.621429
 x_glac <- quantile(parameters[,ics]*parameters[,iglac], c(.05,.5,.95))  # 5.678216  9.289884 14.268706
 x_norm <- quantile(parameters_nm[,ics], c(.05,.5,.95))  # 3.273916 4.396285 5.846267
 x_ktc2017 <- c(3.7, 5.6, 7.5)
 
-offset <- 0.06
+offset <- 0.08
 
 pdf(paste(plot.dir,'deltaT2X.pdf',sep=''),width=4,height=3, colormodel='cmyk', pointsize=11)
 par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
@@ -234,11 +259,11 @@ mtext('Density', side=2, line=0.3)
 arrows(1, 0, 1, .85+offset, length=0.08, angle=30, code=2)
 axis(1, at=seq(0,10))
 minor.tick(nx=4, ny=0, tick.ratio=0.5)
-y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, lwd=1.7, length=0.05, angle=90, code=3, col="steelblue"); points(x_thisstudy[2], y0, pch=16, col="steelblue")
-#y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, length=0.05, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
-y1 <- 0.35*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, length=0.05, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
-#y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.05, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
-legend(4.93,1, c('5-95% range, PR2011','PR2011','5-95% range, this study','Posterior, this study','Prior, both studies'),
+y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, lwd=1.5, length=0.04, angle=90, code=3, col="steelblue"); points(x_thisstudy[2], y0, pch=16, col="steelblue")
+#y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, lwd=1.5, length=0.04, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
+y1 <- 0.35*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, lwd=1.5, length=0.04, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
+#y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.04, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
+legend(5.1,1.02, c('5-95% range, PR2011','PR2011','5-95% range, this study','Posterior, this study','Prior, both studies'),
        pch=c(15,NA,16,NA,NA), lty=c(1,2,1,1,3), col=c("black","black","steelblue","steelblue","steelblue"), bty='n', lwd=1.7, cex=0.9)
 dev.off()
 
@@ -313,12 +338,12 @@ mtext(expression(CO[2]~(ppmv)), side=1, line=2.4)
 mtext('Density', side=2, line=0.3)
 mtext("a.", side=3, line=-0.7, cex=1, adj=-0.06, font=2)
 # 140 Myr
-plot(mm_example140$co2, mm_example140$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,8e-4),
+plot(mm_example50$co2, mm_example50$fit, type='l', lwd=2, xlim=c(-70,5000), ylim=c(0,2.5e-3),
      xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', axes=FALSE)
-text(3000, 6.8e-4, paste('Likelihood surface slice\n at age =',mm_example140$age,'Myr'))
+text(3000, 2e-3, paste('Likelihood surface slice\n at age =',mm_example50$age,'Myr'))
 axis(1, at=seq(0,5000,200), labels=rep('',length(seq(0,5000,200))), col='gray')
 axis(1, at=seq(0,5000,1000), labels=c('0','1000','2000','3000','4000','5000'))
-arrows(0, 0, 0, 7.7e-4, length=0.08, angle=30, code=2)
+arrows(0, 0, 0, 2.4e-3, length=0.08, angle=30, code=2)
 mtext(expression(CO[2]~(ppmv)), side=1, line=2.4)
 mtext('Density', side=2, line=0.3)
 mtext("b.", side=3, line=-0.7, cex=1, adj=-0.06, font=2)

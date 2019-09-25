@@ -165,7 +165,8 @@ deltaT2Xglac_density <- density(parameters[,ics]*parameters[,iglac], from=0, to=
 # Royer et al 2007:  1.5 and 6.2 deg C (5–95% range)
 # Park and Royer 2011:
 pr2011_dat <- read.csv('../input_data/ParkRoyer2011_Fig3_85varred.csv')
-pr2011_cdf <- approxfun(pr2011_dat[,4], pr2011_dat[,1])
+pr2011_cdf <- approxfun(pr2011_dat[,1], pr2011_dat[,4])
+pr2011_icdf <- approxfun(pr2011_dat[,4], pr2011_dat[,1])
 pr2011_pdf <- approxfun(pr2011_dat[,1], pr2011_dat[,3])
 
 deltaT2X_density_pr2011 <- vector('list', 2); names(deltaT2X_density_pr2011) <- c('x','y')
@@ -173,7 +174,8 @@ deltaT2X_density_pr2011$x <- deltaT2X_density$x
 deltaT2X_density_pr2011$y <- pr2011_pdf(deltaT2X_density_pr2011$x)
 
 # Park and Royer 2011 have about 16% probability above deltaT2X = 6 deg C
-print(pr2011_cdf(0.8443))
+print(1-pr2011_cdf(6))
+print(1-pr2011_cdf(7))
 
 ##======================================
 
@@ -207,6 +209,9 @@ print("")
 
 Pr_CS_above_6 <- length(which(parameters[,which(parnames_calib=="deltaT2X")] > 6)) / nrow(parameters)
 print(paste("Pr(deltaT2X > 6 degC) = ",Pr_CS_above_6, sep=""))
+print("")
+Pr_CS_above_7 <- length(which(parameters[,which(parnames_calib=="deltaT2X")] > 7)) / nrow(parameters)
+print(paste("Pr(deltaT2X > 7 degC) = ",Pr_CS_above_7, sep=""))
 print("")
 
 Pr_CS_below_2.5 <- length(which(parameters[,which(parnames_calib=="deltaT2X")] < 2.5)) / nrow(parameters)
@@ -243,12 +248,12 @@ mm_example240$co2 <- seq(from=1,to=10000,by=1)
 mm_example240$fit <- likelihood_fit[[idx]](mm_example240$co2)
 
 
-mm_example140 <- vector('list', 3)
-names(mm_example140) <- c('co2','fit','age')
-idx <- which(age==140)
-mm_example140$age <- age[idx]
-mm_example140$co2 <- seq(from=1,to=10000,by=1)
-mm_example140$fit <- likelihood_fit[[idx]](mm_example140$co2)
+mm_example50 <- vector('list', 3)
+names(mm_example50) <- c('co2','fit','age')
+idx <- which(age==50)
+mm_example50$age <- age[idx]
+mm_example50$co2 <- seq(from=1,to=10000,by=1)
+mm_example50$fit <- likelihood_fit[[idx]](mm_example50$co2)
 
 
 #plot(mm_example240$co2, mm_example240$fit, type='l', xlab='CO2 (ppmv)', ylab='density')

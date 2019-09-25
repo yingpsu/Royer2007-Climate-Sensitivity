@@ -270,6 +270,10 @@ sobol_model_par <- function(parameters, sens,
     stopCluster(cl)
 
     finalOutput[which(is.infinite(finalOutput))] <- NA
+
+    # center the final output, or risk conditioning problems and negative indices!
+    finalOutput <- finalOutput - mean(finalOutput, na.rm=TRUE)
+
     return(finalOutput)
   }
 }
