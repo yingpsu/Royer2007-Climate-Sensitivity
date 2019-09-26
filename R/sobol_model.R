@@ -136,6 +136,10 @@ sobol_model <- function(parameters, sens,
       }
     }
   }
+
+  # center the final output, or risk conditioning problems and negative indices!
+  model_sens <- model_sens - mean(model_sens, na.rm=TRUE)
+
   return(model_sens)
 }
 
