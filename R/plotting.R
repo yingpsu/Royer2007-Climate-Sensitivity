@@ -8,14 +8,12 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
-load('../output/analysis_24Sep2019.RData')
+load('../output/analysis_30Sep2019.RData')
 
 library(Hmisc)
 
 ##==============================================================================
 # Figure 5 (Methods). Observations and fitted likelihood surface.
-
-source('likelihood_surface_quantiles.R')
 
 pdf(paste(plot.dir,'data_likelihood.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
@@ -84,9 +82,6 @@ dev.off()
 # Figure 2. Posterior model ensemble (gray shaded region denotes 5-95% credible
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
-
-#model_quantiles[,'maxpost'] <- model_out[,which.max(lpost_out)]
-idx_gastaldo <- which(data_calib_all$reference=="Gastaldo et al., 2014")
 
 
 ## Log scale (model and points, no likelihood surface)
@@ -162,15 +157,16 @@ minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
 
-## Log scale (model and points, with CO2 and age error bars, no likelihood surface, but with PR2011 too)
+## Log scale (model and points, with CO2 and age error bars, no likelihood surface, but with Royer et al 2014 too)
+## MS FIGURE 2
 
-TODO -- add in model_quantiles_royer
-
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars+Royer14.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars+Royer14.pdf',sep=''),width=4,height=3,colormodel='cmyk', pointsize=11)
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
+polygon(-c(time,rev(time)), log10(c(model_quantiles_royer[,'q025'],rev(model_quantiles_royer[,'q975']))), col=rgb(.6,.2,.6,.5), border=NA)
+lines(-time, log10(model_quantiles_royer[,'co2']), lwd=2, lty=5, col=rgb(.6,.2,.6))
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.2,.6,.6,.5), border=NA)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, col=rgb(.2,.6,.6))
 points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
 for (ii in 1:nrow(data_calib)) {
     arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
@@ -178,40 +174,42 @@ for (ii in 1:nrow(data_calib)) {
 }
 points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
 points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+mtext('Time [Myr ago]', side=1, line=2.1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'))
 ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
+axis(2, at=ticks, labels=rep('',length(ticks)))
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), las=1)
+legend(-452, log10(55), c('Data'), pch=c(16), col=c('black'), pt.cex=0.8, cex=.6, bty='n')
+legend(-452, log10(40), c('95% range,\n this work','95% range,\n Royer et al [2014]'), pch=c(15,15), col=c(rgb(.2,.6,.6,.5),rgb(.6,.2,.6,.5)), pt.cex=1.2, cex=.6, bty='n', y.intersp=1.6)
+legend(-452, log10(40), c('95% range,\n this work','95% range,\n Royer et al [2014]'), pch=c('-','-'), col=c(rgb(.2,.6,.6),rgb(.6,.2,.6)), cex=.6, bty='n', y.intersp=1.6)
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
+## Log scale (model and points, with CO2 and age error bars, no likelihood surface, but with Royer et al 2014 too)
+## MS FIGURE SOM
 
-
-
-pdf(paste(plot.dir,'model_ensemble_vs_royer_logscale.pdf',sep=''),width=4,height=3,colormodel='cmyk')
+pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars+likelihood.pdf',sep=''),width=4,height=3,colormodel='cmyk', pointsize=11)
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-points(-data_calib$age, log10(data_calib$co2), pch=4, cex=0.4, lwd=.4)
+polygon(-c(likelihood_ages,rev(likelihood_ages)), log10(c(likelihood_quantiles[idx_likelihood_ages,'025'],rev(likelihood_quantiles[idx_likelihood_ages,'975']))), col=rgb(.6,.2,.6,.5), border=NA)
+lines(-time[idx_likelihood_ages], log10(likelihood_quantiles[idx_likelihood_ages,'50']), lwd=2, lty=5, col=rgb(.6,.2,.6))
+polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.2,.6,.6,.5), border=NA)
+lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, col=rgb(.2,.6,.6))
+points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
 for (ii in 1:nrow(data_calib)) {
     arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
     arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
 }
-polygon(-c(time,rev(time)), log10(c(model_quantiles_royer[,'q025'],rev(model_quantiles_royer[,'q975']))), col=rgb(.6,.2,.6,.5), border=NA)
-lines(-time, log10(model_quantiles_royer[,'co2']), lwd=2, lty=5, col=rgb(.6,.2,.6))
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.2,.6,.6,.5), border=NA)
-lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, col=rgb(.2,.6,.6))
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
+mtext('Time [Myr ago]', side=1, line=2.1)
+mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2)
+axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'))
 ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
+axis(2, at=ticks, labels=rep('',length(ticks)))
+axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), las=1)
+legend(-452, log10(55), c('Data'), pch=c(16), col=c('black'), pt.cex=0.8, cex=.6, bty='n')
+legend(-452, log10(40), c('95% range,\n this work','95% range,\n likelihood fcn'), pch=c(15,15), col=c(rgb(.2,.6,.6,.5),rgb(.6,.2,.6,.5)), pt.cex=1.2, cex=.6, bty='n', y.intersp=1.6)
+legend(-452, log10(40), c('95% range,\n this work','95% range,\n likelihood fcn'), pch=c('-','-'), col=c(rgb(.2,.6,.6),rgb(.6,.2,.6)), cex=.6, bty='n', y.intersp=1.6)
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
@@ -372,55 +370,28 @@ legend(2500, 0.0019, c('Likelihood','Priors','Priors, ESS-GYM only','Precal','Po
 
 TODO
 
-## SOM figure with our ensemble and that of the supplmeental PR2011 experiment
-## (only ACT, FERT, GYM, LIFE, deltaT2X and GLAC  parameters calibrated)
 
 
-## TODO -- need to modify this and the analysis.R script to process the results
-## of the many supplemental experiments and get a list of the figures to include
-## in SOM
+
+##==============================================================================
 
 
-## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_PR2011.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', col='white')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.7,.7,.7,.6), border=NA)
-polygon(-c(time,rev(time)), log10(c(model_quantiles_pr2011[,'q025'],rev(model_quantiles_pr2011[,'q975']))), col=rgb(.94, .6,.6,.6), border=NA)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-457, log10(35), c('95% range, all 69 parameters','95% range, only 6 PR2011 parameters'), pch=c(15,15), col=c('gray','coral'), cex=.75, bty='n')
-minor.tick(nx=5, ny=0, tick.ratio=0.5)
+
+##==============================================================================
+# SOM figure -- quantiles of deltaT2X as sample size increases
+#===========
+
+pdf(file='../figures/deltaT2X_quantiles.pdf', width=3.5, height=3, colormodel="cmyk", pointsize=11)
+par(mfrow=c(1,1), mai=c(.7,.7,.2,.3))
+plot(sample_sizes, sample_quantiles[,1], type='l', ylim=c(0,8), lty=2, xlab='', ylab='')
+lines(sample_sizes, sample_quantiles[,3], lty=2)
+lines(sample_sizes, sample_quantiles[,2])
+grid()
+mtext("Sample size", side=1, line=2.2)
+mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=2, line=2.2)
 dev.off()
 
-
-## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
-## for experiment with the unimodal likelihood surface, fitted as in
-## Park and Royer 2011
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_PR2011unimodal.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(9000)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n', col='white')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col=rgb(.7,.7,.7,.7), border=NA)
-polygon(-c(time,rev(time)), log10(c(model_quantiles_pr2011uni[,'q025'],rev(model_quantiles_pr2011uni[,'q975']))), col=rgb(.94, .6,.6,.7), border=NA)
-points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
-#for (ii in 1:nrow(data_calib)) {
-#    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-#    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-#}
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-447, log10(32), c('95% range, all 69 parameters','95% range, PR2011 parameter',' and likelihood function'), pch=c(15,15,NA), col=c('gray','coral',NA), cex=.65, bg="white", box.col="white", box.lwd=0)
-minor.tick(nx=5, ny=0, tick.ratio=0.5)
-dev.off()
-
+##==============================================================================
 
 
 ##==============================================================================

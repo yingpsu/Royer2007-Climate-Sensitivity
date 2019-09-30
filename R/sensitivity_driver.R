@@ -21,7 +21,7 @@ library(lhs)
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 100000 # note this will be doubled if using LHS precalibration
+n_sample <- 10000 # note this will be doubled if using LHS precalibration
 .Nboot <- 1000
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI

@@ -16,13 +16,11 @@ filename_analysis <- paste('../output/analysis_',today,'.RData', sep="")
 .upper_bound_co2 <- 50000
 .lower_bound_co2 <- 0
 
+chains <- readRDS("../output/chains_analysis_30Sep2019.rds")
 # normal distribution results
-load('../output/processed_mcmc_results_normal_24Sep2019.RData')
-parameters_nm <- parameters_posterior
+parameters_nm <- chains$dFpAUsRlMnm
 # control results
-load('../output/processed_mcmc_results_24Sep2019.RData')
-parameters <- parameters_posterior
-rm(list=c('parameters_posterior'))
+parameters <- chains$dFpAUsRlMsn
 n_ensemble <- nrow(parameters)
 n_parameter <- ncol(parameters)
 
@@ -108,6 +106,9 @@ lpost_out <- sapply(X=1:n_ensemble,
                                       par_time_stdev=par_time_stdev)})
 
 model_quantiles[,'maxpost'] <- model_out[,which.max(lpost_out)]
+
+# needed for plotting
+idx_gastaldo <- which(data_calib_all$reference=="Gastaldo et al., 2014")
 
 # get a reference model, uncalibrated
 
@@ -467,7 +468,38 @@ model_quantiles_nm[,'maxpost'] <- model_out_nm[,which.max(lpost_out_nm)]
 deltaT2X_density_nm <- density(parameters_nm[,ics], from=0, to=10)
 
 #plot(deltaT2X_density$x, deltaT2X_density$y, type='l', lwd=2); lines(deltaT2X_density_nm$x, deltaT2X_density_nm$y, type='l', lty=2, lwd=2)
+##==============================================================================
 
+
+
+##==============================================================================
+# SOM figure -- likelihood surface and model quantiles
+#===========
+
+source('likelihood_surface_quantiles.R')
+
+##==============================================================================
+
+
+
+##==============================================================================
+# SOM figure -- quantiles of deltaT2X as sample size increases
+#===========
+
+sample_sizes <- seq(from=250, to=nrow(chains$dFpAUsRlMsn), by=250)
+sample_quantiles <- mat.or.vec(length(sample_sizes), 3)
+for (i in 1:length(sample_sizes)) {
+  sample_quantiles[i,] <- quantile(chains$dFpAUsRlMsn[1:sample_sizes[i], 10], c(.05,.5,.95))
+}
+
+##==============================================================================
+
+
+
+
+
+
+##======================================
 save.image(file=filename_analysis)
 ##======================================
 

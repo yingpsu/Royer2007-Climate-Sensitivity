@@ -13,7 +13,7 @@
   1. Continue that process until the chain is sufficiently spun up.
   1. The batch scripts `rgeocarb_mcmc_aci.pbs` and `rgeocarb_mcmc_all.pbs` are good examples of submission scripts for working on high-performance computing systems (experiments in this study were performed on the Penn State ACI machines)
   1. Once the chains are sufficiently converged (by eye and/or by Gelman and Rubin diagnostic (1992)), run a set of parallel chains (changing nnode_mcmc in calib_driver_sn-mixture.R)
-1. Chop off for burn-in and thin the chains to maintain independent MCMC samples (burnin_thinning.R)
+1. Chop off for burn-in and thin the chains to maintain independent MCMC samples (process_results.R). This will also produce two supplemental plots examining the distributions of ESS and the model hindcasts for each of the experiments.
 1. Run and model ensemble and compute relevant statistics (analysis.R)
 1. Make plots (plotting.R and plotting_sobol.R)
 
