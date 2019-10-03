@@ -33,7 +33,7 @@ input <- read.csv(filename.calibinput)
 #stable isotopic compositions ("d" prefix) are in per mil units
 if(USE_LENTON_FSR) {
   time_arrays <- read.csv("../input_data/GEOCARB_input_arrays_Lenton.csv")
-} else if (USE_ROYER_FSR) {
+} else if (USE_DT2019_FSR) {
   time_arrays <- read.csv("../input_data/GEOCARB_input_arrays_NewDegassing.csv")
 } else {
   time_arrays <- read.csv("../input_data/GEOCARB_input_arrays.csv")
@@ -51,6 +51,10 @@ if (l_Godderis) {
 	  time_arrays[,paste('e',arrays_Godderis[i],sep='')] <- time_arrays[,paste(paste('e',arrays_Godderis[i],sep=''),'Godderis',sep='_')]
   }
 }
+
+# normalization of fAw_fA (as per Krause et al, 2018; doi: 10.1038/s41467-018-06383-y)
+time_arrays[,"fAw_fA"] <- time_arrays[,"fAw_fA"]/time_arrays[nrow(time_arrays),"fAw_fA"]
+time_arrays[,'fAw_fA_Godderis'] <- time_arrays[,'fAw_fA_Godderis']/time_arrays[58,'fAw_fA_Godderis']
 
 ind_time <- which(input$type=='time array')
 ind_const <- which(input$type=='constant')

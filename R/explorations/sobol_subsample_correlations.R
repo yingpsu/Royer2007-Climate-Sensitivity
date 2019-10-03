@@ -17,7 +17,7 @@ n_iter <- 10
 n_sample <- 1000
 DO_SAMPLE_TVQ <- TRUE  # sample time series uncertainty by CDF parameters?
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+USE_DT2019_FSR <- TRUE
 
 # get the default parameter values
 filename.calibinput <- '../input_data/GEOCARB_input_summaries_calib_unc.csv'

@@ -36,7 +36,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
                         c("liverworts", TRUE) )
 
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- FALSE
+USE_DT2019_FSR <- FALSE
 
 # do initialization of parameters & covariance matrix from previous calibration?
 DO_PARAM_INIT <- TRUE   # if true, set the two file names below

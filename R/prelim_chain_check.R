@@ -24,7 +24,7 @@ parameters <- rbind(parameters, amcmc_out1$samples)
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+USE_DT2019_FSR <- TRUE
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
 source('parameterSetup_tvq.R')
 
@@ -117,7 +117,7 @@ for (m in 2:2) {
 dist <- 'sn'
 DO_SAMPLE_TVQ <- TRUE
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+USE_DT2019_FSR <- TRUE
 .upper_bound_co2 <- 50000
 .lower_bound_co2 <- 0
 

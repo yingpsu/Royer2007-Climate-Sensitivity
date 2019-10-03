@@ -57,7 +57,7 @@ DO_WRITE_RDATA  <- TRUE
 DO_WRITE_NETCDF <- FALSE
 DO_PARAM_INIT <- FALSE # do initialization of parameters & covariance matrix from previous calibration?
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+USE_DT2019_FSR <- TRUE
 
 filename.calibinput <- paste('../input_data/GEOCARB_input_summaries_calib_',appen,'.csv', sep='')
 filename.covarinit <- "../output/covar_init_unc-sd10_22Jun2019.rds"

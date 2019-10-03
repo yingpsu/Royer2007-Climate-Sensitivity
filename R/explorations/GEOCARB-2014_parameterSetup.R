@@ -31,7 +31,7 @@ input <- read.csv(filename.calibinput)
 #stable isotopic compositions ("d" prefix) are in per mil units
 if(USE_LENTON_FSR) {
   time_arrays <- read.csv("../input_data/GEOCARB_input_arrays_Lenton.csv")
-} else if (USE_ROYER_FSR) {
+} else if (USE_DT2019_FSR) {
   time_arrays <- read.csv("../input_data/GEOCARB_input_arrays_NewDegassing.csv")
 } else {
   time_arrays <- read.csv("../input_data/GEOCARB_input_arrays.csv")

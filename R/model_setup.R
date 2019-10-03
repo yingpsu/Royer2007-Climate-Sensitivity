@@ -24,13 +24,13 @@ filename.stdevinit <- "../output/geocarb_mcmcoutput_stdevSpinup_07Sep2019.RData"
 
 if (fSR_choice=="PR2011") {
   USE_LENTON_FSR <- FALSE
-  USE_ROYER_FSR <- FALSE
+  USE_DT2019_FSR <- FALSE
 } else if (fSR_choice=="LENTON") {
   USE_LENTON_FSR <- TRUE
-  USE_ROYER_FSR <- FALSE
+  USE_DT2019_FSR <- FALSE
 } else if (fSR_choice=="ROYER") {
   USE_LENTON_FSR <- FALSE
-  USE_ROYER_FSR <- TRUE
+  USE_DT2019_FSR <- TRUE
 } else {
   print("ERROR: unknown fSR_choice")
 }

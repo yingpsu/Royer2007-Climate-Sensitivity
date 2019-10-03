@@ -24,7 +24,7 @@ load(paste('../output/geocarb_mcmcoutput_',appen,'_',datestamp,'.RData', sep='')
 
 # get and set up the parameters
 USE_LENTON_FSR <- FALSE
-USE_ROYER_FSR <- TRUE
+USE_DT2019_FSR <- TRUE
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_all_stdev.csv"
 source('parameterSetup_tvq.R')
 

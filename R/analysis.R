@@ -37,6 +37,98 @@ source("model_setup.R")
 ##==============================================================================
 
 
+
+##==============================================================================
+## Further analysis of chains, formerly in process_results.R
+
+##
+## compute ESS quantiles
+##
+
+quantiles_i_want <- c(.025, 0.05, 0.17, 0.25, 0.5, 0.75, 0.83, 0.95, 0.975)
+
+ess <- vector('list', 2)
+names(ess) <- c("ess", "ess_glac")
+for (ee in names(ess)) {
+  ess[[ee]] <- mat.or.vec(length(chains), length(quantiles_i_want))
+  rownames(ess[[ee]]) <- names(chains)
+  colnames(ess[[ee]]) <- quantiles_i_want
+  for (experiment in names(chains)) {
+    if (ncol(chains[[experiment]])==7) {
+      idx_ess <- 5
+    } else {
+      idx_ess <- 10
+    }
+    if (ee=="ess") {
+      ess[[ee]][experiment,] <- quantile(chains[[experiment]][,idx_ess], quantiles_i_want)
+    } else {
+      ess[[ee]][experiment,] <- quantile(chains[[experiment]][,idx_ess]*chains[[experiment]][,idx_ess+1], quantiles_i_want)
+    }
+  }
+}
+
+## Get the quantiles from Park and Royer 2011:
+pr2011_dat <- read.csv('../input_data/ParkRoyer2011_Fig3_85varred.csv')
+pr2011_cdf <- approxfun(pr2011_dat[,4], pr2011_dat[,1])
+pr2011_pdf <- approxfun(pr2011_dat[,1], pr2011_dat[,3])
+x_pr2011 <- pr2011_cdf(quantiles_i_want)
+ess$ess <- rbind(x_pr2011, ess$ess)
+
+##
+## compute model quantiles
+##
+
+library(gdata)
+dat <- read.xls("../input_data/GEOCARB_output--both error envelopes_TW.xlsx", sheet="GEOCARB_output_INNER_BANDS")
+model_quantiles_r2014 <- cbind(dat[,"X0.025"], dat[,"CO2"], dat[,"X0.975"])
+colnames(model_quantiles_r2014) <- c('0.025','0.5','0.975')
+
+model_experiment_quantiles <- vector('list', length(chains))
+names(model_experiment_quantiles) <- names(chains)
+for (ee in names(model_experiment_quantiles)) {
+  if(substr(ee, 2, 2)=="P") {data_choice <- "PR2011"
+  } else {data_choice <- "F2017"}
+  if(substr(ee, 4, 4)=="P") {param_choice <- "PR2011_stdev"
+  } else {param_choice <- "all_stdev"}
+  if(substr(ee, 7, 7)=="O") {fSR_choice <- "PR2011"
+  } else if(substr(ee, 7, 7)=="L") {fSR_choice <- "LENTON"
+  } else if(substr(ee, 7, 7)=="R") {fSR_choice <- "ROYER"}
+  if(substr(ee, 9, 9)=="U") {lhood_choice <- "unimodal"
+  } else {lhood_choice <- "mixture"}
+  dist <- substr(ee, 10, 11)
+  source('model_setup.R')
+  if(data_choice=="PR2011") {data_calib_pr2011 <- data_calib
+  } else if(data_choice=="F2017") {data_calib_f2017 <- data_calib}
+  model_out <- sapply(X=1:nrow(chains[[ee]]),
+                FUN=function(k){model_forMCMC(par_calib=chains[[ee]][k,],
+                                              par_fixed=par_fixed0,
+                                              parnames_calib=parnames_calib,
+                                              parnames_fixed=parnames_fixed,
+                                              parnames_time=parnames_time,
+                                              age=age,
+                                              ageN=ageN,
+                                              ind_const_calib=ind_const_calib,
+                                              ind_time_calib=ind_time_calib,
+                                              ind_const_fixed=ind_const_fixed,
+                                              ind_time_fixed=ind_time_fixed,
+                                              ind_expected_time=ind_expected_time,
+                                              ind_expected_const=ind_expected_const,
+                                              iteration_threshold=iteration_threshold,
+                                              do_sample_tvq=DO_SAMPLE_TVQ,
+                                              par_time_center=par_time_center,
+                                              par_time_stdev=par_time_stdev)[,'co2']})
+  model_experiment_quantiles[[ee]] <- mat.or.vec(nr=n_time, nc=3)
+  for (t in 1:n_time) {
+    model_experiment_quantiles[[ee]][t,] <- quantile(model_out[t,], c(.025, .5, .975))
+  }
+  colnames(model_experiment_quantiles[[ee]]) <- c('0.025', '0.5', '0.975')
+}
+model_experiment_quantiles$r2014 <- model_quantiles_r2014
+
+##==============================================================================
+
+
+
 ##==============================================================================
 # Figure 2. Posterior model ensemble (gray shaded region denotes 5-95% credible
 # range), maximum posterior score simulation (solid bold line) and uncalibrated

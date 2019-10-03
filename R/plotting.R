@@ -58,6 +58,7 @@ minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
 # only the 5-95% range
+# MS FIGURE
 pdf(paste(plot.dir,'data_likelihood_withModel_5-95.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-430,0), ylim=c(0.7,log10(7200)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
@@ -83,6 +84,9 @@ dev.off()
 # range), maximum posterior score simulation (solid bold line) and uncalibrated
 # model simulation (dashed line), with proxy data points superimposed (+ markers).
 
+# need a fix for the NAN that results when co2_low for data points is 0
+idx_low <- which(data_calib$co2_low == 0)
+data_calib$co2_low[idx_low] <- 1
 
 ## Log scale (model and points, no likelihood surface)
 pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
@@ -169,11 +173,11 @@ polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles
 lines(-time, log10(model_quantiles[,'maxpost']), lwd=2, col=rgb(.2,.6,.6))
 points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
 for (ii in 1:nrow(data_calib)) {
-    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.25)
+    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.25)
 }
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
+#points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
+#points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
 mtext('Time [Myr ago]', side=1, line=2.1)
 mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2)
 axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'))
@@ -242,6 +246,8 @@ x_norm <- quantile(parameters_nm[,ics], c(.05,.5,.95))  # 3.273916 4.396285 5.84
 x_ktc2017 <- c(3.7, 5.6, 7.5)
 
 offset <- 0.08
+
+## MS FIGURE
 
 pdf(paste(plot.dir,'deltaT2X.pdf',sep=''),width=4,height=3, colormodel='cmyk', pointsize=11)
 par(mfrow=c(1,1), mai=c(.7,.3,.13,.15))
@@ -323,6 +329,8 @@ source('plotting_sobol.R')
 # Figure S2.  Evidence of multi-modality, and dispersion of probability for
 # higher CO2 data points
 
+## MS FIGURE SOM
+
 pdf(paste(plot.dir,'likelihoodslice_SOM.pdf',sep=''),width=4,height=6, colormodel='cmyk', pointsize=11)
 par(mfrow=c(2,1), mai=c(.7,.3,.1,.25))
 # 240 Myr
@@ -347,8 +355,8 @@ mtext('Density', side=2, line=0.3)
 mtext("b.", side=3, line=-0.7, cex=1, adj=-0.06, font=2)
 dev.off()
 
-
-
+# not included, but nice to have:
+if(FALSE){
 # plot the distribution of modeled CO2 at 240 Myr under likelihood function,
 # priors, precalibration and MCMC
 plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,5000),
@@ -359,27 +367,132 @@ lines(mm_priors$co2, mm_priors$fit, lwd=2, lty=2)
 lines(mm_essgym$co2, mm_essgym$fit, lwd=2, lty=2, col='purple')
 legend(2500, 0.0019, c('Likelihood','Priors','Priors, ESS-GYM only','Precal','Posterior'),
        lty=c(1,2,2,4,3), col=c('black','black','purple','black','black'), lwd=2)
+}
 ##==============================================================================
 
 
 
 ##==============================================================================
-## Other plots showing the supplementary experiments
-## with many model configurations
+## MS FIGURE SOM -- supplementary experiment model vs Royer 2014 comparisons
 ##===================================
 
-TODO
+# SOM FIGURE - 5 row x 2 col figure of each experiment relative to the original Royer
+# et al 2014 calibration results. Include the data set for each experiment.
 
+pdf('../figures/model_experiments_vs_r2014.pdf',width=7,height=9,colormodel='cmyk', pointsize=9)
+par(mfrow=c(5,2))
+par(cex = 0.85)
+par(mar = c(0, 0, 2.5, 0), oma = c(3.5, 5, 0.5, 0.5))
+par(tcl = -0.25)
+par(mgp = c(2, 0.6, 0))
+panel <- 1
+panel_label <- c("a.","b.","c.","d.","e.","f.","g.","h.","i.","j.")
+for (ee in names(chains)) {
+    chainname <- ee
+    if (chainname == "x_pr2011") {table_experiments[row,] <- c("PR2011", "PR2011", "PR2011", "unimodal", "log-normal")
+    } else {
+        if (substr(chainname, 2, 2)=="P") {data_choice <- "PR2011"} else {data_choice <- "F2017"}
+        if (substr(chainname, 4, 5)=="PU") {param_choice <- "PR2011"} else {param_choice <- "all"}
+        if (substr(chainname, 7, 7)=="R") {fSR_choice <- "DT2019"} else if (substr(chainname, 7, 7)=="L") {fSR_choice <- "L2018"} else {fSR_choice <- "PR2011"}
+        if (substr(chainname, 9, 9)=="U") {likelihood_choice <- "unimodal"} else {likelihood_choice <- "mixture"}
+        if (substr(chainname, 10, 11)=="sn") {kernel_choice <- "skew-normal"} else {kernel_choice <- "normal"}
+    }
+    title_tag <- paste(data_choice,"data,",param_choice,"parameters,",fSR_choice,"fSR,",likelihood_choice,"likelihood,",kernel_choice,"uncertainties")
+    title_tag1 <- paste(data_choice,"data,",param_choice,"parameters,",fSR_choice,"fSR")
+    title_tag2 <- paste(likelihood_choice,"likelihood,",kernel_choice,"uncertainties")
 
-
+    if (substr(ee, 2,2)=="P") {data_calib <- data_calib_pr2011
+    } else {data_calib <- data_calib_f2017}
+    plot(-time, log10(model_experiment_quantiles[[ee]][,'0.5']), type='l', xlim=c(-450,0), ylim=c(2,log10(6000)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+    points(-data_calib$age, log10(data_calib$co2), pch=4, cex=0.4, lwd=.4)
+    for (ii in 1:nrow(data_calib)) {
+        arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+        if(substr(ee, 2,2)=="F") {arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)}
+    }
+    polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles$r2014[,'0.025'],rev(model_experiment_quantiles$r2014[,'0.975']))), col=rgb(.7,.2,.4,.5), border=NA)
+    lines(-time, log10(model_experiment_quantiles$r2014[,'0.5']), lwd=1.5, lty=5, col=rgb(.6,.2,.6))
+    polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[ee]][,'0.025'],rev(model_experiment_quantiles[[ee]][,'0.975']))), col=rgb(.2,.6,.6,.5), border=NA)
+    lines(-time, log10(model_experiment_quantiles[[ee]][,'0.5']), lwd=1.5, col=rgb(.2,.6,.75))
+    #mtext(ee, side=3)
+    mtext(panel_label[panel], side=3, adj=0.01, font=2)
+    mtext(title_tag1, side=3, line=0.8)
+    mtext(title_tag2, side=3, line=0)
+    if (panel %in% c(9,10)) {
+        axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'))
+        mtext('Time [Myr ago]', side=1, line=2.1)
+    }
+    ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+    if (panel %in% c(1,3,5,7,9)) {
+        axis(2, at=ticks, labels=rep('',length(ticks)))
+        axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), las=1)
+        mtext(expression('CO'[2]*' [ppmv]'), side=2, line=3)
+    }
+    if (panel==1) {
+        legend(-390, log10(6600), c('95% range (Royer [2014])', '95% range (this work)'), pch=c(15,15), col=c(rgb(.7,.2,.4,.5), rgb(.2,.6,.6,.5)), cex=.8, bty='n')
+        legend(-180, log10(6600), c('',''), pch=c(NA,4), col=c('black','black'), cex=.8, bty='n')
+        legend(-180, log10(6600), c('Median','Data'), pch=c('-',NA), col=c('black','black'), cex=.8, bty='n')
+    }
+    minor.tick(nx=5, ny=0, tick.ratio=0.5)
+    panel <- panel+1
+}
+dev.off()
 
 ##==============================================================================
 
 
 
 ##==============================================================================
-# SOM figure -- quantiles of deltaT2X as sample size increases
-#===========
+## MS FIGURE SOM -- quantiles of deltaT2X as sample size increases
+##===========
+
+col_x <- c(8, 10.4, 13.3, 15.8, 18.5)
+col_names <- c("Data", "Parameters", "fSR", "Likelihood", "Uncertainties")
+
+table_experiments <- mat.or.vec(nr=nrow(ess$ess), length(col_names))
+colnames(table_experiments) <- col_names
+for (row in 1:nrow(ess$ess)) {
+    chainname <- rownames(ess$ess)[row]
+    if (chainname == "x_pr2011") {table_experiments[row,] <- c("PR2011", "PR2011", "PR2011", "unimodal", "log-normal")
+    } else {
+        if (substr(chainname, 2, 2)=="P") {table_experiments[row, "Data"] <- "PR2011"} else {table_experiments[row, "Data"] <- "F2017"}
+        if (substr(chainname, 4, 5)=="PU") {table_experiments[row, "Parameters"] <- "PR2011"} else {table_experiments[row, "Parameters"] <- "all"}
+        if (substr(chainname, 7, 7)=="R") {table_experiments[row, "fSR"] <- "DT2019"} else if (substr(chainname, 7, 7)=="L") {table_experiments[row, "fSR"] <- "L2018"} else {table_experiments[row, "fSR"] <- "PR2011"}
+        if (substr(chainname, 9, 9)=="U") {table_experiments[row, "Likelihood"] <- "unimodal"} else {table_experiments[row, "Likelihood"] <- "mixture"}
+        if (substr(chainname, 10, 11)=="sn") {table_experiments[row, "Uncertainties"] <- "skew-normal"} else {table_experiments[row, "Uncertainties"] <- "normal"}
+    }
+}
+
+pdf(file='../figures/boxplot_ess.pdf', width=8, height=3.7, colormodel="cmyk", pointsize=11)
+offset <- 0.045
+yhgt <- offset*.75
+experiment <- rownames(ess$ess)[1]
+par(mfrow=c(1,1), mai=c(.7,.2,.2,.2))
+plot(ess$ess[experiment,"0.5"], yhgt, xlim=c(0,22), ylim=c(0, .58), pch=16,
+     xaxs='i', yaxs='i', yaxt='n', ylab='', xlab='', axes=FALSE)
+grid()
+axis(1, at=seq(0,9,2)); axis(1, at=seq(0,8,1), labels=rep("", 9), lwd=0.25)
+mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=1, line=2.2, adj=0.18)
+for (experiment in rownames(ess$ess)) {
+    row <- which(rownames(ess$ess)==experiment)
+    points(ess$ess[experiment,"0.5"], yhgt, pch=16)
+    arrows(x0=ess$ess[experiment,"0.05"], x1=ess$ess[experiment,"0.95"], y0=yhgt, y1=yhgt, angle=90, length=0.05, code=3)
+    #text(8, yhgt, experiment, pos=4)
+    #text(8, yhgt, table_experiments[row,], pos=4)
+    for (i in 1:length(col_x)) {text(col_x[i], yhgt, table_experiments[row, i], pos=4)}
+    yhgt <- yhgt + offset
+}
+yhgt <- yhgt + offset*0.25
+for (i in 1:length(col_x)) {text(col_x[i], yhgt, colnames(table_experiments)[i], pos=4)}
+lines(c(8, 22), c(yhgt-0.4*offset, yhgt-0.4*offset))
+dev.off()
+
+##==============================================================================
+
+
+
+##==============================================================================
+## MS FIGURE SOM -- quantiles of deltaT2X as sample size increases
+##===========
 
 pdf(file='../figures/deltaT2X_quantiles.pdf', width=3.5, height=3, colormodel="cmyk", pointsize=11)
 par(mfrow=c(1,1), mai=c(.7,.7,.2,.3))
