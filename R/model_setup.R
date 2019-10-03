@@ -28,7 +28,7 @@ if (fSR_choice=="PR2011") {
 } else if (fSR_choice=="LENTON") {
   USE_LENTON_FSR <- TRUE
   USE_DT2019_FSR <- FALSE
-} else if (fSR_choice=="ROYER") {
+} else if (fSR_choice=="DT2019") {
   USE_LENTON_FSR <- FALSE
   USE_DT2019_FSR <- TRUE
 } else {
@@ -40,7 +40,7 @@ appen <- ""
 if (data_choice=="PR2011") {appen <- paste(appen,"dP", sep="")} else if (data_choice=="F2017") {appen <- paste(appen,"dF", sep="")}
 if (substr(param_choice,1,6)=="PR2011") {appen <- paste(appen,"pP", sep="")} else if (substr(param_choice,1,3)=="all") {appen <- paste(appen,"pA", sep="")}
 if (grepl("stdev", param_choice)) {appen <- paste(appen,"U", sep="")}
-if (fSR_choice=="PR2011") {appen <- paste(appen,"sO", sep="")} else if (fSR_choice=="LENTON") {appen <- paste(appen,"sL", sep="")} else if (fSR_choice=="ROYER") {appen <- paste(appen,"sR", sep="")}
+if (fSR_choice=="PR2011") {appen <- paste(appen,"sO", sep="")} else if (fSR_choice=="LENTON") {appen <- paste(appen,"sL", sep="")} else if (fSR_choice=="DT2019") {appen <- paste(appen,"sR", sep="")}
 if (lhood_choice=="unimodal") {appen <- paste(appen,"lU", sep="")} else if (lhood_choice=="mixture") {appen <- paste(appen,"lM", sep="")}
 appen <- paste(appen,dist, sep="")
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")

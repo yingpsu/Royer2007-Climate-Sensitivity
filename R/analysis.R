@@ -29,7 +29,7 @@ n_parameter <- ncol(parameters)
 param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
 data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
 lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
-fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
+fSR_choice <- 'DT2019'     # Which fSR time series? ("PR2011", "LENTON", "DT2019")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
 source("model_setup.R")
@@ -92,7 +92,7 @@ for (ee in names(model_experiment_quantiles)) {
   } else {param_choice <- "all_stdev"}
   if(substr(ee, 7, 7)=="O") {fSR_choice <- "PR2011"
   } else if(substr(ee, 7, 7)=="L") {fSR_choice <- "LENTON"
-  } else if(substr(ee, 7, 7)=="R") {fSR_choice <- "ROYER"}
+  } else if(substr(ee, 7, 7)=="R") {fSR_choice <- "DT2019"}
   if(substr(ee, 9, 9)=="U") {lhood_choice <- "unimodal"
   } else {lhood_choice <- "mixture"}
   dist <- substr(ee, 10, 11)

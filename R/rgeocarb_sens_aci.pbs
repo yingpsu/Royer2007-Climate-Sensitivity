@@ -1,9 +1,9 @@
 #!/bin/bash
 #PBS -A open
-#PBS -l walltime=48:00:00
+#PBS -l walltime=47:00:00
 #PBS -l nodes=1:ppn=6
 #PBS -l pmem=32gb
 #PBS -j oe
 #PBS -m abe
 #PBS -M anthony.e.wong@colorado.edu
-R --vanilla < /storage/home/a/axw322/work/codes/GEOCARB/R/GEOCARB_sensitivity_driver.R > /storage/home/a/axw322/work/codes/GEOCARB/R/rgeocarb_sens_priors.log
+R --vanilla < /storage/home/a/axw322/work/codes/GEOCARB/R/sensitivity_driver.R > /storage/home/a/axw322/work/codes/GEOCARB/R/rgeocarb_sens_reproduce.log

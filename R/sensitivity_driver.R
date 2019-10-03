@@ -32,7 +32,7 @@ n_node <- 6 # use parallel evaluation of ensembles in Sobol' integration?
 param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
 data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
 lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
-fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
+fSR_choice <- 'DT2019'     # Which fSR time series? ("PR2011", "LENTON", "DT2019")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
 # latin hypercube precalibration

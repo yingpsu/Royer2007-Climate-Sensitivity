@@ -29,7 +29,7 @@ setwd('~/work/codes/GEOCARB/R')
 param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
 data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
 lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
-fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
+fSR_choice <- 'DT2019'     # Which fSR time series? ("PR2011", "LENTON", "DT2019")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
 niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
@@ -72,7 +72,7 @@ if (fSR_choice=="PR2011") {
 } else if (fSR_choice=="LENTON") {
   USE_LENTON_FSR <- TRUE
   USE_DT2019_FSR <- FALSE
-} else if (fSR_choice=="ROYER") {
+} else if (fSR_choice=="DT2019") {
   USE_LENTON_FSR <- FALSE
   USE_DT2019_FSR <- TRUE
 } else {
@@ -84,7 +84,7 @@ appen <- ""
 if (data_choice=="PR2011") {appen <- paste(appen,"dP", sep="")} else if (data_choice=="F2017") {appen <- paste(appen,"dF", sep="")}
 if (substr(param_choice,1,6)=="PR2011") {appen <- paste(appen,"pP", sep="")} else if (substr(param_choice,1,3)=="all") {appen <- paste(appen,"pA", sep="")}
 if (grepl("stdev", param_choice)) {appen <- paste(appen,"U", sep="")}
-if (fSR_choice=="PR2011") {appen <- paste(appen,"sO", sep="")} else if (fSR_choice=="LENTON") {appen <- paste(appen,"sL", sep="")} else if (fSR_choice=="ROYER") {appen <- paste(appen,"sR", sep="")}
+if (fSR_choice=="PR2011") {appen <- paste(appen,"sO", sep="")} else if (fSR_choice=="LENTON") {appen <- paste(appen,"sL", sep="")} else if (fSR_choice=="DT2019") {appen <- paste(appen,"sR", sep="")}
 if (lhood_choice=="unimodal") {appen <- paste(appen,"lU", sep="")} else if (lhood_choice=="mixture") {appen <- paste(appen,"lM", sep="")}
 appen <- paste(appen,dist, sep="")
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
