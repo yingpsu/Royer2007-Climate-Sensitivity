@@ -21,21 +21,19 @@ library(lhs)
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 10000 # note this will be doubled if using LHS precalibration
+n_sample <- 1000000 # note this will be doubled if using LHS precalibration
 .Nboot <- 1000
 appen <- 'test'
 .confidence <- 0.9 # for bootstrap CI
 .second <- FALSE    # calculate second-order indices?
 
-n_node <- 1 # use parallel evaluation of ensembles in Sobol' integration?
+n_node <- 6 # use parallel evaluation of ensembles in Sobol' integration?
 
 param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
 data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
 lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
 fSR_choice <- 'ROYER'     # Which fSR time series? ("PR2011", "LENTON", "ROYER")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
-
-source("model_setup.R")
 
 # latin hypercube precalibration
 sens='NS' # valid values:  L1, L2, NS, NSL, pres
