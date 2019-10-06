@@ -60,32 +60,31 @@ source("process_supp_chains.R");
 
 ## [7] #########################################################################
 ##        dPpAUsRlMsn
-## Paper results: use chains 1 and 3
+## Paper results: use chains 1, 2, 4, 5
 appen <- "dPpAUsRlMsn"
-datestamp <- "13Sep2019"
+datestamp <- "03Oct2019"
 {source("process_supp_chains.R")};
 
 
 ## [8] #########################################################################
 ##        dFpAUsRlUsn
-## Paper results: use chains 1, 3, 4 and 5
+## Paper results: use chains 1, 3, 4, 5
 appen <- "dFpAUsRlUsn"
-datestamp <- "18Sep2019"
+datestamp <- "03Oct2019"
 {source("process_supp_chains.R")};
 
 
 ## [9] #########################################################################
 ##        dFpAUsRlMsn
 appen <- "dFpAUsRlMsn"
-datestamp <- "19Sep2019"
+datestamp <- "04Oct2019"
 {source("process_supp_chains.R")};
 
 
 ## [10] #########################################################################
 ##        dFpAUsRlMnm
-## Paper results: use chains 1, 2, 3 and 5
 appen <- "dFpAUsRlMnm"
-datestamp <- "18Sep2019"
+datestamp <- "03OCt2019"
 {source("process_supp_chains.R")};
 
 

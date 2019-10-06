@@ -8,7 +8,7 @@ rm(list=ls())
 
 setwd('~/codes/GEOCARB/R')
 plot.dir <- '../figures/'
-load('../output/analysis_30Sep2019.RData')
+load('../output/analysis_06Oct2019.RData')
 
 library(Hmisc)
 
@@ -245,7 +245,7 @@ x_glac <- quantile(parameters[,ics]*parameters[,iglac], c(.05,.5,.95))  # 5.6782
 x_norm <- quantile(parameters_nm[,ics], c(.05,.5,.95))  # 3.273916 4.396285 5.846267
 x_ktc2017 <- c(3.7, 5.6, 7.5)
 
-offset <- 0.08
+offset <- 0.1
 
 ## MS FIGURE
 
@@ -265,7 +265,7 @@ axis(1, at=seq(0,10))
 minor.tick(nx=4, ny=0, tick.ratio=0.5)
 y0 <- 0.7*offset; arrows(x_thisstudy[1], y0, x_thisstudy[3], y0, lwd=1.5, length=0.04, angle=90, code=3, col="steelblue"); points(x_thisstudy[2], y0, pch=16, col="steelblue")
 #y1 <- 0.35*offset; arrows(x_royer2007[1], y1, x_royer2007[3], y1, lwd=1.5, length=0.04, angle=90, code=3); points(x_royer2007[2], y1, pch=15)
-y1 <- 0.35*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, lwd=1.5, length=0.04, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
+y1 <- 0.3*offset; arrows(x_pr2011[1], y1, x_pr2011[3], y1, lwd=1.5, length=0.04, angle=90, code=3); points(x_pr2011[2], y1, pch=15)
 #y2 <- 0.08; arrows(x_ktc2017[1], y2, x_ktc2017[3], y2, length=0.04, angle=90, code=3); points(x_ktc2017[2], y2, pch=17)
 legend(5.1,1.02, c('5-95% range, PR2011','PR2011','5-95% range, this study','Posterior, this study','Prior, both studies'),
        pch=c(15,NA,16,NA,NA), lty=c(1,2,1,1,3), col=c("black","black","steelblue","steelblue","steelblue"), bty='n', lwd=1.7, cex=0.9)
@@ -273,7 +273,7 @@ dev.off()
 
 
 ##==============================================================================
-# Figure S3. Posterior probability density for Earth system sensitivity
+# MS FIGURE SOM. Posterior probability density for Earth system sensitivity
 # parameter (deltaT2X), relative to previous studies), assuming a symmetric
 # (Gaussian) error structure for the proxy data as opposed to skew-normal.
 
@@ -310,8 +310,8 @@ print(paste('fraction of dT2X >= 6 is:',length(which(parameters[,ics]>=6))/nrow(
 print(paste('GLAC 5-50-95% quantiles =',quantile(parameters[,iglac], c(.05,.5,.95))))
 print(paste('glacial dT2X 5-50-95% quantiles =',quantile(parameters[,iglac]*parameters[,ics], c(.05,.5,.95))))
 print(paste('glacial dT2X 16-50-84% quantiles =',quantile(parameters[,iglac]*parameters[,ics], c(.16,.5,.84))))
-print(paste('PR2011 dT2X 5-50-95% quantiles =',pr2011_cdf(c(.05,.5,.95))))
-print(paste('PR2011 dT2X 16-50-84% quantiles =',pr2011_cdf(c(.16,.5,.84))))
+print(paste('PR2011 dT2X 5-50-95% quantiles =',pr2011_icdf(c(.05,.5,.95))))
+print(paste('PR2011 dT2X 16-50-84% quantiles =',pr2011_icdf(c(.16,.5,.84))))
 
 ##==============================================================================
 # Figure 4. Radial convergence diagrams for the sensitivity experiment. The

@@ -124,7 +124,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
       m_BA <- m_BA[-idrop]
       mA_i <- mA_i[-idrop]
     }
-    Vi[i] <- mean(mA_i * m_BA) - m0^2
+    Vi[i] <- mean(mA_i * m_BA) - mean(mA_i)^2   ### for consistency with CIs, the mean^2 subtracted off should be mean(mA_i)^2 after removing for idrop
 
     # first-order indices are Si = Vi/V
     S[i] <- Vi[i]/V0
@@ -187,7 +187,7 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
           mA_i <- mA_i[-idrop]
         }
 
-        Vik[cnt] <- mean(mA_i * m_BA) - m0^2
+        Vik[cnt] <- mean(mA_i * m_BA) - mean(mA_i)^2   ### for consistency with CIs, the mean^2 subtracted off should be mean(mA_i)^2 after removing for idrop
 
         # second-order indices are Sik = Vik/V - Si - Sk
         S2[cnt] <- Vik[cnt]/V0 - S[i] - S[k]
@@ -251,12 +251,12 @@ sobolTony <- function(parameters_sampleA, parameters_sampleB, sens,
       m_AB <- m_AB[-idrop]
       mA_i <- mA_i[-idrop]
     }
-    V_i[i] <- mean(mA_i * m_AB) - m0^2
+    V_i[i] <- mean(mA_i * m_AB) - mean(mA_i)^2   ### for consistency with CIs, the mean^2 subtracted off should be mean(mA_i)^2 after removing for idrop
 
     # total indices are Ti = 1 - V_i/V
     T[i] <- 1 - (V_i[i]/V0)
 
-    # confidence interval for S[i]
+    # confidence interval for T[i]
     if (n_boot > 0) {
       # pick n_CI = length(m_AB) runs from m_AB, mA_i, and get
       # V_i_CI = mean(mA_i[ind_CI]*m_AB[ind_CI]) - mean(mA_i[ind_CI])^2

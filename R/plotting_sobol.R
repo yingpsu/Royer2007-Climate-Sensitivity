@@ -10,10 +10,10 @@
 #rm(list=ls())
 #setwd('~/codes/GEOCARB/R')
 
-filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_unc.csv"
+filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_all_stdev.csv"
 
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_precal_25Jun2019.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_precal_25Jun2019.txt"
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_dFpAUsRlMsn_05Oct2019.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_dFpAUsRlMsn_05Oct2019.txt"
 
 n_params <- 69
 plotdir <- '../figures/'
@@ -31,6 +31,7 @@ library(plotrix)      # used when plotting circles
 
 ## Functions in other files
 source('sobol_functions.R')
+source('colorblindPalette.R')
 
 ## Import data from sensitivity analysis
 # First- and total-order indices
@@ -106,22 +107,22 @@ s2_sig0 <- stat_sig_s2(s2
 
 ##==============================================================================
 ## Get sensitive parameter names
-source('GEOCARB-2014_parameterSetup_tvq.R')
+source('parameterSetup_tvq.R')
 
 # yields parnames_calib, which are the sensitive parameters
 ind_sensit <- which((parnames.sobol %in% parnames_calib) & (s1st1$sig>0))
 ind_insens <- 1:n_params; ind_insens <- ind_insens[-ind_sensit]
 
 name_list1 <- list('Sensitive' = parnames.sobol[ind_sensit]
-               ,'Insensitive' = parnames.sobol[ind_insens]
-               )
+                   ,'Insensitive' = parnames.sobol[ind_insens]
+)
 
 # add Parameter symbols to plot
-# TW added hack to space GLAC and deltaT2X apart with spaces...
+# TW added fix to space GLAC and deltaT2X apart with spaces...
 
 name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^'NV'),
-                  'LIFE', 'GYM', '   FERT', expression('e'^'fnBb'),
-                  expression(Delta*'T(2x)'), '  GLAC', 'J', 'n', 'Ws', expression('e'^'fD'), expression('Fwpa'['0']),
+                  'LIFE', 'GYM', ' FERT', expression('e'^'fnBb'),
+                  expression(Delta*'T(2x)   '), ' GLAC', 'J', 'n', 'Ws    ', expression('e'^'fD'), expression('Fwpa'['0']),
                   expression('Fwsa'['0']), expression('Fwga'['0']), expression('Fwca'['0']),
                   expression('Fmg'['0']), expression('Fmc'['0']), expression('Fmp'['0']),
                   expression('Fms'['0']), expression('Fwsi'['0']), expression('Xvolc'['0']),
@@ -141,7 +142,7 @@ new_name_symbols <- c(name_symbols[ind_sensit], name_symbols[ind_insens])
 # defining list of colors for each group
 col_list1 <- list("Sensitive"     = 'black'
                   ,"Insensitive" = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
-                  )
+)
 
 # using function to assign variables and colors based on group
 s1st1 <- gp_name_col(name_list1
@@ -176,13 +177,11 @@ s1st1_sens$symbols <- new_name_symbols[ind_keep]
 ## (done by hand here after examining the initial radial convergence plot)
 old_symbols <- s1st1_sens$symbols
 swap <- function(indices, idx1, idx2) {
-  idx_new <- indices; idx_new[idx1] <- idx2; idx_new[idx2] <- idx1; return(idx_new)
+    idx_new <- indices; idx_new[idx1] <- idx2; idx_new[idx2] <- idx1; return(idx_new)
 }
 ind_rearr <- ind_keep
-ind_rearr <- swap(ind_rearr, 10,12)
 ind_rearr <- swap(ind_rearr, 7, 8)
 ind_rearr <- swap(ind_rearr, 3, 4)
-ind_rearr <- swap(ind_rearr, 9, 11)
 s1st1_sens <- s1st1_sens[ind_rearr,]
 s2_sens <- s2_sens[ind_rearr, ind_rearr]
 s2_sig1_sens <- s2_sig1_sens[ind_rearr, ind_rearr]
@@ -194,7 +193,7 @@ plotRadCon(df=s1st1_sens
            ,s2=s2_sens
            ,plotS2=TRUE
            ,radSc = 2
-           ,scaling=.5
+           ,scaling=.45
            ,widthSc = 0.4
            ,s2_sig=s2_sig1_sens
            ,filename = plot.filename
@@ -203,15 +202,14 @@ plotRadCon(df=s1st1_sens
            ,varNameMult=1.4
            ,RingThick=0.14
            ,legLoc = "bottomcenter"
-           ,cex = .85
+           ,cex = .83
            ,rt_names = 0
            ,s1_col = 'tan'
            ,st_col = 'steelblue'
            ,line_col ='salmon'
-           ,STthick = 0.5
+           ,STthick = 0.4
            ,legFirLabs=c(.02,.10), legTotLabs=c(.05,.50), legSecLabs=c(.01,.05)
 )
-
 
 ##==============================================================================
 ## Some numbers to report

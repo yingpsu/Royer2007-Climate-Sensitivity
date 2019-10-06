@@ -16,7 +16,7 @@ filename_analysis <- paste('../output/analysis_',today,'.RData', sep="")
 .upper_bound_co2 <- 50000
 .lower_bound_co2 <- 0
 
-chains <- readRDS("../output/chains_analysis_30Sep2019.rds")
+chains <- readRDS("../output/chains_analysis_05Oct2019.rds")
 # normal distribution results
 parameters_nm <- chains$dFpAUsRlMnm
 # control results
@@ -466,6 +466,7 @@ mm_essgym$fit <- fit4$y
 
 
 # comparison
+# figure not used in paper but potentially useful to pick apart constraints
 pdf(paste('../figures/multimodality_SOM.pdf',sep=''),width=4,height=3, colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.8,.8,.2,.2))
 plot(mm_modeled$co2, mm_modeled$fit, type='l', lwd=2, lty=3, xlim=c(0,7000), ylim=c(0,0.0009),
@@ -483,7 +484,7 @@ dev.off()
 
 
 ##==============================================================================
-# Figure S3?.  Posterior model ensemble (gray shaded region denotes 5-95%
+# Figure for SOM?  Posterior model ensemble (gray shaded region denotes 5-95%
 # credible range), maximum posterior score simulation (solid bold line) and
 # uncalibrated model simulation (dashed line), with proxy data points
 # superimposed (+ markers), assuming a symmetric (Gaussian) error structure for
@@ -553,7 +554,7 @@ model_quantiles_nm[,'maxpost'] <- model_out_nm[,which.max(lpost_out_nm)]
 
 
 ##==============================================================================
-# Figure S3. Posterior probability density for Earth system sensitivity
+# Figure for SOM?  Posterior probability density for Earth system sensitivity
 # parameter (deltaT2X), relative to previous studies), assuming a symmetric
 # (Gaussian) error structure for the proxy data as opposed to skew-normal.
 
@@ -585,9 +586,6 @@ for (i in 1:length(sample_sizes)) {
 }
 
 ##==============================================================================
-
-
-
 
 
 
