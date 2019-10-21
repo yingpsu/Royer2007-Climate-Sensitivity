@@ -7,7 +7,21 @@
 ##
 ## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
-
+## Copyright 2019 Tony Wong
+## This file is part of GEOCARB-calibration.
+## GEOCARB-calibration is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## GEOCARB-calibration is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with GEOCARB-calibration.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 
 l_Godderis <- TRUE  #set to "TRUE" to run time arrays of fA, fAw/fA, fD, and GEOG
                     #from Godderis et al, 2012; set to "FALSE" to run standard

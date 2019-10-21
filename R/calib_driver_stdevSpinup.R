@@ -9,6 +9,21 @@
 ##
 ## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
+## Copyright 2019 Tony Wong
+## This file is part of GEOCARB-calibration.
+## GEOCARB-calibration is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## GEOCARB-calibration is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with GEOCARB-calibration.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 
 print(paste("START AT",Sys.time()))
 
@@ -16,10 +31,10 @@ rm(list=ls())
 
 setwd('~/work/codes/GEOCARB/R')
 
-param_choice <- 'stdevOnly'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
-data_choice <- 'PR2011'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
+param_choice <- 'stdevOnly' # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
+data_choice <- 'PR2011'     # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
 lhood_choice <- 'unimodal'  # Mixture model ("mixture") or unimodal ("unimodal")?
-dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
+dist <- 'sn'                # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
 today <- Sys.Date(); today <- format(today,format="%d%b%Y")
 filename.mcmc = paste('../output/geocarb_mcmcoutput_stdevSpinup_PR2011_',today,'.RData',sep="")
@@ -170,7 +185,7 @@ save(amcmc_out1, file=filename.mcmc)
 
 ##==============================================================================
 ## Convergence diagnostics and autocorrelation accounted for in the
-## burnin_thinning.R script. So we're done!
+## processing script. So we're done!
 
 print(paste("END AT",Sys.time()))
 

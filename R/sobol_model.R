@@ -11,7 +11,7 @@
 ##                     the parameter sets at which we need to run the model.
 ##                     this saves on the overhead of starting/stopping a cluster
 ##
-## Questions? Tony Wong (anthony.e.wong@colorado.edu)
+## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
 
 

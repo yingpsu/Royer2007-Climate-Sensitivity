@@ -3,6 +3,21 @@
 ##
 ## Questions? Tony Wong (aewsma@rit.edu)
 ##==============================================================================
+## Copyright 2019 Tony Wong
+## This file is part of GEOCARB-calibration.
+## GEOCARB-calibration is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## GEOCARB-calibration is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with GEOCARB-calibration.  If not, see <http://www.gnu.org/licenses/>.
+##==============================================================================
 
 rm(list=ls())
 
@@ -12,8 +27,130 @@ load('../output/analysis_06Oct2019.RData')
 
 library(Hmisc)
 
+
 ##==============================================================================
-# Figure 5 (Methods). Observations and fitted likelihood surface.
+## MS FIGURE 1 -- past ESS estimates, and ours
+
+input <- read.csv("../input_data/Plot_ESS_Cenozoic_input.csv", header = TRUE)
+
+# from this study, to add to the previous ones in the input file
+this_study_g <- quantile(parameters[,10]*parameters[,11], c(.5,.16,.84))
+this_study_ng <- quantile(parameters[,10], c(.5,.16,.84))
+
+# Park and Royer 2011 glacial and non-glacial
+pr2011_g <- c(7,6,8)
+pr2011_ng <- c(3.778407, 3.778407-1.450958, 3.778407+2.181385)
+# glacial period years
+x_g1 <- c(260, 340)
+x_g2 <- c(0, 40)
+
+# separate pCO2 and method
+age_Ma <- input[,1]
+age_high <- input[,3]
+age_low <- input[,2]
+ESS <- input[,4]
+ESS_high <- input[,5]
+ESS_low <- input[,6]
+
+pdf(paste(plot.dir,'Plot_ESS_Cenozoic_update.pdf',sep=''), width=4, height=3.5, pointsize=11, colormodel='cmyk')
+par(mfrow=c(1,1), mai=c(.7,.7,.3,.2))
+
+# start with plot for Park and Royer 2011
+plot(-c(500, x_g1[2]), rep(pr2011_ng[1], 2), type='l', lwd=1.5, lty=2, xlim=c(-420,2), ylim=c(0,15.8), xlab='', ylab='', xaxt='n', yaxt='n', xaxs='i', yaxs='i', axes=FALSE)
+grid()
+lines(-c(x_g1[1], x_g2[2]), rep(pr2011_ng[1], 2), lwd=1.5, lty=2)
+polygon(-c(x_g1[1], x_g2[2], x_g2[2], x_g1[1]), c(rep(pr2011_ng[2], 2), rep(pr2011_ng[3], 2)), col=rgb(.5,.5,.5,.4), border=FALSE)
+polygon(-c(500, x_g1[2], x_g1[2], 500), c(rep(pr2011_ng[2], 2), rep(pr2011_ng[3], 2)), col=rgb(.5,.5,.5,.4), border=FALSE)
+polygon(c(-x_g2, rev(-x_g2)), c(rep(pr2011_g[2], 2), rep(pr2011_g[3], 2)), col=rgb(.5,.5,.5,.4), border=FALSE)
+polygon(c(-x_g1, rev(-x_g1)), c(rep(pr2011_g[2], 2), rep(pr2011_g[3], 2)), col=rgb(.5,.5,.5,.4), border=FALSE)
+axis(1, at=seq(-500,0,100), labels=c('500','400','300','200','100','0'))
+axis(2, at=seq(0,14,2), las=1)
+minor.tick(nx=2, ny=5)
+mtext("Time [Myr ago]", side=1, line=2.3)
+mtext(expression("ESS ["*degree*"C]"), side=2, line=2.3)
+# results from KTC 2017
+idx <- 10
+polygon(-c(age_high[idx], age_low[idx], age_low[idx], age_high[idx]), c(rep(ESS[idx]+ESS_high[idx], 2), rep(ESS[idx]-ESS_low[idx], 2)), col=rgb(.87,.87,.05,.4), border=FALSE)
+idx <- 9 # results from Cramwinckel et al. (2018)
+polygon(-c(age_low[idx], age_high[idx], age_high[idx], age_low[idx]), c(rep(ESS[idx]-ESS_low[idx],2), rep(ESS[idx]+ESS_high[idx],2)), col=rgb(.1,.6,.1,.4), border=FALSE)
+# add results from this study
+lines(-x_g1, rep(this_study_g[1],2), lwd=1.5, lty=1, col="firebrick2")
+lines(-x_g2, rep(this_study_g[1],2), lwd=1.5, lty=1, col="firebrick2")
+lines(-c(500, x_g1[2]), rep(this_study_ng[1], 2), lwd=1.5, lty=1, col="firebrick2")
+lines(-c(x_g1[1], x_g2[2]), rep(this_study_ng[1], 2), lwd=1.5, lty=1, col="firebrick2")
+polygon(c(-x_g2, rev(-x_g2)), c(rep(this_study_g[2], 2), rep(this_study_g[3], 2)), col=rgb(.9,.4,.4,.4), border=FALSE)
+polygon(c(-x_g1, rev(-x_g1)), c(rep(this_study_g[2], 2), rep(this_study_g[3], 2)), col=rgb(.9,.4,.4,.4), border=FALSE)
+polygon(-c(x_g1[1], x_g2[2], x_g2[2], x_g1[1]), c(rep(this_study_ng[2], 2), rep(this_study_ng[3], 2)), col=rgb(.9,.4,.4,.4), border=FALSE)
+polygon(-c(500, x_g1[2], x_g1[2], 500), c(rep(this_study_ng[2], 2), rep(this_study_ng[3], 2)), col=rgb(.9,.4,.4,.4), border=FALSE)
+# add designation for glacial periods
+polygon(c(-500, 5, 5, -500), c(15,15,17,17), col=rgb(1,1,1,1), border=FALSE)
+polygon(c(-x_g1, rev(-x_g1)), c(15.3,15.3,16,16), col=rgb(.1,.9,.96,.4), border=FALSE)
+polygon(c(-x_g2, rev(-x_g2)), c(15.3,15.3,16,16), col=rgb(.1,.9,.96,.4), border=FALSE)
+mtext("glacial", side=3, line=0.1, adj=0.992, cex=0.65)
+mtext("glacial", side=3, line=0.1, adj=.265, cex=0.65)
+# add the rest of the data points
+idx <- c(2,3,4) # results from Pagani et al 2010
+for (ii in idx) {
+    arrows(x0=-age_Ma[ii], y0=(ESS[ii]-ESS_low[ii]), x1=-age_Ma[ii], y1=(ESS[ii]+ESS_high[ii]), length=0.03, angle=90, code=3, col="dodgerblue2", lwd=.9)
+    points(-age_Ma[ii], ESS[ii], pch=15, col="dodgerblue2", cex=0.6)
+}
+idx <- c(5,6,14) # results from Rohling et al 2012
+for (ii in idx) {
+    arrows(x0=-age_Ma[ii], y0=(ESS[ii]-ESS_low[ii]), x1=-age_Ma[ii], y1=(ESS[ii]+ESS_high[ii]), length=0.03, angle=90, code=3, col="darkorange2", lwd=.9)
+    points(-age_Ma[ii], ESS[ii], pch=17, col="darkorange3", cex=0.6)
+}
+idx <- c(7,11) # results from Anagnostou et al 2016
+for (ii in idx) {
+    arrows(x0=-age_Ma[ii], y0=(ESS[ii]-ESS_low[ii]), x1=-age_Ma[ii], y1=(ESS[ii]+ESS_high[ii]), length=0.03, angle=90, code=3, col="red", lwd=.9)
+    points(-age_Ma[ii], ESS[ii], pch=16, col="red", cex=0.6)
+}
+idx <- 8 # results from Bijl et al. (2010)
+arrows(x0=-age_Ma[idx], y0=(ESS[idx]-ESS_low[idx]), x1=-age_Ma[idx], y1=(ESS[idx]+ESS_high[idx]), length=0.03, angle=90, code=3, col="forestgreen", lwd=.9)
+points(-age_Ma[idx], ESS[idx], pch=18, col="forestgreen", cex=0.85)
+idx <- 12 # PETM from Shaffer et al 2016
+points(-age_Ma[idx], ESS[idx], pch=1, cex=0.6, col='blue', lwd=0.8)
+idx <- 13 # pre-PETM from Shaffer et al 2016
+points(-age_Ma[idx], ESS[idx], pch=1, cex=0.6, col='red', lwd=0.8)
+idx <- 16 # results from Knobbe and Schaller (2017)
+arrows(x0=-age_low[idx], y0=ESS[idx], x1=-age_high[idx], y1=ESS[idx], length=0.03, angle=90, code=3, col="magenta", lwd=.9)
+idx <- 1 # results from Haywood et al 2013
+points(-age_Ma[idx], ESS[idx], pch=15, cex=0.6, col='blueviolet', lwd=0.8)
+# add labels for periods and studies
+# this study
+text(-385, 6.3, "This study", srt=0, cex=0.65, col="firebrick3")
+# park and royer 2011
+text(-360, 1.6, "Park and Royer\n(2011)", srt=0, cex=0.65)
+# Permo-carboniferous
+text(-300, 11, "Permo-\n Carboniferous", srt=90, cex=0.65, adj=0)
+# Triassic
+text(-220, 5.25, "Triassic", srt=90, cex=0.65, adj=0)
+# Eocene
+text(-50, 0.2, "Eocene", srt=90, cex=0.65, adj=0)
+# PETM
+text(-56, 7, "PETM", srt=90, cex=0.65, adj=0)
+# Pliocene
+text(-5, 1.8, "Pliocene", srt=90, cex=0.65, adj=0)
+dev.off()
+
+
+# [x] yellow box KTC 2017
+# [x] gray box PR2011
+# [x] pink boxes (this work)
+# [x] blue squares pagani et al 2010
+# [x] orange triangles Rohling et al 2012
+# [x] red circles anagnostou et al 2016
+# [x] green diamond (bijl et al 2010)
+# [x] hollow red circle (pre-PETM) (Shaffer et al 2016)
+# [x] hollow blue circle (PETM) (Shaffer et al 2016)
+# [x] green box Cramwinkel et al 2018
+# [x] magenta horizontal bar (Knobb and Schaller 2017)
+# [x] purple square (Haywood et al 2013)
+##==============================================================================
+
+
+
+##==============================================================================
+# MS FIGURE SOM -- Observations and fitted likelihood surface.
 
 pdf(paste(plot.dir,'data_likelihood.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
@@ -57,8 +194,7 @@ legend(-452, log10(40), c('Data','Likelihood median','95% range','90% range','66
 minor.tick(nx=5, ny=0, tick.ratio=0.5)
 dev.off()
 
-# only the 5-95% range
-# MS FIGURE
+# only the 5-95% range from likelihood, with maximum a posteriori simulation
 pdf(paste(plot.dir,'data_likelihood_withModel_5-95.pdf',sep=''),width=4,height=3,colormodel='cmyk')
 par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
 plot(-time, log10(likelihood_quantiles[,'50']), type='l', xlim=c(-430,0), ylim=c(0.7,log10(7200)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
@@ -87,79 +223,6 @@ dev.off()
 # need a fix for the NAN that results when co2_low for data points is 0
 idx_low <- which(data_calib$co2_low == 0)
 data_calib$co2_low[idx_low] <- 1
-
-## Log scale (model and points, no likelihood surface)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
-for (ii in 1:nrow(data_calib)) {
-    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-}
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
-minor.tick(nx=5, ny=0, tick.ratio=0.5)
-dev.off()
-
-
-## Log scale (model and points, with CO2 error bars, no likelihood surface)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
-for (ii in 1:nrow(data_calib)) {
-    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-}
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
-minor.tick(nx=5, ny=0, tick.ratio=0.5)
-dev.off()
-
-
-## Log scale (model and points, with CO2 and age error bars, no likelihood surface)
-pdf(paste(plot.dir,'model_ensemble_vs_obspts_logscale_2errbars.pdf',sep=''),width=4,height=3,colormodel='cmyk')
-par(mfrow=c(1,1), mai=c(.65,.9,.15,.15))
-plot(-time, log10(model_quantiles[,'maxpost']), type='l', xlim=c(-450,0), ylim=c(0.7,log10(6500)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
-polygon(-c(time,rev(time)), log10(c(model_quantiles[,'q025'],rev(model_quantiles[,'q975']))), col='gray', border=NA)
-lines(-time, log10(model_quantiles[,'maxpost']), lwd=2)
-points(-data_calib$age, log10(data_calib$co2), pch=16, cex=0.4, lwd=.4)
-for (ii in 1:nrow(data_calib)) {
-    arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-    arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)
-}
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='orange', pch=16, cex=1)
-points(-data_calib$age[idx_gastaldo], log10(data_calib$co2[idx_gastaldo]), col='black', pch=16, cex=0.5)
-mtext('Time [Myr ago]', side=1, line=2.1, cex=1)
-mtext(expression('CO'[2]*' concentration [ppmv]'), side=2, line=3.2, cex=1)
-axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1)
-ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
-axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1)
-axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1, las=1)
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(4,NA,15), col=c('black','black','gray'), cex=.75, bty='n')
-legend(-457, log10(35), c('Data','Max posterior','95% range'), pch=c(NA,'-',NA), col=c('black','black','gray'), cex=.75, bty='n')
-minor.tick(nx=5, ny=0, tick.ratio=0.5)
-dev.off()
-
 
 ## Log scale (model and points, with CO2 and age error bars, no likelihood surface, but with Royer et al 2014 too)
 ## MS FIGURE 2
@@ -224,8 +287,6 @@ dev.off()
 ##==============================================================================
 # Figure 3. Posterior probability density for Earth system sensitivity parameter
 # (deltaT2X), relative to previous studies.
-
-#plot(deltaT2X_density$x, deltaT2X_density$y, type='l')
 
 # get priors too
 row_num <- match('deltaT2X',input$parameter)
@@ -326,10 +387,8 @@ source('plotting_sobol.R')
 
 
 ##==============================================================================
-# Figure S2.  Evidence of multi-modality, and dispersion of probability for
+# MS FIGURE SOM.  Evidence of multi-modality, and dispersion of probability for
 # higher CO2 data points
-
-## MS FIGURE SOM
 
 pdf(paste(plot.dir,'likelihoodslice_SOM.pdf',sep=''),width=4,height=6, colormodel='cmyk', pointsize=11)
 par(mfrow=c(2,1), mai=c(.7,.3,.1,.25))
@@ -505,6 +564,64 @@ mtext(expression(Delta*"T(2x) ["*degree*"C]"), side=2, line=2.2)
 dev.off()
 
 ##==============================================================================
+
+
+
+if(FALSE) {
+##
+## try to have a menu to pick which two simulation sets to plot
+##
+
+library(manipulate)
+
+par(mfrow=c(2,1), mai=c(.8,.8,.1,.1))
+manipulate(
+    {
+        runname <- ""
+        if (dataset=="dF") {data_calib <- data_calib_f2017} else if (dataset=="dP") {data_calib <- data_calib_pr2011}
+        runname <- paste(runname, dataset, sep="")
+        runname <- paste(runname, parameters, sep="")
+        runname <- paste(runname, seafloor_spreading, sep="")
+        runname <- paste(runname, likelihood, sep="")
+        runname <- paste(runname, kernels, sep="")
+        exp1 <- "pr2011"
+        exp2 <- runname; print(runname)
+        if ((substr(exp1, 2,2)=="F") | (substr(exp2, 2,2)=="F")) {data_calib <- data_calib_f2017} else {data_calib <- data_calib_pr2011}
+        plot(-time, log10(model_experiment_quantiles[[exp1]][,'0.5']), type='l', xlim=c(-450,0), ylim=c(2,log10(6000)), xlab='', ylab='', xaxs='i', yaxs='i', xaxt='n', yaxt='n')
+        points(-data_calib$age, log10(data_calib$co2), pch=4, cex=0.4, lwd=.4)
+        for (ii in 1:nrow(data_calib)) {
+            arrows(-data_calib$age[ii], log10(data_calib$co2_low[ii]), -data_calib$age[ii], log10(data_calib$co2_high[ii]), length=0.02, angle=90, code=3, lwd=0.5)
+            if(nrow(data_calib)==nrow(data_calib_f2017)) {arrows(-data_calib$age_old[ii], log10(data_calib$co2[ii]), -data_calib$age_young[ii], log10(data_calib$co2[ii]), length=0.02, angle=90, code=3, lwd=0.5)}
+        }
+        polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[exp2]][,'0.025'],rev(model_experiment_quantiles[[exp2]][,'0.975']))), col=rgb(.7,.2,.4,.5), border=NA)
+        lines(-time, log10(model_experiment_quantiles[[exp2]][,'0.5']), lwd=1.5, lty=5, col=rgb(.6,.2,.6))
+        polygon(-c(time,rev(time)), log10(c(model_experiment_quantiles[[exp1]][,'0.025'],rev(model_experiment_quantiles[[exp1]][,'0.975']))), col=rgb(.2,.6,.6,.5), border=NA)
+        lines(-time, log10(model_experiment_quantiles[[exp1]][,'0.5']), lwd=1.5, col=rgb(.2,.6,.75))
+        mtext(ee, side=3, cex=0.8)
+        axis(1, at=seq(-400,0,100), labels=c('400','300','200','100','0'), cex.axis=1.1)
+        mtext('Time [Myr ago]', side=1, line=2.1, cex=0.8)
+        ticks=log10(c(seq(10,100,10),seq(200,1000,100),seq(2000,10000,1000)))
+
+        axis(2, at=ticks, labels=rep('',length(ticks)), cex.axis=1.1)
+        axis(2, at=log10(c(10,30,100,300,1000,3000)), labels=c('10','30','100','300','1000','3000'), cex.axis=1.1, las=1)
+        mtext(expression('CO'[2]*' [ppmv]'), side=2, line=3, cex=0.8)
+
+
+        legend(-390, log10(6600), c(paste('95% range',exp2), paste('95% range',exp1)), pch=c(15,15), col=c(rgb(.7,.2,.4,.5), rgb(.2,.6,.6,.5)), cex=.8, bty='n')
+        legend(-180, log10(6600), c('',''), pch=c(NA,4), col=c('black','black'), cex=.8, bty='n')
+        legend(-180, log10(6600), c('Median','Data'), pch=c('-',NA), col=c('black','black'), cex=.8, bty='n')
+
+        minor.tick(nx=5, ny=0, tick.ratio=0.5)},
+    dataset = picker("Park and Royer [2011]" = "dP", "Foster et al [2017]" = "dF"),
+    parameters = picker("Park and Royer [2011]" = "pPU", "All" = "pAU"),
+    seafloor_spreading = picker("Original" = "sO", "Lenton et al [2018]" = "sL", "Domeier and Torsvik [2019]" = "sR"),
+    likelihood = picker("Unimodal" = "lU", "Mixture" = "lM"),
+    kernels = picker("Skew-normal" = "sn", "Normal" = "nm"))
+
+    #exp1 = picker("dPpPUsOlUsn", "dPpPUsLlUsn", "dPpPUsRlUsn", "dPpPUsRlMsn", "dFpPUsRlMsn", "dFpPUsRlUsn", "dPpAUsRlMsn", "dFpAUsRlMsn", "dFpAUsRlMnm", "pr2011"),
+    #exp2 = picker("dPpPUsOlUsn", "dPpPUsLlUsn", "dPpPUsRlUsn", "dPpPUsRlMsn", "dFpPUsRlMsn", "dFpPUsRlUsn", "dPpAUsRlMsn", "dFpAUsRlMsn", "dFpAUsRlMnm", "pr2011"))
+
+}
 
 
 ##==============================================================================
