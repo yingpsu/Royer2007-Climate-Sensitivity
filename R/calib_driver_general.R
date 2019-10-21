@@ -26,14 +26,16 @@ setwd('~/work/codes/GEOCARB/R')
 ##==============================================================================
 ##==============================================================================
 
+set.seed(1234)
 param_choice <- 'all_stdev'   # Calibrate all 69 parameters? ("all") or only the 6 from Park and Royer 2011 ("PR2011")
 data_choice <- 'F2017'    # Which data set?  PR2011 = Park and Royer (2011), or F2017 = Foster et al (2017)
 lhood_choice <- 'mixture'  # Mixture model ("mixture") or unimodal ("unimodal")?
 fSR_choice <- 'DT2019'     # Which fSR time series? ("PR2011", "LENTON", "DT2019")
 dist <- 'sn'               # kernel choice for each data point (sn (skew-normal), ln (log-normal), nm (normal))
 
-niter_mcmc000 <- 1e4   # number of MCMC iterations per node (Markov chain length)
-nnode000 <- 1        # number of CPUs to use
+niter_mcmc000 <- 1.5e6   # number of MCMC iterations per node (Markov chain length)
+gamma_mcmc000 <- 0.75
+nnode000 <- 5        # number of CPUs to use
 
 # If using the Foster et al 2017 data set, which proxy sets to assimilate?
 #   (set what you want to "TRUE", others to "FALSE")
@@ -47,7 +49,7 @@ data_to_assim <- cbind( c("paleosols" , TRUE),
 DO_PARAM_INIT <- TRUE   # if true, set the two file names below
 filename.covarinit <- "../output/covar_init_sn-mix_12Aug2019.rds"
 filename.paraminit <- "../output/param_init_sn-mix_12Aug2019.rds"
-filename.stdevinit <- "../output/geocarb_mcmcoutput_stdevSpinup_07Sep2019.RData"
+filename.stdevinit <- "../output/geocarb_mcmcoutput_stdevSpinup_PR2011_10Sep2019.RData"
 
 ##==============================================================================
 ##==============================================================================
@@ -209,7 +211,7 @@ accept_mcmc_few <- 0.44         # optimal for only one parameter
 accept_mcmc_many <- 0.234       # optimal for many parameters
 accept_mcmc <- accept_mcmc_many + (accept_mcmc_few - accept_mcmc_many)/length(parnames_calib)
 niter_mcmc <- niter_mcmc000
-gamma_mcmc <- 0.66
+gamma_mcmc <- gamma_mcmc000
 startadapt_mcmc <- 1000
 
 ##==============================================================================
@@ -277,8 +279,7 @@ amcmc_extend1 <- MCMC.add.samples(amcmc_out1, niter_extend,
                                 ind_expected_time=ind_expected_time, ind_expected_const=ind_expected_const,
                                 iteration_threshold=iteration_threshold,
                                 loglikelihood_smoothed=loglikelihood_smoothed, likelihood_fit=likelihood_fit, idx_data=idx_data,
-                                do_sample_tvq=DO_SAMPLE_TVQ, par_time_center=par_time_center, par_time_stdev=par_time_stdev,
-                                upper_bound_co2=.upper_bound_co2, lower_bound_co2=.lower_bound_co2)
+                                do_sample_tvq=TRUE, par_time_center=par_time_center, par_time_stdev=par_time_stdev)
 tend <- proc.time()
 chain1 <- amcmc_extend1$samples
 amcmc_out1 <- amcmc_extend1

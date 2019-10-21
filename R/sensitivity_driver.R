@@ -21,11 +21,11 @@ library(lhs)
 
 ## Set testing number of samples and file name appendix here
 ## if there aren't enough samples on the MCMC output file, will break.
-n_sample <- 1000000 # note this will be doubled if using LHS precalibration
-.Nboot <- 1000
-appen <- 'test'
+n_sample <- 1.1e6 # note this will be doubled if using LHS precalibration
+.Nboot <- 10000
+appen <- 'final'
 .confidence <- 0.9 # for bootstrap CI
-.second <- FALSE    # calculate second-order indices?
+.second <- TRUE    # calculate second-order indices?
 
 n_node <- 6 # use parallel evaluation of ensembles in Sobol' integration?
 
