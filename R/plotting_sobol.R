@@ -1,9 +1,25 @@
 ##==============================================================================
 ## plotting_sobol.R
 ##
-## Plotting of...
+## Generate radial convergence plot and print out numbers for the manuscript 
+## from the sensitivity analysis.
 ##
-## Questions?  Tony Wong (anthony.e.wong@colorado.edu)
+## Questions?  Tony Wong (aewsma@rit.edu)
+##==============================================================================
+## Copyright 2019 Tony Wong
+## This file is part of GEOCARB-calibration.
+## GEOCARB-calibration is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## GEOCARB-calibration is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with GEOCARB-calibration.  If not, see <http://www.gnu.org/licenses/>.
 ##==============================================================================
 
 # assumed to be a continuation of the plotting.R routine
@@ -12,8 +28,8 @@
 
 filename.calibinput <- "../input_data/GEOCARB_input_summaries_calib_all_stdev.csv"
 
-Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_dFpAUsRlMsn_05Oct2019.txt"
-Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_dFpAUsRlMsn_05Oct2019.txt"
+Sobol_file_1 <- "../output/geocarb_sobol-1-tot_sensNS_dFpAUsRlMsn_08Oct2019.txt"
+Sobol_file_2 <- "../output/geocarb_sobol-2_sensNS_dFpAUsRlMsn_08Oct2019.txt"
 
 n_params <- 69
 plotdir <- '../figures/'
@@ -72,38 +88,19 @@ colnames(s2_conf_high) <- rownames(s2_conf_high) <- parnames.sobol
 ##==============================================================================
 # Determine which indices are statistically significant
 
-# S1 & ST: using the confidence intervals
+# S1 & ST: confidence lower bound greater than sig.cutoff
 s1st1 <- stat_sig_s1st(s1st
-                      ,method="congtr"
-                      ,greater=sig.cutoff
-                      ,sigCri='either')
-
-# S1 & ST: using greater than a given value
-#s1st1 <- stat_sig_s1st(s1st
-#                      ,method="gtr"
-#                      ,greater=0.01
-#                      ,sigCri='either')
-
-# S2: using the confidence intervals
-s2_sig1 <- stat_sig_s2(s2
-                       ,s2_conf_low
-                       ,s2_conf_high
-                       ,method='congtr'
+                       ,method="con"
                        ,greater=sig.cutoff
-                       )
-# only confidence lower bound above 0
-s2_sig0 <- stat_sig_s2(s2
+                       ,sigCri='either')
+
+# S2: confidence lower bound greater than sig.cutoff
+s2_sig1 <- stat_sig_s2(s2
                        ,s2_conf_low
                        ,s2_conf_high
                        ,method='con'
                        ,greater=sig.cutoff
-                       )
-
-# S2: using greater than a given value
-#s2_sig1 <- stat_sig_s2(s2
-#                       ,s2_conf
-#                       ,greater=0.02
-#                       ,method='congtr')
+)
 
 ##==============================================================================
 ## Get sensitive parameter names
@@ -121,8 +118,8 @@ name_list1 <- list('Sensitive' = parnames.sobol[ind_sensit]
 # TW added fix to space GLAC and deltaT2X apart with spaces...
 
 name_symbols <- c('ACT', expression('ACT'['carb']), 'VNV', 'NV', expression('e'^'NV'),
-                  'LIFE', 'GYM', ' FERT', expression('e'^'fnBb'),
-                  expression(Delta*'T(2x)   '), ' GLAC', 'J', 'n', 'Ws    ', expression('e'^'fD'), expression('Fwpa'['0']),
+                  'LIFE', 'GYM', 'FERT', expression('e'^'fnBb'),
+                  expression(Delta*'T(2x)'), 'GLAC', 'J', 'n', 'Ws', expression('e'^'fD'), expression('Fwpa'['0']),
                   expression('Fwsa'['0']), expression('Fwga'['0']), expression('Fwca'['0']),
                   expression('Fmg'['0']), expression('Fmc'['0']), expression('Fmp'['0']),
                   expression('Fms'['0']), expression('Fwsi'['0']), expression('Xvolc'['0']),
@@ -173,15 +170,17 @@ s2_sens <- s2_rearr[ind_keep,ind_keep]
 s2_sig1_sens <- s2_sig1_rearr[ind_keep,ind_keep]
 s1st1_sens$symbols <- new_name_symbols[ind_keep]
 
-## Rearrange again to move the clusters of connected parameters together
+## Rearrange again to move the clusters of connected parameters together and
+## make the plot a bit more pleasant to look at.
 ## (done by hand here after examining the initial radial convergence plot)
 old_symbols <- s1st1_sens$symbols
 swap <- function(indices, idx1, idx2) {
     idx_new <- indices; idx_new[idx1] <- idx2; idx_new[idx2] <- idx1; return(idx_new)
 }
 ind_rearr <- ind_keep
-ind_rearr <- swap(ind_rearr, 7, 8)
-ind_rearr <- swap(ind_rearr, 3, 4)
+ind_rearr <- swap(ind_rearr, 2, 5)
+ind_rearr <- swap(ind_rearr, 3, 6)
+ind_rearr <- swap(ind_rearr, 20, 21)
 s1st1_sens <- s1st1_sens[ind_rearr,]
 s2_sens <- s2_sens[ind_rearr, ind_rearr]
 s2_sig1_sens <- s2_sig1_sens[ind_rearr, ind_rearr]
@@ -193,7 +192,7 @@ plotRadCon(df=s1st1_sens
            ,s2=s2_sens
            ,plotS2=TRUE
            ,radSc = 2
-           ,scaling=.45
+           ,scaling=.47
            ,widthSc = 0.4
            ,s2_sig=s2_sig1_sens
            ,filename = plot.filename
@@ -204,9 +203,9 @@ plotRadCon(df=s1st1_sens
            ,legLoc = "bottomcenter"
            ,cex = .83
            ,rt_names = 0
-           ,s1_col = 'tan'
-           ,st_col = 'steelblue'
-           ,line_col ='salmon'
+           ,s1_col = 'gray80'
+           ,st_col = 'gray30'
+           ,line_col ='gray60'
            ,STthick = 0.4
            ,legFirLabs=c(.02,.10), legTotLabs=c(.05,.50), legSecLabs=c(.01,.05)
 )
@@ -284,10 +283,11 @@ print(paste('Total first- and second-order variance contribution from all sensit
 
 ##==============================================================================
 ## Create a calibration parameter input file to calibrate only the parameters
-## found to be sensitive
+## found to be sensitive (NOT USED, but potentially handy so leaving here)
 
+if (FALSE) {
 # read the original input_summaries_calib CSV file
-orig_calib <- "../input_data/GEOCARB_input_summaries_calib_mix.csv"
+orig_calib <- "../input_data/GEOCARB_input_summaries_calib_unc_stdev.csv"
 sens_calib <- "../input_data/GEOCARB_input_summaries_calib_sens.csv"
 rv <- file.copy(orig_calib, sens_calib, overwrite=TRUE)
 input <- read.csv(sens_calib)
@@ -302,40 +302,7 @@ for (row in 1:nrow(input)) {
 
 # save as a new CSV
 write.csv(input, file=sens_calib)
-
-
-##==============================================================================
-## Radial convergence plot with all parameters
-
-if(FALSE) {
-
-plot.filename <- paste(plotdir,'sobol_spider_all',sep='')
-
-plotRadCon(df=s1st1_rearr
-           ,s2=s2_rearr
-           ,plotS2=TRUE
-           ,radSc = 2
-           ,scaling=.3
-           ,widthSc = 0.5
-           ,s2_sig=s2_sig1_rearr
-           ,filename = plot.filename
-           ,plotType = 'EPS'
-           ,gpNameMult=1.7
-           ,varNameMult=1.34
-           ,RingThick=0.17
-           ,legLoc = "bottomcenter"
-           ,cex = .75
-           ,s1_col = rgb(mycol[3,1],mycol[3,2],mycol[3,3])
-           ,st_col = rgb(mycol[6,1],mycol[6,2],mycol[6,3])
-           ,line_col = rgb(mycol[10,1],mycol[10,2],mycol[10,3])
-           ,STthick = 0.5
-           ,legFirLabs=c(.05,.25), legTotLabs=c(.05,.75), legSecLabs=c(.02,.07)
-)
-
 }
-
-##==============================================================================
-
 
 ##==============================================================================
 ## End

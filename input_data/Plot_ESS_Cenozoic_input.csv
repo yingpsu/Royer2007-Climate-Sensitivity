@@ -1,0 +1,20 @@
+Age (Ma),age_low,age_high,Paleoclimate Sensitivity (K),upper uncertainty ,lower uncertainty ,Time Period,Reference,,Note
+3.1445,3.025,3.264,5.01,0,0,Mid-Pliocene,Haywood et al. (2013),,
+3.3,3.3,3.3,7.1,1,1,middle Pliocene,Pagani et al. (2010),,lower range
+3.3,3.3,3.3,8.7,1.3,1.3,middle Pliocene,Pagani et al. (2010),,higher range
+4.2,4.2,4.2,9.6,1.4,1.4,early Pliocene,Pagani et al. (2010),,
+34,34,34,6.364,3.33,1.998,Eocene-Oligocene,"Rohling et al., (2012)",,using Lunt et al. (2010) definition of ESS
+36,36,36,6.734,0.962,1.813,Late Eocene,"Rohling et al., (2012)",age is approximate (36 to 33.9 Ma = late Eocene),using Lunt et al. (2010) definition of ESS
+36.9,36.9,36.9,3.3,0.3,1.2,Late Eocene,Anagnostou et al. (2016),,66% Confidence
+40,40,40,3.515,1.11,1.11,Middle Eocene Climate Optimum,Bijl et al. (2010) ,,
+45,32,58,6.2,2.7,2.7,Eocene,Cramwinckel et al. (2018),,"age rangs from 32 to 58 Ma, 68% confidence level is 3.5 to 8.9 degree C per doubling of CO2"
+50,1,100,5.6,1.3,1.2,Mesozoic-Cenozoic,Krissansen-Totton and Catling (2017),,age ranges from 0 to 100 Ma (PDF available)
+53.2,53.2,53.2,3.8,0.8,1.2,Early Eocene,Anagnostou et al. (2016),,66% Confidence
+55.8,55.8,55.8,5.1,1.4,1.4,PETM,Shaffer et al. (2016),,
+55.9,55.9,55.9,4.45,1.15,1.15,pre-PETM,Shaffer et al. (2016),,
+56,56,56,5.2,1.5,1.5,PETM,"Rohling et al., (2012)",,
+210,0,420,2.8,2.7,1.2,Phanerozoic,Royer et al. (2007),,age ranges from 0 to 420 Ma (PDF available)
+217,201,233,3.82,0,0,Late Triassic,Knobbe and Schaller (2017),,age ranges from 201 to 233 Ma
+300,260,340,7,1,1,Glacial Periods,Park and Royer (2011),,age ranges from 260 to 340Ma
+20,0,40,7,1,1,Glacial Periods,Park and Royer (2011),,age ranges from 0 to 40Ma
+250,0,420,3.778407,2.181385,1.450958,Phanerozoic,Park and Royer (2011),,Phanerozoic

@@ -6,7 +6,7 @@
 ## and Perry Oddo, Penn State
 ##
 ## Modified (condensed - codes are almost entirely unchanged) for brevity by
-## Tony Wong (anthony.e.wong@colorado.edu).
+## Tony Wong (aewsma@rit.edu).
 ## The only code that was changed is the plotting routine 'plotRadCon'; added:
 ## (1) inputs for the first-, total- and second-order % values used for legend
 ## (2) generate labels for first-, total- and second-order in legend
@@ -17,6 +17,21 @@
 ## Tony also modified the 'sig' test for significance to test for confidence
 ## interval bounds of the same sign (otherwise, 0 is in CI for sensitivity
 ## index) and greater than 1%.
+##==============================================================================
+## Copyright 2019 Tony Wong
+## This file is part of GEOCARB-calibration.
+## GEOCARB-calibration is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## GEOCARB-calibration is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with GEOCARB-calibration.  If not, see <http://www.gnu.org/licenses/>.
 ##==============================================================================
 
 ##==============================================================================
@@ -492,7 +507,7 @@ df$ang <- angles
                 ,yloc[i]
                 ,radius <- scaling*(legend_scale[i]^widthSc)/2#scaling*(legThick[i]^widthSc)/2
                 ,nv=200
-                ,border=NA
+                ,border=TRUE
                 ,col=s1_col
                 )
     text(-2#xloc[i]*0.65,
